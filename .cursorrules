@@ -1,0 +1,11 @@
+https://cursor.directory/
+
+About
+
+Copy and add a .cursorrules file in the root of your project.
+
+The instructions in the .cursorrules file will be included for features such as Cursor Chat and Ctrl/⌘ K.
+
+The more specific your rules for your project, the better.
+
+Feel free to create your own directory using our template on GitHub.
