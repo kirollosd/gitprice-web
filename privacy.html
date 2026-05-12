@@ -4,166 +4,231 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Privacy Policy — GitPrice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0f0f1a;
+      --surface:   #14141f;
+      --border:    rgba(255, 255, 255, 0.07);
+      --accent:    #34d399;
+      --text-hi:   #f1f5f9;
+      --text-md:   #cbd5e1;
+      --text-lo:   #64748b;
+      --radius:    10px;
+    }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #0f0f1a;
-      color: #e2e8f0;
-      line-height: 1.7;
-      padding: 40px 20px 80px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-md);
+      line-height: 1.75;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
     }
-    .container { max-width: 720px; margin: 0 auto; }
-    .logo {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 48px;
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15, 15, 26, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .logo-text {
-      font-size: 22px; font-weight: 700; color: #34d399;
-      letter-spacing: -0.5px;
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 32px; height: 32px; flex-shrink: 0; }
+    .logo-name { font-size: 17px; font-weight: 700; color: var(--text-hi); letter-spacing: -0.4px; }
+    .header-badge {
+      font-size: 12px; font-weight: 500; color: var(--accent);
+      background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.2);
+      padding: 3px 10px; border-radius: 20px;
     }
-    h1 {
-      font-size: 30px; font-weight: 700; color: #f1f5f9;
-      margin-bottom: 8px;
+    main { max-width: 720px; margin: 0 auto; padding: 56px 24px 80px; }
+    .page-header { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    h1 { font-size: 32px; font-weight: 700; color: var(--text-hi); letter-spacing: -0.8px; line-height: 1.2; margin-bottom: 12px; }
+    .meta { font-size: 13px; color: var(--text-lo); display: flex; align-items: center; gap: 8px; }
+    .intro {
+      font-size: 15px; color: var(--text-md); line-height: 1.8; margin-bottom: 40px;
+      padding: 20px 24px; background: var(--surface);
+      border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius);
     }
-    .effective {
-      font-size: 13px; color: #9ca3af; margin-bottom: 40px;
-    }
+    .section { margin-top: 40px; }
     h2 {
-      font-size: 18px; font-weight: 600; color: #34d399;
-      margin-top: 36px; margin-bottom: 10px;
+      font-size: 16px; font-weight: 600; color: var(--accent); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
     }
-    p { font-size: 14px; color: #cbd5e1; margin-bottom: 12px; }
-    ul { padding-left: 20px; margin-bottom: 12px; }
-    li { font-size: 14px; color: #cbd5e1; margin-bottom: 6px; }
-    a { color: #34d399; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .footer {
-      margin-top: 56px; padding-top: 24px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      font-size: 12px; color: #6b7280;
+    h2::before {
+      content: ''; display: inline-block; width: 3px; height: 16px;
+      background: var(--accent); border-radius: 2px; flex-shrink: 0;
+    }
+    p { font-size: 14px; color: var(--text-md); line-height: 1.8; margin-bottom: 12px; }
+    ul { padding-left: 0; margin-bottom: 12px; list-style: none; }
+    li { font-size: 14px; color: var(--text-md); line-height: 1.8; margin-bottom: 6px; padding-left: 18px; position: relative; }
+    li::before { content: '\00B7'; position: absolute; left: 4px; color: var(--accent); font-weight: 700; }
+    strong { color: var(--text-hi); font-weight: 600; }
+    code {
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px;
+      background: rgba(52, 211, 153, 0.08); color: var(--accent);
+      padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(52, 211, 153, 0.15);
+    }
+    a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 200ms ease; }
+    a:hover { border-bottom-color: var(--accent); }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+    footer {
+      margin-top: 64px; padding: 32px 24px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 12px; color: var(--text-lo); }
+    .footer-links { display: flex; align-items: center; gap: 20px; }
+    .footer-links a { font-size: 12px; color: var(--text-lo); border-bottom: none; transition: color 200ms ease; }
+    .footer-links a:hover { color: var(--accent); }
+    @media (max-width: 600px) {
+      h1 { font-size: 26px; }
+      main { padding: 40px 16px 64px; }
+      header { padding: 0 16px; }
+      footer { flex-direction: column; align-items: flex-start; padding: 24px 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0ms !important; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="28" height="28" rx="6" fill="#34d399"/>
-        <text x="5" y="21" font-size="18" font-weight="800" fill="#0f0f1a">GP</text>
+  <header>
+    <a href="https://gitprice.com" class="logo" aria-label="GitPrice home">
+      <svg class="logo-icon" viewBox="516 330 363 363" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="516" y="330" width="363" height="363" rx="72" ry="72" fill="#34d399"/>
+        <path d="M694.982 564.096C638.749 564.096 593 518.316 593 462.045C593 405.778 638.749 360 694.982 360C751.218 360 796.964 405.778 796.964 462.045C796.964 518.316 751.218 564.096 694.982 564.096ZM694.982 421.117C672.428 421.117 654.078 439.478 654.078 462.045C654.078 484.614 672.428 502.978 694.982 502.978C717.537 502.978 735.89 484.614 735.89 462.045C735.89 439.478 717.537 421.117 694.982 421.117Z" fill="#0f0f1a"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M694.983 360H802.541V421.116H694.983V360Z" fill="#0f0f1a"/>
+        <path d="M694.983 663.053C669.893 663.053 645.402 658.475 622.194 649.445L644.329 592.486C676.573 605.029 713.392 605.029 745.624 592.492L767.755 649.451C744.553 658.48 720.068 663.053 694.983 663.053Z" fill="#0f0f1a"/>
       </svg>
-      <span class="logo-text">GitPrice</span>
+      <span class="logo-name">GitPrice</span>
+    </a>
+    <span class="header-badge">Privacy Policy</span>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Privacy Policy</h1>
+      <p class="meta">
+        <span>Effective May 11, 2026</span>
+        <span>&middot;</span>
+        <span>Last updated May 11, 2026</span>
+      </p>
     </div>
 
-    <h1>Privacy Policy</h1>
-    <p class="effective">Effective date: May 11, 2026 &nbsp;·&nbsp; Last updated: May 11, 2026</p>
-
-    <p>
-      GitPrice ("we", "us", or "our") is a browser extension that helps you compare prices across
-      Egyptian e-commerce stores including Amazon.eg, Noon, Jumia, B.Tech, and 2B. This Privacy
-      Policy explains what information we collect, how we use it, and your rights as a user.
+    <p class="intro">
+      GitPrice is a browser extension that helps you compare prices across Egyptian e-commerce stores
+      including Amazon.eg, Noon, Jumia, B.Tech, and 2B. This Privacy Policy explains what information
+      we collect, how we use it, and your rights as a user.
     </p>
 
-    <h2>1. Information We Collect</h2>
-    <p>GitPrice collects the minimum data necessary to provide price comparison functionality.</p>
-    <p><strong>Data collected automatically while using the extension:</strong></p>
-    <ul>
-      <li>Product identifiers (ASIN, SKU) and product titles from the pages you browse on supported stores</li>
-      <li>Current prices displayed on those pages</li>
-      <li>Your extension settings (e.g. background search frequency, notifications preference) stored in <code>chrome.storage.sync</code></li>
-      <li>Anonymous error and crash reports (opt-out available in Settings → Privacy)</li>
-    </ul>
-    <p><strong>Account data (if you sign in):</strong></p>
-    <ul>
-      <li>Email address used to create your GitPrice account</li>
-      <li>Authentication tokens stored locally in <code>chrome.storage.local</code></li>
-    </ul>
-    <p>We do not collect your browsing history outside supported store pages, financial information, passwords, or any personally identifiable information beyond your email if you register.</p>
-
-    <h2>2. How We Use Your Information</h2>
-    <ul>
-      <li>To search for and display competing prices across supported stores</li>
-      <li>To send price-drop notifications for products you are tracking (if enabled)</li>
-      <li>To improve extension reliability by diagnosing crashes and errors</li>
-      <li>To authenticate your account and manage Pro subscription status</li>
-    </ul>
-    <p>We do not use your data for advertising, profiling, or sale to third parties.</p>
-
-    <h2>3. Third-Party Services and Affiliate Links</h2>
-    <p>
-      GitPrice may redirect you to Amazon.eg, Noon, Jumia, B.Tech, or 2B using affiliate links.
-      These links allow us to earn a small commission when you make a purchase, at no additional
-      cost to you. Affiliate links are provided for your convenience and do not affect the prices
-      you see or pay.
-    </p>
-    <p>
-      When you follow an affiliate link, the destination store's own privacy policy applies to
-      your activity on their site. GitPrice does not share your personal information with
-      affiliate stores.
-    </p>
-
-    <h2>4. Data Storage and Security</h2>
-    <p>
-      Your extension settings and authentication tokens are stored locally in your browser using
-      Chrome's secure storage APIs (<code>chrome.storage.local</code> and
-      <code>chrome.storage.sync</code>). Server-side data (e.g. your account and price history)
-      is stored on secured servers with access controls and encryption at rest.
-    </p>
-    <p>
-      We retain price comparison data only as long as necessary to provide the service. Account
-      data is retained until you delete your account.
-    </p>
-
-    <h2>5. Data Sharing</h2>
-    <p>We do not sell, rent, or trade your personal information. We may share data only in these limited circumstances:</p>
-    <ul>
-      <li><strong>Service providers:</strong> Third-party vendors who assist us in operating the extension (e.g. hosting, error tracking) under strict confidentiality agreements</li>
-      <li><strong>Legal requirements:</strong> If required by applicable law, court order, or governmental authority</li>
-      <li><strong>Business transfers:</strong> In connection with a merger, acquisition, or sale of assets, with notice to users</li>
-    </ul>
-
-    <h2>6. Your Rights (GDPR and General)</h2>
-    <p>Depending on your jurisdiction, you may have the right to:</p>
-    <ul>
-      <li><strong>Access:</strong> Request a copy of the personal data we hold about you</li>
-      <li><strong>Correction:</strong> Ask us to correct inaccurate data</li>
-      <li><strong>Deletion:</strong> Request deletion of your account and associated data</li>
-      <li><strong>Portability:</strong> Receive your data in a machine-readable format</li>
-      <li><strong>Objection:</strong> Object to processing based on legitimate interests</li>
-      <li><strong>Opt-out of error reporting:</strong> Disable anonymous error reports in Settings → Privacy</li>
-    </ul>
-    <p>To exercise these rights, contact us at <a href="mailto:privacy@gitprice.com">privacy@gitprice.com</a>.</p>
-
-    <h2>7. Cookies and Tracking</h2>
-    <p>
-      The GitPrice extension itself does not set cookies. When you visit store pages, those
-      sites may set their own cookies — their respective privacy policies govern that activity.
-    </p>
-
-    <h2>8. Children's Privacy</h2>
-    <p>
-      GitPrice is not directed at children under 13. We do not knowingly collect personal
-      information from children. If you believe a child has provided us with personal data,
-      please contact us and we will promptly delete it.
-    </p>
-
-    <h2>9. Changes to This Policy</h2>
-    <p>
-      We may update this Privacy Policy from time to time. We will post the revised policy on
-      this page with an updated effective date. For significant changes, we will notify you via
-      a notice in the extension.
-    </p>
-
-    <h2>10. Contact Us</h2>
-    <p>If you have questions about this Privacy Policy, please contact us:</p>
-    <ul>
-      <li>Email: <a href="mailto:privacy@gitprice.com">privacy@gitprice.com</a></li>
-      <li>GitHub: <a href="https://github.com/kirollosd/gitprice" target="_blank" rel="noopener noreferrer">github.com/kirollosd/gitprice</a></li>
-    </ul>
-
-    <div class="footer">
-      &copy; 2026 GitPrice. All rights reserved.
+    <div class="section">
+      <h2>1. Information We Collect</h2>
+      <p>GitPrice collects the minimum data necessary to provide price comparison functionality.</p>
+      <p><strong>Data collected automatically while using the extension:</strong></p>
+      <ul>
+        <li>Product identifiers (ASIN, SKU) and product titles from the pages you browse on supported stores</li>
+        <li>Current prices displayed on those pages</li>
+        <li>Your extension settings stored in <code>chrome.storage.sync</code></li>
+        <li>Anonymous error and crash reports (opt-out available in Settings &rarr; Privacy)</li>
+      </ul>
+      <p><strong>Account data (if you sign in):</strong></p>
+      <ul>
+        <li>Email address used to create your GitPrice account</li>
+        <li>Authentication tokens stored locally in <code>chrome.storage.local</code></li>
+      </ul>
+      <p>We do not collect your browsing history outside supported store pages, financial information, passwords, or any personally identifiable information beyond your email if you register.</p>
     </div>
-  </div>
+
+    <div class="section">
+      <h2>2. How We Use Your Information</h2>
+      <ul>
+        <li>To search for and display competing prices across supported stores</li>
+        <li>To send price-drop notifications for products you are tracking (if enabled)</li>
+        <li>To improve extension reliability by diagnosing crashes and errors</li>
+        <li>To authenticate your account and manage Pro subscription status</li>
+      </ul>
+      <p>We do not use your data for advertising, profiling, or sale to third parties.</p>
+    </div>
+
+    <div class="section">
+      <h2>3. Third-Party Services and Affiliate Links</h2>
+      <p>
+        GitPrice may redirect you to Amazon.eg, Noon, Jumia, B.Tech, or 2B using affiliate links.
+        These links allow us to earn a small commission when you make a purchase, at no additional cost to you.
+      </p>
+      <p>
+        When you follow an affiliate link, the destination store's own privacy policy applies. GitPrice does not share your personal information with affiliate stores.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>4. Data Storage and Security</h2>
+      <p>
+        Your extension settings and authentication tokens are stored locally in your browser using
+        Chrome's secure storage APIs (<code>chrome.storage.local</code> and <code>chrome.storage.sync</code>).
+        Server-side data is stored on secured servers with access controls and encryption at rest.
+      </p>
+      <p>We retain price comparison data only as long as necessary. Account data is retained until you delete your account.</p>
+    </div>
+
+    <div class="section">
+      <h2>5. Data Sharing</h2>
+      <p>We do not sell, rent, or trade your personal information. We may share data only in these limited circumstances:</p>
+      <ul>
+        <li><strong>Service providers:</strong> Third-party vendors assisting in operating the extension under strict confidentiality agreements</li>
+        <li><strong>Legal requirements:</strong> If required by applicable law, court order, or governmental authority</li>
+        <li><strong>Business transfers:</strong> In connection with a merger, acquisition, or sale of assets, with notice to users</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>6. Your Rights</h2>
+      <p>Depending on your jurisdiction, you may have the right to:</p>
+      <ul>
+        <li><strong>Access:</strong> Request a copy of the personal data we hold about you</li>
+        <li><strong>Correction:</strong> Ask us to correct inaccurate data</li>
+        <li><strong>Deletion:</strong> Request deletion of your account and associated data</li>
+        <li><strong>Portability:</strong> Receive your data in a machine-readable format</li>
+        <li><strong>Objection:</strong> Object to processing based on legitimate interests</li>
+        <li><strong>Opt-out of error reporting:</strong> Disable anonymous error reports in Settings &rarr; Privacy</li>
+      </ul>
+      <p>To exercise these rights, contact us at <a href="mailto:privacy@gitprice.com">privacy@gitprice.com</a>.</p>
+    </div>
+
+    <div class="section">
+      <h2>7. Cookies and Tracking</h2>
+      <p>
+        The GitPrice extension itself does not set cookies. When you visit store pages, those sites may set their own cookies &mdash; their respective privacy policies govern that activity.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>8. Children's Privacy</h2>
+      <p>
+        GitPrice is not directed at children under 13. We do not knowingly collect personal information from children.
+        If you believe a child has provided us with personal data, contact us at
+        <a href="mailto:privacy@gitprice.com">privacy@gitprice.com</a> and we will promptly delete it.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>9. Changes to This Policy</h2>
+      <p>
+        We may update this Privacy Policy from time to time. We will post the revised policy on this page with an updated effective date. For significant changes, we will notify you via a notice in the extension.
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer-copy">&copy; 2026 GitPrice. All rights reserved.</span>
+    <nav class="footer-links" aria-label="Legal pages">
+      <a href="https://kirollosd.github.io/gitprice-web/privacy.html">Privacy Policy</a>
+      <a href="https://kirollosd.github.io/gitprice-web/terms.html">Terms of Service</a>
+    </nav>
+  </footer>
 </body>
 </html>

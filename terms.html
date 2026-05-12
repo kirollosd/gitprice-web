@@ -4,202 +4,247 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Terms of Service — GitPrice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0f0f1a;
+      --surface:   #14141f;
+      --border:    rgba(255, 255, 255, 0.07);
+      --accent:    #34d399;
+      --text-hi:   #f1f5f9;
+      --text-md:   #cbd5e1;
+      --text-lo:   #64748b;
+      --radius:    10px;
+    }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
-      background: #f9fafb;
-      color: #1f2937;
-      line-height: 1.7;
-      font-size: 16px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-md);
+      line-height: 1.75;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
     }
     header {
-      background: #1a1a2e;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15, 15, 26, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    header a { text-decoration: none; display: flex; align-items: center; gap: 8px; }
-    header span {
-      font-size: 18px;
-      font-weight: 700;
-      color: #34d399;
-      letter-spacing: -0.3px;
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 32px; height: 32px; flex-shrink: 0; }
+    .logo-name { font-size: 17px; font-weight: 700; color: var(--text-hi); letter-spacing: -0.4px; }
+    .header-badge {
+      font-size: 12px; font-weight: 500; color: var(--accent);
+      background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.2);
+      padding: 3px 10px; border-radius: 20px;
     }
-    main {
-      max-width: 760px;
-      margin: 48px auto;
-      padding: 0 24px 80px;
+    main { max-width: 720px; margin: 0 auto; padding: 56px 24px 80px; }
+    .page-header { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    h1 { font-size: 32px; font-weight: 700; color: var(--text-hi); letter-spacing: -0.8px; line-height: 1.2; margin-bottom: 12px; }
+    .meta { font-size: 13px; color: var(--text-lo); display: flex; align-items: center; gap: 8px; }
+    .intro {
+      font-size: 15px; color: var(--text-md); line-height: 1.8; margin-bottom: 40px;
+      padding: 20px 24px; background: var(--surface);
+      border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius);
     }
-    h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #111827;
-      margin-bottom: 8px;
-    }
-    .meta {
-      font-size: 14px;
-      color: #6b7280;
-      margin-bottom: 40px;
-    }
+    .section { margin-top: 40px; }
     h2 {
-      font-size: 1.125rem;
-      font-weight: 700;
-      color: #111827;
-      margin-top: 36px;
-      margin-bottom: 12px;
+      font-size: 16px; font-weight: 600; color: var(--accent); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
     }
-    p { margin-bottom: 14px; color: #374151; }
-    ul { padding-left: 20px; margin-bottom: 14px; }
-    li { margin-bottom: 6px; color: #374151; }
-    a { color: #059669; }
-    a:hover { text-decoration: underline; }
+    h2::before {
+      content: ''; display: inline-block; width: 3px; height: 16px;
+      background: var(--accent); border-radius: 2px; flex-shrink: 0;
+    }
+    p { font-size: 14px; color: var(--text-md); line-height: 1.8; margin-bottom: 12px; }
+    ul { padding-left: 0; margin-bottom: 12px; list-style: none; }
+    li { font-size: 14px; color: var(--text-md); line-height: 1.8; margin-bottom: 6px; padding-left: 18px; position: relative; }
+    li::before { content: '\00B7'; position: absolute; left: 4px; color: var(--accent); font-weight: 700; }
+    strong { color: var(--text-hi); font-weight: 600; }
+    a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 200ms ease; }
+    a:hover { border-bottom-color: var(--accent); }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
     footer {
-      text-align: center;
-      font-size: 13px;
-      color: #9ca3af;
-      padding: 24px;
-      border-top: 1px solid #e5e7eb;
-      margin-top: 60px;
+      margin-top: 64px; padding: 32px 24px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
     }
+    .footer-copy { font-size: 12px; color: var(--text-lo); }
+    .footer-links { display: flex; align-items: center; gap: 20px; }
+    .footer-links a { font-size: 12px; color: var(--text-lo); border-bottom: none; transition: color 200ms ease; }
+    .footer-links a:hover { color: var(--accent); }
     @media (max-width: 600px) {
-      main { margin: 24px auto; }
-      h1 { font-size: 1.5rem; }
+      h1 { font-size: 26px; }
+      main { padding: 40px 16px 64px; }
+      header { padding: 0 16px; }
+      footer { flex-direction: column; align-items: flex-start; padding: 24px 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0ms !important; }
     }
   </style>
 </head>
 <body>
   <header>
-    <a href="https://gitprice.com">
-      <span>GitPrice</span>
+    <a href="https://gitprice.com" class="logo" aria-label="GitPrice home">
+      <svg class="logo-icon" viewBox="516 330 363 363" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="516" y="330" width="363" height="363" rx="72" ry="72" fill="#34d399"/>
+        <path d="M694.982 564.096C638.749 564.096 593 518.316 593 462.045C593 405.778 638.749 360 694.982 360C751.218 360 796.964 405.778 796.964 462.045C796.964 518.316 751.218 564.096 694.982 564.096ZM694.982 421.117C672.428 421.117 654.078 439.478 654.078 462.045C654.078 484.614 672.428 502.978 694.982 502.978C717.537 502.978 735.89 484.614 735.89 462.045C735.89 439.478 717.537 421.117 694.982 421.117Z" fill="#0f0f1a"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M694.983 360H802.541V421.116H694.983V360Z" fill="#0f0f1a"/>
+        <path d="M694.983 663.053C669.893 663.053 645.402 658.475 622.194 649.445L644.329 592.486C676.573 605.029 713.392 605.029 745.624 592.492L767.755 649.451C744.553 658.48 720.068 663.053 694.983 663.053Z" fill="#0f0f1a"/>
+      </svg>
+      <span class="logo-name">GitPrice</span>
     </a>
+    <span class="header-badge">Terms of Service</span>
   </header>
 
   <main>
-    <h1>Terms of Service</h1>
-    <p class="meta">Last updated: May 11, 2026 &nbsp;·&nbsp; Effective: May 11, 2026</p>
+    <div class="page-header">
+      <h1>Terms of Service</h1>
+      <p class="meta">
+        <span>Effective May 11, 2026</span>
+        <span>&middot;</span>
+        <span>Last updated May 11, 2026</span>
+      </p>
+    </div>
 
-    <p>
-      Please read these Terms of Service ("<strong>Terms</strong>") carefully before installing or
-      using the GitPrice Chrome extension ("<strong>Service</strong>"). By installing or using the
-      Service, you agree to be bound by these Terms. If you do not agree, do not install or use the
-      Service.
+    <p class="intro">
+      Please read these Terms of Service carefully before installing or using the GitPrice Chrome
+      extension. By installing or using the Service, you agree to be bound by these Terms.
+      If you do not agree, do not install or use the Service.
     </p>
 
-    <h2>1. Description of Service</h2>
-    <p>
-      GitPrice is a browser extension that automatically detects product pages on supported
-      e-commerce platforms — currently Amazon.eg, Noon, and Jumia — and displays price comparisons
-      for the same or equivalent products across those platforms. The Service also provides optional
-      price-drop alerts and a 6-month local price history for tracked products.
-    </p>
-    <p>
-      GitPrice is a pre-launch MVP product offered free of charge during its initial release. The
-      scope of supported platforms and features may change over time.
-    </p>
+    <div class="section">
+      <h2>1. Description of Service</h2>
+      <p>
+        GitPrice is a browser extension that automatically detects product pages on supported
+        e-commerce platforms &mdash; currently Amazon.eg, Noon, and Jumia &mdash; and displays price
+        comparisons for the same or equivalent products across those platforms. The Service also
+        provides optional price-drop alerts and a 6-month local price history for tracked products.
+      </p>
+      <p>
+        GitPrice is a pre-launch MVP product offered free of charge during its initial release.
+        The scope of supported platforms and features may change over time.
+      </p>
+    </div>
 
-    <h2>2. Eligibility and Account</h2>
-    <p>
-      You must be at least 13 years of age to use the Service. You may use GitPrice without
-      creating an account. Certain features (such as syncing alerts across devices) require
-      registration. You are responsible for maintaining the confidentiality of your account
-      credentials.
-    </p>
+    <div class="section">
+      <h2>2. Eligibility and Account</h2>
+      <p>
+        You must be at least 13 years of age to use the Service. You may use GitPrice without
+        creating an account. Certain features (such as syncing alerts across devices) require
+        registration. You are responsible for maintaining the confidentiality of your account credentials.
+      </p>
+    </div>
 
-    <h2>3. User Obligations</h2>
-    <p>By using the Service, you agree to:</p>
-    <ul>
-      <li>Use the Service only for personal, non-commercial price-comparison purposes.</li>
-      <li>Not attempt to reverse-engineer, decompile, or scrape the Service itself.</li>
-      <li>Not use the Service to automate bulk purchases, generate fraudulent affiliate clicks, or
-          circumvent the terms of any supported e-commerce platform.</li>
-      <li>Not interfere with or disrupt the Service's infrastructure or the servers of third-party
-          platforms it accesses.</li>
-      <li>Comply with all applicable laws and regulations in your jurisdiction.</li>
-    </ul>
+    <div class="section">
+      <h2>3. User Obligations</h2>
+      <p>By using the Service, you agree to:</p>
+      <ul>
+        <li>Use the Service only for personal, non-commercial price-comparison purposes.</li>
+        <li>Not attempt to reverse-engineer, decompile, or scrape the Service itself.</li>
+        <li>Not use the Service to automate bulk purchases, generate fraudulent affiliate clicks, or circumvent the terms of any supported e-commerce platform.</li>
+        <li>Not interfere with or disrupt the Service's infrastructure or the servers of third-party platforms it accesses.</li>
+        <li>Comply with all applicable laws and regulations in your jurisdiction.</li>
+      </ul>
+    </div>
 
-    <h2>4. Affiliate Disclosure</h2>
-    <p>
-      GitPrice participates in affiliate programmes operated by Amazon.eg, Noon, and Jumia. When
-      you click a price-comparison result or a "Go to Store" link provided by the Service, that
-      link may contain an affiliate tracking code. If you complete a purchase after following such a
-      link, GitPrice may receive a commission from the retailer at <strong>no additional cost to
-      you</strong>. Affiliate commissions do not influence the prices displayed or the ranking of
-      results — GitPrice always shows you the best available price regardless of affiliate
-      relationships.
-    </p>
+    <div class="section">
+      <h2>4. Affiliate Disclosure</h2>
+      <p>
+        GitPrice participates in affiliate programmes operated by Amazon.eg, Noon, and Jumia. When
+        you click a price-comparison result or a &ldquo;Go to Store&rdquo; link provided by the Service, that
+        link may contain an affiliate tracking code. If you complete a purchase after following such
+        a link, GitPrice may receive a commission from the retailer at <strong>no additional cost to
+        you</strong>. Affiliate commissions do not influence the prices displayed or the ranking of
+        results &mdash; GitPrice always shows you the best available price regardless of affiliate relationships.
+      </p>
+    </div>
 
-    <h2>5. Privacy and Data</h2>
-    <p>
-      GitPrice stores product data and price history <strong>locally on your device</strong>. No
-      personal shopping data is transmitted to GitPrice servers in the current MVP release. For
-      details on what data is collected and how it is used, please see our
-      <a href="https://kirollosd.github.io/gitprice-web/privacy.html">Privacy Policy</a>.
-    </p>
+    <div class="section">
+      <h2>5. Privacy and Data</h2>
+      <p>
+        GitPrice stores product data and price history <strong>locally on your device</strong>. No
+        personal shopping data is transmitted to GitPrice servers in the current MVP release. For
+        details on what data is collected and how it is used, please see our
+        <a href="https://kirollosd.github.io/gitprice-web/privacy.html">Privacy Policy</a>.
+      </p>
+    </div>
 
-    <h2>6. Disclaimer of Warranties</h2>
-    <p>
-      THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-      IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-      PURPOSE, AND NON-INFRINGEMENT. GITPRICE DOES NOT WARRANT THAT PRICES DISPLAYED ARE ACCURATE,
-      COMPLETE, OR UP TO DATE. PRICES ON THIRD-PARTY PLATFORMS MAY CHANGE AT ANY TIME, AND
-      GITPRICE IS NOT RESPONSIBLE FOR DISCREPANCIES BETWEEN DISPLAYED AND ACTUAL PRICES.
-    </p>
+    <div class="section">
+      <h2>6. Disclaimer of Warranties</h2>
+      <p>
+        THE SERVICE IS PROVIDED &ldquo;AS IS&rdquo; AND &ldquo;AS AVAILABLE&rdquo; WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+        PURPOSE, AND NON-INFRINGEMENT. GITPRICE DOES NOT WARRANT THAT PRICES DISPLAYED ARE ACCURATE,
+        COMPLETE, OR UP TO DATE. PRICES ON THIRD-PARTY PLATFORMS MAY CHANGE AT ANY TIME, AND GITPRICE
+        IS NOT RESPONSIBLE FOR DISCREPANCIES BETWEEN DISPLAYED AND ACTUAL PRICES.
+      </p>
+    </div>
 
-    <h2>7. Limitation of Liability</h2>
-    <p>
-      TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, GITPRICE AND ITS OFFICERS, EMPLOYEES, AND
-      CONTRIBUTORS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR
-      PUNITIVE DAMAGES — INCLUDING LOSS OF PROFITS, DATA, OR GOODWILL — ARISING FROM YOUR USE OF
-      OR INABILITY TO USE THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
-      GITPRICE'S TOTAL LIABILITY TO YOU FOR ANY CLAIMS ARISING UNDER THESE TERMS SHALL NOT EXCEED
-      USD 10.
-    </p>
+    <div class="section">
+      <h2>7. Limitation of Liability</h2>
+      <p>
+        TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, GITPRICE AND ITS OFFICERS, EMPLOYEES, AND
+        CONTRIBUTORS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR
+        PUNITIVE DAMAGES &mdash; INCLUDING LOSS OF PROFITS, DATA, OR GOODWILL &mdash; ARISING FROM YOUR USE OF
+        OR INABILITY TO USE THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+        GITPRICE&rsquo;S TOTAL LIABILITY TO YOU FOR ANY CLAIMS ARISING UNDER THESE TERMS SHALL NOT EXCEED USD 10.
+      </p>
+    </div>
 
-    <h2>8. Third-Party Platforms</h2>
-    <p>
-      The Service accesses publicly available data on third-party e-commerce platforms. GitPrice is
-      not affiliated with, endorsed by, or sponsored by Amazon.eg, Noon, Jumia, or any other
-      retailer. Each platform's own terms of service govern your use of that platform, and GitPrice
-      makes no representations regarding those terms.
-    </p>
+    <div class="section">
+      <h2>8. Third-Party Platforms</h2>
+      <p>
+        The Service accesses publicly available data on third-party e-commerce platforms. GitPrice is
+        not affiliated with, endorsed by, or sponsored by Amazon.eg, Noon, Jumia, or any other retailer.
+        Each platform's own terms of service govern your use of that platform, and GitPrice makes no
+        representations regarding those terms.
+      </p>
+    </div>
 
-    <h2>9. Modifications to the Service and Terms</h2>
-    <p>
-      GitPrice reserves the right to modify or discontinue the Service at any time without notice.
-      We may also update these Terms from time to time. We will indicate the date of the last
-      revision at the top of this page. Your continued use of the Service after a change in Terms
-      constitutes your acceptance of the revised Terms.
-    </p>
+    <div class="section">
+      <h2>9. Modifications to the Service and Terms</h2>
+      <p>
+        GitPrice reserves the right to modify or discontinue the Service at any time without notice.
+        We may also update these Terms from time to time. We will indicate the date of the last revision
+        at the top of this page. Your continued use of the Service after a change in Terms constitutes
+        your acceptance of the revised Terms.
+      </p>
+    </div>
 
-    <h2>10. Termination</h2>
-    <p>
-      You may stop using the Service at any time by uninstalling the extension. GitPrice may
-      suspend or terminate your access to the Service (including account features) if you violate
-      these Terms. Upon termination, the obligations and limitations set forth in Sections 4–7 and
-      11 survive.
-    </p>
+    <div class="section">
+      <h2>10. Termination</h2>
+      <p>
+        You may stop using the Service at any time by uninstalling the extension. GitPrice may suspend
+        or terminate your access to the Service if you violate these Terms. Upon termination, the
+        obligations and limitations set forth in Sections 4&ndash;7 and 11 survive.
+      </p>
+    </div>
 
-    <h2>11. Governing Law</h2>
-    <p>
-      These Terms are governed by and construed in accordance with the laws of the Arab Republic of
-      Egypt, without regard to its conflict-of-law principles. Any dispute arising out of or
-      relating to these Terms or the Service shall be subject to the exclusive jurisdiction of the
-      courts located in Cairo, Egypt.
-    </p>
-
-    <h2>12. Contact</h2>
-    <p>
-      If you have questions about these Terms, please contact us at
-      <a href="mailto:support@gitprice.com">support@gitprice.com</a>.
-    </p>
+    <div class="section">
+      <h2>11. Governing Law</h2>
+      <p>
+        These Terms are governed by and construed in accordance with the laws of the Arab Republic of
+        Egypt, without regard to its conflict-of-law principles. Any dispute arising out of or relating
+        to these Terms or the Service shall be subject to the exclusive jurisdiction of the courts
+        located in Cairo, Egypt.
+      </p>
+    </div>
   </main>
 
   <footer>
-    &copy; 2026 GitPrice. All rights reserved. &nbsp;·&nbsp;
-    <a href="https://kirollosd.github.io/gitprice-web/privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
-    <a href="https://kirollosd.github.io/gitprice-web/terms.html">Terms of Service</a>
+    <span class="footer-copy">&copy; 2026 GitPrice. All rights reserved.</span>
+    <nav class="footer-links" aria-label="Legal pages">
+      <a href="https://kirollosd.github.io/gitprice-web/privacy.html">Privacy Policy</a>
+      <a href="https://kirollosd.github.io/gitprice-web/terms.html">Terms of Service</a>
+    </nav>
   </footer>
 </body>
 </html>
