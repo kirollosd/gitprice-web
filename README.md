@@ -1,12 +1,6 @@
-# gitprice-chrome
+# gitprice-web
 
-This is a chrome extension that allows you to compare prices accross different ecommerce platforms (currently only available in egypt)
+Static GitHub Pages site for GitPrice legal documents.
 
-## MVP Stack
-
-- nextjs (typescript)
-- tailwind (css)
-- shadcn (ui)
-- clerk (auth)
-- supabase (db)
-- vercel (hosting)
+- [Privacy Policy](https://kirollosd.github.io/gitprice-web/privacy.html)
+- [Terms of Service](https://kirollosd.github.io/gitprice-web/terms.html)
