@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitPrice — Compare Prices Across Egyptian Stores While You Shop</title>
+  <meta name="description" content="GitPrice automatically compares prices on Amazon.eg, Noon, and Jumia while you browse. Free Chrome extension with price alerts and history." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'><rect width='28' height='28' rx='6' fill='%2334d399'/><text x='5' y='21' font-size='18' font-weight='800' fill='%230f0f1a' font-family='system-ui'>GP</text></svg>" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #0f0f1a;
+      --surface:    #14141f;
+      --surface2:   #1a1a2e;
+      --border:     rgba(255, 255, 255, 0.07);
+      --border2:    rgba(255, 255, 255, 0.12);
+      --accent:     #34d399;
+      --accent-dim: rgba(52, 211, 153, 0.12);
+      --accent-glow:rgba(52, 211, 153, 0.25);
+      --text-hi:    #f1f5f9;
+      --text-md:    #cbd5e1;
+      --text-lo:    #64748b;
+      --radius:     10px;
+      --radius-lg:  16px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-md);
+      line-height: 1.6;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15, 15, 26, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 32px; height: 32px; flex-shrink: 0; }
+    .logo-name { font-size: 17px; font-weight: 700; color: var(--text-hi); letter-spacing: -0.4px; }
+    nav { display: flex; align-items: center; gap: 8px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; color: var(--text-lo);
+      text-decoration: none; padding: 6px 12px; border-radius: 6px;
+      transition: color 180ms ease, background 180ms ease;
+    }
+    .nav-links a:hover { color: var(--text-hi); background: rgba(255,255,255,0.05); }
+    .btn-nav {
+      font-size: 13px; font-weight: 600; color: #0f0f1a;
+      background: var(--accent); border: none; border-radius: 7px;
+      padding: 8px 16px; cursor: pointer; text-decoration: none;
+      transition: opacity 160ms ease, transform 160ms ease;
+      white-space: nowrap;
+    }
+    .btn-nav:hover { opacity: 0.88; transform: translateY(-1px); }
+    .nav-toggle {
+      display: none; background: none; border: none; cursor: pointer;
+      color: var(--text-hi); padding: 6px; border-radius: 6px;
+    }
+    .nav-toggle svg { display: block; }
+
+    /* ─── HERO ─── */
+    .hero {
+      max-width: 1100px; margin: 0 auto;
+      padding: 96px 24px 80px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      background: var(--accent-dim); border: 1px solid rgba(52, 211, 153, 0.25);
+      padding: 5px 12px; border-radius: 20px; margin-bottom: 24px;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+    .hero h1 {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 800;
+      color: var(--text-hi);
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent) 0%, #6ee7b7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 16px; color: var(--text-md); line-height: 1.75;
+      margin-bottom: 36px; max-width: 480px;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 700; color: #0f0f1a;
+      background: var(--accent); border: none; border-radius: 9px;
+      padding: 13px 24px; cursor: pointer; text-decoration: none;
+      transition: opacity 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+      box-shadow: 0 0 0 0 var(--accent-glow);
+    }
+    .btn-primary:hover {
+      opacity: 0.9; transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+    .btn-ghost {
+      font-size: 14px; font-weight: 500; color: var(--text-lo);
+      text-decoration: none; transition: color 160ms ease;
+    }
+    .btn-ghost:hover { color: var(--text-hi); }
+    .hero-meta {
+      margin-top: 28px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    .hero-meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-lo);
+    }
+    .hero-meta-item svg { color: var(--accent); flex-shrink: 0; }
+
+    /* ─── HERO ILLUSTRATION ─── */
+    .hero-visual { position: relative; }
+    .price-card {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .price-card-header {
+      background: var(--surface2);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #28ca41; }
+    .price-card-title {
+      margin-left: 4px; font-size: 12px; font-weight: 600; color: var(--text-lo);
+    }
+    .price-card-product {
+      padding: 20px 16px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .product-thumb {
+      width: 100%; height: 72px;
+      background: var(--surface2);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .product-name { font-size: 13px; font-weight: 600; color: var(--text-hi); margin-bottom: 4px; }
+    .product-asin { font-size: 11px; color: var(--text-lo); }
+    .price-rows { padding: 8px 0; }
+    .price-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px;
+      transition: background 160ms ease;
+    }
+    .price-row:hover { background: rgba(255,255,255,0.03); }
+    .price-row.best { background: var(--accent-dim); }
+    .store-info { display: flex; align-items: center; gap: 10px; }
+    .store-badge {
+      width: 28px; height: 28px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 800; flex-shrink: 0;
+    }
+    .store-badge.amazon { background: rgba(255, 153, 0, 0.15); color: #ff9900; }
+    .store-badge.noon   { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
+    .store-badge.jumia  { background: rgba(255, 102, 0, 0.15); color: #ff6600; }
+    .store-name { font-size: 12px; font-weight: 600; color: var(--text-hi); }
+    .store-stock { font-size: 10px; color: var(--text-lo); }
+    .price-val { font-size: 15px; font-weight: 700; color: var(--text-hi); }
+    .price-val.best { color: var(--accent); }
+    .best-tag {
+      display: inline-block; font-size: 9px; font-weight: 700;
+      color: var(--accent); background: var(--accent-dim);
+      border: 1px solid rgba(52,211,153,0.25);
+      padding: 2px 6px; border-radius: 10px; margin-left: 6px;
+      vertical-align: middle;
+    }
+    .card-footer {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .saving-badge {
+      font-size: 11px; font-weight: 600; color: var(--accent);
+      background: var(--accent-dim); border: 1px solid rgba(52,211,153,0.2);
+      padding: 4px 10px; border-radius: 8px;
+    }
+    .view-btn {
+      font-size: 11px; font-weight: 600; color: var(--text-lo);
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      padding: 4px 10px; border-radius: 6px; cursor: pointer;
+      transition: color 160ms ease;
+    }
+    .view-btn:hover { color: var(--text-hi); }
+    /* floating badge */
+    .float-badge {
+      position: absolute; top: -14px; right: -14px;
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: 12px; padding: 10px 14px;
+      display: flex; align-items: center; gap: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      font-size: 12px; font-weight: 600; color: var(--text-hi);
+    }
+    .float-badge-icon { font-size: 18px; }
+
+    /* ─── STORES STRIP ─── */
+    .stores {
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 28px 24px;
+    }
+    .stores-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
+    }
+    .stores-label { font-size: 12px; font-weight: 600; color: var(--text-lo); text-transform: uppercase; letter-spacing: 0.08em; margin-right: 8px; }
+    .store-pill {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 18px; border-radius: 8px;
+      border: 1px solid var(--border2);
+      background: var(--surface);
+      font-size: 13px; font-weight: 700;
+      transition: border-color 200ms ease, background 200ms ease;
+    }
+    .store-pill:hover { border-color: var(--accent); background: var(--accent-dim); }
+    .store-pill.amazon-pill { color: #ff9900; }
+    .store-pill.noon-pill   { color: #ffcc00; }
+    .store-pill.jumia-pill  { color: #ff6600; }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 96px 24px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 12px; font-weight: 700; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(24px, 3vw, 38px); font-weight: 800;
+      color: var(--text-hi); letter-spacing: -0.8px; line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 16px; color: var(--text-md); line-height: 1.7;
+      max-width: 540px;
+    }
+    .section-head { margin-bottom: 56px; }
+
+    /* ─── FEATURES ─── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      transition: border-color 220ms ease, transform 220ms ease;
+    }
+    .feature-card:hover { border-color: var(--border2); transform: translateY(-3px); }
+    .feature-icon {
+      width: 44px; height: 44px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(52,211,153,0.2);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px; color: var(--accent);
+    }
+    .feature-title { font-size: 15px; font-weight: 700; color: var(--text-hi); margin-bottom: 8px; }
+    .feature-desc { font-size: 14px; color: var(--text-md); line-height: 1.7; }
+
+    /* ─── HOW IT WORKS ─── */
+    .hiw-bg { background: var(--surface); }
+    .hiw-steps {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+      position: relative;
+    }
+    .hiw-steps::before {
+      content: '';
+      position: absolute; top: 32px; left: calc(16.66% + 16px); right: calc(16.66% + 16px);
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), rgba(52,211,153,0.2) 50%, var(--accent));
+    }
+    .hiw-step { text-align: center; padding: 0 24px; }
+    .step-num {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--surface2);
+      border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      position: relative; z-index: 1;
+    }
+    .step-num-text { font-size: 18px; font-weight: 800; color: var(--accent); }
+    .step-icon { color: var(--accent); }
+    .step-title { font-size: 16px; font-weight: 700; color: var(--text-hi); margin-bottom: 10px; }
+    .step-desc { font-size: 14px; color: var(--text-md); line-height: 1.7; }
+
+    /* ─── PRICING ─── */
+    .pricing-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 720px; margin: 0 auto;
+    }
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      position: relative;
+    }
+    .pricing-card.pro {
+      border-color: rgba(52,211,153,0.3);
+      box-shadow: 0 0 0 1px rgba(52,211,153,0.1), 0 16px 48px rgba(52,211,153,0.08);
+    }
+    .pricing-card.pro::before {
+      content: '';
+      position: absolute; inset: 0; border-radius: var(--radius-lg);
+      background: radial-gradient(ellipse at top center, rgba(52,211,153,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .pricing-tier { font-size: 13px; font-weight: 700; color: var(--text-lo); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+    .pricing-price { font-size: 40px; font-weight: 800; color: var(--text-hi); letter-spacing: -1px; margin-bottom: 4px; }
+    .pricing-price span { font-size: 16px; font-weight: 500; color: var(--text-lo); }
+    .pricing-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      background: var(--accent-dim); border: 1px solid rgba(52,211,153,0.25);
+      padding: 3px 10px; border-radius: 20px; margin-bottom: 24px;
+    }
+    .pricing-divider { height: 1px; background: var(--border); margin: 24px 0; }
+    .pricing-features { list-style: none; padding: 0; margin: 0 0 32px; }
+    .pricing-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--text-md); line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .pricing-features li svg { flex-shrink: 0; margin-top: 2px; }
+    .pricing-features li.muted { color: var(--text-lo); }
+    .pricing-features li.muted svg { opacity: 0.4; }
+    .btn-outline {
+      display: block; width: 100%; text-align: center;
+      font-size: 14px; font-weight: 700;
+      color: var(--text-hi);
+      background: none; border: 1px solid var(--border2);
+      border-radius: 8px; padding: 12px 24px;
+      text-decoration: none; cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.05); border-color: var(--text-lo); }
+    .btn-primary-full {
+      display: block; width: 100%; text-align: center;
+      font-size: 14px; font-weight: 700;
+      color: #0f0f1a; background: var(--accent);
+      border: none; border-radius: 8px; padding: 12px 24px;
+      text-decoration: none; cursor: pointer;
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+    .btn-primary-full:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-disabled {
+      display: block; width: 100%; text-align: center;
+      font-size: 14px; font-weight: 700;
+      color: var(--text-lo); background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border); border-radius: 8px; padding: 12px 24px;
+      text-decoration: none; cursor: not-allowed;
+    }
+
+    /* ─── FINAL CTA ─── */
+    .cta-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .cta-inner {
+      max-width: 720px; margin: 0 auto; text-align: center; padding: 96px 24px;
+      position: relative;
+    }
+    .cta-inner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 600px 300px at center, rgba(52,211,153,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-inner h2 { font-size: clamp(26px, 3.5vw, 42px); font-weight: 800; color: var(--text-hi); letter-spacing: -1px; margin-bottom: 16px; }
+    .cta-inner p { font-size: 16px; color: var(--text-md); line-height: 1.7; margin-bottom: 36px; }
+    .cta-actions { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .cta-note { margin-top: 16px; font-size: 12px; color: var(--text-lo); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 36px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 12px; color: var(--text-lo); }
+    .footer-links { display: flex; align-items: center; gap: 20px; }
+    .footer-links a {
+      font-size: 12px; color: var(--text-lo); text-decoration: none;
+      transition: color 160ms ease;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px 56px; }
+      .hero-visual { order: -1; }
+      .features-grid { grid-template-columns: 1fr; gap: 16px; }
+      .hiw-steps { grid-template-columns: 1fr; gap: 40px; }
+      .hiw-steps::before { display: none; }
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; align-items: flex-start; gap: 0; position: absolute; top: 64px; left: 0; right: 0; background: rgba(15,15,26,0.98); border-bottom: 1px solid var(--border); padding: 8px 16px 16px; }
+      .nav-links.open { display: flex; }
+      .nav-links a { width: 100%; padding: 10px 12px; }
+      .nav-links .btn-nav { margin: 8px 12px 0; width: calc(100% - 24px); text-align: center; }
+      .nav-toggle { display: block; }
+      header { position: relative; }
+      section { padding: 64px 16px; }
+    }
+    @media (max-width: 480px) {
+      .hero { padding: 48px 16px 48px; }
+      .stores { padding: 20px 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header>
+    <a href="/" class="logo" aria-label="GitPrice home">
+      <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="7" fill="#34d399"/>
+        <text x="5.5" y="23" font-family="'Inter', system-ui, sans-serif" font-size="16" font-weight="800" fill="#0f0f1a">GP</text>
+      </svg>
+      <span class="logo-name">GitPrice</span>
+    </a>
+    <nav>
+      <div class="nav-links" id="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="https://chrome.google.com/webstore/detail/gitprice/EXTENSION_ID_HERE" target="_blank" rel="noopener" class="btn-nav">Install Free</a>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+          <line x1="3" y1="5" x2="17" y2="5"/>
+          <line x1="3" y1="10" x2="17" y2="10"/>
+          <line x1="3" y1="15" x2="17" y2="15"/>
+        </svg>
+      </button>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section style="padding: 0;">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Now available on Chrome Web Store
+        </div>
+        <h1>Compare Prices Across <em>Egyptian Stores</em> While You Shop</h1>
+        <p class="hero-sub">GitPrice automatically finds better deals on Amazon.eg, Noon, and Jumia — so you never overpay for anything you buy online.</p>
+        <div class="hero-actions">
+          <a href="https://chrome.google.com/webstore/detail/gitprice/EXTENSION_ID_HERE" target="_blank" rel="noopener" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Install on Chrome — It's Free
+          </a>
+          <a href="#features" class="btn-ghost">See how it works →</a>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Free forever
+          </div>
+          <div class="hero-meta-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            No account needed
+          </div>
+          <div class="hero-meta-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Works instantly
+          </div>
+        </div>
+      </div>
+
+      <!-- HERO VISUAL: mock price comparison card -->
+      <div class="hero-visual">
+        <div class="float-badge">
+          <span class="float-badge-icon">💰</span>
+          Save up to 40%
+        </div>
+        <div class="price-card" role="img" aria-label="GitPrice extension showing price comparison">
+          <div class="price-card-header">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+            <span class="price-card-title">GitPrice — Price Comparison</span>
+          </div>
+          <div class="price-card-product">
+            <div class="product-thumb">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(52,211,153,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><path d="M8 7V5a2 2 0 0 1 4 0v2"/></svg>
+            </div>
+            <div class="product-name">Sony WH-1000XM5 Headphones</div>
+            <div class="product-asin">ASIN: B09XS7JWHH</div>
+          </div>
+          <div class="price-rows">
+            <div class="price-row best">
+              <div class="store-info">
+                <div class="store-badge noon">N</div>
+                <div>
+                  <div class="store-name">Noon <span class="best-tag">Best Price</span></div>
+                  <div class="store-stock">In Stock</div>
+                </div>
+              </div>
+              <div class="price-val best">EGP 8,499</div>
+            </div>
+            <div class="price-row">
+              <div class="store-info">
+                <div class="store-badge amazon">A</div>
+                <div>
+                  <div class="store-name">Amazon.eg</div>
+                  <div class="store-stock">In Stock</div>
+                </div>
+              </div>
+              <div class="price-val">EGP 9,199</div>
+            </div>
+            <div class="price-row">
+              <div class="store-info">
+                <div class="store-badge jumia">J</div>
+                <div>
+                  <div class="store-name">Jumia</div>
+                  <div class="store-stock">Limited Stock</div>
+                </div>
+              </div>
+              <div class="price-val">EGP 9,649</div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="saving-badge">Save EGP 700 vs Amazon</div>
+            <button class="view-btn">View Deal</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORES STRIP -->
+  <div class="stores">
+    <div class="stores-inner">
+      <span class="stores-label">Works on</span>
+      <div class="store-pill amazon-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 7.594 3.166 11.87 3.166 2.852 0 5.668-.533 8.447-1.595l.315-.14c.138-.06.234-.1.293-.13.226-.088.39-.046.525.13.12.174.09.336-.12.48-.256.19-.6.41-1.006.654-1.905 1.094-4.188 1.642-6.85 1.642-3.84 0-7.37-.935-10.59-2.804-.278-.163-.44-.326-.47-.49zm1.296-1.86c-.232-.26-.183-.527.205-.784 2.18-1.442 4.17-2.57 5.97-3.38 1.79-.81 3.69-1.47 5.7-1.97.4-.11.73.07.97.56.05.11.05.22 0 .34-.12.23-.37.31-.73.22-1.79.42-3.54 1.03-5.25 1.82-1.71.79-3.56 1.87-5.55 3.24-.23.16-.47.17-.67.01l-.64-.06zm7.686-4.24c-.1-.26.01-.47.33-.63 1.52-.77 2.97-1.23 4.37-1.38.22-.02.43.02.63.13.24.14.33.37.27.7-.06.28-.25.42-.57.44-1.19.12-2.44.51-3.74 1.16-.26.13-.48.13-.64.01l-.65-.44zm.784-3.09c-.2-.3-.13-.57.23-.82 1.11-.75 2.38-1.24 3.79-1.47.32-.05.62.04.9.27.27.22.35.52.25.9l-.01.03c-.08.24-.24.37-.47.4-1.14.19-2.23.61-3.27 1.26-.26.17-.53.16-.74-.01l-.67-.57zm4.81-3.14c-.15-.28-.07-.52.23-.71 1.27-.8 2.7-1.2 4.31-1.2.66 0 1.31.08 1.95.25.38.1.58.35.59.74.01.34-.18.55-.57.64-.17.04-.39.04-.67.02-.5-.05-1.02-.07-1.56-.07-1.28 0-2.48.31-3.61.92-.25.13-.47.13-.67-.02l-.02-.57z"/></svg>
+        Amazon.eg
+      </div>
+      <div class="store-pill noon-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Noon
+      </div>
+      <div class="store-pill jumia-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Jumia
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="section-inner">
+      <div class="section-head">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Everything you need to shop smarter</h2>
+        <p class="section-sub">GitPrice works silently in the background, surfacing better deals without disrupting your shopping flow.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="feature-title">Real-Time Price Comparison</div>
+          <div class="feature-desc">See prices from Amazon.eg, Noon, and Jumia side-by-side on any product page — updated instantly as you browse.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <div class="feature-title">Price Alerts & Tracking</div>
+          <div class="feature-desc">Set a target price and get notified the moment any store drops below it. Never miss a sale again.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="feature-title">Price History Charts</div>
+          <div class="feature-desc">Track price trends over time across all three stores. Know if you're buying at the best price or waiting will save you more.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works" class="hiw-bg" style="padding: 96px 24px;">
+    <div class="section-inner">
+      <div class="section-head" style="text-align: center; max-width: 560px; margin: 0 auto 64px;">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">Up and running in seconds</h2>
+        <p class="section-sub">No sign-up required. Install and immediately start saving on your next purchase.</p>
+      </div>
+      <div class="hiw-steps">
+        <div class="hiw-step">
+          <div class="step-num" aria-hidden="true">
+            <svg class="step-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </div>
+          <div class="step-title">1. Install</div>
+          <div class="step-desc">Add GitPrice to Chrome with one click. No account, no email — just install and go.</div>
+        </div>
+        <div class="hiw-step">
+          <div class="step-num" aria-hidden="true">
+            <svg class="step-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </div>
+          <div class="step-title">2. Browse</div>
+          <div class="step-desc">Shop normally on Amazon.eg, Noon, or Jumia. GitPrice works quietly in the background.</div>
+        </div>
+        <div class="hiw-step">
+          <div class="step-num" aria-hidden="true">
+            <svg class="step-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 14.14 14.14"/><path d="M12 8v4l2 2"/></svg>
+          </div>
+          <div class="step-title">3. Save</div>
+          <div class="step-desc">GitPrice shows you a better price instantly. One click takes you to the cheaper store.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="section-inner">
+      <div class="section-head" style="text-align: center; max-width: 540px; margin: 0 auto 56px;">
+        <div class="section-label">Pricing</div>
+        <h2 class="section-title">Simple, honest pricing</h2>
+        <p class="section-sub">Start for free. Upgrade when you're ready for advanced features.</p>
+      </div>
+      <div class="pricing-grid">
+        <!-- Free -->
+        <div class="pricing-card">
+          <div class="pricing-tier">Free</div>
+          <div class="pricing-price">$0 <span>/ forever</span></div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Real-time price comparison
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Side-by-side store results
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Basic product matching
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Amazon.eg, Noon, Jumia
+            </li>
+          </ul>
+          <a href="https://chrome.google.com/webstore/detail/gitprice/EXTENSION_ID_HERE" target="_blank" rel="noopener" class="btn-primary-full">Install Free</a>
+        </div>
+        <!-- Pro -->
+        <div class="pricing-card pro">
+          <div class="pricing-tier">Pro</div>
+          <div class="pricing-price" style="color: var(--accent);">Coming Soon</div>
+          <div style="margin-bottom: 24px;">
+            <span class="pricing-tag">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+              In Development
+            </span>
+          </div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Everything in Free
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Price drop alerts
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Price history charts
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Priority product matching
+            </li>
+          </ul>
+          <span class="btn-disabled" aria-disabled="true">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cta-section" style="padding: 0;">
+    <div class="cta-inner">
+      <h2>Start Saving Today</h2>
+      <p>Join smart shoppers comparing prices across Egyptian stores.<br>Free, instant, no account required.</p>
+      <div class="cta-actions">
+        <a href="https://chrome.google.com/webstore/detail/gitprice/EXTENSION_ID_HERE" target="_blank" rel="noopener" class="btn-primary" style="font-size: 16px; padding: 15px 30px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Install GitPrice — It's Free
+        </a>
+      </div>
+      <div class="cta-note">Available for Chrome · No sign-up · Works on Amazon.eg, Noon &amp; Jumia</div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <a href="/" class="logo" aria-label="GitPrice home" style="gap: 8px;">
+          <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="7" fill="#34d399"/><text x="5.5" y="23" font-family="'Inter', system-ui" font-size="16" font-weight="800" fill="#0f0f1a">GP</text></svg>
+          <span style="font-size: 14px; font-weight: 600; color: var(--text-hi);">GitPrice</span>
+        </a>
+        <span class="footer-copy">© 2026 GitPrice. All rights reserved.</span>
+      </div>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        var target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Mobile nav toggle
+    var toggle = document.getElementById('nav-toggle');
+    var navLinks = document.getElementById('nav-links');
+    if (toggle && navLinks) {
+      toggle.addEventListener('click', function() {
+        var open = navLinks.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      // Close on link click
+      navLinks.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          navLinks.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+  </script>
+</body>
+</html>
