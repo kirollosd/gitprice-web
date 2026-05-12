@@ -5,92 +5,176 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Terms of Service — GitPrice</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap');
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand:   #2D415E;
+      --accent:  #059669;
+      --bg:      #F8FAFC;
+      --surface: #FFFFFF;
+      --border:  #E2E8F0;
+      --text:    #1E293B;
+      --muted:   #64748B;
+      --body:    #374151;
+    }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
-      background: #f9fafb;
-      color: #1f2937;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.7;
       font-size: 16px;
     }
+
+    /* ── Header ───────────────────────────────────── */
     header {
-      background: #1a1a2e;
-      padding: 16px 24px;
+      background: var(--brand);
+      padding: 14px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .header-inner {
+      max-width: 760px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
-    header a { text-decoration: none; display: flex; align-items: center; gap: 8px; }
-    header span {
-      font-size: 18px;
-      font-weight: 700;
-      color: #34d399;
+    .logo-icon { width: 30px; height: 30px; flex-shrink: 0; }
+    .logo-name {
+      font-size: 17px;
+      font-weight: 600;
+      color: #FFFFFF;
       letter-spacing: -0.3px;
     }
+    .logo-name em { font-style: normal; color: #34d399; }
+
+    /* ── Main ─────────────────────────────────────── */
     main {
       max-width: 760px;
-      margin: 48px auto;
-      padding: 0 24px 80px;
+      margin: 0 auto;
+      padding: 52px 24px 96px;
     }
+
+    .doc-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
     h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #111827;
-      margin-bottom: 8px;
-    }
-    .meta {
-      font-size: 14px;
-      color: #6b7280;
-      margin-bottom: 40px;
-    }
-    h2 {
-      font-size: 1.125rem;
+      font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+      font-size: 2.5rem;
       font-weight: 700;
-      color: #111827;
-      margin-top: 36px;
+      color: var(--brand);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 36px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .intro-box {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 18px 20px;
+      margin-bottom: 40px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .intro-box p { font-size: 15px; color: var(--body); margin-bottom: 0; }
+
+    h2 {
+      font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--brand);
+      margin-top: 44px;
       margin-bottom: 12px;
     }
-    p { margin-bottom: 14px; color: #374151; }
-    ul { padding-left: 20px; margin-bottom: 14px; }
-    li { margin-bottom: 6px; color: #374151; }
-    a { color: #059669; }
+
+    p { font-size: 15px; color: var(--body); margin-bottom: 14px; }
+
+    ul { padding-left: 22px; margin-bottom: 14px; }
+    li { font-size: 15px; color: var(--body); margin-bottom: 7px; padding-left: 4px; }
+
+    strong { color: var(--text); font-weight: 600; }
+
+    a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
+    a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    /* ── Footer ───────────────────────────────────── */
     footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 24px;
       text-align: center;
       font-size: 13px;
-      color: #9ca3af;
-      padding: 24px;
-      border-top: 1px solid #e5e7eb;
-      margin-top: 60px;
+      color: var(--muted);
     }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+    .footer-sep { margin: 0 10px; opacity: 0.4; }
+
+    /* ── Responsive ───────────────────────────────── */
     @media (max-width: 600px) {
-      main { margin: 24px auto; }
-      h1 { font-size: 1.5rem; }
+      h1 { font-size: 1.875rem; }
+      main { padding: 36px 16px 72px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <a href="https://gitprice.com">
-      <span>GitPrice</span>
-    </a>
+    <div class="header-inner">
+      <svg class="logo-icon" viewBox="516 330 363 363" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M694.982 564.096C638.749 564.096 593 518.316 593 462.045C593 405.778 638.749 360 694.982 360C751.218 360 796.964 405.778 796.964 462.045C796.964 518.316 751.218 564.096 694.982 564.096ZM694.982 421.117C672.428 421.117 654.078 439.478 654.078 462.045C654.078 484.614 672.428 502.978 694.982 502.978C717.537 502.978 735.89 484.614 735.89 462.045C735.89 439.478 717.537 421.117 694.982 421.117Z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M694.983 360H802.541V421.116H694.983V360Z" fill="white"/>
+        <path d="M694.983 663.053C669.893 663.053 645.402 658.475 622.194 649.445L644.329 592.486C676.573 605.029 713.392 605.029 745.624 592.492L767.755 649.451C744.553 658.48 720.068 663.053 694.983 663.053Z" fill="#34d399"/>
+      </svg>
+      <span class="logo-name">Git<em>Price</em></span>
+    </div>
   </header>
 
   <main>
+    <span class="doc-label">Legal</span>
     <h1>Terms of Service</h1>
-    <p class="meta">Last updated: May 11, 2026 &nbsp;·&nbsp; Effective: May 11, 2026</p>
+    <p class="meta">Last updated: May 11, 2026 &nbsp;&middot;&nbsp; Effective: May 11, 2026</p>
 
-    <p>
-      Please read these Terms of Service ("<strong>Terms</strong>") carefully before installing or
-      using the GitPrice Chrome extension ("<strong>Service</strong>"). By installing or using the
-      Service, you agree to be bound by these Terms. If you do not agree, do not install or use the
-      Service.
-    </p>
+    <div class="intro-box">
+      <p>
+        Please read these Terms of Service (&ldquo;<strong>Terms</strong>&rdquo;) carefully before installing or
+        using the GitPrice Chrome extension (&ldquo;<strong>Service</strong>&rdquo;). By installing or using the
+        Service, you agree to be bound by these Terms. If you do not agree, do not install or use the
+        Service.
+      </p>
+    </div>
 
     <h2>1. Description of Service</h2>
     <p>
       GitPrice is a browser extension that automatically detects product pages on supported
-      e-commerce platforms — currently Amazon.eg, Noon, and Jumia — and displays price comparisons
+      e-commerce platforms &mdash; currently Amazon.eg, Noon, and Jumia &mdash; and displays price comparisons
       for the same or equivalent products across those platforms. The Service also provides optional
       price-drop alerts and a 6-month local price history for tracked products.
     </p>
@@ -114,7 +198,7 @@
       <li>Not attempt to reverse-engineer, decompile, or scrape the Service itself.</li>
       <li>Not use the Service to automate bulk purchases, generate fraudulent affiliate clicks, or
           circumvent the terms of any supported e-commerce platform.</li>
-      <li>Not interfere with or disrupt the Service's infrastructure or the servers of third-party
+      <li>Not interfere with or disrupt the Service&rsquo;s infrastructure or the servers of third-party
           platforms it accesses.</li>
       <li>Comply with all applicable laws and regulations in your jurisdiction.</li>
     </ul>
@@ -122,11 +206,11 @@
     <h2>4. Affiliate Disclosure</h2>
     <p>
       GitPrice participates in affiliate programmes operated by Amazon.eg, Noon, and Jumia. When
-      you click a price-comparison result or a "Go to Store" link provided by the Service, that
+      you click a price-comparison result or a &ldquo;Go to Store&rdquo; link provided by the Service, that
       link may contain an affiliate tracking code. If you complete a purchase after following such a
       link, GitPrice may receive a commission from the retailer at <strong>no additional cost to
       you</strong>. Affiliate commissions do not influence the prices displayed or the ranking of
-      results — GitPrice always shows you the best available price regardless of affiliate
+      results &mdash; GitPrice always shows you the best available price regardless of affiliate
       relationships.
     </p>
 
@@ -135,12 +219,12 @@
       GitPrice stores product data and price history <strong>locally on your device</strong>. No
       personal shopping data is transmitted to GitPrice servers in the current MVP release. For
       details on what data is collected and how it is used, please see our
-      <a href="https://kirollosd.github.io/gitprice-web/privacy.html">Privacy Policy</a>.
+      <a href="privacy.html">Privacy Policy</a>.
     </p>
 
     <h2>6. Disclaimer of Warranties</h2>
     <p>
-      THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+      THE SERVICE IS PROVIDED &ldquo;AS IS&rdquo; AND &ldquo;AS AVAILABLE&rdquo; WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
       IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
       PURPOSE, AND NON-INFRINGEMENT. GITPRICE DOES NOT WARRANT THAT PRICES DISPLAYED ARE ACCURATE,
       COMPLETE, OR UP TO DATE. PRICES ON THIRD-PARTY PLATFORMS MAY CHANGE AT ANY TIME, AND
@@ -151,9 +235,9 @@
     <p>
       TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, GITPRICE AND ITS OFFICERS, EMPLOYEES, AND
       CONTRIBUTORS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR
-      PUNITIVE DAMAGES — INCLUDING LOSS OF PROFITS, DATA, OR GOODWILL — ARISING FROM YOUR USE OF
+      PUNITIVE DAMAGES &mdash; INCLUDING LOSS OF PROFITS, DATA, OR GOODWILL &mdash; ARISING FROM YOUR USE OF
       OR INABILITY TO USE THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
-      GITPRICE'S TOTAL LIABILITY TO YOU FOR ANY CLAIMS ARISING UNDER THESE TERMS SHALL NOT EXCEED
+      GITPRICE&rsquo;S TOTAL LIABILITY TO YOU FOR ANY CLAIMS ARISING UNDER THESE TERMS SHALL NOT EXCEED
       USD 10.
     </p>
 
@@ -161,7 +245,7 @@
     <p>
       The Service accesses publicly available data on third-party e-commerce platforms. GitPrice is
       not affiliated with, endorsed by, or sponsored by Amazon.eg, Noon, Jumia, or any other
-      retailer. Each platform's own terms of service govern your use of that platform, and GitPrice
+      retailer. Each platform&rsquo;s own terms of service govern your use of that platform, and GitPrice
       makes no representations regarding those terms.
     </p>
 
@@ -177,7 +261,7 @@
     <p>
       You may stop using the Service at any time by uninstalling the extension. GitPrice may
       suspend or terminate your access to the Service (including account features) if you violate
-      these Terms. Upon termination, the obligations and limitations set forth in Sections 4–7 and
+      these Terms. Upon termination, the obligations and limitations set forth in Sections 4&ndash;7 and
       11 survive.
     </p>
 
@@ -188,18 +272,17 @@
       relating to these Terms or the Service shall be subject to the exclusive jurisdiction of the
       courts located in Cairo, Egypt.
     </p>
-
-    <h2>12. Contact</h2>
-    <p>
-      If you have questions about these Terms, please contact us at
-      <a href="mailto:support@gitprice.com">support@gitprice.com</a>.
-    </p>
   </main>
 
   <footer>
-    &copy; 2026 GitPrice. All rights reserved. &nbsp;·&nbsp;
-    <a href="https://kirollosd.github.io/gitprice-web/privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
-    <a href="https://kirollosd.github.io/gitprice-web/terms.html">Terms of Service</a>
+    <p>
+      &copy; 2026 GitPrice. All rights reserved.
+      <span class="footer-sep">&middot;</span>
+      <a href="privacy.html">Privacy Policy</a>
+      <span class="footer-sep">&middot;</span>
+      <a href="terms.html">Terms of Service</a>
+    </p>
   </footer>
+
 </body>
 </html>

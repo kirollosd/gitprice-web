@@ -5,64 +5,179 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Privacy Policy — GitPrice</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand:   #2D415E;
+      --accent:  #059669;
+      --bg:      #F8FAFC;
+      --surface: #FFFFFF;
+      --border:  #E2E8F0;
+      --text:    #1E293B;
+      --muted:   #64748B;
+      --body:    #374151;
+    }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #0f0f1a;
-      color: #e2e8f0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.7;
-      padding: 40px 20px 80px;
+      font-size: 16px;
     }
-    .container { max-width: 720px; margin: 0 auto; }
-    .logo {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 48px;
+
+    /* ── Header ───────────────────────────────────── */
+    header {
+      background: var(--brand);
+      padding: 14px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
-    .logo-text {
-      font-size: 22px; font-weight: 700; color: #34d399;
-      letter-spacing: -0.5px;
+    .header-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
+    .logo-icon { width: 30px; height: 30px; flex-shrink: 0; }
+    .logo-name {
+      font-size: 17px;
+      font-weight: 600;
+      color: #FFFFFF;
+      letter-spacing: -0.3px;
+    }
+    .logo-name em { font-style: normal; color: #34d399; }
+
+    /* ── Main ─────────────────────────────────────── */
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 52px 24px 96px;
+    }
+
+    .doc-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
     h1 {
-      font-size: 30px; font-weight: 700; color: #f1f5f9;
-      margin-bottom: 8px;
+      font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--brand);
+      line-height: 1.15;
+      margin-bottom: 10px;
     }
-    .effective {
-      font-size: 13px; color: #9ca3af; margin-bottom: 40px;
+
+    .meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 36px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
     }
+
+    .intro-box {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 18px 20px;
+      margin-bottom: 40px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .intro-box p { font-size: 15px; color: var(--body); margin-bottom: 0; }
+
     h2 {
-      font-size: 18px; font-weight: 600; color: #34d399;
-      margin-top: 36px; margin-bottom: 10px;
+      font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--brand);
+      margin-top: 44px;
+      margin-bottom: 12px;
     }
-    p { font-size: 14px; color: #cbd5e1; margin-bottom: 12px; }
-    ul { padding-left: 20px; margin-bottom: 12px; }
-    li { font-size: 14px; color: #cbd5e1; margin-bottom: 6px; }
-    a { color: #34d399; text-decoration: none; }
+
+    p { font-size: 15px; color: var(--body); margin-bottom: 14px; }
+
+    ul { padding-left: 22px; margin-bottom: 14px; }
+    li { font-size: 15px; color: var(--body); margin-bottom: 7px; padding-left: 4px; }
+
+    strong { color: var(--text); font-weight: 600; }
+
+    code {
+      font-size: 12.5px;
+      background: #F1F5F9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #475569;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .footer {
-      margin-top: 56px; padding-top: 24px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      font-size: 12px; color: #6b7280;
+    a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    /* ── Footer ───────────────────────────────────── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+    .footer-sep { margin: 0 10px; opacity: 0.4; }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 600px) {
+      h1 { font-size: 1.875rem; }
+      main { padding: 36px 16px 72px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="28" height="28" rx="6" fill="#34d399"/>
-        <text x="5" y="21" font-size="18" font-weight="800" fill="#0f0f1a">GP</text>
+
+  <header>
+    <div class="header-inner">
+      <svg class="logo-icon" viewBox="516 330 363 363" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M694.982 564.096C638.749 564.096 593 518.316 593 462.045C593 405.778 638.749 360 694.982 360C751.218 360 796.964 405.778 796.964 462.045C796.964 518.316 751.218 564.096 694.982 564.096ZM694.982 421.117C672.428 421.117 654.078 439.478 654.078 462.045C654.078 484.614 672.428 502.978 694.982 502.978C717.537 502.978 735.89 484.614 735.89 462.045C735.89 439.478 717.537 421.117 694.982 421.117Z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M694.983 360H802.541V421.116H694.983V360Z" fill="white"/>
+        <path d="M694.983 663.053C669.893 663.053 645.402 658.475 622.194 649.445L644.329 592.486C676.573 605.029 713.392 605.029 745.624 592.492L767.755 649.451C744.553 658.48 720.068 663.053 694.983 663.053Z" fill="#34d399"/>
       </svg>
-      <span class="logo-text">GitPrice</span>
+      <span class="logo-name">Git<em>Price</em></span>
     </div>
+  </header>
 
+  <main>
+    <span class="doc-label">Legal</span>
     <h1>Privacy Policy</h1>
-    <p class="effective">Effective date: May 11, 2026 &nbsp;·&nbsp; Last updated: May 11, 2026</p>
+    <p class="meta">Effective date: May 11, 2026 &nbsp;&middot;&nbsp; Last updated: May 11, 2026</p>
 
-    <p>
-      GitPrice ("we", "us", or "our") is a browser extension that helps you compare prices across
-      Egyptian e-commerce stores including Amazon.eg, Noon, Jumia, B.Tech, and 2B. This Privacy
-      Policy explains what information we collect, how we use it, and your rights as a user.
-    </p>
+    <div class="intro-box">
+      <p>
+        GitPrice (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;) is a browser extension that helps you compare prices across
+        Egyptian e-commerce stores including Amazon.eg, Noon, Jumia, B.Tech, and 2B. This Privacy
+        Policy explains what information we collect, how we use it, and your rights as a user.
+      </p>
+    </div>
 
     <h2>1. Information We Collect</h2>
     <p>GitPrice collects the minimum data necessary to provide price comparison functionality.</p>
@@ -71,7 +186,7 @@
       <li>Product identifiers (ASIN, SKU) and product titles from the pages you browse on supported stores</li>
       <li>Current prices displayed on those pages</li>
       <li>Your extension settings (e.g. background search frequency, notifications preference) stored in <code>chrome.storage.sync</code></li>
-      <li>Anonymous error and crash reports (opt-out available in Settings → Privacy)</li>
+      <li>Anonymous error and crash reports (opt-out available in Settings &rarr; Privacy)</li>
     </ul>
     <p><strong>Account data (if you sign in):</strong></p>
     <ul>
@@ -97,7 +212,7 @@
       you see or pay.
     </p>
     <p>
-      When you follow an affiliate link, the destination store's own privacy policy applies to
+      When you follow an affiliate link, the destination store&rsquo;s own privacy policy applies to
       your activity on their site. GitPrice does not share your personal information with
       affiliate stores.
     </p>
@@ -105,7 +220,7 @@
     <h2>4. Data Storage and Security</h2>
     <p>
       Your extension settings and authentication tokens are stored locally in your browser using
-      Chrome's secure storage APIs (<code>chrome.storage.local</code> and
+      Chrome&rsquo;s secure storage APIs (<code>chrome.storage.local</code> and
       <code>chrome.storage.sync</code>). Server-side data (e.g. your account and price history)
       is stored on secured servers with access controls and encryption at rest.
     </p>
@@ -130,21 +245,21 @@
       <li><strong>Deletion:</strong> Request deletion of your account and associated data</li>
       <li><strong>Portability:</strong> Receive your data in a machine-readable format</li>
       <li><strong>Objection:</strong> Object to processing based on legitimate interests</li>
-      <li><strong>Opt-out of error reporting:</strong> Disable anonymous error reports in Settings → Privacy</li>
+      <li><strong>Opt-out of error reporting:</strong> Disable anonymous error reports in Settings &rarr; Privacy</li>
     </ul>
     <p>To exercise these rights, contact us at <a href="mailto:privacy@gitprice.com">privacy@gitprice.com</a>.</p>
 
     <h2>7. Cookies and Tracking</h2>
     <p>
       The GitPrice extension itself does not set cookies. When you visit store pages, those
-      sites may set their own cookies — their respective privacy policies govern that activity.
+      sites may set their own cookies &mdash; their respective privacy policies govern that activity.
     </p>
 
-    <h2>8. Children's Privacy</h2>
+    <h2>8. Children&rsquo;s Privacy</h2>
     <p>
       GitPrice is not directed at children under 13. We do not knowingly collect personal
       information from children. If you believe a child has provided us with personal data,
-      please contact us and we will promptly delete it.
+      please contact us at <a href="mailto:privacy@gitprice.com">privacy@gitprice.com</a> and we will promptly delete it.
     </p>
 
     <h2>9. Changes to This Policy</h2>
@@ -153,17 +268,17 @@
       this page with an updated effective date. For significant changes, we will notify you via
       a notice in the extension.
     </p>
+  </main>
 
-    <h2>10. Contact Us</h2>
-    <p>If you have questions about this Privacy Policy, please contact us:</p>
-    <ul>
-      <li>Email: <a href="mailto:privacy@gitprice.com">privacy@gitprice.com</a></li>
-      <li>GitHub: <a href="https://github.com/kirollosd/gitprice" target="_blank" rel="noopener noreferrer">github.com/kirollosd/gitprice</a></li>
-    </ul>
-
-    <div class="footer">
+  <footer>
+    <p>
       &copy; 2026 GitPrice. All rights reserved.
-    </div>
-  </div>
+      <span class="footer-sep">&middot;</span>
+      <a href="privacy.html">Privacy Policy</a>
+      <span class="footer-sep">&middot;</span>
+      <a href="terms.html">Terms of Service</a>
+    </p>
+  </footer>
+
 </body>
 </html>
