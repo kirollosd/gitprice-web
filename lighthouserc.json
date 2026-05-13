@@ -1,7 +1,12 @@
 {
   "ci": {
     "collect": {
-      "staticDistDir": "./out"
+      "staticDistDir": "./out",
+      "url": [
+        "http://localhost/",
+        "http://localhost/privacy/",
+        "http://localhost/terms/"
+      ]
     },
     "assert": {
       "assertions": {
