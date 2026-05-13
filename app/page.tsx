@@ -154,15 +154,15 @@ export default function HomePage() {
 
           <ol className={styles.stepList} role="list">
             {STEPS.map((step, i) => (
-              <ScrollReveal key={step.num} delay={i * 100}>
-                <li className={styles.step}>
+              <li key={step.num} className={styles.step}>
+                <ScrollReveal delay={i * 100}>
                   <div className={styles.stepNum}>{step.num}</div>
                   <div className={styles.stepContent}>
                     <h3 className={styles.stepTitle}>{step.title}</h3>
                     <p className={styles.stepBody}>{step.body}</p>
                   </div>
-                </li>
-              </ScrollReveal>
+                </ScrollReveal>
+              </li>
             ))}
           </ol>
         </div>
