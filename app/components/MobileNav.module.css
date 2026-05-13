@@ -1,0 +1,113 @@
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.hamburger:hover {
+  background-color: var(--color-surface-2);
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-text-secondary);
+  border-radius: 2px;
+  transition: transform var(--transition-base), opacity var(--transition-base);
+  transform-origin: center;
+}
+
+.barTop  { transform: rotate(45deg) translate(5px, 5px); }
+.barMid  { opacity: 0; }
+.barBot  { transform: rotate(-45deg) translate(5px, -5px); }
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+
+.drawer {
+  position: fixed;
+  top: var(--nav-height);
+  right: 0;
+  bottom: 0;
+  z-index: 95;
+  width: min(280px, 80vw);
+  background-color: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  padding: var(--space-6);
+  transform: translateX(100%);
+  transition: transform var(--transition-base);
+  overflow-y: auto;
+}
+
+.drawerOpen {
+  transform: translateX(0);
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.link {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  text-decoration: none;
+}
+
+.link:hover,
+.linkActive {
+  background-color: var(--color-surface-2);
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.cta {
+  display: block;
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-brand);
+  color: #0f0f1a;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  text-align: center;
+  transition: background-color var(--transition-fast);
+  text-decoration: none;
+}
+
+.cta:hover {
+  background-color: var(--color-brand-light);
+  text-decoration: none;
+  color: #0f0f1a;
+}
+
+/* Show hamburger only on mobile */
+@media (max-width: 767px) {
+  .hamburger {
+    display: flex;
+  }
+}

@@ -1,0 +1,201 @@
+/* ── Browser shell ─────────────────────────────────────── */
+.browser {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    var(--shadow-glow);
+  overflow: hidden;
+  font-size: 11px;
+}
+
+/* ── Address bar ────────────────────────────────────────── */
+.chrome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #131320;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.dot[data-color="red"]    { background: #ff5f57; }
+.dot[data-color="yellow"] { background: #febc2e; }
+.dot[data-color="green"]  { background: #28c840; }
+
+.addressBar {
+  flex: 1;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.extIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* ── Page area ──────────────────────────────────────────── */
+.page {
+  position: relative;
+  min-height: 280px;
+  padding: 20px 16px;
+  background: var(--color-surface);
+}
+
+.pageContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 180px;
+  opacity: 0.35;
+}
+
+.skeleton {
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Popup panel ────────────────────────────────────────── */
+.popup {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 192px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-2);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.popupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border);
+  background: rgba(52, 211, 153, 0.06);
+}
+
+.popupLogo {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-brand);
+  letter-spacing: -0.02em;
+}
+
+.popupBadge {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+}
+
+/* ── Comparison table ───────────────────────────────────── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+}
+
+.table th {
+  padding: 6px 10px 4px;
+  text-align: left;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--font-body);
+}
+
+.table td {
+  padding: 5px 10px;
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+}
+
+.bestRow td {
+  background: rgba(52, 211, 153, 0.07);
+}
+
+.storeName {
+  font-weight: 600;
+  color: var(--color-text-primary) !important;
+}
+
+.price {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.bestRow .price {
+  color: var(--color-brand) !important;
+}
+
+.bestTag {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  color: #0f0f1a;
+  background: var(--color-brand);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.savingsTag {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 600;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.12);
+  padding: 2px 5px;
+  border-radius: var(--radius-full);
+}
+
+.goBtn {
+  display: block;
+  width: calc(100% - 16px);
+  margin: 8px;
+  padding: 7px 0;
+  border-radius: var(--radius-md);
+  background: var(--color-brand);
+  color: #0f0f1a;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  font-weight: 700;
+  border: none;
+  text-align: center;
+  cursor: default;
+}
