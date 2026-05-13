@@ -892,8 +892,17 @@
   <!-- ═══ NAV ═══ -->
   <nav class="nav" aria-label="Main navigation">
     <div class="container">
-      <!-- Real brand logo from public/logo_full.svg — paths extracted, viewBox trimmed to content -->
-      <a href="#" class="logo" aria-label="GitPrice home" style="display:inline-flex;align-items:center;">
+      <!-- Real brand logos from public/logo_icon.svg (icon mark) + public/logo_full.svg (wordmark) -->
+      <a href="#" class="logo" aria-label="GitPrice home">
+        <!-- Icon mark: logo_icon.svg paths, white fill on emerald square background -->
+        <div class="logo-mark" aria-hidden="true">
+          <svg width="18" height="18" viewBox="593 360 210 303" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M694.982 564.096C638.749 564.096 593 518.316 593 462.045C593 405.778 638.749 360 694.982 360C751.218 360 796.964 405.778 796.964 462.045C796.964 518.316 751.218 564.096 694.982 564.096ZM694.982 421.117C672.428 421.117 654.078 439.478 654.078 462.045C654.078 484.614 672.428 502.978 694.982 502.978C717.537 502.978 735.89 484.614 735.89 462.045C735.89 439.478 717.537 421.117 694.982 421.117Z" fill="white"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M694.983 360H802.541V421.116H694.983V360Z" fill="white"/>
+            <path d="M694.983 663.053C669.893 663.053 645.402 658.475 622.194 649.445L644.329 592.486C676.573 605.029 713.392 605.029 745.624 592.492L767.755 649.451C744.553 658.48 720.068 663.053 694.983 663.053Z" fill="white"/>
+          </svg>
+        </div>
+        <!-- Wordmark: logo_full.svg paths, brand-dark navy on light background -->
         <svg height="22" viewBox="37 313 1366 392" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;">
           <path d="M139.064 606.402C82.8302 606.402 37.0812 560.623 37.0812 504.352C37.0812 448.084 82.8302 402.307 139.064 402.307C195.299 402.307 241.045 448.084 241.045 504.352C241.045 560.623 195.299 606.402 139.064 606.402ZM139.064 463.424C116.509 463.424 98.1595 481.784 98.1595 504.352C98.1595 526.921 116.509 545.284 139.064 545.284C161.619 545.284 179.971 526.921 179.971 504.352C179.971 481.784 161.619 463.424 139.064 463.424Z" fill="#2D415E"/>
           <path fill-rule="evenodd" clip-rule="evenodd" d="M139.064 402.307H246.622V463.423H139.064V402.307Z" fill="#2D415E"/>
@@ -975,9 +984,12 @@
           </div>
           <div class="browser-body">
             <div class="panel-head">
+              <!-- panel-logo uses logo_icon.svg paths, white fill on emerald square -->
               <div class="panel-logo" aria-hidden="true">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <text x="2" y="12" font-family="'Sora',sans-serif" font-weight="700" font-size="11" fill="white">G</text>
+                <svg width="14" height="14" viewBox="593 360 210 303" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M694.982 564.096C638.749 564.096 593 518.316 593 462.045C593 405.778 638.749 360 694.982 360C751.218 360 796.964 405.778 796.964 462.045C796.964 518.316 751.218 564.096 694.982 564.096ZM694.982 421.117C672.428 421.117 654.078 439.478 654.078 462.045C654.078 484.614 672.428 502.978 694.982 502.978C717.537 502.978 735.89 484.614 735.89 462.045C735.89 439.478 717.537 421.117 694.982 421.117Z" fill="white"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M694.983 360H802.541V421.116H694.983V360Z" fill="white"/>
+                  <path d="M694.983 663.053C669.893 663.053 645.402 658.475 622.194 649.445L644.329 592.486C676.573 605.029 713.392 605.029 745.624 592.492L767.755 649.451C744.553 658.48 720.068 663.053 694.983 663.053Z" fill="white"/>
                 </svg>
               </div>
               <div>
