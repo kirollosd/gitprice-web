@@ -57,10 +57,10 @@ export const metadata: Metadata = {
       "Automatically compare prices across Amazon.eg, Noon, and Jumia as you browse. Never overpay again.",
     images: [
       {
-        url: "/logo_full.svg",
-        width: 1440,
-        height: 1024,
-        alt: "GitPrice logo",
+        url: "/logo_og.png",
+        width: 1200,
+        height: 630,
+        alt: "GitPrice — Price Comparison for Egypt",
       },
     ],
   },
@@ -72,10 +72,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/logo_icon.svg", type: "image/svg+xml" },
+      { url: "/gitprice-web/favicon.ico", sizes: "any" },
+      { url: "/gitprice-web/logo_icon.svg", type: "image/svg+xml" },
     ],
-    apple: "/logo_icon.svg",
+    apple: "/gitprice-web/logo_icon.svg",
   },
   robots: {
     index: true,

@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     description:
       "Compare prices across Amazon.eg, Noon, and Jumia in one click. Free Chrome extension.",
     type: "website",
+    images: [{ url: "/logo_og.png", width: 1200, height: 630, alt: "GitPrice — Price Comparison for Egypt" }],
   },
 };
 
@@ -70,7 +71,7 @@ const STEPS = [
 
 export default function HomePage() {
   return (
-    <main>
+    <>
       {/* ── Hero ───────────────────────────────────────── */}
       <section className={styles.hero}>
         <div className={`${styles.heroInner} container`}>
@@ -188,6 +189,6 @@ export default function HomePage() {
           </ScrollReveal>
         </div>
       </section>
-    </main>
+    </>
   );
 }
