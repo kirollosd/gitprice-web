@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     description:
       "Compare prices across Amazon.eg, Noon, and Jumia in one click. Free Chrome extension.",
     type: "website",
+    images: [{ url: "/logo_og.png", width: 1200, height: 630, alt: "GitPrice — Price Comparison for Egypt" }],
   },
 };
 
@@ -70,7 +71,7 @@ const STEPS = [
 
 export default function HomePage() {
   return (
-    <main>
+    <>
       {/* ── Hero ───────────────────────────────────────── */}
       <section className={styles.hero}>
         <div className={`${styles.heroInner} container`}>
@@ -153,15 +154,15 @@ export default function HomePage() {
 
           <ol className={styles.stepList} role="list">
             {STEPS.map((step, i) => (
-              <ScrollReveal key={step.num} delay={i * 100}>
-                <li className={styles.step}>
+              <li key={step.num} className={styles.step}>
+                <ScrollReveal delay={i * 100}>
                   <div className={styles.stepNum}>{step.num}</div>
                   <div className={styles.stepContent}>
                     <h3 className={styles.stepTitle}>{step.title}</h3>
                     <p className={styles.stepBody}>{step.body}</p>
                   </div>
-                </li>
-              </ScrollReveal>
+                </ScrollReveal>
+              </li>
             ))}
           </ol>
         </div>
@@ -188,6 +189,6 @@ export default function HomePage() {
           </ScrollReveal>
         </div>
       </section>
-    </main>
+    </>
   );
 }

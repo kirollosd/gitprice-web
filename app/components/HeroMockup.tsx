@@ -81,7 +81,7 @@ export default function HeroMockup() {
             </tbody>
           </table>
 
-          <button className={styles.goBtn}>Go to Amazon →</button>
+          <button className={styles.goBtn} tabIndex={-1}>Go to Amazon →</button>
         </div>
       </div>
     </div>
