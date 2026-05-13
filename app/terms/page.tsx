@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import styles from "../components/LegalPage.module.css";
 
 export const metadata: Metadata = {
@@ -85,7 +86,7 @@ export default function TermsPage() {
           GitPrice stores product data and price history <strong>locally on your device</strong>. No
           personal shopping data is transmitted to GitPrice servers in the current MVP release. For
           details on what data is collected and how it is used, please see our{" "}
-          <a href="/privacy/" className={styles.link}>Privacy Policy</a>.
+          <Link href="/privacy" className={styles.link}>Privacy Policy</Link>.
         </p>
       </div>
 

@@ -1,7 +1,40 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import "./globals.css";
+
+const sora = localFont({
+  src: [
+    {
+      path: "../public/fonts/sora-latin.woff2",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/sora-latin-ext.woff2",
+      style: "normal",
+    },
+  ],
+  weight: "400 700",
+  display: "swap",
+  variable: "--font-sora",
+});
+
+const karla = localFont({
+  src: [
+    {
+      path: "../public/fonts/karla-latin.woff2",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/karla-latin-ext.woff2",
+      style: "normal",
+    },
+  ],
+  weight: "400 600",
+  display: "swap",
+  variable: "--font-karla",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -56,7 +89,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${sora.variable} ${karla.variable}`}>
       <body>
         <Nav />
         <main>{children}</main>
