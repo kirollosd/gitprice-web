@@ -471,8 +471,8 @@
     .pi-jm { background: #007DCE; }
 
     /* =============================================================
-       FEATURES — Bento Box Grid (ui-ux-pro-max: Apple-style)
-       Asymmetric: hero card (2-col) + 3 standard cards
+       FEATURES — Product Demo Section
+       Split view: Amazon product page + GitPrice panel
        ============================================================= */
     .features { padding: 104px var(--gutter); background: var(--bg); }
 
@@ -495,78 +495,281 @@
       margin-bottom: 40px;
     }
 
-    /* Bento grid: 2 cols, first card spans full width */
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto auto;
-      gap: 16px;
-    }
-    .bento-card {
-      background: var(--bg-white);
-      border: 1px solid var(--border);
-      border-radius: var(--r-2xl);
-      padding: 32px;
-      transition: box-shadow var(--ease-base), transform var(--ease-out), border-color var(--ease-base);
-      position: relative;
-      overflow: hidden;
-    }
-    .bento-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: scale(1.018);   /* ui-ux-pro-max bento hover: scale 1.02 */
-      border-color: var(--border-strong);
-    }
-    /* Hero card: spans 2 columns, horizontal layout */
-    .bento-hero {
-      grid-column: span 2;
-      display: flex;
-      align-items: flex-start;
-      gap: 32px;
-      background: var(--brand-muted);
-      border-color: var(--brand-border);
-    }
-    .bento-hero:hover { border-color: rgba(52,211,153,0.4); }
-    .bento-hero-content { flex: 1; }
-    .bento-hero-visual {
-      flex-shrink: 0;
-      width: 200px;
+    /* ── Demo container ── */
+    .demo-wrap {
       background: var(--bg-white);
       border: 1px solid var(--border-strong);
-      border-radius: var(--r-lg);
-      padding: 16px;
-      box-shadow: var(--shadow-sm);
+      border-radius: var(--r-2xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      display: grid;
+      grid-template-columns: 1fr 320px;
     }
-    .mini-compare { display: flex; flex-direction: column; gap: 6px; }
-    .mini-row {
+
+    /* Left: simulated product page */
+    .demo-page {
+      padding: 28px 32px;
+      border-right: 1px solid var(--border);
+      background: var(--bg-white);
+    }
+    .demo-breadcrumb {
+      font-size: 12px;
+      color: var(--text-4);
+      margin-bottom: 12px;
+      letter-spacing: 0.01em;
+    }
+    .demo-product-title {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-1);
+      line-height: 1.35;
+      margin-bottom: 10px;
+      max-width: 40ch;
+    }
+    .demo-stars {
+      color: #F59E0B;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+    .demo-rating {
+      font-size: 12.5px;
+      color: var(--brand-dark);
+      margin-left: 6px;
+      font-weight: 500;
+    }
+    .demo-rating-row { display: flex; align-items: center; margin-bottom: 16px; }
+    .demo-price-block { margin-bottom: 16px; }
+    .demo-price-label { font-size: 12px; color: var(--text-4); margin-bottom: 2px; }
+    .demo-price-egp {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-1);
+      font-variant-numeric: tabular-nums;
+    }
+    .demo-delivery {
+      font-size: 13px;
+      color: var(--text-3);
+      margin-bottom: 20px;
+    }
+    .demo-delivery strong { color: var(--brand-dark); }
+    .demo-add-cart {
+      display: inline-block;
+      background: #FFD814;
+      color: #111;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 24px;
+      border-radius: var(--r-pill);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Right: GitPrice extension panel */
+    .demo-panel {
+      background: var(--bg-white);
+      display: flex;
+      flex-direction: column;
+    }
+    .demo-panel-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-alt);
+    }
+    .demo-panel-logo {
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .demo-panel-logo svg { display: block; width: 100%; height: 100%; }
+    .demo-panel-title-text {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-1);
+      letter-spacing: -0.02em;
+      flex: 1;
+    }
+    .demo-panel-subtitle {
+      font-size: 11px;
+      color: var(--text-4);
+    }
+    .demo-panel-close {
+      font-size: 14px;
+      color: var(--text-4);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 4px;
+      line-height: 1;
+      transition: color var(--ease-fast);
+    }
+    .demo-panel-close:hover { color: var(--text-1); }
+
+    .demo-panel-product {
+      padding: 12px 18px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-2);
+      border-bottom: 1px solid var(--border);
+      line-height: 1.4;
+    }
+    .demo-panel-asin {
+      font-size: 11px;
+      color: var(--text-4);
+      margin-top: 2px;
+    }
+
+    .demo-panel-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      flex: 1;
+    }
+    .demo-panel-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--border);
+      transition: background var(--ease-fast);
+    }
+    .demo-panel-row.winner {
+      background: var(--brand-muted);
+    }
+    .demo-store-initial {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .demo-store-initial.noon { background: #E91E37; }
+    .demo-store-initial.amazon { background: #FF9900; color: #111; }
+    .demo-store-initial.jumia { background: #007DCE; }
+
+    .demo-store-info { flex: 1; min-width: 0; }
+    .demo-store-name-text {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-1);
+      letter-spacing: -0.01em;
+    }
+    .demo-store-label-text {
+      font-size: 11px;
+      color: var(--text-4);
+      margin-top: 1px;
+    }
+    .demo-row-right { text-align: right; flex-shrink: 0; }
+    .demo-row-price {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-1);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .demo-panel-row.winner .demo-row-price { color: var(--brand-dark); }
+    .demo-best-badge {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      background: rgba(52,211,153,0.2);
+      padding: 1px 7px;
+      border-radius: var(--r-pill);
+      display: inline-block;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .demo-savings-bar {
+      padding: 12px 18px;
+      background: var(--brand-muted);
+      border-top: 1px solid var(--brand-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 7px 10px;
-      border-radius: var(--r-md);
-      border: 1px solid var(--border);
-      font-size: 12px;
+      gap: 8px;
     }
-    .mini-row.best { background: var(--brand-muted); border-color: var(--brand-border); }
-    .mini-store { font-weight: 600; color: var(--text-2); }
-    .mini-price { font-family: var(--font-display); font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; color: var(--text-1); }
-    .mini-row.best .mini-price { color: var(--brand-dark); }
-    .mini-badge { font-size: 10px; font-weight: 600; color: var(--brand-dark); background: rgba(52,211,153,0.18); padding: 1px 6px; border-radius: var(--r-pill); }
+    .demo-savings-text {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--brand-dark);
+    }
+    .demo-view-deal {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      background: var(--brand-dark);
+      padding: 7px 14px;
+      border-radius: var(--r-pill);
+      transition: opacity var(--ease-fast);
+      flex-shrink: 0;
+    }
+    .demo-view-deal:hover { opacity: 0.85; }
 
-    /* Standard bento cards */
-    .bento-icon {
-      width: 44px;
-      height: 44px;
+    /* ── Feature pills row below demo ── */
+    .feat-pills {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .feat-pill {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 20px;
+      transition: box-shadow var(--ease-base), transform var(--ease-out);
+    }
+    .feat-pill:hover { box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+    .fp-icon {
+      width: 36px;
+      height: 36px;
       background: var(--bg);
       border: 1px solid var(--border-strong);
       border-radius: var(--r-md);
       display: grid;
       place-items: center;
-      margin-bottom: 20px;
+      flex-shrink: 0;
       box-shadow: var(--shadow-xs);
     }
-    .bento-icon svg { display: block; }
-    .bento-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: -0.025em; color: var(--text-1); margin-bottom: 10px; }
-    .bento-body { font-size: 15px; line-height: 1.68; color: var(--text-3); max-width: 32ch; }
+    .fp-icon svg { display: block; }
+    .fp-text {}
+    .fp-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-1);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .fp-body {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text-3);
+    }
 
     /* =============================================================
        HOW IT WORKS
@@ -654,9 +857,8 @@
       .hero-h1 { font-size: 2.625rem; }
       .hero-actions { flex-direction: column; align-items: center; }
       .btn-primary { width: 100%; justify-content: center; }
-      .bento-grid { grid-template-columns: 1fr; }
-      .bento-hero { flex-direction: column; gap: 20px; grid-column: span 1; }
-      .bento-hero-visual { width: 100%; }
+      .demo-wrap { grid-template-columns: 1fr; }
+      .feat-pills { grid-template-columns: repeat(2, 1fr); }
       .steps { grid-template-columns: 1fr; gap: 36px; }
       .step { border-right: none; border-bottom: 1px solid var(--border); padding: 0 0 36px; }
       .step:last-child { border-bottom: none; padding-bottom: 0; }
@@ -673,8 +875,8 @@
        768px tablet breakpoint
        ============================================================= */
     @media (min-width: 681px) and (max-width: 900px) {
-      .bento-grid { grid-template-columns: repeat(2, 1fr); }
-      .bento-hero { grid-column: span 2; }
+      .demo-wrap { grid-template-columns: 1fr; }
+      .feat-pills { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -690,14 +892,31 @@
   <!-- ═══ NAV ═══ -->
   <nav class="nav" aria-label="Main navigation">
     <div class="container">
-      <a href="#" class="logo" aria-label="GitPrice home">
-        <div class="logo-mark" aria-hidden="true">
-          <!-- G wordmark as SVG — no emoji -->
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <text x="2" y="13" font-family="'Sora',sans-serif" font-weight="700" font-size="13" fill="white">G</text>
-          </svg>
-        </div>
-        <span class="logo-wordmark">GitPrice</span>
+      <!-- Real brand logo from public/logo_full.svg — paths extracted, viewBox trimmed to content -->
+      <a href="#" class="logo" aria-label="GitPrice home" style="display:inline-flex;align-items:center;">
+        <svg height="22" viewBox="37 313 1366 392" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;">
+          <path d="M139.064 606.402C82.8302 606.402 37.0812 560.623 37.0812 504.352C37.0812 448.084 82.8302 402.307 139.064 402.307C195.299 402.307 241.045 448.084 241.045 504.352C241.045 560.623 195.299 606.402 139.064 606.402ZM139.064 463.424C116.509 463.424 98.1595 481.784 98.1595 504.352C98.1595 526.921 116.509 545.284 139.064 545.284C161.619 545.284 179.971 526.921 179.971 504.352C179.971 481.784 161.619 463.424 139.064 463.424Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M139.064 402.307H246.622V463.423H139.064V402.307Z" fill="#2D415E"/>
+          <path d="M139.064 705.359C113.974 705.359 89.4834 700.781 66.275 691.751L88.4097 634.793C120.654 647.335 157.473 647.335 189.705 634.799L211.836 691.757C188.634 700.787 164.15 705.359 139.064 705.359Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M278.922 406.807H339.998V602.333H278.922V406.807Z" fill="#2D415E"/>
+          <path d="M343.766 347.524C343.766 366.484 328.409 381.853 309.461 381.853C290.514 381.853 275.154 366.484 275.154 347.524C275.154 328.565 290.514 313.196 309.461 313.196C328.409 313.196 343.766 328.565 343.766 347.524Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M377.042 408.041H483.339V458.046H377.042V408.041Z" fill="#2D415E"/>
+          <path d="M452.389 606.61C410.84 606.61 377.042 572.788 377.042 531.219V338.362H438.12V531.219C438.12 539.092 444.522 545.492 452.389 545.492C456.134 545.492 458.917 544.088 460.583 542.902L495.844 592.813C483.075 601.837 468.05 606.61 452.389 606.61Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M377.042 408.041H438.12V458.046H377.042V408.041Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M522.455 406.528H583.534V681.358H522.455V406.528Z" fill="#2D415E"/>
+          <path d="M624.441 606.402C568.204 606.402 522.455 560.623 522.455 504.352C522.455 448.084 568.204 402.307 624.441 402.307C680.677 402.307 726.428 448.084 726.428 504.352C726.428 560.623 680.677 606.402 624.441 606.402ZM624.441 463.424C601.884 463.424 583.534 481.784 583.534 504.352C583.534 526.921 601.884 545.284 624.441 545.284C646.996 545.284 665.348 526.921 665.348 504.352C665.348 481.784 646.996 463.424 624.441 463.424Z" fill="#2D415E"/>
+          <path d="M583.534 597.768V410.941C547.621 426.749 522.455 462.644 522.455 504.352C522.455 546.064 547.621 581.96 583.534 597.768Z" fill="#2D415E"/>
+          <path d="M857.498 463.424C860.791 463.424 864.06 463.833 867.209 464.639L882.355 405.431C874.27 403.359 865.898 402.307 857.498 402.307C802.403 402.307 757.581 447.157 757.581 502.283H818.66C818.66 480.857 836.083 463.424 857.498 463.424Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M757.582 406.528H818.66V602.054H757.582V406.528Z" fill="#2D415E"/>
+          <path d="M818.66 502.283V410.169C782.802 425.363 757.582 460.932 757.582 502.283" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M906.197 406.807H967.273V602.333H906.197V406.807Z" fill="#2D415E"/>
+          <path d="M971.041 347.524C971.041 366.484 955.684 381.853 936.736 381.853C917.788 381.853 902.429 366.484 902.429 347.524C902.429 328.565 917.788 313.196 936.736 313.196C955.684 313.196 971.041 328.565 971.041 347.524Z" fill="#2D415E"/>
+          <path d="M1099.71 606.402C1043.47 606.402 997.721 560.623 997.721 504.352C997.721 448.084 1043.47 402.307 1099.71 402.307C1133.42 402.307 1164.91 418.953 1183.95 446.834L1133.52 481.31C1125.87 470.111 1113.23 463.424 1099.71 463.424C1077.15 463.424 1058.8 481.784 1058.8 504.352C1058.8 526.921 1077.15 545.284 1099.71 545.284C1112.77 545.284 1124.75 539.257 1132.56 528.743L1181.56 565.229C1162.39 591.007 1131.79 606.402 1099.71 606.402Z" fill="#2D415E"/>
+          <path d="M1342.78 504.274V503.717C1342.72 499.216 1341.83 494.715 1340.28 490.382C1337.84 483.714 1333.9 478.047 1328.84 473.658C1318.01 464.157 1302.36 460.601 1287.86 465.88C1273.32 471.214 1263.6 483.937 1261.38 498.216V498.272C1260.43 504.881 1260.99 511.716 1263.43 518.386C1265.76 524.883 1269.71 530.441 1274.54 534.83C1285.42 544.553 1301.19 548.163 1315.85 542.777C1327.84 538.44 1337.01 528.888 1340.84 516.661L1399.14 535.053C1389.47 565.61 1366.71 589.279 1336.73 600.228C1290.08 617.228 1238.89 597.89 1214.29 556.774C1211.07 551.274 1208.29 545.441 1206.02 539.276C1203.74 532.996 1202.13 526.608 1201.08 520.219C1193.64 472.991 1220.4 425.431 1266.99 408.485C1313.46 391.539 1364.54 410.708 1389.2 451.711C1391.64 455.823 1393.92 460.212 1395.81 464.824C1396.47 466.38 1397.08 467.935 1397.64 469.491C1398.2 471.047 1398.69 472.547 1399.19 474.102C1400.63 478.77 1401.8 483.492 1402.52 488.215L1402.03 488.382L1342.34 510.164C1342.61 508.216 1342.78 506.273 1342.78 504.274Z" fill="#2D415E"/>
+          <path d="M1402.03 488.382V488.437L1342.33 510.164L1274.54 534.83L1214.29 556.774C1211.07 551.274 1208.29 545.441 1206.02 539.276C1203.74 532.996 1202.13 526.608 1201.08 520.219L1261.38 498.272V498.216L1328.84 473.658L1388.64 451.878C1391.36 455.934 1393.81 460.268 1395.81 464.824C1396.47 466.38 1397.08 467.936 1397.64 469.491C1398.2 471.047 1398.69 472.547 1399.19 474.102C1400.53 478.77 1401.53 483.548 1402.03 488.382Z" fill="#2D415E"/>
+          <path d="M1328.86 473.666C1333.89 478.046 1337.84 483.703 1340.26 490.386C1341.84 494.719 1342.7 499.195 1342.76 503.729L1342.75 503.729C1342.76 503.918 1342.76 504.107 1342.76 504.291C1342.76 506.279 1342.61 508.239 1342.34 510.147L1401.48 488.608L1402 488.42C1401.33 481.921 1399.88 475.591 1397.66 469.483C1395.36 463.165 1392.3 457.303 1388.64 451.898L1328.86 473.666Z" fill="#2D415E"/>
+          <path d="M1263.41 518.374C1260.98 511.694 1260.42 504.801 1261.4 498.237L1201.13 520.191C1202.13 526.585 1203.72 532.973 1206.01 539.282C1208.27 545.476 1211.11 551.291 1214.37 556.752L1274.54 534.841C1269.69 530.458 1265.78 524.906 1263.41 518.374Z" fill="#2D415E"/>
+        </svg>
       </a>
       <ul class="nav-links" role="list">
         <li><a href="#">Home</a></li>
@@ -812,86 +1031,135 @@
     </div>
   </div>
 
-  <!-- ═══ FEATURES — BENTO GRID ═══ -->
+  <!-- ═══ FEATURES — PRODUCT DEMO ═══ -->
   <section class="features" aria-labelledby="features-heading">
     <div class="container">
       <span class="section-kicker" aria-hidden="true">Why GitPrice</span>
       <h2 class="section-h2" id="features-heading">Built for smarter shopping</h2>
 
-      <!-- Bento grid: hero 2-col + 3 standard -->
-      <div class="bento-grid" role="list">
+      <!-- Split demo: Amazon product page + GitPrice panel -->
+      <div class="demo-wrap" role="img" aria-label="GitPrice extension showing price comparison for Sony WH-1000XM5: Noon EGP 8,499 (best), Amazon EGP 9,199, Jumia EGP 9,649">
+        <!-- Left: simulated Amazon product page -->
+        <div class="demo-page" aria-hidden="true">
+          <div class="demo-breadcrumb">Electronics › Headphones › Sony</div>
+          <h3 class="demo-product-title">Sony WH-1000XM5 Wireless Noise Canceling Headphones</h3>
+          <div class="demo-rating-row">
+            <span class="demo-stars">★★★★★</span>
+            <span class="demo-rating">4.6 (2,847 ratings)</span>
+          </div>
+          <div class="demo-price-block">
+            <div class="demo-price-label">Price:</div>
+            <div class="demo-price-egp">EGP 9,199</div>
+          </div>
+          <div class="demo-delivery"><strong>FREE delivery</strong> Fri, May 15</div>
+          <span class="demo-add-cart">Add to Cart</span>
+        </div>
 
-        <!-- Hero bento: Instant comparison (spans 2 cols) -->
-        <article class="bento-card bento-hero" role="listitem">
-          <div class="bento-hero-content">
-            <div class="bento-icon" aria-hidden="true">
-              <!-- Lightning bolt SVG — no emoji -->
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-                <path d="M13 2L4 13h7l-2 7 9-11h-7l2-7z" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Right: GitPrice extension panel -->
+        <div class="demo-panel" aria-hidden="true">
+          <div class="demo-panel-header">
+            <!-- Real logo_icon.svg paths, viewBox trimmed to mark content -->
+            <div class="demo-panel-logo">
+              <svg viewBox="593 360 210 303" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M694.982 564.096C638.749 564.096 593 518.316 593 462.045C593 405.778 638.749 360 694.982 360C751.218 360 796.964 405.778 796.964 462.045C796.964 518.316 751.218 564.096 694.982 564.096ZM694.982 421.117C672.428 421.117 654.078 439.478 654.078 462.045C654.078 484.614 672.428 502.978 694.982 502.978C717.537 502.978 735.89 484.614 735.89 462.045C735.89 439.478 717.537 421.117 694.982 421.117Z" fill="#2D415E"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M694.983 360H802.541V421.116H694.983V360Z" fill="#2D415E"/>
+                <path d="M694.983 663.053C669.893 663.053 645.402 658.475 622.194 649.445L644.329 592.486C676.573 605.029 713.392 605.029 745.624 592.492L767.755 649.451C744.553 658.48 720.068 663.053 694.983 663.053Z" fill="#2D415E"/>
               </svg>
             </div>
-            <h3 class="bento-title">Instant comparison</h3>
-            <p class="bento-body">Prices from all three stores load side-by-side in under a second, right inside your current tab.</p>
+            <div>
+              <div class="demo-panel-title-text">GitPrice</div>
+              <div class="demo-panel-subtitle">Price Comparison</div>
+            </div>
+            <button class="demo-panel-close" aria-label="Close GitPrice panel">✕</button>
           </div>
-          <!-- Inline mini mockup for the hero card -->
-          <div class="bento-hero-visual" aria-hidden="true">
-            <div class="mini-compare">
-              <div class="mini-row best">
-                <span class="mini-store">Noon</span>
-                <span class="mini-price">EGP 1,249</span>
-                <span class="mini-badge">Best</span>
+
+          <div class="demo-panel-product">
+            Sony WH-1000XM5 Headphones
+            <div class="demo-panel-asin">ASIN: B09XS7JWHH · Amazon.eg</div>
+          </div>
+
+          <div class="demo-panel-rows">
+            <!-- Noon — winner -->
+            <div class="demo-panel-row winner">
+              <span class="demo-store-initial noon">N</span>
+              <div class="demo-store-info">
+                <div class="demo-store-name-text">Noon</div>
+                <div class="demo-store-label-text">Best Price · In Stock · Ships today</div>
               </div>
-              <div class="mini-row">
-                <span class="mini-store">Amazon</span>
-                <span class="mini-price">EGP 1,399</span>
+              <div class="demo-row-right">
+                <div class="demo-row-price">EGP 8,499</div>
+                <span class="demo-best-badge">Best</span>
               </div>
-              <div class="mini-row">
-                <span class="mini-store">Jumia</span>
-                <span class="mini-price">EGP 1,450</span>
+            </div>
+            <!-- Amazon.eg -->
+            <div class="demo-panel-row">
+              <span class="demo-store-initial amazon">A</span>
+              <div class="demo-store-info">
+                <div class="demo-store-name-text">Amazon.eg</div>
+                <div class="demo-store-label-text">In Stock · Viewing now</div>
+              </div>
+              <div class="demo-row-right">
+                <div class="demo-row-price">EGP 9,199</div>
+              </div>
+            </div>
+            <!-- Jumia -->
+            <div class="demo-panel-row">
+              <span class="demo-store-initial jumia">J</span>
+              <div class="demo-store-info">
+                <div class="demo-store-name-text">Jumia</div>
+                <div class="demo-store-label-text">3 left in stock</div>
+              </div>
+              <div class="demo-row-right">
+                <div class="demo-row-price">EGP 9,649</div>
               </div>
             </div>
           </div>
-        </article>
 
-        <!-- Standard card: Price drop alerts -->
-        <article class="bento-card" role="listitem">
-          <div class="bento-icon" aria-hidden="true">
-            <!-- Bell SVG -->
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-              <path d="M11 2a7 7 0 0 1 7 7v4l1.5 2.5H2.5L4 13V9a7 7 0 0 1 7-7z" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M9 17a2 2 0 0 0 4 0" stroke="#059669" stroke-width="1.75" stroke-linecap="round"/>
-            </svg>
+          <div class="demo-savings-bar">
+            <span class="demo-savings-text">Save EGP 700 vs Amazon</span>
+            <a href="#" class="demo-view-deal">View Deal →</a>
           </div>
-          <h3 class="bento-title">Price drop alerts</h3>
-          <p class="bento-body">Set a target price and we'll notify you the moment any store drops below it.</p>
-        </article>
+        </div>
+      </div>
 
-        <!-- Standard card: Zero data collection -->
-        <article class="bento-card" role="listitem">
-          <div class="bento-icon" aria-hidden="true">
-            <!-- Shield/lock SVG -->
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-              <path d="M11 2L4 5v6c0 4.4 2.9 8 7 9 4.1-1 7-4.6 7-9V5l-7-3z" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M8 11l2 2 4-4" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+      <!-- Feature pills below demo -->
+      <div class="feat-pills" role="list">
+        <div class="feat-pill" role="listitem">
+          <div class="fp-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M13 2L4 13h7l-2 7 9-11h-7l2-7z" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
-          <h3 class="bento-title">Zero data collection</h3>
-          <p class="bento-body">GitPrice never reads your Amazon account, cart, or personal data. It only sees the product page you're on.</p>
-        </article>
-
-        <!-- Standard card: Egypt-native -->
-        <article class="bento-card" role="listitem">
-          <div class="bento-icon" aria-hidden="true">
-            <!-- Globe/map pin SVG -->
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-              <circle cx="11" cy="11" r="8" stroke="#059669" stroke-width="1.75"/>
-              <path d="M11 3c-2 3-2 5 0 8s2 5 0 8M3 11h16M5 6.5c1.5 1 3 1.5 6 1.5s4.5-.5 6-1.5M5 15.5c1.5-1 3-1.5 6-1.5s4.5.5 6 1.5" stroke="#059669" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
+          <div class="fp-text">
+            <div class="fp-title">Instant comparison</div>
+            <div class="fp-body">Side-by-side in under a second</div>
           </div>
-          <h3 class="bento-title">Egypt-native</h3>
-          <p class="bento-body">Built specifically for the Egyptian market — EGP prices, local store coverage, local shipping estimates.</p>
-        </article>
-
+        </div>
+        <div class="feat-pill" role="listitem">
+          <div class="fp-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M11 2a7 7 0 0 1 7 7v4l1.5 2.5H2.5L4 13V9a7 7 0 0 1 7-7z" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 17a2 2 0 0 0 4 0" stroke="#059669" stroke-width="1.75" stroke-linecap="round"/></svg>
+          </div>
+          <div class="fp-text">
+            <div class="fp-title">Price drop alerts</div>
+            <div class="fp-body">Notified when any store drops</div>
+          </div>
+        </div>
+        <div class="feat-pill" role="listitem">
+          <div class="fp-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M11 2L4 5v6c0 4.4 2.9 8 7 9 4.1-1 7-4.6 7-9V5l-7-3z" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 11l2 2 4-4" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="fp-text">
+            <div class="fp-title">Zero data collection</div>
+            <div class="fp-body">Reads only the page you're on</div>
+          </div>
+        </div>
+        <div class="feat-pill" role="listitem">
+          <div class="fp-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#059669" stroke-width="1.75"/><path d="M11 3c-2 3-2 5 0 8s2 5 0 8M3 11h16" stroke="#059669" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="fp-text">
+            <div class="fp-title">Egypt-native</div>
+            <div class="fp-body">EGP prices, local store coverage</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -943,13 +1211,30 @@
   <!-- ═══ FOOTER ═══ -->
   <footer class="footer">
     <div class="container">
-      <a href="#" class="logo" aria-label="GitPrice home">
-        <div class="logo-mark" aria-hidden="true">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <text x="2" y="13" font-family="'Sora',sans-serif" font-weight="700" font-size="13" fill="white">G</text>
-          </svg>
-        </div>
-        <span class="logo-wordmark">GitPrice</span>
+      <a href="#" class="logo" aria-label="GitPrice home" style="display:inline-flex;align-items:center;">
+        <svg height="18" viewBox="37 313 1366 392" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;opacity:0.6;">
+          <path d="M139.064 606.402C82.8302 606.402 37.0812 560.623 37.0812 504.352C37.0812 448.084 82.8302 402.307 139.064 402.307C195.299 402.307 241.045 448.084 241.045 504.352C241.045 560.623 195.299 606.402 139.064 606.402ZM139.064 463.424C116.509 463.424 98.1595 481.784 98.1595 504.352C98.1595 526.921 116.509 545.284 139.064 545.284C161.619 545.284 179.971 526.921 179.971 504.352C179.971 481.784 161.619 463.424 139.064 463.424Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M139.064 402.307H246.622V463.423H139.064V402.307Z" fill="#2D415E"/>
+          <path d="M139.064 705.359C113.974 705.359 89.4834 700.781 66.275 691.751L88.4097 634.793C120.654 647.335 157.473 647.335 189.705 634.799L211.836 691.757C188.634 700.787 164.15 705.359 139.064 705.359Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M278.922 406.807H339.998V602.333H278.922V406.807Z" fill="#2D415E"/>
+          <path d="M343.766 347.524C343.766 366.484 328.409 381.853 309.461 381.853C290.514 381.853 275.154 366.484 275.154 347.524C275.154 328.565 290.514 313.196 309.461 313.196C328.409 313.196 343.766 328.565 343.766 347.524Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M377.042 408.041H483.339V458.046H377.042V408.041Z" fill="#2D415E"/>
+          <path d="M452.389 606.61C410.84 606.61 377.042 572.788 377.042 531.219V338.362H438.12V531.219C438.12 539.092 444.522 545.492 452.389 545.492C456.134 545.492 458.917 544.088 460.583 542.902L495.844 592.813C483.075 601.837 468.05 606.61 452.389 606.61Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M377.042 408.041H438.12V458.046H377.042V408.041Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M522.455 406.528H583.534V681.358H522.455V406.528Z" fill="#2D415E"/>
+          <path d="M624.441 606.402C568.204 606.402 522.455 560.623 522.455 504.352C522.455 448.084 568.204 402.307 624.441 402.307C680.677 402.307 726.428 448.084 726.428 504.352C726.428 560.623 680.677 606.402 624.441 606.402ZM624.441 463.424C601.884 463.424 583.534 481.784 583.534 504.352C583.534 526.921 601.884 545.284 624.441 545.284C646.996 545.284 665.348 526.921 665.348 504.352C665.348 481.784 646.996 463.424 624.441 463.424Z" fill="#2D415E"/>
+          <path d="M583.534 597.768V410.941C547.621 426.749 522.455 462.644 522.455 504.352C522.455 546.064 547.621 581.96 583.534 597.768Z" fill="#2D415E"/>
+          <path d="M857.498 463.424C860.791 463.424 864.06 463.833 867.209 464.639L882.355 405.431C874.27 403.359 865.898 402.307 857.498 402.307C802.403 402.307 757.581 447.157 757.581 502.283H818.66C818.66 480.857 836.083 463.424 857.498 463.424Z" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M757.582 406.528H818.66V602.054H757.582V406.528Z" fill="#2D415E"/>
+          <path d="M818.66 502.283V410.169C782.802 425.363 757.582 460.932 757.582 502.283" fill="#2D415E"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M906.197 406.807H967.273V602.333H906.197V406.807Z" fill="#2D415E"/>
+          <path d="M971.041 347.524C971.041 366.484 955.684 381.853 936.736 381.853C917.788 381.853 902.429 366.484 902.429 347.524C902.429 328.565 917.788 313.196 936.736 313.196C955.684 313.196 971.041 328.565 971.041 347.524Z" fill="#2D415E"/>
+          <path d="M1099.71 606.402C1043.47 606.402 997.721 560.623 997.721 504.352C997.721 448.084 1043.47 402.307 1099.71 402.307C1133.42 402.307 1164.91 418.953 1183.95 446.834L1133.52 481.31C1125.87 470.111 1113.23 463.424 1099.71 463.424C1077.15 463.424 1058.8 481.784 1058.8 504.352C1058.8 526.921 1077.15 545.284 1099.71 545.284C1112.77 545.284 1124.75 539.257 1132.56 528.743L1181.56 565.229C1162.39 591.007 1131.79 606.402 1099.71 606.402Z" fill="#2D415E"/>
+          <path d="M1342.78 504.274V503.717C1342.72 499.216 1341.83 494.715 1340.28 490.382C1337.84 483.714 1333.9 478.047 1328.84 473.658C1318.01 464.157 1302.36 460.601 1287.86 465.88C1273.32 471.214 1263.6 483.937 1261.38 498.216V498.272C1260.43 504.881 1260.99 511.716 1263.43 518.386C1265.76 524.883 1269.71 530.441 1274.54 534.83C1285.42 544.553 1301.19 548.163 1315.85 542.777C1327.84 538.44 1337.01 528.888 1340.84 516.661L1399.14 535.053C1389.47 565.61 1366.71 589.279 1336.73 600.228C1290.08 617.228 1238.89 597.89 1214.29 556.774C1211.07 551.274 1208.29 545.441 1206.02 539.276C1203.74 532.996 1202.13 526.608 1201.08 520.219C1193.64 472.991 1220.4 425.431 1266.99 408.485C1313.46 391.539 1364.54 410.708 1389.2 451.711C1391.64 455.823 1393.92 460.212 1395.81 464.824C1396.47 466.38 1397.08 467.935 1397.64 469.491C1398.2 471.047 1398.69 472.547 1399.19 474.102C1400.63 478.77 1401.8 483.492 1402.52 488.215L1402.03 488.382L1342.34 510.164C1342.61 508.216 1342.78 506.273 1342.78 504.274Z" fill="#2D415E"/>
+          <path d="M1402.03 488.382V488.437L1342.33 510.164L1274.54 534.83L1214.29 556.774C1211.07 551.274 1208.29 545.441 1206.02 539.276C1203.74 532.996 1202.13 526.608 1201.08 520.219L1261.38 498.272V498.216L1328.84 473.658L1388.64 451.878C1391.36 455.934 1393.81 460.268 1395.81 464.824C1396.47 466.38 1397.08 467.936 1397.64 469.491C1398.2 471.047 1398.69 472.547 1399.19 474.102C1400.53 478.77 1401.53 483.548 1402.03 488.382Z" fill="#2D415E"/>
+          <path d="M1328.86 473.666C1333.89 478.046 1337.84 483.703 1340.26 490.386C1341.84 494.719 1342.7 499.195 1342.76 503.729L1342.75 503.729C1342.76 503.918 1342.76 504.107 1342.76 504.291C1342.76 506.279 1342.61 508.239 1342.34 510.147L1401.48 488.608L1402 488.42C1401.33 481.921 1399.88 475.591 1397.66 469.483C1395.36 463.165 1392.3 457.303 1388.64 451.898L1328.86 473.666Z" fill="#2D415E"/>
+          <path d="M1263.41 518.374C1260.98 511.694 1260.42 504.801 1261.4 498.237L1201.13 520.191C1202.13 526.585 1203.72 532.973 1206.01 539.282C1208.27 545.476 1211.11 551.291 1214.37 556.752L1274.54 534.841C1269.69 530.458 1265.78 524.906 1263.41 518.374Z" fill="#2D415E"/>
+        </svg>
       </a>
       <span class="footer-copy">© 2026 GitPrice. All rights reserved.</span>
       <ul class="footer-links" role="list">
