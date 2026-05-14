@@ -26,7 +26,7 @@
   --color-text-primary:   #0f172a;   /* Slate 900 */
   --color-text-secondary: #334155;   /* Slate 700 */
   --color-text-muted:     #64748b;   /* Slate 500 */
-  --color-text-faint:     #94a3b8;   /* Slate 400 — WCAG AA on white: 3.07:1 (large text only) */
+  --color-text-faint:     #64748b;   /* Slate 500 — WCAG AA on white: 5.74:1 ✓ */
 
   /* Typography */
   --font-heading: var(--font-sora), system-ui, sans-serif;
