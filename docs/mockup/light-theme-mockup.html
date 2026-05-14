@@ -577,20 +577,14 @@
     }
     .hero-gp-row.winner { background: var(--brand-muted); }
     .hero-gp-dot {
-      width: 27px;
-      height: 27px;
-      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
       display: grid;
       place-items: center;
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 800;
-      color: white;
       flex-shrink: 0;
+      overflow: hidden;
     }
-    .hero-gp-dot.az { background: #FF9900; color: #111; }
-    .hero-gp-dot.nn { background: #E91E37; }
-    .hero-gp-dot.jm { background: #007DCE; }
     .hero-gp-info { flex: 1; min-width: 0; }
     .hero-gp-sname {
       font-family: var(--font-display);
@@ -600,7 +594,7 @@
       letter-spacing: -0.01em;
     }
     .hero-gp-slabel { font-size: 10px; color: var(--text-4); margin-top: 1px; }
-    .hero-gp-right { text-align: right; flex-shrink: 0; }
+    .hero-gp-right { text-align: center; flex-shrink: 0; }
     /* ui-ux-pro-max: tabular-nums */
     .hero-gp-price {
       font-family: var(--font-display);
@@ -1442,7 +1436,14 @@
               <div class="hero-gp-rows">
                 <!-- Amazon.eg — winner, current page, cheapest -->
                 <div class="hero-gp-row winner">
-                  <div class="hero-gp-dot az" aria-hidden="true">A</div>
+                  <div class="hero-gp-dot" aria-hidden="true">
+                    <!-- Amazon.eg icon -->
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="28" height="28" rx="7" fill="#FF9900"/>
+                      <text x="14" y="17" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="900" fill="#111111">a</text>
+                      <path d="M8.5 21.5 Q14 24.5 19.5 21.5" stroke="#111111" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+                    </svg>
+                  </div>
                   <div class="hero-gp-info">
                     <div class="hero-gp-sname">Amazon.eg</div>
                     <div class="hero-gp-slabel">Current page · In Stock</div>
@@ -1454,7 +1455,13 @@
                 </div>
                 <!-- Noon -->
                 <div class="hero-gp-row">
-                  <div class="hero-gp-dot nn" aria-hidden="true">N</div>
+                  <div class="hero-gp-dot" aria-hidden="true">
+                    <!-- Noon icon -->
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="28" height="28" rx="7" fill="#E91E37"/>
+                      <text x="14" y="18.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="900" fill="#FFFFFF">N</text>
+                    </svg>
+                  </div>
                   <div class="hero-gp-info">
                     <div class="hero-gp-sname">Noon</div>
                     <div class="hero-gp-slabel">+EGP 2,000 more</div>
@@ -1465,7 +1472,13 @@
                 </div>
                 <!-- Jumia -->
                 <div class="hero-gp-row">
-                  <div class="hero-gp-dot jm" aria-hidden="true">J</div>
+                  <div class="hero-gp-dot" aria-hidden="true">
+                    <!-- Jumia icon -->
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect width="28" height="28" rx="7" fill="#F68B1E"/>
+                      <text x="14" y="18.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="900" fill="#FFFFFF">J</text>
+                    </svg>
+                  </div>
                   <div class="hero-gp-info">
                     <div class="hero-gp-sname">Jumia</div>
                     <div class="hero-gp-slabel">+EGP 2,900 more</div>
@@ -1562,9 +1575,9 @@
         </div>
 
         <!-- Card 4 (mint stat): Speed -->
-        <div class="bento-card bento-mint" aria-label="Compares all 3 stores in under 1 second">
+        <div class="bento-card bento-mint" aria-label="Compares all 3 stores in under 10 seconds">
           <span class="bento-eyebrow">Real-time data</span>
-          <span class="bento-num">&lt;1s</span>
+          <span class="bento-num">&lt;10s</span>
           <span class="bento-num-label">to compare all 3 stores live</span>
         </div>
 
@@ -1578,19 +1591,6 @@
           </div>
           <h3 class="bento-h3-sm">Zero tracking</h3>
           <p class="bento-body-sm">Reads only the product page you're viewing. No browsing history. No data sent to any server.</p>
-        </div>
-
-        <!-- placeholder closing — original had an unclosed feat-pill here -->
-        <div class="bento-card">
-          <div class="bento-icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <circle cx="11" cy="11" r="9" stroke="#059669" stroke-width="1.75"/>
-              <path d="M11 2C11 2 14 6 14 11s-3 9-3 9" stroke="#059669" stroke-width="1.75" stroke-linecap="round"/>
-              <path d="M2 11h18" stroke="#059669" stroke-width="1.75" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <h3 class="bento-h3-sm">Egypt-native</h3>
-          <p class="bento-body-sm">Built specifically for Egyptian shoppers. Prices in EGP, stores people actually use, shipping to Egypt.</p>
         </div>
 
       </div>
