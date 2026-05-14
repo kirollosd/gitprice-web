@@ -17,16 +17,16 @@
   --color-navy:         #2d415e;
 
   /* Color — Surfaces */
-  --color-bg:           #0f0f1a;   /* primary dark background */
-  --color-surface:      #1a1a2e;   /* elevated surface / nav */
-  --color-surface-2:    #1e1e35;   /* cards, inputs */
-  --color-border:       rgba(255, 255, 255, 0.08);
+  --color-bg:           #f8fafc;   /* primary light background (Slate 50) */
+  --color-surface:      #ffffff;   /* elevated surface / nav */
+  --color-surface-2:    #f1f5f9;   /* cards, inputs (Slate 100) */
+  --color-border:       rgba(0, 0, 0, 0.08);
 
   /* Color — Text */
-  --color-text-primary:   #f1f5f9;
-  --color-text-secondary: #cbd5e1;
-  --color-text-muted:     #9ca3af;
-  --color-text-faint:     #7e8fa2;   /* raised for WCAG AA: ≥4.5:1 on all dark surfaces */
+  --color-text-primary:   #0f172a;   /* Slate 900 */
+  --color-text-secondary: #334155;   /* Slate 700 */
+  --color-text-muted:     #64748b;   /* Slate 500 */
+  --color-text-faint:     #94a3b8;   /* Slate 400 — WCAG AA on white: 3.07:1 (large text only) */
 
   /* Typography */
   --font-heading: var(--font-sora), system-ui, sans-serif;
@@ -74,9 +74,9 @@
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 24px rgba(52, 211, 153, 0.15);
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 24px rgba(5, 150, 105, 0.18);
 
   /* Transitions */
   --transition-fast: 120ms ease;

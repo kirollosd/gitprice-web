@@ -12,7 +12,7 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-brand);
+  color: var(--color-brand-dark);
   margin-bottom: var(--space-3);
 }
 
@@ -53,12 +53,12 @@
   gap: var(--space-2);
   padding: 6px 14px;
   border-radius: var(--radius-full);
-  background: rgba(52, 211, 153, 0.1);
-  border: 1px solid rgba(52, 211, 153, 0.25);
+  background: rgba(5, 150, 105, 0.08);
+  border: 1px solid rgba(5, 150, 105, 0.2);
   font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--color-brand);
+  color: var(--color-brand-dark);
   width: fit-content;
 }
 
@@ -85,7 +85,7 @@
 }
 
 .heroAccent {
-  color: var(--color-brand);
+  color: var(--color-brand-dark);
 }
 
 .heroSub {
@@ -130,7 +130,7 @@
   inset: -60px;
   background: radial-gradient(
     ellipse 60% 60% at 50% 50%,
-    rgba(52, 211, 153, 0.12) 0%,
+    rgba(5, 150, 105, 0.07) 0%,
     transparent 70%
   );
   pointer-events: none;
@@ -192,8 +192,8 @@
 }
 
 .featureCard:hover {
-  border-color: rgba(52, 211, 153, 0.25);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  border-color: rgba(5, 150, 105, 0.25);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
 .featureIcon {
@@ -245,7 +245,7 @@
   font-family: var(--font-heading);
   font-size: var(--text-3xl);
   font-weight: 700;
-  color: var(--color-brand);
+  color: var(--color-brand-dark);
   opacity: 0.4;
   line-height: 1;
   flex-shrink: 0;
@@ -290,7 +290,7 @@
   padding: clamp(40px, 6vw, 72px);
   border-radius: var(--radius-xl);
   background: var(--color-surface);
-  border: 1px solid rgba(52, 211, 153, 0.15);
+  border: 1px solid rgba(5, 150, 105, 0.15);
   text-align: center;
   overflow: hidden;
 }
@@ -300,7 +300,7 @@
   inset: 0;
   background: radial-gradient(
     ellipse 70% 50% at 50% 0%,
-    rgba(52, 211, 153, 0.08) 0%,
+    rgba(5, 150, 105, 0.06) 0%,
     transparent 60%
   );
   pointer-events: none;
@@ -312,7 +312,7 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-brand);
+  color: var(--color-brand-dark);
   margin-bottom: var(--space-4);
 }
 
