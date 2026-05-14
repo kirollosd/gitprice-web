@@ -489,7 +489,8 @@
     }
     .hero-gp-head {
       padding: 12px 14px;
-      background: var(--text-1);
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       gap: 9px;
@@ -497,7 +498,8 @@
     .hero-gp-icon {
       width: 25px;
       height: 25px;
-      background: var(--brand);
+      background: #fff;
+      border: 1.5px solid var(--border-strong);
       border-radius: 6px;
       display: grid;
       place-items: center;
@@ -508,14 +510,14 @@
       font-family: var(--font-display);
       font-size: 13px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-1);
       letter-spacing: -0.02em;
     }
-    .hero-gp-sub { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1.5px; }
+    .hero-gp-sub { font-size: 10px; color: var(--text-4); margin-top: 1.5px; }
     .hero-gp-close {
       margin-left: auto;
       font-size: 13px;
-      color: rgba(255,255,255,0.4);
+      color: var(--text-4);
       background: none;
       border: none;
       cursor: pointer;
@@ -523,7 +525,37 @@
       line-height: 1;
       transition: color var(--ease-fast);
     }
-    .hero-gp-close:hover { color: rgba(255,255,255,0.8); }
+    .hero-gp-close:hover { color: var(--text-2); }
+
+    /* Featured best-price block — matches actual extension UI */
+    .hero-gp-featured {
+      padding: 11px 14px 12px;
+      background: var(--brand-muted);
+      border-bottom: 1px solid var(--brand-border);
+    }
+    .hero-gp-featured-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--brand-dark);
+      margin-bottom: 3px;
+    }
+    .hero-gp-featured-price {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-1);
+      letter-spacing: -0.05em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+    .hero-gp-featured-meta {
+      font-size: 10px;
+      color: var(--brand-dark);
+      font-weight: 500;
+    }
     .hero-gp-product {
       padding: 10px 14px;
       font-size: 11.5px;
@@ -1066,6 +1098,179 @@
       .demo-wrap { grid-template-columns: 1fr; }
       .feat-pills { grid-template-columns: repeat(2, 1fr); }
     }
+
+    /* =============================================================
+       BENTO GRID — Smarter Shopping Section
+       Inspired by modern SaaS landing patterns (Dribbble / Toast)
+       ============================================================= */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .bento-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-2xl);
+      padding: 28px 28px 26px;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: box-shadow var(--ease-base), transform var(--ease-out);
+    }
+    .bento-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .bento-wide  { grid-column: span 2; }
+    .bento-dark  {
+      background: var(--text-1);
+      border-color: transparent;
+    }
+    .bento-mint  {
+      background: linear-gradient(135deg, var(--brand-muted) 0%, var(--bg-white) 100%);
+      border-color: var(--brand-border);
+    }
+
+    .bento-eyebrow {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--brand-dark);
+      margin-bottom: 10px;
+      display: block;
+    }
+    .bento-dark .bento-eyebrow { color: var(--brand); }
+
+    .bento-h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.25rem, 2vw, 1.5rem);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.18;
+      color: var(--text-1);
+      margin-bottom: 10px;
+    }
+    .bento-body {
+      font-size: 14px;
+      color: var(--text-3);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      max-width: 38ch;
+    }
+    .bento-num {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      font-weight: 800;
+      letter-spacing: -0.06em;
+      line-height: 0.9;
+      color: #fff;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .bento-mint .bento-num { color: var(--brand-dark); }
+    .bento-num-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.4;
+      max-width: 20ch;
+    }
+    .bento-mint .bento-num-label { color: var(--text-3); }
+
+    .bento-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--brand-muted);
+      border-radius: var(--r-md);
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+      flex-shrink: 0;
+    }
+    .bento-h3-sm {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--text-1);
+      margin-bottom: 7px;
+      line-height: 1.2;
+    }
+    .bento-body-sm {
+      font-size: 13.5px;
+      color: var(--text-3);
+      line-height: 1.55;
+    }
+
+    /* Price race bar chart inside wide bento card */
+    .bpr-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .bpr-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .bpr-store {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-3);
+      width: 76px;
+      flex-shrink: 0;
+    }
+    .bpr-row.bpr-winner .bpr-store {
+      color: var(--brand-dark);
+      font-weight: 700;
+    }
+    .bpr-track {
+      flex: 1;
+      height: 9px;
+      background: var(--bg-alt);
+      border-radius: var(--r-pill);
+      overflow: hidden;
+    }
+    .bpr-bar {
+      height: 100%;
+      border-radius: var(--r-pill);
+      background: var(--border-strong);
+    }
+    .bpr-row.bpr-winner .bpr-bar { background: var(--brand); }
+    .bpr-price {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-2);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      width: 110px;
+      justify-content: flex-end;
+    }
+    .bpr-row.bpr-winner .bpr-price { color: var(--brand-dark); font-weight: 700; }
+    .bpr-best {
+      font-size: 9px;
+      font-weight: 700;
+      color: white;
+      background: var(--brand-dark);
+      padding: 1.5px 6px;
+      border-radius: var(--r-pill);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* Bento responsive */
+    @media (max-width: 767px) {
+      .bento-grid { grid-template-columns: 1fr; }
+      .bento-wide { grid-column: span 1; }
+    }
+    @media (min-width: 681px) and (max-width: 900px) {
+      .bento-grid { grid-template-columns: repeat(2, 1fr); }
+      .bento-wide { grid-column: span 2; }
+    }
   </style>
 </head>
 <body>
@@ -1222,6 +1427,13 @@
                 <button class="hero-gp-close" aria-label="Close GitPrice panel" tabindex="-1">✕</button>
               </div>
 
+              <!-- Featured price — matches actual extension: large price display at top -->
+              <div class="hero-gp-featured" aria-hidden="true">
+                <div class="hero-gp-featured-label">Best price found</div>
+                <div class="hero-gp-featured-price">EGP&nbsp;12,599</div>
+                <div class="hero-gp-featured-meta">Amazon.eg · Current page · In Stock</div>
+              </div>
+
               <div class="hero-gp-product" aria-hidden="true">
                 Sony WH-1000XM5 Noise Cancelling Wireless Headphones
                 <div class="hero-gp-asin">ASIN: B0CTFK7P9R · Amazon.eg</div>
@@ -1298,135 +1510,89 @@
     </div>
   </div>
 
-  <!-- ═══ FEATURES — PRODUCT DEMO ═══ -->
+  <!-- ═══ FEATURES — BENTO GRID ═══ -->
   <section class="features" aria-labelledby="features-heading">
     <div class="container">
       <span class="section-kicker" aria-hidden="true">Why GitPrice</span>
       <h2 class="section-h2" id="features-heading">Built for smarter shopping</h2>
 
-      <!-- Split demo: Amazon product page + GitPrice panel -->
-      <div class="demo-wrap" role="img" aria-label="GitPrice extension showing price comparison for Sony WH-1000XM5: Noon EGP 8,499 (best), Amazon EGP 9,199, Jumia EGP 9,649">
-        <!-- Left: simulated Amazon product page -->
-        <div class="demo-page" aria-hidden="true">
-          <div class="demo-breadcrumb">Electronics › Headphones › Sony</div>
-          <h3 class="demo-product-title">Sony WH-1000XM5 Wireless Noise Canceling Headphones</h3>
-          <div class="demo-rating-row">
-            <span class="demo-stars">★★★★★</span>
-            <span class="demo-rating">4.6 (2,847 ratings)</span>
-          </div>
-          <div class="demo-price-block">
-            <div class="demo-price-label">Price:</div>
-            <div class="demo-price-egp">EGP 9,199</div>
-          </div>
-          <div class="demo-delivery"><strong>FREE delivery</strong> Fri, May 15</div>
-          <span class="demo-add-cart">Add to Cart</span>
-        </div>
+      <div class="bento-grid">
 
-        <!-- Right: GitPrice extension panel -->
-        <div class="demo-panel" aria-hidden="true">
-          <div class="demo-panel-header">
-            <!-- Real logo_icon.svg paths, viewBox trimmed to mark content -->
-            <div class="demo-panel-logo">
-              <svg viewBox="593 360 210 303" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M694.982 564.096C638.749 564.096 593 518.316 593 462.045C593 405.778 638.749 360 694.982 360C751.218 360 796.964 405.778 796.964 462.045C796.964 518.316 751.218 564.096 694.982 564.096ZM694.982 421.117C672.428 421.117 654.078 439.478 654.078 462.045C654.078 484.614 672.428 502.978 694.982 502.978C717.537 502.978 735.89 484.614 735.89 462.045C735.89 439.478 717.537 421.117 694.982 421.117Z" fill="#2D415E"/>
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M694.983 360H802.541V421.116H694.983V360Z" fill="#2D415E"/>
-                <path d="M694.983 663.053C669.893 663.053 645.402 658.475 622.194 649.445L644.329 592.486C676.573 605.029 713.392 605.029 745.624 592.492L767.755 649.451C744.553 658.48 720.068 663.053 694.983 663.053Z" fill="#2D415E"/>
-              </svg>
+        <!-- Card 1 (wide, 2-col): Instant comparison with price-race visual -->
+        <div class="bento-card bento-wide">
+          <span class="bento-eyebrow">Instant comparison</span>
+          <h3 class="bento-h3">Three stores.<br>One&nbsp;click.</h3>
+          <p class="bento-body">GitPrice surfaces every price across Amazon.eg, Noon, and Jumia without leaving the product page you're on.</p>
+          <div class="bpr-wrap" role="img" aria-label="Price comparison: Noon EGP 8,499 best, Amazon EGP 9,199, Jumia EGP 9,649">
+            <div class="bpr-row bpr-winner">
+              <span class="bpr-store">Noon</span>
+              <div class="bpr-track"><div class="bpr-bar" style="width:52%"></div></div>
+              <span class="bpr-price">EGP&nbsp;8,499 <span class="bpr-best">Best</span></span>
             </div>
-            <div>
-              <div class="demo-panel-title-text">GitPrice</div>
-              <div class="demo-panel-subtitle">Price Comparison</div>
+            <div class="bpr-row">
+              <span class="bpr-store">Amazon.eg</span>
+              <div class="bpr-track"><div class="bpr-bar" style="width:67%"></div></div>
+              <span class="bpr-price">EGP&nbsp;9,199</span>
             </div>
-            <button class="demo-panel-close" aria-label="Close GitPrice panel">✕</button>
-          </div>
-
-          <div class="demo-panel-product">
-            Sony WH-1000XM5 Headphones
-            <div class="demo-panel-asin">ASIN: B09XS7JWHH · Amazon.eg</div>
-          </div>
-
-          <div class="demo-panel-rows">
-            <!-- Noon — winner -->
-            <div class="demo-panel-row winner">
-              <span class="demo-store-initial noon">N</span>
-              <div class="demo-store-info">
-                <div class="demo-store-name-text">Noon</div>
-                <div class="demo-store-label-text">Best Price · In Stock · Ships today</div>
-              </div>
-              <div class="demo-row-right">
-                <div class="demo-row-price">EGP 8,499</div>
-                <span class="demo-best-badge">Best</span>
-              </div>
-            </div>
-            <!-- Amazon.eg -->
-            <div class="demo-panel-row">
-              <span class="demo-store-initial amazon">A</span>
-              <div class="demo-store-info">
-                <div class="demo-store-name-text">Amazon.eg</div>
-                <div class="demo-store-label-text">In Stock · Viewing now</div>
-              </div>
-              <div class="demo-row-right">
-                <div class="demo-row-price">EGP 9,199</div>
-              </div>
-            </div>
-            <!-- Jumia -->
-            <div class="demo-panel-row">
-              <span class="demo-store-initial jumia">J</span>
-              <div class="demo-store-info">
-                <div class="demo-store-name-text">Jumia</div>
-                <div class="demo-store-label-text">3 left in stock</div>
-              </div>
-              <div class="demo-row-right">
-                <div class="demo-row-price">EGP 9,649</div>
-              </div>
+            <div class="bpr-row">
+              <span class="bpr-store">Jumia</span>
+              <div class="bpr-track"><div class="bpr-bar" style="width:74%"></div></div>
+              <span class="bpr-price">EGP&nbsp;9,649</span>
             </div>
           </div>
+        </div>
 
-          <div class="demo-savings-bar">
-            <span class="demo-savings-text">Save EGP 700 vs Amazon</span>
-            <a href="#" class="demo-view-deal">View Deal →</a>
-          </div>
+        <!-- Card 2 (dark stat): Average savings -->
+        <div class="bento-card bento-dark" aria-label="Shoppers save an average of 23 percent with GitPrice">
+          <span class="bento-eyebrow">Average savings</span>
+          <span class="bento-num">23%</span>
+          <span class="bento-num-label">saved vs buying from the first store you visit</span>
         </div>
-      </div>
 
-      <!-- Feature pills below demo -->
-      <div class="feat-pills" role="list">
-        <div class="feat-pill" role="listitem">
-          <div class="fp-icon" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M13 2L4 13h7l-2 7 9-11h-7l2-7z" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <!-- Card 3: Price drop alerts -->
+        <div class="bento-card">
+          <div class="bento-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M11 2a7 7 0 0 1 7 7v4l1.5 2.5H2.5L4 13V9a7 7 0 0 1 7-7z" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 17a2 2 0 0 0 4 0" stroke="#059669" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
           </div>
-          <div class="fp-text">
-            <div class="fp-title">Instant comparison</div>
-            <div class="fp-body">Side-by-side in under a second</div>
-          </div>
+          <h3 class="bento-h3-sm">Price drop alerts</h3>
+          <p class="bento-body-sm">Track any product. Get notified the moment a price drops across any store — before anyone else finds out.</p>
         </div>
-        <div class="feat-pill" role="listitem">
-          <div class="fp-icon" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M11 2a7 7 0 0 1 7 7v4l1.5 2.5H2.5L4 13V9a7 7 0 0 1 7-7z" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 17a2 2 0 0 0 4 0" stroke="#059669" stroke-width="1.75" stroke-linecap="round"/></svg>
-          </div>
-          <div class="fp-text">
-            <div class="fp-title">Price drop alerts</div>
-            <div class="fp-body">Notified when any store drops</div>
-          </div>
+
+        <!-- Card 4 (mint stat): Speed -->
+        <div class="bento-card bento-mint" aria-label="Compares all 3 stores in under 1 second">
+          <span class="bento-eyebrow">Real-time data</span>
+          <span class="bento-num">&lt;1s</span>
+          <span class="bento-num-label">to compare all 3 stores live</span>
         </div>
-        <div class="feat-pill" role="listitem">
-          <div class="fp-icon" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M11 2L4 5v6c0 4.4 2.9 8 7 9 4.1-1 7-4.6 7-9V5l-7-3z" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 11l2 2 4-4" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+        <!-- Card 5: Zero tracking -->
+        <div class="bento-card">
+          <div class="bento-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M11 2L4 5v6c0 4.4 2.9 8 7 9 4.1-1 7-4.6 7-9V5l-7-3z" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 11l2 2 4-4" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
-          <div class="fp-text">
-            <div class="fp-title">Zero data collection</div>
-            <div class="fp-body">Reads only the page you're on</div>
-          </div>
+          <h3 class="bento-h3-sm">Zero tracking</h3>
+          <p class="bento-body-sm">Reads only the product page you're viewing. No browsing history. No data sent to any server.</p>
         </div>
-        <div class="feat-pill" role="listitem">
-          <div class="fp-icon" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#059669" stroke-width="1.75"/><path d="M11 3c-2 3-2 5 0 8s2 5 0 8M3 11h16" stroke="#059669" stroke-width="1.5" stroke-linecap="round"/></svg>
+
+        <!-- placeholder closing — original had an unclosed feat-pill here -->
+        <div class="bento-card">
+          <div class="bento-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <circle cx="11" cy="11" r="9" stroke="#059669" stroke-width="1.75"/>
+              <path d="M11 2C11 2 14 6 14 11s-3 9-3 9" stroke="#059669" stroke-width="1.75" stroke-linecap="round"/>
+              <path d="M2 11h18" stroke="#059669" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
           </div>
-          <div class="fp-text">
-            <div class="fp-title">Egypt-native</div>
-            <div class="fp-body">EGP prices, local store coverage</div>
-          </div>
+          <h3 class="bento-h3-sm">Egypt-native</h3>
+          <p class="bento-body-sm">Built specifically for Egyptian shoppers. Prices in EGP, stores people actually use, shipping to Egypt.</p>
         </div>
+
       </div>
     </div>
   </section>
