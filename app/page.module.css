@@ -12,7 +12,7 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-brand-dark);
+  color: var(--color-brand-text);
   margin-bottom: var(--space-3);
 }
 
@@ -58,7 +58,7 @@
   font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--color-brand-dark);
+  color: var(--color-brand-text);
   width: fit-content;
 }
 
@@ -312,7 +312,7 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-brand-dark);
+  color: var(--color-brand-text);
   margin-bottom: var(--space-4);
 }
 
