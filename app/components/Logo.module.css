@@ -17,7 +17,7 @@
   font-family: var(--font-heading);
   font-size: var(--text-xl);
   font-weight: 700;
-  color: var(--color-brand);
+  color: var(--color-brand-dark);
   letter-spacing: -0.3px;
   line-height: 1;
 }
