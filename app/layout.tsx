@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
+import HeapAnalytics from "./components/HeapAnalytics";
 import "./globals.css";
 
 const sora = localFont({
@@ -94,6 +95,7 @@ export default function RootLayout({
         <Nav />
         <main>{children}</main>
         <Footer />
+        <HeapAnalytics />
       </body>
     </html>
   );

@@ -114,6 +114,9 @@ export default function PrivacyPage() {
         <p className={styles.body}>
           The GitPrice extension itself does not set cookies. When you visit store pages, those sites may set their own cookies &mdash; their respective privacy policies govern that activity.
         </p>
+        <p className={styles.body}>
+          This website uses Heap Analytics to understand how visitors use it (pages viewed, clicks, and general device and browser information). Heap sets its own cookies on this site. We do not use this data for advertising.
+        </p>
       </div>
 
       <div className={styles.section}>
