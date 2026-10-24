@@ -20,7 +20,6 @@ const NOTE = "board draws the 'Prices are placeholders' note (a copy key the bui
 const TEXT = "~5000px of body text: Sketch and Chromium rasterise Fustat differently, and a one-pixel line-height drift accumulates down the page";
 const NOBTN = "board draws an action button the build omits by design (no web target; e2e asserts no actions)";
 const FIELD = "board draws the Show/Hide password toggle and the 'At least 8 characters' hint; both need new i18n keys, so they are not built";
-const AR = "Arabic copy: Chromium wraps the privacy paragraph one word later than Sketch (about 2% narrower measure); en measures 0.02";
 export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Checkout-summary-1440": { max: 0.05, reason: NOTE },
   "Checkout-summary-390": { max: 0.12, reason: NOTE },
@@ -37,11 +36,6 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "ResetPassword-weak-password-390": { max: 0.08, reason: FIELD },
   "ResetPassword-saving-390": { max: 0.08, reason: FIELD },
   "ResetPassword-error-390": { max: 0.08, reason: FIELD },
-  "Checkout-failed-1440": { max: 0.04, reason: NOBTN },
-  "ResetPassword-verifying-390": { max: 0.04, reason: "Sketch and Chromium rasterise short centred card text differently; measured 0.03 at per-pixel threshold 0.1, no layout offset found" },
-  "ResetPassword-success-390": { max: 0.04, reason: "Sketch and Chromium rasterise short centred card text differently; measured 0.03 at per-pixel threshold 0.1, no layout offset found" },
-  "Checkout-signed-out-390": { max: 0.04, reason: "Sketch and Chromium rasterise short centred card text differently; measured 0.03 at per-pixel threshold 0.1, no layout offset found" },
-  "Checkout-waiting-390": { max: 0.04, reason: "Sketch and Chromium rasterise short centred card text differently; measured 0.03 at per-pixel threshold 0.1, no layout offset found" },
   "Terms-default-1440": { max: 0.04, reason: TEXT },
   "Terms-default-390": { max: 0.09, reason: TEXT },
   "Privacy-default-1440": { max: 0.04, reason: TEXT + "; the build's privacy copy gained the Vercel/Tally paragraph after the board was drawn" },
@@ -49,19 +43,11 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Pricing-no-prices-1440": { max: 0.04, reason: "board draws the Free price '0' and the 'Premium for sellers' row; neither has an i18n key" },
   "Pricing-no-prices-390": { max: 0.09, reason: "board draws the Free price '0' and the 'Premium for sellers' row; neither has an i18n key" },
   "Welcome-default-390": { max: 0.05, reason: "board draws decorative art (toolbar icons, store chip) the build does not ship" },
-  "Home-prelaunch-1440": { max: 0.04, reason: AR },
-  "Home-cookie-notice-1440": { max: 0.04, reason: AR },
-  "Home-launch-1440": { max: 0.04, reason: AR },
-  "Home-prelaunch-390": { max: 0.07, reason: AR },
-  "Home-cookie-notice-390": { max: 0.07, reason: AR },
-  "Home-launch-390": { max: 0.09, reason: AR + "; the board draws App Store and Google Play badges at 390 too, the spec shows them at 390 only on the launch build, the ar launch board also wraps differently" },
   "NotFound-default-390": { max: 0.05, reason: "Noto Sans Arabic line metrics differ between Sketch and Chromium" },
 };
 
 /** Boards the build cannot match yet; reported, never loosened. Key: `<Screen>`. */
-export const DIVERGED: Record<string, string> = {
-  Sellers: "measured 0.11-0.15 vs 0.02 allowed: hero and h1 now align to 1px, but the features list ends about 22px short of the board (band2 at 1131 vs 1153), so everything below shifts; needs one more geometry pass",
-};
+export const DIVERGED: Record<string, string> = {};
 export const isDiverged = (screen: string) => !process.env.PARITY_MEASURE && screen in DIVERGED;
 
 /** One masked region: where it sits in the build, why it intentionally differs from the board. */

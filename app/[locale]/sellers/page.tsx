@@ -22,17 +22,19 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
   );
   return (
     <>
-      <section className={`${styles.hero} ${styles.sellersHero}`}>
+      <section className={styles.hero}>
         <div className={`container ${styles.heroGrid}`}>
           <div className={styles.heroText}>
+            <Link href={pathFor(locale, "/")} className={styles.back}>{t(locale, S + "backToShoppers")}</Link>
             <h1 className={styles.h1}>{t(locale, S + "hero.headline")}</h1>
             <p className={styles.sub}>{t(locale, S + "hero.sub")}</p>
-            <p className={styles.caption}>{t(locale, S + "hero.micro")}</p>
             <div id="waitlist" className={styles.action}>
               {env.launch ? access("launch.hero.access.label") : <Waitlist locale={locale} label={waitlistLabel} />}
             </div>
+            {!env.launch && <p className={styles.caption}>{t(locale, S + "prelaunch.hero.waitlist.note")}</p>}
+            <p className={styles.caption}>{t(locale, S + "hero.micro")}</p>
           </div>
-          <div className={`${styles.art} ${styles.sellersArt}`} data-art aria-hidden="true">
+          <div className={styles.visual} aria-hidden="true">
             <ul className={styles.rivals}>
               {[1, 2, 3].map((n) => (
                 <li key={n} className={styles.rival}>
@@ -45,12 +47,12 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
         </div>
       </section>
 
-      <section id="features" className={styles.section} aria-labelledby="sellers-features-h">
+      <section className={styles.section} aria-labelledby="sellers-features-h">
         <div className="container">
           <h2 id="sellers-features-h" className={styles.h2}>{t(locale, S + "features.heading")}</h2>
-          <ul className={styles.items} role="list">
+          <ul className={styles.cards} role="list">
             {[1, 2, 3, 4].map((n) => (
-              <li key={n} className={styles.item}>
+              <li key={n} className={styles.card}>
                 <h3 className={styles.h3}>{t(locale, `${S}features.${n}.title`)}</h3>
                 <p className={styles.muted}>{t(locale, `${S}features.${n}.body`)}</p>
               </li>
@@ -59,7 +61,7 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
         </div>
       </section>
 
-      <Steps locale={locale} id="how-it-works" prefix="web.sellers.how." />
+      <Steps locale={locale} prefix="web.sellers.how." />
 
       <section className={styles.section}>
         <div className="container">
@@ -76,9 +78,6 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
           <Waitlist locale={locale} label={t(locale, S + "cta.waitlist.button.submitLabel")} />
         </CtaBand>
       )}
-      <div className={`container ${styles.backRow}`}>
-        <Link href={pathFor(locale, "/")} className={styles.back}>{t(locale, S + "backToShoppers")}</Link>
-      </div>
     </>
   );
 }

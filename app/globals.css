@@ -135,11 +135,9 @@ h1[tabindex="-1"]:focus-visible { outline: none; }
   --web-fs-hero: var(--web-fs-display);   /* 56/64 from 1024, mobile display (32) below */
   --web-lh-hero: 40px;
   --web-fs-display: 32px;
-  --web-fs-h2: 22px;       /* section heading: title on phones, display from 1024 */
-  --web-fs-feature: 22px;  /* feature row title: 28 from 1024 (boards) */
   --web-fs-title: 22px;
   --web-fs-body: 17px;
   --web-lh-body: 1.6;
 }
-@media (min-width: 1024px) { :root { --web-fs-hero: 56px; --web-lh-hero: 64px; --web-fs-h2: 32px; --web-fs-feature: 28px; } }
+@media (min-width: 1024px) { :root { --web-fs-hero: 56px; --web-lh-hero: 64px; } }
 @media (min-width: 1024px) { [dir="rtl"] { --web-lh-hero: 84px; } }
