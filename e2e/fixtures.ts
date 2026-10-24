@@ -8,6 +8,8 @@ export type { Page } from "@playwright/test";
 export const test = base.extend({
   context: async ({ context }, provide) => {
     await context.route("https://www.googletagmanager.com/**", (r) => r.fulfill({ contentType: "text/javascript", body: "" }));
+    // Vercel Speed Insights script is served by Vercel only; locally it 404s and trips the no-console-error specs.
+    await context.route("**/_vercel/**", (r) => r.fulfill({ contentType: "text/javascript", body: "" }));
     await provide(context);
   },
 });
