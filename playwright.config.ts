@@ -11,6 +11,7 @@ const launchEnv = {
   NEXT_DIST_DIR: ".next-launch",
 };
 
+// A stale `next start` on :3000 or :3001 is reused outside CI; kill it first or you test old code.
 export default defineConfig({
   testDir: "e2e",
   projects: [
@@ -18,12 +19,12 @@ export default defineConfig({
     { name: "launch", testMatch: /\.launch\.spec\.ts$/, use: { baseURL: `http://localhost:${LAUNCH}` } },
   ],
   webServer: [
-    { command: `npm run build && npm run start -- -p ${PRELAUNCH}`, url: `http://localhost:${PRELAUNCH}`, reuseExistingServer: true, timeout: 180_000 },
+    { command: `npm run build && npm run start -- -p ${PRELAUNCH}`, url: `http://localhost:${PRELAUNCH}`, reuseExistingServer: !process.env.CI, timeout: 180_000 },
     {
       command: `npm run build && npm run start -- -p ${LAUNCH}`,
       url: `http://localhost:${LAUNCH}`,
       env: launchEnv,
-      reuseExistingServer: true,
+      reuseExistingServer: !process.env.CI,
       timeout: 180_000,
     },
   ],

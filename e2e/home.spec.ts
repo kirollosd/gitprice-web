@@ -3,8 +3,9 @@ import { expect, test, type Page } from "@playwright/test";
 const TALLY_STUB = "window.Tally={loadEmbeds(){window.__tallyLoads=(window.__tallyLoads||0)+1}};";
 
 /** Tests never reach tally.so: the script is a stub and anything else on that host is refused. */
-async function stubTally(page: Page, { fail = false } = {}) {
+async function stubTally(page: Page, { fail = false, onScript = () => {} } = {}) {
   await page.route("https://tally.so/**", (route) => {
+    if (route.request().url().endsWith("/widgets/embed.js")) onScript();
     if (fail || !route.request().url().endsWith("/widgets/embed.js")) return route.abort();
     return route.fulfill({ contentType: "text/javascript", body: TALLY_STUB });
   });
@@ -45,6 +46,15 @@ test.describe("Home prelaunch", () => {
     await stubTally(page);
     await page.goto("/");
     await page.waitForFunction(() => (window as unknown as { __tallyLoads?: number }).__tallyLoads! >= 1);
+  });
+
+  test("two embeds on the page request embed.js once", async ({ page }) => {
+    let requests = 0;
+    await stubTally(page, { onScript: () => requests++ });
+    await page.goto("/");
+    await expect(page.locator("iframe[data-tally-src]")).toHaveCount(2);
+    await page.waitForFunction(() => (window as unknown as { __tallyLoads?: number }).__tallyLoads! >= 1);
+    expect(requests).toBe(1);
   });
 
   test("falls back to the hosted form link when the script cannot load", async ({ page }) => {

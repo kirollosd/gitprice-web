@@ -56,13 +56,36 @@ describe("TallyEmbed", () => {
     expect(document.querySelector("iframe")).not.toBeNull();
   });
 
-  it("passes lang=ar to the embed and loads the script lazily regardless of consent", async () => {
+  it("passes lang=ar to the embed and loads embed.js with the lazyOnload strategy", async () => {
     const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
     render(<TallyEmbed formId="mYLGEG" locale="ar" />);
     expect(document.querySelector("iframe")!.getAttribute("data-tally-src")).toBe(
       "https://tally.so/embed/mYLGEG?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=ar",
     );
     expect(script).toMatchObject({ src: "https://tally.so/widgets/embed.js", strategy: "lazyOnload" });
+  });
+
+  it("brings the form back when Tally arrives after the 5 second fallback", async () => {
+    vi.useFakeTimers();
+    const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
+    render(<TallyEmbed formId="mYLGEG" locale="en" />);
+    act(() => { vi.advanceTimersByTime(5001); });
+    expect(screen.getByRole("link")).toBeTruthy();
+    expect(document.querySelector("iframe")).toBeNull();
+    const loadEmbeds = vi.fn();
+    w.Tally = { loadEmbeds };
+    act(() => script!.onReady!());
+    expect(screen.queryByRole("link")).toBeNull();
+    expect(document.querySelector("iframe")).not.toBeNull();
+    expect(loadEmbeds).toHaveBeenCalled();
+  });
+
+  it("encodes the form id in both URLs", async () => {
+    const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
+    render(<TallyEmbed formId="a b&c" locale="en" />);
+    expect(document.querySelector("iframe")!.getAttribute("data-tally-src")).toContain("/embed/a%20b%26c?");
+    act(() => script!.onError!());
+    expect(screen.getByRole("link").getAttribute("href")).toBe("https://tally.so/r/a%20b%26c");
   });
 
   it("calls Tally.loadEmbeds once the script is ready", async () => {

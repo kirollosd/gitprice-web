@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { t, type Locale } from "../../lib/i18n";
 import { pathFor } from "../../lib/locale";
+import FooterTagline from "./FooterTagline";
 import Logo from "./Logo";
 import styles from "./WebFooter.module.css";
 
@@ -12,7 +13,7 @@ export default function WebFooter({ locale }: { locale: Locale }) {
       <div className={`${styles.inner} container`}>
         <div className={styles.brand}>
           <Logo locale={locale} />
-          <p className={styles.tagline}>{t(locale, K + "tagline")}</p>
+          <FooterTagline locale={locale} className={styles.tagline} />
         </div>
         <nav aria-label={t(locale, K + "label.nav")}>
           <ul className={styles.links} role="list">

@@ -62,3 +62,4 @@ The page itself already shows a hosted-form link (`https://tally.so/r/<id>`) if 
 
 1. **Arabic form.** Both locales use the same form ID with `lang=<locale>`. Decide between a separate Arabic Tally form (needs an env var and a code change) or Tally's translation feature (Arabic copy from `i18n/ar.json`, Modern Standard Arabic).
 2. **Seller form.** Decide whether sellers get their own Tally form (same env-var question) so the labels and thank-you text can be seller-specific.
+3. **Seller access destination.** "Get seller access" links to the Chrome Web Store listing because there is no seller URL. Confirm, or provide a seller destination.

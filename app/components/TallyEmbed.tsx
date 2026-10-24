@@ -38,30 +38,32 @@ export default function TallyEmbed({
 
   const text = label ?? t(locale, W + "empty.button.submit.label");
 
-  if (failed) {
-    return (
-      <a className={styles.fallback} href={`https://tally.so/r/${formId}`} target="_blank" rel="noopener">
-        {text}
-      </a>
-    );
-  }
+  const id = encodeURIComponent(formId);
+  // Script stays mounted when the fallback shows, so a late load can bring the form back.
+  const onReady = () => {
+    setFailed(false);
+    (window as TallyWindow).Tally?.loadEmbeds();
+  };
 
   return (
-    <div className={styles.frame} style={{ minBlockSize: height }}>
-      <iframe
-        data-tally-src={`https://tally.so/embed/${formId}?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=${locale}`}
-        title={text}
-        width="100%"
-        height={height}
-        loading="lazy"
-        className={styles.iframe}
-      />
-      <Script
-        src="https://tally.so/widgets/embed.js"
-        strategy="lazyOnload"
-        onReady={() => (window as TallyWindow).Tally?.loadEmbeds()}
-        onError={() => setFailed(true)}
-      />
-    </div>
+    <>
+      {failed ? (
+        <a className={styles.fallback} href={`https://tally.so/r/${id}`} target="_blank" rel="noopener">
+          {text}
+        </a>
+      ) : (
+        <div className={styles.frame} style={{ minBlockSize: height }}>
+          <iframe
+            data-tally-src={`https://tally.so/embed/${id}?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=${locale}`}
+            title={text}
+            width="100%"
+            height={height}
+            loading="lazy"
+            className={styles.iframe}
+          />
+        </div>
+      )}
+      <Script src="https://tally.so/widgets/embed.js" strategy="lazyOnload" onReady={onReady} onError={() => setFailed(true)} />
+    </>
   );
 }
