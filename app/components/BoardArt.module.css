@@ -156,11 +156,10 @@
   background: var(--gp-surface-raised);
   border-radius: var(--gp-r-lg);
 }
-/* The store page keeps the board shot's proportions (2880x1640). */
+/* Below 1024 the store page grows with its content (wrapped panel rows, the pill); from 1024 it keeps the board shot's proportions (2880x1640). */
 .page {
   display: flex;
   flex-direction: column;
-  aspect-ratio: 2880 / 1640;
   overflow: hidden;
   background: var(--gp-surface);
   border-radius: var(--gp-r-sm);
@@ -189,6 +188,10 @@
   font-size: var(--gp-fs-caption);
 }
 .sidePanel { display: none; }
+/* Phones: the receipt overlaps the page bottom by sp-6, so the product reserves that much under the pill. */
+@media (max-width: 767.98px) {
+  .product { padding-block-end: calc(var(--gp-sp-4) + var(--gp-sp-6)); }
+}
 
 .receiptFrame {
   position: relative;
@@ -228,9 +231,15 @@
   /* The panel is a reduced shot of the extension: one line per text, cut at the edge rather than wrapped. */
   .sidePanel .rowText > span, .receiptMini > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
+/* 768 to 1023: the store page grows with its content, so the narrow panel's rows wrap instead of cutting "Exact match". */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .sidePanel .rowText > span { white-space: normal; overflow: visible; }
+  .sidePanel .rowStore { flex-wrap: wrap; column-gap: var(--gp-sp-1); white-space: nowrap; } /* "Store B" and "Exact match" wrap as whole pieces */
+}
 
 @media (min-width: 1024px) {
   .hero { padding: 0; background: none; border-radius: 0; }
+  .page { aspect-ratio: 2880 / 1640; }
   .browser {
     padding: var(--gp-sp-3);
     background: var(--gp-surface-raised);
