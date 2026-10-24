@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@69bd7434",
+  "_source": "gitprice@01c2ca16",
   "web": {
     "component": {
       "webNav": {
@@ -49,6 +49,14 @@
           },
           "cta": {
             "label": "Join the waitlist"
+          }
+        },
+        "a11y": {
+          "label": {
+            "primary": "Main navigation",
+            "home": "GitPrice home",
+            "menuOpen": "Open menu",
+            "menuClose": "Close menu"
           }
         }
       },
@@ -218,7 +226,8 @@
           "tagline": "Compares prices while you shop.",
           "label": {
             "privacy": "Privacy",
-            "terms": "Terms"
+            "terms": "Terms",
+            "nav": "Footer links"
           },
           "copyright": "© 2026 GitPrice"
         }
@@ -284,6 +293,14 @@
             "dismiss": {
               "label": "Dismiss"
             }
+          }
+        }
+      },
+      "languageSwitch": {
+        "default": {
+          "label": {
+            "en": "English",
+            "ar": "العربية"
           }
         }
       }

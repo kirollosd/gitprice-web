@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@69bd7434",
+  "_source": "gitprice@01c2ca16",
   "web": {
     "component": {
       "webNav": {
@@ -49,6 +49,14 @@
           },
           "cta": {
             "label": "انضم إلى قائمة الانتظار"
+          }
+        },
+        "a11y": {
+          "label": {
+            "primary": "التنقل الرئيسي",
+            "home": "الصفحة الرئيسية لـ GitPrice",
+            "menuOpen": "فتح القائمة",
+            "menuClose": "إغلاق القائمة"
           }
         }
       },
@@ -218,7 +226,8 @@
           "tagline": "يقارن الأسعار أثناء تسوقك.",
           "label": {
             "privacy": "الخصوصية",
-            "terms": "الشروط"
+            "terms": "الشروط",
+            "nav": "روابط التذييل"
           },
           "copyright": "© 2026 GitPrice"
         }
@@ -284,6 +293,14 @@
             "dismiss": {
               "label": "إغلاق"
             }
+          }
+        }
+      },
+      "languageSwitch": {
+        "default": {
+          "label": {
+            "en": "English",
+            "ar": "العربية"
           }
         }
       }
