@@ -20,6 +20,7 @@ const NOTE = "board draws the 'Prices are placeholders' note (a copy key the bui
 const TEXT = "~5000px of body text: Sketch and Chromium rasterise Fustat differently, and a one-pixel line-height drift accumulates down the page";
 const NOBTN = "board draws an action button the build omits by design (no web target; e2e asserts no actions)";
 const FIELD = "board draws the Show/Hide password toggle and the 'At least 8 characters' hint; both need new i18n keys, so they are not built";
+const RASTER = "Sketch and Chromium rasterise short centred card text differently; measured 0.03 at per-pixel threshold 0.1, no layout offset found";
 export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Checkout-summary-1440": { max: 0.05, reason: NOTE },
   "Checkout-summary-390": { max: 0.12, reason: NOTE },
@@ -36,6 +37,11 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "ResetPassword-weak-password-390": { max: 0.08, reason: FIELD },
   "ResetPassword-saving-390": { max: 0.08, reason: FIELD },
   "ResetPassword-error-390": { max: 0.08, reason: FIELD },
+  "Checkout-failed-1440": { max: 0.04, reason: NOBTN },
+  "ResetPassword-verifying-390": { max: 0.04, reason: RASTER },
+  "ResetPassword-success-390": { max: 0.04, reason: RASTER },
+  "Checkout-signed-out-390": { max: 0.04, reason: RASTER },
+  "Checkout-waiting-390": { max: 0.04, reason: RASTER },
   "Terms-default-1440": { max: 0.04, reason: TEXT },
   "Terms-default-390": { max: 0.09, reason: TEXT },
   "Privacy-default-1440": { max: 0.04, reason: TEXT + "; the build's privacy copy gained the Vercel/Tally paragraph after the board was drawn" },
@@ -47,7 +53,10 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
 };
 
 /** Boards the build cannot match yet; reported, never loosened. Key: `<Screen>`. */
-export const DIVERGED: Record<string, string> = {};
+export const DIVERGED: Record<string, string> = {
+  Home: "board composes owner product art (device mockup, receipt cards, feature art) and an inline waitlist form the build does not have; parked until the owner supplies assets (measured 0.15 to 0.19)",
+  Sellers: "same board vocabulary as Home (mockups, bands, seller access card); parked until the owner supplies assets (measured 0.19 to 0.26)",
+};
 export const isDiverged = (screen: string) => !process.env.PARITY_MEASURE && screen in DIVERGED;
 
 /** One masked region: where it sits in the build, why it intentionally differs from the board. */
@@ -205,10 +214,6 @@ export async function seedCheckout(page: Page, state: CheckoutState, path: strin
 export const spinnerMask: Mask = {
   locator: (p) => p.locator('[role="status"] > [aria-hidden="true"]'),
   reason: "spinner: animated, drawn by the board as a static ring at a different phase",
-};
-export const artMask: Mask = {
-  locator: (p) => p.locator("[data-art]"),
-  reason: "product art (device mockup, receipt cards, rival cards): owner assets not supplied, so the build draws empty panels at the board's size",
 };
 export const tallyMask: Mask = {
   locator: (p) => p.locator("iframe[data-tally-src]"),
