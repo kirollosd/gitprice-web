@@ -55,7 +55,7 @@ export default function WebMenu({ locale }: { locale: Locale }) {
       if (e.key === "Escape") return close();
       if (e.key !== "Tab") return;
       // Keep Tab inside the button + overlay links (smaller than inerting the page behind).
-      const items = [button.current!, ...overlay.current!.querySelectorAll<HTMLElement>("a")];
+      const items = [button.current!, ...overlay.current!.querySelectorAll<HTMLElement>("a, button")];
       const i = items.indexOf(document.activeElement as HTMLElement);
       e.preventDefault();
       items[(i + (e.shiftKey ? -1 : 1) + items.length) % items.length].focus();
@@ -83,7 +83,8 @@ export default function WebMenu({ locale }: { locale: Locale }) {
       </button>
       {open && (
         <div id="web-menu" ref={overlay} className={styles.overlay}>
-          <nav aria-label={t(locale, N + "a11y.label.primary")}>
+          {/* Unlabelled on purpose: the header nav already owns "Main navigation" at 768-1023. */}
+          <nav>
           <ul className={styles.list} role="list">
             <li><Link href={`${home}#features`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.features`)}</Link></li>
             <li><Link href={`${home}#how-it-works`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.howItWorks`)}</Link></li>

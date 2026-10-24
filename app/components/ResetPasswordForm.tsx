@@ -1,10 +1,11 @@
 "use client";
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent, type RefObject } from "react";
 import { env } from "../../lib/env";
 import { t, type Locale } from "../../lib/i18n";
 import { parseRecovery, validatePassword } from "../../lib/recovery";
+import { useHeadingFocus } from "./useHeadingFocus";
 import styles from "./ResetPasswordForm.module.css";
 
 const K = "web.resetPassword.";
@@ -20,6 +21,8 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
   const [password, setPassword] = useState("");
   const client = useRef<SupabaseClient | null>(null);
   const started = useRef(false);
+  const view = status === "verifying" || status === "expired" || status === "success" ? status : "form";
+  const heading = useHeadingFocus(view);
 
   // Lazy so nothing is created during prerender.
   const supabase = () =>
@@ -71,9 +74,9 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
     }
   }
 
-  if (status === "verifying") return <Message locale={locale} k="verifying" live />;
-  if (status === "expired") return <Message locale={locale} k="linkExpired" />;
-  if (status === "success") return <Message locale={locale} k="success" />;
+  if (status === "verifying") return <Message locale={locale} k="verifying" live heading={heading} />;
+  if (status === "expired") return <Message locale={locale} k="linkExpired" heading={heading} />;
+  if (status === "success") return <Message locale={locale} k="success" heading={heading} />;
 
   const feedback = status === "weak" ? t(locale, K + "weak.message") : status === "error" ? t(locale, K + "error.field.message") : "";
   return (
@@ -105,10 +108,10 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
   );
 }
 
-function Message({ locale, k, live }: { locale: Locale; k: string; live?: boolean }) {
+function Message({ locale, k, live, heading }: { locale: Locale; k: string; live?: boolean; heading: RefObject<HTMLHeadingElement | null> }) {
   return (
     <div className={styles.card} role={live ? "status" : undefined}>
-      <h1 className={styles.h1}>{t(locale, `${K}${k}.title`)}</h1>
+      <h1 ref={heading} tabIndex={-1} className={styles.h1}>{t(locale, `${K}${k}.title`)}</h1>
       <p className={styles.muted}>{t(locale, `${K}${k}.body`)}</p>
     </div>
   );

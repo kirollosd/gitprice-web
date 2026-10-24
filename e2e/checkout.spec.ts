@@ -78,6 +78,16 @@ for (const [base, loc] of LOCALES) {
       await expect(page.getByText(C.summary.note)).toHaveCount(0);
     });
 
+    test("summary: an unrelated query param survives, the fragment does not", async ({ page }) => {
+      await stub(page, {});
+      await page.goto(`${base}/checkout?utm_source=mail#code=c`);
+      await expect(h1(page, C.summary.title)).toBeVisible();
+      expect(await page.evaluate(() => location.search + location.hash)).toBe("?utm_source=mail");
+      // The call saw the kept query and no code; the shared check below expects a bare URL.
+      expect(seenUrls).toEqual(["?utm_source=mail"]);
+      seenUrls = [""];
+    });
+
     test("summary: yearly plan", async ({ page }) => {
       await stub(page, { summary: ok(YEARLY) });
       await page.goto(`${base}/checkout#code=c`);

@@ -58,7 +58,7 @@ export default async function LocaleLayout({
       </head>
       <body>
         <WebNav locale={l} />
-        <main>{children}</main>
+        <main tabIndex={-1}>{children}</main>
         <HideOnHosted fallback={<HostedFooter locale={l} />}><WebFooter locale={l} /></HideOnHosted>
         <FloatingStack>
           <LocaleSuggestion />

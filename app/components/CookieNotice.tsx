@@ -42,10 +42,10 @@ export default function CookieNotice({ locale }: { locale: Locale }) {
   const choose = (value: "allow" | "decline") => {
     setConsent(value);
     setOpen(false);
-    if (reopened.current) {
-      reopened.current = false;
-      document.querySelector<HTMLElement>("[data-cookie-settings]")?.focus();
-    }
+    // The clicked button unmounts, so focus would drop to body: send it to the footer control or main.
+    const target = reopened.current ? "[data-cookie-settings]" : "main";
+    reopened.current = false;
+    document.querySelector<HTMLElement>(target)?.focus();
   };
 
   return (

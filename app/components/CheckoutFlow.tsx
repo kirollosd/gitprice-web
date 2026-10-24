@@ -37,7 +37,7 @@ export default function CheckoutFlow({ locale }: { locale: Locale }) {
     started.current = true;
     code.current = new URLSearchParams(window.location.hash.slice(1)).get("code") ?? "";
     // The code leaves the address bar and history before any network call.
-    window.history.replaceState(null, "", window.location.pathname);
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
     if (!code.current) return setState({ kind: "signedOut" });
 
     void getHandoffSummary(code.current).then((r) => {
@@ -57,6 +57,15 @@ export default function CheckoutFlow({ locale }: { locale: Locale }) {
     assigned.current = true;
     window.location.assign(state.redirectUrl);
   }, [state]);
+
+  // A bfcache restore keeps the redirecting view, but the code is already consumed.
+  useEffect(() => {
+    const onShow = (e: PageTransitionEvent) => {
+      if (e.persisted) setState((s) => (s.kind === "redirecting" ? { kind: "signedOut" } : s));
+    };
+    window.addEventListener("pageshow", onShow);
+    return () => window.removeEventListener("pageshow", onShow);
+  }, []);
 
   async function onContinue() {
     if (busy.current) return;

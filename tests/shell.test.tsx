@@ -72,7 +72,8 @@ describe("WebMenu", () => {
     fireEvent.click(btn);
     const links = screen.getAllByRole("link");
     expect(document.activeElement).toBe(links[0]);
-    expect(screen.getByRole("navigation", { name: "Main navigation" })).toBeTruthy();
+    expect(screen.getByRole("navigation")).toBeTruthy();
+    expect(screen.queryByRole("navigation", { name: "Main navigation" })).toBeNull();
   });
 
   it("Escape closes and returns focus to the button even when focus moved elsewhere", async () => {

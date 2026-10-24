@@ -24,7 +24,7 @@ export function middleware(req: NextRequest) {
   if (!dismissed && suggestLocale(req.headers.get("accept-language"), "en") === "ar") {
     res.headers.set("x-gp-suggest", "ar");
     // Readable by the client suggestion banner so pages stay static. Session cookie.
-    res.cookies.set("gp_suggest", "ar", { path: "/", sameSite: "lax", httpOnly: false });
+    res.cookies.set("gp_suggest", "ar", { path: "/", sameSite: "lax", httpOnly: false, secure: req.nextUrl.protocol === "https:" });
   }
   return res;
 }

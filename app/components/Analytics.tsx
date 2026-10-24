@@ -23,7 +23,7 @@ export default function Analytics() {
   return (
     <>
       <VercelAnalytics />
-      {consent === "allow" && env.heapId ? <Script id="heap" strategy="afterInteractive">{heapSnippet(env.heapId)}</Script> : null}
+      {consent === "allow" && env.heapId && process.env.NODE_ENV === "production" ? <Script id="heap" strategy="afterInteractive">{heapSnippet(env.heapId)}</Script> : null}
     </>
   );
 }

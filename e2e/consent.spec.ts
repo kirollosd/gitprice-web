@@ -38,6 +38,16 @@ test("Allow loads Heap, Decline reloads and removes it and its cookies", async (
   expect(names.filter((n) => n.startsWith("_hp2_"))).toEqual([]);
 });
 
+test("focus moves to main after the first choice, Allow or Decline", async ({ page }) => {
+  for (const label of [N.button.allow.label, N.button.decline.label]) {
+    await page.context().clearCookies();
+    await page.goto("/");
+    await notice(page).getByRole("button", { name: label }).click();
+    await expect(notice(page)).toBeHidden();
+    await expect(page.locator("main")).toBeFocused();
+  }
+});
+
 test("Decline then Allow injects Heap without a reload", async ({ page }) => {
   await page.goto("/");
   await notice(page).getByRole("button", { name: N.button.decline.label }).click();
@@ -78,5 +88,18 @@ test.describe("with the Arabic suggestion banner", () => {
     await expect(notice(page)).toBeVisible();
     const [a, b] = await Promise.all([banner.boundingBox(), notice(page).boundingBox()]);
     expect(a!.y + a!.height).toBeLessThanOrEqual(b!.y);
+  });
+
+  test("at 390 wide both fit: no horizontal overflow, no overlap, inside the viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await page.goto("/privacy");
+    const banner = page.getByRole("region", { name: en.web.component.webLocaleSuggest.default.label });
+    await expect(banner).toBeVisible();
+    await expect(notice(page)).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+    const [a, b] = await Promise.all([banner.boundingBox(), notice(page).boundingBox()]);
+    expect(a!.y + a!.height).toBeLessThanOrEqual(b!.y);
+    expect(a!.y).toBeGreaterThanOrEqual(0);
+    expect(b!.y + b!.height).toBeLessThanOrEqual(800);
   });
 });

@@ -21,7 +21,7 @@ export default function CheckoutReturn({ locale }: { locale: Locale }) {
       const p = new URLSearchParams(window.location.hash.slice(1));
       input.current = { token: p.get("rt") ?? "", cancelled: p.get("status") === "cancelled" };
       // The return token leaves the address bar and history before any network call.
-      window.history.replaceState(null, "", window.location.pathname);
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
     }
     const { token, cancelled } = input.current;
     if (cancelled) return setView("cancelled");

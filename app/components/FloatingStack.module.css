@@ -7,6 +7,8 @@
   flex-direction: column;
   gap: var(--gp-sp-3);
   padding: var(--gp-sp-4);
+  max-block-size: calc(100dvh - var(--gp-sp-16));
+  overflow-y: auto;
   pointer-events: none;
 }
 .stack > * { pointer-events: auto; }

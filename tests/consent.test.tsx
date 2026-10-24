@@ -10,7 +10,8 @@ vi.mock("next/link", () => ({
 vi.mock("@vercel/analytics/react", () => ({ Analytics: () => <i data-testid="vercel" /> }));
 // next/script caches loaded ids module-wide, so stand in a plain element: only our gating is under test.
 vi.mock("next/script", () => ({ default: ({ id }: { id: string }) => <script id={id} /> }));
-vi.mock("../lib/env", () => ({ env: { heapId: "12345" } }));
+const mockEnv = vi.hoisted(() => ({ heapId: "12345" as string | undefined }));
+vi.mock("../lib/env", () => ({ env: mockEnv }));
 
 const N = en.web.component.webCookieNotice.default;
 const reload = vi.fn();
@@ -20,12 +21,15 @@ const clearCookies = () =>
 
 beforeEach(() => {
   clearCookies();
+  mockEnv.heapId = "12345";
+  vi.stubEnv("NODE_ENV", "production");
   reload.mockReset();
   vi.stubGlobal("location", { ...window.location, hostname: "localhost", reload });
 });
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
 });
 
 describe("consent cookie helpers", () => {
@@ -112,5 +116,39 @@ describe("cookie notice and Heap", () => {
     click(N.button.allow.label);
     expect(heap()).not.toBeNull();
     expect(reload).not.toHaveBeenCalled();
+  });
+
+  it("never loads Heap without a heapId, even after Allow", async () => {
+    mockEnv.heapId = undefined;
+    await mount();
+    click(N.button.allow.label);
+    expect(document.cookie).toContain("gp_consent=allow");
+    expect(heap()).toBeNull();
+  });
+
+  it("never loads Heap outside production, even after Allow", async () => {
+    vi.stubEnv("NODE_ENV", "development");
+    await mount();
+    click(N.button.allow.label);
+    expect(heap()).toBeNull();
+  });
+
+  it("Allow twice loads Heap once", async () => {
+    await mount();
+    click(N.button.allow.label);
+    click(en.web.component.webFooter.default.label.cookies);
+    click(N.button.allow.label);
+    expect(document.querySelectorAll("#heap")).toHaveLength(1);
+  });
+
+  it("moves focus to main after the first choice, and to the footer control after a reopen", async () => {
+    const { default: CookieNotice, CookieSettingsButton } = await import("../app/components/CookieNotice");
+    render(<><main tabIndex={-1} /><CookieNotice locale="en" /><CookieSettingsButton locale="en" /></>);
+    screen.getByRole("button", { name: N.button.allow.label }).focus();
+    click(N.button.allow.label);
+    expect(document.activeElement).toBe(document.querySelector("main"));
+    click(en.web.component.webFooter.default.label.cookies);
+    click(N.button.decline.label);
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: en.web.component.webFooter.default.label.cookies }));
   });
 });
