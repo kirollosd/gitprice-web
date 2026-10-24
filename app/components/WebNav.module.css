@@ -49,3 +49,6 @@
 @media (min-width: 1280px) { .l1440 { display: inline-flex; } }
 @media (min-width: 1024px) { .wide { display: inline; } }
 @media (min-width: 768px) { .header { --nav-h: calc(var(--gp-sp-16) + var(--gp-sp-2)); } }
+/* While the menu sheet is open the bar shows only the logo and the close button (Menu/open boards). */
+.header:has([aria-expanded="true"]) .links,
+.header:has([aria-expanded="true"]) .hideSmall { visibility: hidden; }
