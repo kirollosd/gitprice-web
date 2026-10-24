@@ -163,3 +163,14 @@ describe("cookie notice and Heap", () => {
     expect(document.activeElement).toBe(screen.getByRole("button", { name: en.web.component.webFooter.default.label.cookies }));
   });
 });
+
+describe("cookie notice names Google Analytics", () => {
+  it.each([
+    ["en", "Google Analytics and Heap"],
+    ["ar", "Google Analytics وHeap"],
+  ] as const)("%s body mentions GA and Heap", async (locale, phrase) => {
+    const { default: CookieNotice } = await import("../app/components/CookieNotice");
+    const { container } = render(<CookieNotice locale={locale} />);
+    expect(container.textContent).toContain(phrase);
+  });
+});

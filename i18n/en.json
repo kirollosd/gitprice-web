@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@90375068",
+  "_source": "gitprice@f9323e76",
   "web": {
     "component": {
       "webNav": {
@@ -188,7 +188,7 @@
       "webCookieNotice": {
         "default": {
           "title": "Analytics cookies",
-          "body": "This site uses Heap analytics cookies. No ads, and we never sell your data.",
+          "body": "This site uses analytics cookies from Google Analytics and Heap to understand how it's used. No ads, and we never sell your data.",
           "label": {
             "privacy": "Read the privacy policy"
           },
@@ -689,7 +689,7 @@
     },
     "privacy": {
       "title": "Privacy Policy",
-      "meta": "Effective May 11, 2026 · Last updated May 11, 2026",
+      "meta": "Effective May 11, 2026 · Last updated October 25, 2026",
       "intro": "GitPrice is a browser extension that helps you compare prices across supported online stores. This Privacy Policy explains what information we collect, how we use it, and your rights as a user.",
       "section1": {
         "heading": "1. Information We Collect",
@@ -745,7 +745,8 @@
         "heading": "7. Cookies and Tracking",
         "p1": "The GitPrice extension itself does not set cookies. When you visit store pages, those sites may set their own cookies — their respective privacy policies govern that activity.",
         "p2": "This website uses Vercel Analytics to count page views. It does not set cookies or identify individual visitors.",
-        "p3": "With your consent, this website also uses Heap Analytics to understand how visitors use it (pages viewed, clicks, and general device and browser information). Heap sets its own cookies only after you accept them in the cookie notice, and you can change your choice at any time from the link in the site footer. We do not use this data for advertising."
+        "p3": "With your consent, this website also uses Heap Analytics to understand how visitors use it (pages viewed, clicks, and general device and browser information). Heap sets its own cookies only after you accept them in the cookie notice, and you can change your choice at any time from the link in the site footer. We do not use this data for advertising.",
+        "p4": "This website also uses Google Tag Manager and Google Analytics to measure visits and where they come from. Until you make a choice in the cookie notice, Google Analytics runs without cookies and receives only anonymous signals. If you allow cookies, Google Analytics sets its own cookies to recognise returning visits; if you decline, it sets none. We do not use this data for advertising."
       },
       "section8": {
         "heading": "8. Children’s Privacy",
