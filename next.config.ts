@@ -9,6 +9,8 @@ const www = [{ type: "host" as const, value: "www.gitprice.com" }];
 const nextConfig: NextConfig = {
   // e2e builds the launch variant into its own dir so it can sit beside the prelaunch build.
   distDir: process.env.NEXT_DIST_DIR || ".next",
+  // app/global-not-found.tsx: the 404 document for a site whose root layouts are per locale.
+  experimental: { globalNotFound: true },
   async redirects() {
     return [
       { source: "/", has: www, destination: "https://gitprice.com/", permanent: true },

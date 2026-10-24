@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import en from "../i18n/en.json";
+import ar from "../i18n/ar.json";
 
 const banner = en.web.component.webLocaleSuggest.default.label;
 
@@ -80,5 +81,15 @@ test("server-rendered language switch hrefs have no /en segment", async ({ reque
     const html = await (await request.get(path)).text();
     expect(html, path).not.toMatch(/href="\/ar\/en(\/|")/);
     expect(html, path).toContain(`href="${path === "/" ? "/ar" : "/ar" + path}"`);
+  }
+});
+
+test("404 HTML carries lang, dir and the page-not-found title before any script runs", async ({ request }) => {
+  for (const [path, lang, dir, title] of [["/nope", "en", "ltr", en.web.notFound.title], ["/ar/nope", "ar", "rtl", ar.web.notFound.title]]) {
+    const res = await request.get(path);
+    expect(res.status(), path).toBe(404);
+    const html = await res.text();
+    expect(html, path).toMatch(new RegExp(`<html[^>]*lang="${lang}"[^>]*dir="${dir}"`));
+    expect(html, path).toContain(`<title>${title} | GitPrice</title>`);
   }
 });

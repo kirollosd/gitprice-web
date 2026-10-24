@@ -15,3 +15,11 @@ describe("gp_suggest cookie", () => {
     expect(c).not.toMatch(/secure/i);
   });
 });
+
+describe("x-gp-locale request header (for app/global-not-found)", () => {
+  const routed = (url: string) => middleware(new NextRequest(url)).headers.get("x-middleware-request-x-gp-locale");
+  it("is ar under /ar and en on the rewritten English paths", () => {
+    expect(routed("http://localhost:3000/ar/nope")).toBe("ar");
+    expect(routed("http://localhost:3000/nope")).toBe("en");
+  });
+});
