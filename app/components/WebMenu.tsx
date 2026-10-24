@@ -10,6 +10,7 @@ import styles from "./WebMenu.module.css";
 
 const N = "web.component.webNav.";
 const TABLET = "(min-width: 768px)";
+const DESKTOP = "(min-width: 1024px)";
 
 function useTablet(): boolean {
   return useSyncExternalStore(
@@ -27,23 +28,42 @@ function useTablet(): boolean {
 export default function WebMenu({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
   const button = useRef<HTMLButtonElement>(null);
+  const overlay = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const keys = useTablet() ? "menuOpen768" : "menuOpen";
   const home = pathFor(locale, "/");
 
+  const close = () => {
+    setOpen(false);
+    button.current?.focus();
+  };
+
   useEffect(() => setOpen(false), [pathname]);
   useEffect(() => {
     if (!open) return;
+    overlay.current?.querySelector<HTMLElement>("a")?.focus();
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const desktop = window.matchMedia?.(DESKTOP);
+    const onDesktop = () => desktop?.matches && setOpen(false);
+    desktop?.addEventListener("change", onDesktop);
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return;
-      setOpen(false);
-      button.current?.focus();
+      if (e.key === "Escape") return close();
+      if (e.key !== "Tab") return;
+      // Keep Tab inside the button + overlay links (smaller than inerting the page behind).
+      const items = [button.current!, ...overlay.current!.querySelectorAll<HTMLElement>("a")];
+      const i = items.indexOf(document.activeElement as HTMLElement);
+      e.preventDefault();
+      items[(i + (e.shiftKey ? -1 : 1) + items.length) % items.length].focus();
     };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      desktop?.removeEventListener("change", onDesktop);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
-  const close = () => setOpen(false);
   return (
     <>
       <button
@@ -51,20 +71,22 @@ export default function WebMenu({ locale }: { locale: Locale }) {
         type="button"
         className={styles.button}
         aria-expanded={open}
-        aria-controls="web-menu"
+        aria-controls={open ? "web-menu" : undefined}
         aria-label={t(locale, N + (open ? "a11y.label.menuClose" : "a11y.label.menuOpen"))}
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => (open ? close() : setOpen(true))}
       >
         <span className={styles.bars} aria-hidden="true" data-open={open} />
       </button>
       {open && (
-        <div id="web-menu" className={styles.overlay}>
+        <div id="web-menu" ref={overlay} className={styles.overlay}>
+          <nav aria-label={t(locale, N + "a11y.label.primary")}>
           <ul className={styles.list} role="list">
-            <li><Link href={`${home}#features`} onClick={close}>{t(locale, `${N}${keys}.label.features`)}</Link></li>
-            <li><Link href={`${home}#how-it-works`} onClick={close}>{t(locale, `${N}${keys}.label.howItWorks`)}</Link></li>
-            <li><Link href={pathFor(locale, "/sellers")} onClick={close}>{t(locale, `${N}${keys}.label.sellers`)}</Link></li>
+            <li><Link href={`${home}#features`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.features`)}</Link></li>
+            <li><Link href={`${home}#how-it-works`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.howItWorks`)}</Link></li>
+            <li><Link href={pathFor(locale, "/sellers")} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.sellers`)}</Link></li>
           </ul>
-          <Link href={`${home}#waitlist`} className={styles.cta} onClick={close}>{t(locale, `${N}${keys}.cta.label`)}</Link>
+          </nav>
+          <Link href={`${home}#waitlist`} className={styles.cta} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.cta.label`)}</Link>
           <LanguageSwitch locale={locale} />
         </div>
       )}

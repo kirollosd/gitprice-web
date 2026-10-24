@@ -9,7 +9,7 @@
 .tile { fill: var(--gp-brand-navy); }
 .glyph { fill: var(--gp-brand-on-navy); font-family: var(--gp-font); }
 .wordmark {
-  font-size: var(--gp-fs-xl);
+  font-size: var(--gp-fs-title);
   font-weight: 700;
   color: var(--gp-ink);
   letter-spacing: -0.3px;

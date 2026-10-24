@@ -28,18 +28,18 @@
 
 .overlay {
   position: fixed;
-  inset: 0;
+  inset: var(--nav-h) 0 0; /* starts under the bar so logo and toggle stay clickable */
   z-index: 40;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--gp-sp-6);
-  padding: calc(var(--gp-nav-height) + var(--gp-sp-8)) var(--gp-sp-6) var(--gp-sp-6);
+  padding: var(--gp-sp-8) var(--gp-sp-6) var(--gp-sp-6);
   background: var(--gp-surface);
   overflow-y: auto;
 }
 .list { list-style: none; display: flex; flex-direction: column; gap: var(--gp-sp-5); }
-.list a { color: var(--gp-ink); font-size: var(--gp-fs-xl); font-weight: 600; }
+.list a { color: var(--gp-ink); font-size: var(--gp-fs-title); font-weight: 600; }
 .cta {
   background: var(--gp-ink);
   color: var(--gp-surface);
