@@ -71,6 +71,21 @@ describe("TallyEmbed", () => {
     expect(document.querySelector("iframe")!.getAttribute("data-tally-src")).toMatch(/[?&]audience=seller$/);
   });
 
+  it("shows a skeleton until Tally loads its page into the frame, with no height floor", async () => {
+    const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
+    const { fireEvent } = await import("@testing-library/react");
+    render(<TallyEmbed formId="mYLGEG" locale="en" audience="shopper" />);
+    const frame = document.querySelector("iframe")!;
+    expect((frame.parentElement as HTMLElement).style.minBlockSize).toBe("");
+    expect(frame.getAttribute("height")).toBe("120");
+    expect(document.querySelector("[data-tally-skeleton]")!.getAttribute("aria-hidden")).toBe("true");
+    fireEvent.load(frame); // the initial about:blank load
+    expect(document.querySelector("[data-tally-skeleton]")).not.toBeNull();
+    frame.setAttribute("src", "https://tally.so/embed/mYLGEG?x=1");
+    fireEvent.load(frame);
+    expect(document.querySelector("[data-tally-skeleton]")).toBeNull();
+  });
+
   it("brings the form back when Tally arrives after the 5 second fallback", async () => {
     vi.useFakeTimers();
     const { default: TallyEmbed } = await import("../app/components/TallyEmbed");

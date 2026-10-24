@@ -65,7 +65,7 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Sellers-launch-1440": { max: 0.07, reason: SELLERS_1440 + "; measured en 0.04, ar 0.06" },
   "Sellers-launch-390": { max: 0.11, reason: SELLERS_390 + "; measured en 0.10, ar 0.07" },
   "Sellers-prelaunch-1440": { max: 0.08, reason: SELLERS_1440 + NOTE_PRE + "; measured en 0.04, ar 0.07" },
-  "Sellers-prelaunch-390": { max: 0.10, reason: SELLERS_390 + NOTE_PRE + "; measured en 0.09, ar 0.07" },
+  "Sellers-prelaunch-390": { max: 0.12, reason: SELLERS_390 + NOTE_PRE + "; the two waitlist frames start at 120 (skeleton, Tally's dynamicHeight sets the rest) instead of the old 160 floor (GP-262 P1-12), moving everything below up 80; measured en 0.11 (0.09 at 160), ar 0.08" },
 };
 
 /** Boards the build cannot match yet; reported, never loosened. Key: `<Screen>-<state>`. */

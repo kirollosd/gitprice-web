@@ -7,7 +7,8 @@ import styles from "./TallyEmbed.module.css";
 
 const W = "web.component.webWaitlistForm.";
 const LOAD_TIMEOUT_MS = 5000;
-const DEFAULT_HEIGHT = 160;
+// Initial frame height before Tally's dynamicHeight takes over: the one-field form's own height, so nothing below jumps.
+const DEFAULT_HEIGHT = 120;
 
 type TallyWindow = Window & { Tally?: { loadEmbeds: () => void } };
 
@@ -32,6 +33,7 @@ export default function TallyEmbed({
 }) {
   const [failed, setFailed] = useState(false);
   const [ready, setReady] = useState(false);
+  const [filled, setFilled] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -63,7 +65,14 @@ export default function TallyEmbed({
       ) : (
         // Light tokens and color-scheme inside the frame: the Tally page is light, so a dark iframe scheme would paint
         // an opaque white canvas behind it. In dark theme the frame is a deliberate light panel instead (CSS).
-        <div className={styles.frame} data-gp="app" data-theme="light" style={{ minBlockSize: height }}>
+        <div className={styles.frame} data-gp="app" data-theme="light">
+          {/* Skeleton until Tally has loaded the form into the (lazy) frame. */}
+          {!filled && (
+            <div className={styles.skeleton} aria-hidden="true" data-tally-skeleton>
+              <span className={styles.skField} />
+              <span className={styles.skButton} />
+            </div>
+          )}
           <iframe
             data-tally-src={`https://tally.so/embed/${id}?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=${locale}&audience=${audience}`}
             title={text}
@@ -71,6 +80,8 @@ export default function TallyEmbed({
             height={height}
             loading="lazy"
             className={styles.iframe}
+            // The frame starts without a src (about:blank); only a load of Tally's page means the form is there.
+            onLoad={(e) => e.currentTarget.src.startsWith("https://tally.so/") && setFilled(true)}
           />
         </div>
       )}
