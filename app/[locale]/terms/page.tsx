@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import styles from "../components/LegalPage.module.css";
+import styles from "../../components/LegalPage.module.css";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
