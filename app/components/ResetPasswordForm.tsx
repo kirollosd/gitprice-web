@@ -112,7 +112,7 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
 function Message({ locale, k, heading }: { locale: Locale; k: string; heading: RefObject<HTMLHeadingElement | null> }) {
   return (
     <div className={styles.card}>
-      <div role="status" aria-live="polite" className={styles.card}>
+      <div role="status" aria-live="polite">
         <h1 ref={heading} tabIndex={-1} className={styles.h1}>{t(locale, `${K}${k}.title`)}</h1>
         <p className={styles.muted}>{t(locale, `${K}${k}.body`)}</p>
       </div>
