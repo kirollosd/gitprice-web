@@ -1,0 +1,130 @@
+/* Shared by Home and Sellers. Sizes come from the app token scale; web/hero (56/64) has no token, see .h1. */
+.hero { padding-block: var(--gp-sp-10) var(--gp-sp-12); }
+.heroGrid { display: grid; gap: var(--gp-sp-10); align-items: center; }
+.heroText { display: flex; flex-direction: column; align-items: flex-start; gap: var(--gp-sp-4); min-inline-size: 0; }
+.action { inline-size: 100%; scroll-margin-block-start: calc(var(--gp-sp-16) + var(--gp-sp-4)); }
+.h1 {
+  font-size: var(--gp-fs-display);
+  line-height: var(--gp-lh-display);
+  overflow-wrap: anywhere;
+}
+.sub { color: var(--gp-ink-muted); font-size: var(--gp-fs-body); max-inline-size: 36rem; }
+.caption { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); }
+.muted { color: var(--gp-ink-muted); }
+
+.visual { position: relative; display: flex; flex-direction: column; gap: var(--gp-sp-3); min-inline-size: 0; }
+.priceCard {
+  background: var(--gp-surface-raised);
+  border-radius: var(--gp-r-lg);
+  padding: var(--gp-sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gp-sp-3);
+}
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gp-sp-4);
+  background: var(--gp-surface);
+  border: 1px solid var(--gp-hairline-strong);
+  border-radius: var(--gp-r-md);
+  padding: var(--gp-sp-3) var(--gp-sp-4);
+}
+.productTitle { font-weight: 600; font-size: var(--gp-fs-headline); }
+.saving { color: var(--gp-savings); font-weight: 600; font-size: var(--gp-fs-price); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.otherStore {
+  color: var(--gp-ink-muted);
+  font-size: var(--gp-fs-body-compact);
+  padding-inline: var(--gp-sp-4);
+  padding-block: var(--gp-sp-1);
+  border-block-end: 1px solid var(--gp-hairline);
+}
+.toast {
+  align-self: flex-start;
+  max-inline-size: 100%;
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+  border-radius: var(--gp-r-md);
+  padding: var(--gp-sp-3) var(--gp-sp-4);
+  font-size: var(--gp-fs-body-compact);
+  box-shadow: var(--gp-shadow-toast);
+}
+
+.proof {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gp-sp-2) var(--gp-sp-6);
+  padding-block: var(--gp-sp-4);
+  color: var(--gp-ink-muted);
+  font-size: var(--gp-fs-body-compact);
+  border-block: 1px solid var(--gp-hairline);
+}
+
+.section { padding-block: var(--gp-sp-12); scroll-margin-block-start: var(--gp-sp-16); }
+.h2 { font-size: var(--gp-fs-display); line-height: var(--gp-lh-display); margin-block-end: var(--gp-sp-6); }
+.h3 { font-size: var(--gp-fs-title); line-height: var(--gp-lh-tight); margin-block-end: var(--gp-sp-2); }
+
+.cards, .steps { list-style: none; display: grid; gap: var(--gp-sp-4); }
+.card { background: var(--gp-surface-raised); border-radius: var(--gp-r-lg); padding: var(--gp-sp-6); }
+.step { padding-block-start: var(--gp-sp-4); border-block-start: 1px solid var(--gp-hairline-strong); }
+.num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--gp-target);
+  block-size: var(--gp-target);
+  margin-block-end: var(--gp-sp-3);
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+  font-weight: 700;
+}
+
+.points { list-style: disc; padding-inline-start: var(--gp-sp-6); display: grid; gap: var(--gp-sp-2); margin-block-end: var(--gp-sp-4); max-inline-size: 40rem; }
+.textLink { color: var(--gp-ink); text-decoration: underline; display: inline-flex; align-items: center; min-block-size: var(--gp-target); }
+
+.faq { max-inline-size: 48rem; }
+.qa { border-block-end: 1px solid var(--gp-hairline); padding-block: var(--gp-sp-2); }
+.qa summary { cursor: pointer; font-weight: 600; min-block-size: var(--gp-target); display: flex; align-items: center; }
+.qa p { padding-block-end: var(--gp-sp-3); }
+
+.band { background: var(--gp-ink); color: var(--gp-surface); padding-block: var(--gp-sp-12); margin-block-start: var(--gp-sp-8); }
+.bandInner { display: grid; gap: var(--gp-sp-6); align-items: center; }
+.bandTitle { color: var(--gp-surface); font-size: var(--gp-fs-display); line-height: var(--gp-lh-display); }
+.bandLine { color: var(--gp-surface); margin-block-start: var(--gp-sp-2); }
+.bandCard { background: var(--gp-surface); color: var(--gp-ink); border-radius: var(--gp-r-lg); padding: var(--gp-sp-4); min-inline-size: 0; }
+
+.back { display: inline-flex; align-items: center; min-block-size: var(--gp-target); color: var(--gp-ink); text-decoration: underline; }
+.who { font-size: var(--gp-fs-title); max-inline-size: 40rem; }
+.rivals { list-style: none; display: grid; gap: var(--gp-sp-2); }
+.rival { display: flex; flex-direction: column; background: var(--gp-surface); border: 1px solid var(--gp-hairline-strong); border-radius: var(--gp-r-md); padding: var(--gp-sp-3) var(--gp-sp-4); }
+.rivalName { font-weight: 600; }
+.rivalCount { color: var(--gp-danger); font-size: var(--gp-fs-body-compact); }
+
+@media (min-width: 768px) {
+  .hero { padding-block: var(--gp-sp-16); }
+  .cards, .steps { grid-template-columns: repeat(3, 1fr); }
+  .bandInner { grid-template-columns: 1fr 1fr; gap: var(--gp-sp-10); }
+}
+@media (min-width: 1024px) {
+  .heroGrid { grid-template-columns: 1fr 1fr; gap: var(--gp-sp-16); }
+  /* web/hero: 56/700, line height 64 (design-map.md, GP-259); not part of the app token scale. */
+  .h1 { font-size: 56px; line-height: 64px; }
+}
+[dir="rtl"] .h1 { line-height: var(--gp-lh-display); }
+@media (min-width: 1024px) { [dir="rtl"] .h1 { line-height: 84px; } }
+
+.accessBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--gp-target);
+  padding-inline: var(--gp-sp-6);
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+  font-weight: 600;
+}
+.accessBtn:hover { text-decoration: none; }

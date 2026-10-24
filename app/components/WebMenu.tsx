@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import { pathFor } from "../../lib/locale";
 import LanguageSwitch from "./LanguageSwitch";
+import { ctaFor, sellersLinkFor, useOnSellers } from "./NavLinks";
 import styles from "./WebMenu.module.css";
 
 const N = "web.component.webNav.";
@@ -32,6 +33,9 @@ export default function WebMenu({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const keys = useTablet() ? "menuOpen768" : "menuOpen";
   const home = pathFor(locale, "/");
+  const onSellers = useOnSellers();
+  const sellers = sellersLinkFor(locale, keys, onSellers);
+  const cta = ctaFor(locale, keys, onSellers);
 
   const close = () => {
     setOpen(false);
@@ -83,10 +87,10 @@ export default function WebMenu({ locale }: { locale: Locale }) {
           <ul className={styles.list} role="list">
             <li><Link href={`${home}#features`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.features`)}</Link></li>
             <li><Link href={`${home}#how-it-works`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.howItWorks`)}</Link></li>
-            <li><Link href={pathFor(locale, "/sellers")} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.sellers`)}</Link></li>
+            <li><Link href={sellers.href} onClick={() => setOpen(false)}>{sellers.label}</Link></li>
           </ul>
           </nav>
-          <Link href={`${home}#waitlist`} className={styles.cta} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.cta.label`)}</Link>
+          <Link href={cta.href} className={styles.cta} onClick={() => setOpen(false)}>{cta.label}</Link>
           <LanguageSwitch locale={locale} />
         </div>
       )}

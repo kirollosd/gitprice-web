@@ -1,0 +1,14 @@
+.frame { inline-size: 100%; max-inline-size: 400px; }
+.iframe { display: block; inline-size: 100%; border: 0; }
+.fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--gp-target);
+  padding-inline: var(--gp-sp-6);
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+  font-weight: 600;
+}
+.fallback:hover { text-decoration: none; }

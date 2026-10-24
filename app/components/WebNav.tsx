@@ -3,6 +3,7 @@ import { t, type Locale } from "../../lib/i18n";
 import { pathFor } from "../../lib/locale";
 import LanguageSwitch from "./LanguageSwitch";
 import Logo from "./Logo";
+import { NavCta, NavSellers } from "./NavLinks";
 import WebMenu from "./WebMenu";
 import styles from "./WebNav.module.css";
 
@@ -23,7 +24,6 @@ export default function WebNav({ locale, variant = "site" }: { locale: Locale; v
     );
   }
   const home = pathFor(locale, "/");
-  const sellers = pathFor(locale, "/sellers");
   return (
     <header className={styles.header}>
       <div className={`${styles.bar} container`}>
@@ -31,13 +31,13 @@ export default function WebNav({ locale, variant = "site" }: { locale: Locale; v
         <nav aria-label={t(locale, N + "a11y.label.primary")} className={styles.links}>
           <Link href={`${home}#features`} className={`${styles.link} ${styles.wide}`}>{t(locale, N + "1024.label.features")}</Link>
           <Link href={`${home}#how-it-works`} className={`${styles.link} ${styles.wide}`}>{t(locale, N + "1024.label.howItWorks")}</Link>
-          <Link href={sellers} className={`${styles.link} ${styles.l1024}`}>{t(locale, N + "1024.label.sellers")}</Link>
-          <Link href={sellers} className={`${styles.link} ${styles.l1440}`}>{t(locale, N + "1440.label.sellers")}</Link>
-          <Link href={sellers} className={`${styles.link} ${styles.l768}`}>{t(locale, N + "768.label.sellers")}</Link>
+          <NavSellers locale={locale} keys="1024" className={`${styles.link} ${styles.l1024}`} />
+          <NavSellers locale={locale} keys="1440" className={`${styles.link} ${styles.l1440}`} />
+          <NavSellers locale={locale} keys="768" className={`${styles.link} ${styles.l768}`} />
         </nav>
         <div className={styles.actions}>
           <span className={styles.wide}><LanguageSwitch locale={locale} /></span>
-          <Link href={`${home}#waitlist`} className={`${styles.cta} ${styles.hideSmall}`}>{t(locale, N + "1440.cta.label")}</Link>
+          <NavCta locale={locale} keys="1440" className={`${styles.cta} ${styles.hideSmall}`} />
           <WebMenu locale={locale} />
         </div>
       </div>
