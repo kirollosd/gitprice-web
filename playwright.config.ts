@@ -17,14 +17,27 @@ const launchEnv = {
   NEXT_DIST_DIR: ".next-launch",
 };
 
+// PLAYWRIGHT_BASE_URL points every project at an already-deployed site (a Vercel preview) and skips the local servers.
+// The deployment's own launch mode decides which project applies: run `--project=prelaunch` or `--project=launch`.
+const REMOTE = process.env.PLAYWRIGHT_BASE_URL;
+// SKIP_PARITY drops the pixel-parity specs (CI's functional job): baselines are board exports, not Linux renders.
+const noParity = process.env.SKIP_PARITY ? [/parity/] : [];
+// Vercel previews can sit behind Deployment Protection; the automation bypass secret lets the runner in.
+const bypass = process.env.VERCEL_BYPASS_SECRET;
+const extraHTTPHeaders = bypass ? { "x-vercel-protection-bypass": bypass } : undefined;
+const baseFor = (port: number) => REMOTE ?? `http://localhost:${port}`;
+
 // A stale `next start` on :3000 or :3001 is reused outside CI; kill it first or you test old code.
 export default defineConfig({
   testDir: "e2e",
+  // Parity baselines are the board exports in e2e/refs, copied (and masked) into e2e/.parity by each test.
+  snapshotPathTemplate: "{testDir}/.parity/{arg}{ext}",
+  expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.02 } },
   projects: [
-    { name: "prelaunch", testIgnore: /\.launch\.spec\.ts$/, use: { baseURL: `http://localhost:${PRELAUNCH}` } },
-    { name: "launch", testMatch: /\.launch\.spec\.ts$/, use: { baseURL: `http://localhost:${LAUNCH}` } },
+    { name: "prelaunch", testIgnore: [/\.launch\.spec\.ts$/, ...noParity], use: { baseURL: baseFor(PRELAUNCH), extraHTTPHeaders } },
+    { name: "launch", testMatch: /\.launch\.spec\.ts$/, testIgnore: noParity, use: { baseURL: baseFor(LAUNCH), extraHTTPHeaders } },
   ],
-  webServer: [
+  webServer: REMOTE ? undefined : [
     {
       command: `npm run build && npm run start -- -p ${PRELAUNCH}`,
       url: `http://localhost:${PRELAUNCH}`,

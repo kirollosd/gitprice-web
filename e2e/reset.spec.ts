@@ -150,7 +150,7 @@ test("the submit button is disabled while saving", async ({ page }) => {
 });
 
 for (const [path, locale] of [["/reset-password", "en"], ["/ar/reset-password", "ar"]] as const) {
-  test(`hosted shell on ${path}: logo nav, minimal footer, noindex, no hydration errors`, async ({ page }) => {
+  test(`hosted shell on ${path}: logo + language switch nav, site footer without sellers, noindex, no hydration errors`, async ({ page }) => {
     const problems: string[] = [];
     page.on("pageerror", (e) => problems.push(e.message));
     // /_vercel/insights 404s off Vercel; every other console error, including failed CSS/JS/fonts, fails the test.
@@ -162,8 +162,11 @@ for (const [path, locale] of [["/reset-password", "en"], ["/ar/reset-password", 
     await expect(page.getByLabel(copy)).toBeFocused();
     await expect(page.locator("html")).toHaveAttribute("dir", locale === "ar" ? "rtl" : "ltr");
     await expect(page.locator("header nav")).toHaveCount(0);
-    await expect(page.locator('a[href*="sellers"], a[href*="terms"]')).toHaveCount(0);
+    await expect(page.locator('a[href*="sellers"]')).toHaveCount(0);
+    await expect(page.locator("header a[hreflang]")).toHaveCount(1);
+    await expect(page.locator("footer a[hreflang]")).toHaveCount(1);
     await expect(page.locator('footer a[href$="/privacy"]')).toHaveCount(1);
+    await expect(page.locator('footer a[href$="/terms"]')).toHaveCount(1);
     await expect(page.locator("footer [data-cookie-settings]")).toHaveCount(1);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
     expect(problems).toEqual([]);

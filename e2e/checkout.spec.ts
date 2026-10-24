@@ -246,6 +246,8 @@ for (const [base, loc] of LOCALES) {
 
     test("leaving the page in-app stops polling", async ({ page }) => {
       await page.clock.install();
+      // The cookie notice sits over the footer's start edge, so decide it first.
+      await page.context().addCookies([{ name: "gp_consent", value: "decline", url: "http://localhost:3000" }]);
       const calls = await stub(page, { returns: [ok({ status: "pending" })] });
       await page.goto(`${base}/checkout/return#rt=t&status=success`);
       await expect.poll(() => calls.returns.length).toBe(1);
@@ -332,7 +334,7 @@ for (const [base, loc] of LOCALES) {
   });
 
   for (const path of ["/checkout", "/checkout/return"]) {
-    test(`hosted shell on ${base}${path}: no-referrer, noindex, no nav, no errors`, async ({ page }) => {
+    test(`hosted shell on ${base}${path}: no-referrer, noindex, no nav links, no sellers, no errors`, async ({ page }) => {
       expectsNetwork = false;
       const problems: string[] = [];
       page.on("pageerror", (e) => problems.push(e.message));
@@ -346,7 +348,11 @@ for (const [base, loc] of LOCALES) {
       await expect(page.locator('meta[name="referrer"]')).toHaveAttribute("content", "no-referrer");
       await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
       await expect(page.locator("header nav")).toHaveCount(0);
+      await expect(page.locator('a[href*="sellers"]')).toHaveCount(0);
+      await expect(page.locator("header a[hreflang]")).toHaveCount(1);
+      await expect(page.locator("footer a[hreflang]")).toHaveCount(1);
       await expect(page.locator('footer a[href$="/privacy"]')).toHaveCount(1);
+      await expect(page.locator('footer a[href$="/terms"]')).toHaveCount(1);
       await expect(page.locator("footer [data-cookie-settings]")).toHaveCount(1);
       expect(problems).toEqual([]);
     });
