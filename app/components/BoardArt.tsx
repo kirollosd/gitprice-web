@@ -276,7 +276,8 @@ export function PinStepArt() {
 /** Welcome step 2: the on-page badge (Badge/ready). Its line is the receipt's "23,749 on Store B" clause plus the row's saving. */
 export function BadgeStepArt({ locale }: { locale: Locale }) {
   // receipt.detail is "<price> on <store> · <price> here" in both locales; the badge shows its first clause.
-  const offer = t(locale, V + "receipt.detail").split(" · ")[0];
+  // split() returns the whole string when the separator is missing, so a reworded key degrades to the full detail line.
+  const [offer] = t(locale, V + "receipt.detail").split(" · ");
   return (
     <span className={styles.readyBadge} aria-hidden="true" data-art="welcome-badge">
       <Mark />

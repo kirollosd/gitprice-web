@@ -2,7 +2,6 @@ import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import WelcomePage from "../app/[locale]/welcome/page";
 import en from "../i18n/en.json";
-import ar from "../i18n/ar.json";
 
 afterEach(cleanup);
 
@@ -21,8 +20,6 @@ describe("Welcome step art", () => {
 
   it("uses the Arabic clause in Arabic", async () => {
     const { container } = render(await WelcomePage({ params: Promise.resolve({ locale: "ar" }) }));
-    const V = ar.web.home.visual;
-    expect(container.querySelector('[data-art="welcome-badge"]')!.textContent)
-      .toBe(`${V.receipt.detail.split(" · ")[0]} · ${V.pricerowcompact.saving}`);
+    expect(container.querySelector('[data-art="welcome-badge"]')!.textContent).toBe("23,749 في المتجر ب · أقل بـ 1,250");
   });
 });
