@@ -11,7 +11,7 @@ const K = "web.checkout.";
 type State =
   | { kind: "loading" }
   | { kind: "signedOut" | "alreadyPro" | "failed" }
-  | { kind: "summary"; summary: HandoffSummary }
+  | { kind: "summary"; summary: HandoffSummary; price: string }
   | { kind: "redirecting"; redirectUrl: string };
 
 // Only http(s) URLs are followed: the value goes into location and an href.
@@ -41,10 +41,15 @@ export default function CheckoutFlow({ locale }: { locale: Locale }) {
     if (!code.current) return setState({ kind: "signedOut" });
 
     void getHandoffSummary(code.current).then((r) => {
-      if (r.ok) return setState({ kind: "summary", summary: r.data });
-      setState({ kind: failure(r.status, r.code) });
+      if (!r.ok) return setState({ kind: failure(r.status, r.code) });
+      try {
+        setState({ kind: "summary", summary: r.data, price: formatPrice(locale, r.data.priceMinor, r.data.currency) });
+      } catch {
+        // An unformattable price is a failure, never a guess.
+        setState({ kind: "failed" });
+      }
     });
-  }, []);
+  }, [locale]);
 
   // Navigate only after the redirecting state has committed, once even under StrictMode.
   useEffect(() => {
@@ -81,7 +86,7 @@ export default function CheckoutFlow({ locale }: { locale: Locale }) {
             </div>
             <div className={styles.row}>
               <dt>{t(locale, K + "summary.row.label2")}</dt>
-              <dd>{t(locale, `${K}summary.total.${summary.period}`, { price: formatPrice(locale, summary.priceMinor, summary.currency) })}</dd>
+              <dd>{t(locale, `${K}summary.total.${summary.period}`, { price: state.price })}</dd>
             </div>
           </dl>
           <button type="button" className={styles.button} disabled={redeeming} onClick={onContinue}>

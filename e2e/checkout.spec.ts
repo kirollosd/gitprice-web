@@ -55,15 +55,14 @@ const spinner = (page: Page) => page.locator('[role="status"] > [aria-hidden="tr
 
 for (const [base, loc] of LOCALES) {
   const C = COPY[loc];
-  // Hardcoded expectations (not formatPrice): digits and the decimal mark match in either Latin or Arabic-Indic form.
-  const intl = (minor: number) => {
-    const n = minor === 9900 ? "99.00" : "999.00";
-    const digits = n.replace(/\d/g, (d) => `[${d}${String.fromCharCode(0x660 + Number(d))}]`).replace(".", "[.٫]");
-    return loc === "ar" ? digits : `EGP ${n}`;
+  // Expected strings are formatted inside Chromium by the platform Intl, independent of lib/price.
+  const totalText = async (page: Page, tpl: string, major: number) => {
+    const price = await page.evaluate(
+      ([l, m]) => new Intl.NumberFormat(l as string, { style: "currency", currency: "EGP" }).format(m as number),
+      [loc, major],
+    );
+    return page.getByText(tpl.replace("{price}", price), { exact: true });
   };
-
-  const totalText = (page: Page, tpl: string, minor: number) =>
-    loc === "ar" ? page.getByText(new RegExp(intl(minor))) : page.getByText(tpl.replace("{price}", intl(minor)), { exact: true });
 
   test.describe(`handoff ${loc}`, () => {
     test("summary: plan and formatted total, fragment stripped before the call", async ({ page }) => {
@@ -71,7 +70,7 @@ for (const [base, loc] of LOCALES) {
       await page.goto(`${base}/checkout#code=ab/c`);
       await expect(h1(page, C.summary.title)).toBeVisible();
       await expect(page.getByText(C.summary.plan.month, { exact: true })).toBeVisible();
-      await expect(totalText(page, C.summary.total.month, 9900)).toBeVisible();
+      await expect(await totalText(page, C.summary.total.month, 99)).toBeVisible();
       await expect(page.getByRole("button", { name: C.summary.button.label })).toBeEnabled();
       expect(await page.evaluate(() => location.hash + location.search)).toBe("");
       expect(calls.summary).toEqual(["/api/v1/subscription/checkout/handoff/ab%2Fc/summary"]);
@@ -83,7 +82,14 @@ for (const [base, loc] of LOCALES) {
       await stub(page, { summary: ok(YEARLY) });
       await page.goto(`${base}/checkout#code=c`);
       await expect(page.getByText(C.summary.plan.year, { exact: true })).toBeVisible();
-      await expect(totalText(page, C.summary.total.year, 99900)).toBeVisible();
+      await expect(await totalText(page, C.summary.total.year, 999)).toBeVisible();
+    });
+
+    test("an unformattable currency shows failed, never a guess", async ({ page }) => {
+      await stub(page, { summary: ok({ ...SUMMARY, currency: "??" }) });
+      await page.goto(`${base}/checkout#code=c`);
+      await expect(h1(page, C.failed.title)).toBeVisible();
+      await noActions(page);
     });
 
     test("no code shows signed-out and makes no call", async ({ page }) => {
@@ -228,31 +234,42 @@ for (const [base, loc] of LOCALES) {
       await expect.poll(() => calls.returns.length).toBe(2);
     });
 
-    test("navigating away stops polling", async ({ page }) => {
+    test("leaving the page in-app stops polling", async ({ page }) => {
       await page.clock.install();
       const calls = await stub(page, { returns: [ok({ status: "pending" })] });
       await page.goto(`${base}/checkout/return#rt=t&status=success`);
       await expect.poll(() => calls.returns.length).toBe(1);
-      await page.goto("about:blank");
-      await page.waitForTimeout(150);
+      // Client-side navigation keeps the document alive, so only the effect cleanup can stop the poll.
+      await page.locator('footer a[href$="/privacy"]').click();
+      await expect(page).toHaveURL(/\/privacy$/);
+      await page.clock.runFor(4000);
+      await page.waitForTimeout(200);
       expect(calls.returns).toHaveLength(1);
     });
 
-    test("a hung poll request times out and polling continues", async ({ page }) => {
+    test("a hung poll request is aborted by the per-fetch timeout, then polling continues", async ({ page }) => {
       await page.clock.install();
       const calls = await stub(page, { returns: [ok({ status: "active" })] });
-      let first = true;
+      let total = 0;
+      let hungFailed = false;
+      page.on("requestfailed", (r) => { if (r.url().includes("/checkout/return/")) hungFailed = true; });
       // Registered after stub(): the first return request never answers.
       await page.route(`${API}/subscription/checkout/return/**`, (route) => {
-        if (first) { first = false; seenUrls.push(""); return; }
+        total++;
+        if (total === 1) { seenUrls.push(""); return; }
         return route.fallback();
       });
+      const started = Date.now();
       await page.goto(`${base}/checkout/return#rt=t&status=success`);
+      await expect.poll(() => total).toBe(1);
       await expect(async () => {
         await page.clock.runFor(2000);
         await expect(h1(page, C.success.title)).toBeVisible({ timeout: 500 });
       }).toPass({ timeout: 20_000 });
-      expect(calls.returns.length).toBeGreaterThanOrEqual(1);
+      console.log(`hung-poll elapsed real ms: ${Date.now() - started}`);
+      expect(total).toBe(2); // one hung, one answered
+      expect(calls.returns).toHaveLength(1);
+      expect(hungFailed).toBe(true); // the hung request was aborted, not answered
     });
 
     test("5xx and network errors keep polling", async ({ page }) => {

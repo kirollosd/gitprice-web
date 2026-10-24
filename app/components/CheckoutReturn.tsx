@@ -33,7 +33,10 @@ export default function CheckoutReturn({ locale }: { locale: Locale }) {
     const deadline = Date.now() + POLL_CAP_MS;
 
     async function poll() {
-      const r = await getReturnStatus(token, AbortSignal.any([unmount.signal, AbortSignal.timeout(FETCH_TIMEOUT_MS)]));
+      // No request may outlive the deadline, so the timed-out view never appears after the cap.
+      const remaining = deadline - Date.now();
+      if (remaining <= 0) return setView("timedOut");
+      const r = await getReturnStatus(token, AbortSignal.any([unmount.signal, AbortSignal.timeout(Math.min(FETCH_TIMEOUT_MS, remaining))]));
       if (stopped) return;
       if (r.ok && r.data.status === "active") return setView("success");
       if (r.ok && r.data.status === "failed") return setView("failed");
