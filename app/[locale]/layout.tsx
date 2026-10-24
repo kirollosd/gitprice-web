@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     openGraph: {
       type: "website",
       siteName: "GitPrice",
-      locale: l === "ar" ? "ar" : "en_US",
+      locale: l === "ar" ? "ar_AR" : "en_US",
       title,
       description,
       images: [{ url: "/logo_og.png", width: 1200, height: 630, alt: "GitPrice" }],

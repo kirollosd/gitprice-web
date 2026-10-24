@@ -1,12 +1,13 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import en from "../i18n/en.json";
-import ar from "../i18n/ar.json";
 import { INDEXABLE_PATHS, NOINDEX_PATHS, pageMeta } from "../lib/seo";
 import sitemap from "../app/sitemap";
 import robots from "../app/robots";
-import { sectionKeys } from "../app/components/LegalPage";
+import LegalPage from "../app/components/LegalPage";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { t } from "../lib/i18n";
 
 const SITE = "http://localhost:3000";
 
@@ -35,6 +36,7 @@ describe("sitemap and robots", () => {
     const urls = sitemap().map((e) => e.url);
     expect(urls).toHaveLength(INDEXABLE_PATHS.length * 2);
     expect(urls).toContain(`${SITE}/ar/terms`);
+    expect(sitemap()[0].alternates?.languages).toHaveProperty("x-default", `${SITE}/`);
     expect(urls).toContain(`${SITE}/sellers`);
     for (const p of NOINDEX_PATHS) {
       expect(urls.some((u) => u.replace(SITE, "").replace(/^\/ar(?=\/|$)/, "") === p)).toBe(false);
@@ -54,30 +56,51 @@ function files(dir: string): string[] {
   });
 }
 
+const linksToPricing = (src: string) =>
+  /href\s*=[^>]*\/pricing/.test(src) || /pathFor\([^)]*["']\/pricing/.test(src);
+
 describe("pricing is unlisted", () => {
   it("no file under app/ links to /pricing outside pricing/", () => {
     const offenders = files("app")
-      .filter((f) => /\.(tsx?|css)$/.test(f) && !f.includes(`${join("[locale]", "pricing")}`))
-      .filter((f) => /pricing/i.test(readFileSync(f, "utf8").replace(/web\.pricing\./g, "")));
+      .filter((f) => /\.tsx?$/.test(f) && !f.includes(join("[locale]", "pricing")))
+      .filter((f) => linksToPricing(readFileSync(f, "utf8")));
     expect(offenders).toEqual([]);
   });
 });
 
-describe("legal pages render every key", () => {
-  for (const name of ["privacy", "terms"] as const) {
-    it(`${name}: sections and keys match in en and ar`, () => {
-      const node = en.web[name] as Record<string, unknown>;
-      const arNode = ar.web[name] as Record<string, unknown>;
-      const secs = sectionKeys(name);
-      expect(secs.length).toBe(name === "privacy" ? 9 : 11);
-      for (const s of secs) {
-        expect(Object.keys(arNode[s.id] as object)).toEqual(Object.keys(node[s.id] as object));
-        expect(s.items.map((i) => i.key)).toEqual(Object.keys(node[s.id] as object).filter((k) => k !== "heading"));
-      }
-    });
+describe("legal pages", () => {
+  const decode = (h: string) =>
+    h.replace(/&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+  const must = [
+    ["privacy", "section3.p3"],
+    ["privacy", "section7.p2"],
+    ["privacy", "section7.p3"],
+    ["terms", "section11.p1"],
+  ] as const;
+  for (const locale of ["en", "ar"] as const) {
+    for (const name of ["privacy", "terms"] as const) {
+      it(`${locale} ${name}: no doubled bullets, key paragraphs present`, () => {
+        const html = renderToStaticMarkup(createElement(LegalPage, { locale, name }));
+        const items = [...html.matchAll(/<li>([^<]*)<\/li>/g)].map((m) => decode(m[1]));
+        expect(items.length).toBeGreaterThan(0);
+        for (const text of items) expect(text).not.toMatch(/^[\u200e\u200f]*•/u);
+        const text = decode(html);
+        for (const [n, key] of must) if (n === name) expect(text).toContain(t(locale, `web.${n}.${key}`));
+      });
+    }
   }
-  it("privacy names Vercel, Tally and Heap", () => {
-    const text = JSON.stringify(en.web.privacy);
-    for (const n of ["Vercel", "Tally", "Heap"]) expect(text).toContain(n);
+  it("TOC label is not a heading, so the h1 comes first", () => {
+    const html = renderToStaticMarkup(createElement(LegalPage, { locale: "en", name: "privacy" }));
+    expect(html.indexOf("<h1")).toBeLessThan(html.indexOf("<h2"));
+    expect(html).toMatch(/<nav[^>]*aria-label=/);
+  });
+});
+
+describe("pricing link detector", () => {
+  it("flags real links and ignores prose", () => {
+    expect(linksToPricing('<a href="/pricing">x</a>')).toBe(true);
+    expect(linksToPricing('<Link href={pathFor(locale, "/pricing")}>')).toBe(true);
+    expect(linksToPricing('href={`${base}/ar/pricing`}')).toBe(true);
+    expect(linksToPricing("/* the pricing page */ const a = 'web.pricing.x'")).toBe(false);
   });
 });

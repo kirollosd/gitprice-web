@@ -6,7 +6,7 @@ export type LegalName = "privacy" | "terms";
 type Item = { key: string; kind: "p" | "li" };
 type Section = { id: string; items: Item[] };
 
-const BULLET = /^•\s+/;
+const BULLET = /^[\u200e\u200f]*•\s*/u;
 
 /** Sections and their paragraph/list keys in source order, so no key is ever skipped. */
 export function sectionKeys(name: LegalName): Section[] {
@@ -27,8 +27,8 @@ export default function LegalPage({ locale, name }: { locale: Locale; name: Lega
   const sections = sectionKeys(name);
   return (
     <div className={`container ${styles.layout}`}>
-      <nav className={styles.toc} aria-labelledby={`${name}-toc-h`}>
-        <h2 id={`${name}-toc-h`} className={styles.tocHeading}>{t(locale, toc + "heading")}</h2>
+      <nav className={styles.toc} aria-label={t(locale, toc + "heading")}>
+        <p className={styles.tocHeading} aria-hidden="true">{t(locale, toc + "heading")}</p>
         <ol className={styles.tocList}>
           {sections.map((s) => (
             <li key={s.id}><a className={styles.tocLink} href={`#${s.id}`}>{t(locale, `${toc}label.${s.id}`)}</a></li>

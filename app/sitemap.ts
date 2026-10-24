@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return INDEXABLE_PATHS.flatMap((path) =>
     LOCALES.map((locale) => ({
       url: absoluteUrl(locale, path),
-      alternates: { languages: { en: absoluteUrl("en", path), ar: absoluteUrl("ar", path) } },
+      alternates: { languages: { en: absoluteUrl("en", path), ar: absoluteUrl("ar", path), "x-default": absoluteUrl("en", path) } },
     })),
   );
 }
