@@ -44,7 +44,7 @@ export default defineConfig({
     {
       command: `npm run build && npm run start -- -p ${PRELAUNCH}`,
       url: `http://localhost:${PRELAUNCH}`,
-      env: { ...supabaseEnv, NEXT_PUBLIC_HEAP_ID: "e2e-heap", NEXT_PUBLIC_CHECKOUT: "1" },
+      env: { ...supabaseEnv, NEXT_PUBLIC_HEAP_ID: "e2e-heap", NEXT_PUBLIC_GTM_ID: "GTM-TEST000", NEXT_PUBLIC_CHECKOUT: "1" },
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
     },

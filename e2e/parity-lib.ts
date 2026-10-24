@@ -225,6 +225,8 @@ export async function seedCheckout(page: Page, state: CheckoutState, path: strin
     return void (await page.goto(`${path}/checkout/return#rt=t&status=${status}`));
   }
   await page.goto(state === "signed-out" ? `${path}/checkout` : `${path}/checkout#code=c`);
+  // The summary view renders after hydration and its fetch; masks are measured right after, so wait for it (a slower hydration, e.g. with GTM on, otherwise races).
+  if (state === "summary") await page.getByRole("button", { name: continueLabel }).waitFor();
   if (state === "redirecting") {
     await page.getByRole("button", { name: continueLabel }).click();
     await page.waitForFunction(() => document.querySelector("main a"));

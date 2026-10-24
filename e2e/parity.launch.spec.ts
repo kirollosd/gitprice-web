@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test } from "./fixtures";
 import { decideConsent, expectParity, LOCALES, sizeToBoard, stubTally, WIDTHS, type Shot } from "./parity-lib";
 
 // Launch project (:3001): the boards that show the launched site (store badges, Add to Chrome).

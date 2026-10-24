@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Page } from "./fixtures";
 
 const TALLY_STUB = "window.Tally={loadEmbeds(){window.__tallyLoads=(window.__tallyLoads||0)+1}};";
 

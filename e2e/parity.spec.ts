@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test } from "./fixtures";
 import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 import {

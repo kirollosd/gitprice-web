@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("launched pricing sends both plans to the Chrome store", async ({ page }) => {
   await page.goto("/pricing");

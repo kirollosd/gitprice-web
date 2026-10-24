@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { stubTally } from "./parity-lib";
 
 // 1024 and 768 are layout-only checks (no pixel parity): no horizontal scroll, and the right nav variant.

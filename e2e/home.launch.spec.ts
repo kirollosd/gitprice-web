@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 // Runs against the NEXT_PUBLIC_LAUNCH=1 build (see playwright.config.ts).
 const CHROME = "https://chromewebstore.example/gitprice";
