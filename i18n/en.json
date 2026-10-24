@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@6dee8e8e",
+  "_source": "gitprice@bf05c07e",
   "web": {
     "component": {
       "webNav": {
@@ -710,6 +710,9 @@
         "field": {
           "message": "Something went wrong on our side. Your password wasn’t changed. Try again."
         }
+      },
+      "weak": {
+        "message": "At least 8 characters, with an uppercase letter, a lowercase letter and a number"
       }
     },
     "checkout": {

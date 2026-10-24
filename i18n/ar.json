@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@6dee8e8e",
+  "_source": "gitprice@bf05c07e",
   "web": {
     "component": {
       "webNav": {
@@ -710,6 +710,9 @@
         "field": {
           "message": "حدث خطأ من جانبنا. لم تتغير كلمة المرور. حاول مرة أخرى."
         }
+      },
+      "weak": {
+        "message": "8 أحرف على الأقل، تتضمن حرفًا إنجليزيًا كبيرًا وحرفًا صغيرًا ورقمًا"
       }
     },
     "checkout": {
