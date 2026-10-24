@@ -1,5 +1,7 @@
 export type SiteEnv = {
   launch: boolean;
+  /** Pro checkout pages; off until Pro opens (they 404). */
+  checkout: boolean;
   chromeStoreUrl?: string;
   appStoreUrl?: string;
   playStoreUrl?: string;
@@ -28,6 +30,7 @@ const STORES = {
 export function readEnv(src: Record<string, string | undefined>): SiteEnv {
   const get = (name: string) => src[name]?.trim() || undefined;
   const launch = get("NEXT_PUBLIC_LAUNCH") === "1";
+  const checkout = get("NEXT_PUBLIC_CHECKOUT") === "1";
 
   const needed: Record<string, string> = { ...REQUIRED, ...(launch ? STORES : {}) };
   const missing = Object.values(needed).filter((name) => !get(name));
@@ -37,6 +40,7 @@ export function readEnv(src: Record<string, string | undefined>): SiteEnv {
 
   return {
     launch,
+    checkout,
     chromeStoreUrl: get(STORES.chromeStoreUrl),
     appStoreUrl: get(STORES.appStoreUrl),
     playStoreUrl: get(STORES.playStoreUrl),
@@ -52,6 +56,7 @@ export function readEnv(src: Record<string, string | undefined>): SiteEnv {
 // Next inlines NEXT_PUBLIC_* only for literal property access, so pass them explicitly.
 export const env: SiteEnv = readEnv({
   NEXT_PUBLIC_LAUNCH: process.env.NEXT_PUBLIC_LAUNCH,
+  NEXT_PUBLIC_CHECKOUT: process.env.NEXT_PUBLIC_CHECKOUT,
   NEXT_PUBLIC_CHROME_STORE_URL: process.env.NEXT_PUBLIC_CHROME_STORE_URL,
   NEXT_PUBLIC_APP_STORE_URL: process.env.NEXT_PUBLIC_APP_STORE_URL,
   NEXT_PUBLIC_PLAY_STORE_URL: process.env.NEXT_PUBLIC_PLAY_STORE_URL,

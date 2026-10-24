@@ -19,6 +19,12 @@ describe("readEnv", () => {
     expect(e.siteUrl).toBe("https://gitprice.com");
   });
 
+  test("checkout is off unless NEXT_PUBLIC_CHECKOUT=1", () => {
+    expect(readEnv(base).checkout).toBe(false);
+    expect(readEnv({ ...base, NEXT_PUBLIC_CHECKOUT: "0" }).checkout).toBe(false);
+    expect(readEnv({ ...base, NEXT_PUBLIC_CHECKOUT: "1" }).checkout).toBe(true);
+  });
+
   test("readEnv accepts launch with all store URLs", () => {
     const e = readEnv({
       ...base,

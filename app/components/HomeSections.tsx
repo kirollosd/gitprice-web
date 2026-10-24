@@ -86,7 +86,8 @@ function Baseline({ locale }: { locale: Locale }) {
 
 const ART = { rows: RowsArt, alerts: AlertsArt, history: HistoryArt } as const;
 
-type Item = { key: string; tag?: "soon" | "pro"; note?: boolean };
+// Pro is not on sale at launch (owner ruling 2026-10-25): its limits row is tagged Coming soon; web.home.features.tag.pro is unused for now.
+type Item = { key: string; tag?: "soon"; note?: boolean };
 /** GP-372 feature list: two columns from 1024 (Compare + Know when to buy | See it add up + Your way). */
 export const GROUPS: { key: string; items: Item[] }[][] = [
   [
@@ -97,7 +98,7 @@ export const GROUPS: { key: string; items: Item[] }[][] = [
         { key: "emailAlerts", tag: "soon" },
         { key: "phoneAlerts", tag: "soon" },
         { key: "priceHistory", note: true },
-        { key: "proLimits", tag: "pro" },
+        { key: "proLimits", tag: "soon" },
       ],
     },
   ],

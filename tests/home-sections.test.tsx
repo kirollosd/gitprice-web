@@ -39,20 +39,21 @@ describe("Home GP-372 sections", () => {
     });
   }
 
-  it("tags the right items and gives priceHistory a note, not a tag", async () => {
+  it("tags the coming-soon items (Pro included) and gives priceHistory a note, not a tag", async () => {
     mockEnv(true);
     const { default: HomeContent, GROUPS } = await import("../app/components/HomeSections");
     render(<HomeContent locale="en" />);
-    const soon = ["emailAlerts", "phoneAlerts", "sync", "suggestStore"];
+    const soon = ["emailAlerts", "phoneAlerts", "proLimits", "sync", "suggestStore"];
     const all = GROUPS.flat().flatMap((g) => g.items.map((i) => i.key));
     expect(all).toHaveLength(13);
     for (const key of all) {
       const el = item(key);
       expect(within(el).getByRole("heading", { level: 4 }).textContent).toBe((F as unknown as Record<string, { title: string }>)[key].title);
       const tag = el.querySelector("span")?.textContent ?? null;
-      expect(tag).toBe(soon.includes(key) ? F.tag.soon : key === "proLimits" ? F.tag.pro : null);
+      expect(tag).toBe(soon.includes(key) ? F.tag.soon : null);
     }
     expect(within(item("priceHistory")).getByText(F.priceHistory.pro)).toBeTruthy();
+    expect(screen.queryByText(F.tag.pro)).toBeNull();
     expect(document.querySelectorAll("[data-feature] p").length).toBe(all.length + 1);
   });
 

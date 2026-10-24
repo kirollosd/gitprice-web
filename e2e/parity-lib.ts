@@ -25,7 +25,8 @@ const RASTER = "Sketch and Chromium rasterise short centred card text differentl
 // Per-section deltas are build minus board block-start/size (Sketch frames vs Playwright boxes, en, 2026-10-24); the art is never masked.
 const ART = "art text and the product photo rasterise differently in Sketch and Chromium; the CTA card is 56px shorter because the store badges are hidden at >=768 per owner ruling (board card 132, build 76)";
 const BANDS = "the board's closing band runs past its card (1440: 122px, 390: 136px; build 72) and the footer then sits 48 below it where the build keeps its shared 96, so the band colour stops early while card-to-footer distance matches within 2px (1440) or 16px (390)";
-const HOME_1440 = ART + "; " + BANDS + "; above that, the hero art is 5px taller and later sections drift +6 to +14px; net page 51px shorter (5471 vs 5522)";
+const PRO_SOON = "; the proLimits row shows the Coming soon tag where the board shows Pro (owner ruling 2026-10-25: Pro is not on sale at launch)";
+const HOME_1440 = ART + PRO_SOON + "; " + BANDS + "; above that, the hero art is 5px taller and later sections drift +6 to +14px; net page 51px shorter (5471 vs 5522)";
 const HOME_390 = "art text and the product photo rasterise differently in Sketch and Chromium; sections drift down 5 to 27px in steps of at most 8 (hero +5, cheaper price row +4, grouped rows +2 each, unexplained residual text-metric drift); " + BANDS + "; net page +18px";
 const SELLERS_390 = "board steps band is a fixed 600 with a fixed 150px step pitch, the build sizes steps by content (545, -55px); board CTA keeps 53px between title and card with no line, build 32 (-20); band bottom 84 vs 71 (-13); back link row is a 44px target vs 27 text (+17); footer gap 96 vs board 32 (+64)";
 const SELLERS_1440 = "Chromium wraps the hero and feature copy a word differently from Sketch, Arabic most; page +48px en, +112px ar, not split per section (unexplained residual); footer gap 96 vs board 32";
@@ -60,7 +61,7 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Welcome-default-390": { max: 0.05, reason: "board draws decorative art (toolbar icons, store chip) the build does not ship" },
   "NotFound-default-390": { max: 0.05, reason: "Noto Sans Arabic line metrics differ between Sketch and Chromium" },
   "Home-launch-1440": { max: 0.07, reason: HOME_1440 + "; measured en 0.05, ar 0.06" },
-  "Home-launch-390": { max: 0.09, reason: HOME_390 + "; measured en 0.08, ar 0.07" },
+  "Home-launch-390": { max: 0.09, reason: HOME_390 + PRO_SOON + "; measured en 0.08, ar 0.07" },
   "Sellers-launch-1440": { max: 0.07, reason: SELLERS_1440 + "; measured en 0.04, ar 0.06" },
   "Sellers-launch-390": { max: 0.11, reason: SELLERS_390 + "; measured en 0.10, ar 0.07" },
   "Sellers-prelaunch-1440": { max: 0.08, reason: SELLERS_1440 + NOTE_PRE + "; measured en 0.04, ar 0.07" },
