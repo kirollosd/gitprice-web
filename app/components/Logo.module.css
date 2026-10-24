@@ -4,4 +4,16 @@
   text-decoration: none;
 }
 .root:hover { text-decoration: none; }
-.wordmark { flex-shrink: 0; block-size: auto; }
+/* The SVG is a mask so its colour follows the theme: navy on light, white on dark. */
+.wordmark {
+  --logo-ink: var(--gp-brand-navy);
+  flex-shrink: 0;
+  inline-size: 77px;
+  block-size: 22px;
+  background-color: var(--logo-ink);
+  mask: url("/logo_wordmark.svg") center / contain no-repeat;
+}
+:root[data-theme="dark"] .wordmark { --logo-ink: var(--gp-brand-on-navy); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .wordmark { --logo-ink: var(--gp-brand-on-navy); }
+}

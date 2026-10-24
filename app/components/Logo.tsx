@@ -9,7 +9,7 @@ interface LogoProps {
   className?: string;
 }
 
-/** GitPrice wordmark (navy, as on the boards). */
+/** GitPrice wordmark: navy on light, white on dark (brand rule). */
 export default function Logo({ locale, href, className }: LogoProps) {
   return (
     <Link
@@ -17,8 +17,7 @@ export default function Logo({ locale, href, className }: LogoProps) {
       className={`${styles.root} ${className ?? ""}`}
       aria-label={t(locale, "web.component.webNav.a11y.label.home")}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element -- static navy wordmark, nothing to optimise */}
-      <img src="/logo_wordmark.svg" alt="" width="77" height="22" className={styles.wordmark} />
+      <span aria-hidden="true" className={styles.wordmark} />
     </Link>
   );
 }
