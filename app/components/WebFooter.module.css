@@ -4,6 +4,7 @@
 .tagline, .copy { color: var(--gp-ink-muted); font-size: var(--gp-fs-body-compact); }
 .links { list-style: none; display: flex; gap: var(--gp-sp-6); }
 .link { color: var(--gp-ink); font-size: var(--gp-fs-body); }
+.link { background: none; border: 0; padding: 0; font-family: inherit; cursor: pointer; }
 .copy { flex-basis: 100%; }
 @media (max-width: 767px) {
   .inner { flex-direction: column; align-items: flex-start; }

@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@975200f1",
+  "_source": "gitprice@6dee8e8e",
   "web": {
     "component": {
       "webNav": {
@@ -227,7 +227,8 @@
           "label": {
             "privacy": "الخصوصية",
             "terms": "الشروط",
-            "nav": "روابط التذييل"
+            "nav": "روابط التذييل",
+            "cookies": "إعدادات ملفات تعريف الارتباط"
           },
           "copyright": "© 2026 GitPrice"
         }

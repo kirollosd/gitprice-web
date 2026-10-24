@@ -19,7 +19,13 @@ export default defineConfig({
     { name: "launch", testMatch: /\.launch\.spec\.ts$/, use: { baseURL: `http://localhost:${LAUNCH}` } },
   ],
   webServer: [
-    { command: `npm run build && npm run start -- -p ${PRELAUNCH}`, url: `http://localhost:${PRELAUNCH}`, reuseExistingServer: !process.env.CI, timeout: 180_000 },
+    {
+      command: `npm run build && npm run start -- -p ${PRELAUNCH}`,
+      url: `http://localhost:${PRELAUNCH}`,
+      env: { NEXT_PUBLIC_HEAP_ID: "e2e-heap" },
+      reuseExistingServer: !process.env.CI,
+      timeout: 180_000,
+    },
     {
       command: `npm run build && npm run start -- -p ${LAUNCH}`,
       url: `http://localhost:${LAUNCH}`,

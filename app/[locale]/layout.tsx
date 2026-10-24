@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import HeapAnalytics from "../components/HeapAnalytics";
+import Analytics from "../components/Analytics";
+import CookieNotice from "../components/CookieNotice";
+import FloatingStack from "../components/FloatingStack";
 import LocaleSuggestion from "../components/LocaleSuggestion";
 import WebFooter from "../components/WebFooter";
 import WebNav from "../components/WebNav";
@@ -53,11 +55,14 @@ export default async function LocaleLayout({
         <link rel="preload" href="/fonts/fustat-latin-400-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
       <body>
-        <LocaleSuggestion />
         <WebNav locale={l} />
         <main>{children}</main>
         <WebFooter locale={l} />
-        <HeapAnalytics />
+        <FloatingStack>
+          <LocaleSuggestion />
+          <CookieNotice locale={l} />
+        </FloatingStack>
+        <Analytics />
       </body>
     </html>
   );

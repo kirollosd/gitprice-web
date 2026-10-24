@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { t, type Locale } from "../../lib/i18n";
 import { pathFor } from "../../lib/locale";
+import { CookieSettingsButton } from "./CookieNotice";
 import FooterTagline from "./FooterTagline";
 import Logo from "./Logo";
 import styles from "./WebFooter.module.css";
@@ -19,6 +20,7 @@ export default function WebFooter({ locale }: { locale: Locale }) {
           <ul className={styles.links} role="list">
             <li><Link href={pathFor(locale, "/privacy")} className={styles.link}>{t(locale, K + "label.privacy")}</Link></li>
             <li><Link href={pathFor(locale, "/terms")} className={styles.link}>{t(locale, K + "label.terms")}</Link></li>
+            <li><CookieSettingsButton locale={locale} className={styles.link} /></li>
           </ul>
         </nav>
         <p className={styles.copy}>{t(locale, K + "copyright")}</p>

@@ -1,9 +1,5 @@
-/* Fixed so mounting after hydration never shifts the nav (CLS). */
+/* Lives in FloatingStack (fixed), so mounting after hydration never shifts the nav (CLS). */
 .banner {
-  position: fixed;
-  inset-block-end: var(--gp-sp-4);
-  inset-inline: var(--gp-sp-4);
-  z-index: 60;
   display: flex;
   flex-wrap: wrap;
   gap: var(--gp-sp-4);
