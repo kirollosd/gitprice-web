@@ -57,3 +57,10 @@ describe("sellersNav flag", () => {
     expect(readEnv({ ...base, NEXT_PUBLIC_SELLERS_NAV: "1" }).sellersNav).toBe(true);
   });
 });
+
+describe("gtmId", () => {
+  test("is undefined when unset and the id when set", () => {
+    expect(readEnv(base).gtmId).toBeUndefined();
+    expect(readEnv({ ...base, NEXT_PUBLIC_GTM_ID: "GTM-PLZZJV54" }).gtmId).toBe("GTM-PLZZJV54");
+  });
+});

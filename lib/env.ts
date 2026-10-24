@@ -12,6 +12,7 @@ export type SiteEnv = {
   supabaseUrl: string;
   supabaseAnonKey: string;
   heapId?: string;
+  gtmId?: string;
   siteUrl: string;
 };
 
@@ -53,6 +54,7 @@ export function readEnv(src: Record<string, string | undefined>): SiteEnv {
     supabaseUrl: get(REQUIRED.supabaseUrl)!,
     supabaseAnonKey: get(REQUIRED.supabaseAnonKey)!,
     heapId: get("NEXT_PUBLIC_HEAP_ID"),
+    gtmId: get("NEXT_PUBLIC_GTM_ID"),
     siteUrl: get(REQUIRED.siteUrl)!,
   };
 }
@@ -70,5 +72,6 @@ export const env: SiteEnv = readEnv({
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   NEXT_PUBLIC_HEAP_ID: process.env.NEXT_PUBLIC_HEAP_ID,
+  NEXT_PUBLIC_GTM_ID: process.env.NEXT_PUBLIC_GTM_ID,
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
 });

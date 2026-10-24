@@ -2,7 +2,7 @@ import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import en from "../i18n/en.json";
-import { consentCookie, heapCookieExpiries, readConsent } from "../lib/consent";
+import { ANALYTICS_COOKIE_PREFIXES, consentCookie, cookieExpiries, readConsent } from "../lib/consent";
 
 vi.mock("next/link", () => ({
   default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => <a href={href} {...rest}>{children}</a>,
@@ -42,6 +42,16 @@ afterEach(() => {
 });
 
 describe("consent cookie helpers", () => {
+  it("expires _ga* and _gid cookies on host, hostname and parent, never the TLD or others", () => {
+    const out = cookieExpiries("_ga=1; _ga_SM4YKS90F0=2; _gid=3; other=4", "www.gitprice.com", ANALYTICS_COOKIE_PREFIXES);
+    for (const n of ["_ga", "_ga_SM4YKS90F0", "_gid"]) {
+      expect(out).toContain(`${n}=; Max-Age=0; Path=/`);
+      expect(out).toContain(`${n}=; Max-Age=0; Path=/; Domain=www.gitprice.com`);
+      expect(out).toContain(`${n}=; Max-Age=0; Path=/; Domain=gitprice.com`);
+    }
+    expect(out).toHaveLength(9);
+    expect(out.some((c) => c.startsWith("other="))).toBe(false);
+  });
   it("reads only allow and decline", () => {
     expect(readConsent("a=1; gp_consent=allow")).toBe("allow");
     expect(readConsent("gp_consent=decline")).toBe("decline");
@@ -53,7 +63,7 @@ describe("consent cookie helpers", () => {
     expect(consentCookie("allow")).toBe("gp_consent=allow; Max-Age=31536000; Path=/; SameSite=Lax; Secure");
   });
   it("expires only _hp2_ cookies, on the host and each parent domain", () => {
-    const out = heapCookieExpiries("a=1; _hp2_id.123=x; _hp2_ses_props.123=y; gp_consent=allow", "www.gitprice.app");
+    const out = cookieExpiries("a=1; _hp2_id.123=x; _hp2_ses_props.123=y; gp_consent=allow", "www.gitprice.app", ["_hp2_"]);
     expect(out).toContain("_hp2_id.123=; Max-Age=0; Path=/");
     expect(out).toContain("_hp2_id.123=; Max-Age=0; Path=/; Domain=www.gitprice.app");
     expect(out).toContain("_hp2_id.123=; Max-Age=0; Path=/; Domain=gitprice.app");
@@ -62,7 +72,7 @@ describe("consent cookie helpers", () => {
     expect(out.some((c) => c.endsWith("Domain=app"))).toBe(false);
   });
   it("uses a host-only expiry on single-label hosts", () => {
-    expect(heapCookieExpiries("_hp2_id.1=x", "localhost")).toEqual(["_hp2_id.1=; Max-Age=0; Path=/"]);
+    expect(cookieExpiries("_hp2_id.1=x", "localhost", ["_hp2_"])).toEqual(["_hp2_id.1=; Max-Age=0; Path=/"]);
   });
 });
 
@@ -161,6 +171,25 @@ describe("cookie notice and Heap", () => {
     click(en.web.component.webFooter.default.label.cookies);
     click(N.button.decline.label);
     expect(document.activeElement).toBe(screen.getByRole("button", { name: en.web.component.webFooter.default.label.cookies }));
+  });
+});
+
+describe("setConsent and the dataLayer", () => {
+  const dl = () => ((window as unknown as { dataLayer?: ArrayLike<unknown>[] }).dataLayer ?? []).map((a) => Array.from(a));
+  beforeEach(() => { delete (window as { dataLayer?: unknown }).dataLayer; });
+  it("allow pushes a granted consent update", async () => {
+    const { setConsent } = await import("../lib/consent");
+    setConsent("allow");
+    expect(dl()).toContainEqual(["consent", "update", { analytics_storage: "granted" }]);
+  });
+  it("decline after allow pushes denied, expires _ga cookies, then reloads", async () => {
+    const { setConsent } = await import("../lib/consent");
+    setConsent("allow");
+    document.cookie = "_ga=1; Path=/";
+    reload.mockImplementation(() => { expect(document.cookie).not.toContain("_ga="); });
+    setConsent("decline");
+    expect(dl()).toContainEqual(["consent", "update", { analytics_storage: "denied" }]);
+    expect(reload).toHaveBeenCalledTimes(1);
   });
 });
 

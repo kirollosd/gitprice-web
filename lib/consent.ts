@@ -1,9 +1,10 @@
+import { gtag } from "./gtm";
 export type Consent = "allow" | "decline" | null;
 
 export const CONSENT_COOKIE = "gp_consent";
 export const CONSENT_EVENT = "gp:consent";
 export const REOPEN_EVENT = "gp:cookie-settings";
-const HEAP_COOKIE_PREFIX = "_hp2_";
+export const ANALYTICS_COOKIE_PREFIXES = ["_hp2_", "_ga", "_gid"] as const;
 
 export function readConsent(cookie: string): Consent {
   const hit = cookie.split(";").map((p) => p.trim()).find((p) => p.startsWith(`${CONSENT_COOKIE}=`));
@@ -16,14 +17,14 @@ export function consentCookie(value: "allow" | "decline"): string {
 }
 
 /**
- * Cookie strings that expire every Heap cookie, on the current host (no Domain) and on each
- * parent domain Heap may have set it on. Unknown suffixes like co.uk are ignored by the browser.
+ * Cookie strings that expire every cookie starting with one of the prefixes, on the current host (no Domain),
+ * the hostname itself and each parent domain with at least two labels (never a bare TLD).
  */
-export function heapCookieExpiries(cookie: string, hostname: string): string[] {
+export function cookieExpiries(cookie: string, hostname: string, prefixes: readonly string[]): string[] {
   const names = cookie
     .split(";")
     .map((p) => p.trim().split("=")[0])
-    .filter((n) => n.startsWith(HEAP_COOKIE_PREFIX));
+    .filter((n) => prefixes.some((p) => n.startsWith(p)));
   const labels = hostname.split(".");
   const domains = labels.length > 1 ? labels.slice(0, -1).map((_, i) => labels.slice(i).join(".")) : [];
   return names.flatMap((n) => [
@@ -32,7 +33,7 @@ export function heapCookieExpiries(cookie: string, hostname: string): string[] {
   ]);
 }
 
-/** Stores the choice and tells listeners. Allow then Decline drops Heap's cookies and reloads, since Heap cannot be unloaded. */
+/** Stores the choice and tells listeners. Allow then Decline drops Heap and Google cookies and reloads, since Heap cannot be unloaded. */
 export function setConsent(value: "allow" | "decline"): void {
   const previous = readConsent(document.cookie);
   if (value === "decline" && previous === "allow") {
@@ -40,8 +41,9 @@ export function setConsent(value: "allow" | "decline"): void {
     try { heap?.stopTracking?.(); } catch { /* best effort; the reload removes Heap anyway */ }
   }
   document.cookie = consentCookie(value);
+  gtag("consent", "update", { analytics_storage: value === "allow" ? "granted" : "denied" });
   if (value === "decline" && previous === "allow") {
-    heapCookieExpiries(document.cookie, location.hostname).forEach((c) => { document.cookie = c; });
+    cookieExpiries(document.cookie, location.hostname, ANALYTICS_COOKIE_PREFIXES).forEach((c) => { document.cookie = c; });
     location.reload();
     return;
   }
