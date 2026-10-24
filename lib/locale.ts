@@ -2,10 +2,14 @@ import type { Locale } from "./i18n";
 
 export const LOCALES: Locale[] = ["en", "ar"];
 
-/** Takes a pathname only (no query string). */
+/**
+ * Takes a pathname only (no query string). The middleware rewrites English paths to /en/..., so during prerender
+ * `usePathname()` carries that prefix; it is stripped like /ar so `rest` is always locale-less.
+ */
 export function localeFromPath(pathname: string): { locale: Locale; rest: string } {
-  if (pathname === "/ar" || pathname.startsWith("/ar/")) {
-    return { locale: "ar", rest: pathname.slice(3) || "/" };
+  for (const locale of LOCALES) {
+    const prefix = `/${locale}`;
+    if (pathname === prefix || pathname.startsWith(prefix + "/")) return { locale, rest: pathname.slice(3) || "/" };
   }
   return { locale: "en", rest: pathname };
 }
@@ -42,7 +46,7 @@ export function suggestLocale(acceptLanguage: string | null, current: Locale): L
   return (q.get("ar") ?? 0) > (q.get("en") ?? 0) ? "ar" : null;
 }
 
-// Middleware rewrites English paths to /en/..., so the server sees that prefix too.
+// `rest` is locale-less, but callers may still pass a raw rewritten path, so /en is tolerated.
 const HOSTED = /^(\/en)?\/(reset-password|checkout)(\/|$)/;
 
 /** Takes the locale-less path (`localeFromPath(...).rest`). Hosted pages carry secrets in the URL and show a minimal shell. */

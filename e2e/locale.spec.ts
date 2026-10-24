@@ -65,3 +65,20 @@ test.describe("Arabic Accept-Language", () => {
     await expect(page.getByRole("region", { name: banner }).getByRole("link", { name: "العربية" })).toBeHidden();
   });
 });
+
+// P1-1/P1-2: the server render saw /en/... and built /ar/en/... switch hrefs and a hydration mismatch on /sellers.
+test("/sellers loads without a page error", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto("/sellers");
+  await page.waitForLoadState("networkidle");
+  expect(errors).toEqual([]);
+});
+
+test("server-rendered language switch hrefs have no /en segment", async ({ request }) => {
+  for (const path of ["/", "/privacy", "/sellers", "/welcome"]) {
+    const html = await (await request.get(path)).text();
+    expect(html, path).not.toMatch(/href="\/ar\/en(\/|")/);
+    expect(html, path).toContain(`href="${path === "/" ? "/ar" : "/ar" + path}"`);
+  }
+});
