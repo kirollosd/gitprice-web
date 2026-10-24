@@ -93,7 +93,11 @@ Tag Manager (GTM) is the delivery layer, so tags can change without a deploy. GT
    - It expires `_ga`, `_ga_*` and `_gid` on the host and its parent domains. Reuse and generalise `heapCookieExpiries` into a prefix-based helper rather than duplicating it.
    - The existing reload path then runs.
 5. **GTM side.** The GA4 Google Tag fires on All Pages, with the built-in consent check `analytics_storage`. Consent Mode then handles cookieless pings automatically.
-6. **Page views.** SPA page views come from GA4 enhanced measurement ("page changes based on browser history events"). The site sends no manual `page_view`.
+6. **Page views.**
+   - The Google Tag sends the initial `page_view`.
+   - SPA navigations fire a GTM **History Change** trigger. It sends a GA4 Event tag `page_view` that uses the same `GA4 Event Settings` variable, so `page_location` is recomputed (and redacted) on every fire.
+   - GA4 enhanced measurement's "page changes based on browser history events" is turned **off**. It would reuse the `page_location` set at config time, which can be stale or unredacted, and it would double-count.
+   - The site's code sends no `page_view`.
 7. **Redaction.** `page_location` is sent without its query string or fragment on `/reset-password`, `/checkout` and `/checkout/return`, and on `/welcome`, each with or without the `/ar` prefix:
    - A custom JavaScript variable, `Redacted Page Location`, strips `?…` and `#…` on those paths.
    - It's applied through one **Google Tag: Event Settings** variable, which sets `page_location`. That variable is attached to the Google Tag **and to every GA4 Event tag**, including `scroll_depth`, so no tag sends a raw URL.
@@ -149,7 +153,8 @@ The owner imports it into a workspace with **Merge → Rename conflicting** and 
     - Admin → Events → mark `waitlist_submit` as a key event once it has fired.
     - Register the custom dimensions `audience`, `placement`, `cta_id`, `section_id`, `store` and `locale` (event scope).
     - Enhanced measurement:
-      - keep page views (including browser-history changes) and outbound clicks;
+      - keep page views and outbound clicks;
+      - turn **off** "page changes based on browser history events", because GTM's History Change `page_view` tag replaces it with a redacted `page_location`;
       - turn **off** scrolls, because the GTM scroll-depth trigger replaces them and leaving both on would double-count at 90%;
       - turn **off** form interactions.
     - Set data retention to 14 months.

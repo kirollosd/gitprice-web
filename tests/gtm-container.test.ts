@@ -29,8 +29,14 @@ describe("GTM container export", () => {
     expect(googtag[0].firingTriggerId).toEqual([ALL_PAGES]);
   });
 
-  it("has exactly one GA4 Event tag per site event", () => {
-    expect(events.map((t) => param(t, "eventName")).sort()).toEqual([...EVENTS].sort());
+  it("has exactly one GA4 Event tag per site event, plus page_view", () => {
+    expect(events.map((t) => param(t, "eventName")).sort()).toEqual([...EVENTS, "page_view"].sort());
+  });
+
+  it("sends SPA page views from a History Change trigger, so page_location is recomputed per fire", () => {
+    const pv = events.find((t) => param(t, "eventName") === "page_view")!;
+    const trig = cv.trigger.find((t) => t.triggerId === pv.firingTriggerId![0])!;
+    expect(trig.type).toBe("HISTORY_CHANGE");
   });
 
   it("fires every tag on a defined trigger", () => {
