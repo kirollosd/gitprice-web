@@ -10,6 +10,16 @@ import styles from "./BoardArt.module.css";
 const FIG = { here: "24,999", cheaper: "23,749", other: "24,250", alert: "22,900", saved: "4,210", month: "+340" };
 const V = "web.home.visual.";
 
+/** A board figure: kept left-to-right inside Arabic text, as the boards isolate it. */
+function N({ v, className }: { v: string; className?: string }) {
+  return <bdi dir="ltr" className={className}>{v}</bdi>;
+}
+
+/** Mockup button: a styled span, never interactive (the art is aria-hidden). */
+function Btn({ children, primary }: { children: string; primary?: boolean }) {
+  return <span className={primary ? styles.btnPrimary : styles.btnText}>{children}</span>;
+}
+
 /** Product photo exported once from the Sketch library (thumb/photo); decorative. */
 function Photo({ className }: { className?: string }) {
   return (
@@ -26,19 +36,35 @@ function Thumb({ large }: { large?: boolean }) {
   );
 }
 
-type Row = { store: string; price: string; cheaper?: boolean };
+/** Check mark (Toast/success, Milestone, Exact match): a jade tick. */
+function Tick({ small }: { small?: boolean }) {
+  return (
+    <svg className={small ? styles.tickSmall : styles.tick} viewBox="0 0 12 8" width="12" height="8" fill="none">
+      <path d="M1 4l3 3 7-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
-/** PriceRowCompact: thumb, title and store, price at the inline end; the cheaper row adds the saving. */
+type Row = { store: string; price: string; cheaper?: boolean; here?: boolean };
+
+/** PriceRowCompact: thumb, title, store with "This page" or "Exact match", price at the inline end; the cheaper row adds the saving. */
 function PriceRow({ locale, row }: { locale: Locale; row: Row }) {
   return (
     <li className={row.cheaper ? `${styles.row} ${styles.rowCheaper}` : styles.row}>
       <Thumb />
       <span className={styles.rowText}>
         <span className={styles.rowTitle}>{t(locale, V + "pricerowcompact.title")}</span>
-        <span className={styles.rowStore}>{t(locale, V + row.store)}</span>
+        <span className={styles.rowStore}>
+          {t(locale, V + row.store)}
+          {row.here ? (
+            <span className={styles.muted}>{t(locale, V + "row.thisPage")}</span>
+          ) : (
+            <span className={styles.match}><Tick small />{t(locale, V + "row.exactMatch")}</span>
+          )}
+        </span>
       </span>
       <span className={styles.rowPrice}>
-        <span className={row.cheaper ? styles.figSaving : styles.fig}>{row.price}</span>
+        <N v={row.price} className={row.cheaper ? styles.figSaving : styles.fig} />
         {row.cheaper && <span className={styles.rowSaving}>{t(locale, V + "pricerowcompact.saving")}</span>}
       </span>
     </li>
@@ -46,25 +72,32 @@ function PriceRow({ locale, row }: { locale: Locale; row: Row }) {
 }
 
 const ROWS: Row[] = [
-  { store: "pricerowcompact.store", price: FIG.here },
+  { store: "pricerowcompact.store", price: FIG.here, here: true },
   { store: "pricerowcompact.store2", price: FIG.cheaper, cheaper: true },
   { store: "pricerowcompact.store3", price: FIG.other },
 ];
 
-function PriceRows({ locale, className }: { locale: Locale; className?: string }) {
+function PriceRows({ locale }: { locale: Locale }) {
   return (
-    <ul className={`${styles.rows} ${className ?? ""}`} role="list">
+    <ul className={styles.rows} role="list">
       {ROWS.map((r) => <PriceRow key={r.store} locale={locale} row={r} />)}
     </ul>
   );
 }
 
-/** Check mark (Toast/success, Milestone): a 12x8 jade tick. */
-function Tick() {
+/** SavingsHero: the cheapest same product, the saving, both prices and the two actions. */
+function Receipt({ locale, className }: { locale: Locale; className?: string }) {
+  const R = V + "receipt.";
   return (
-    <svg className={styles.tick} viewBox="0 0 12 8" width="12" height="8" fill="none">
-      <path d="M1 4l3 3 7-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <div className={`${styles.receipt} ${className ?? ""}`}>
+      <span className={styles.receiptCaption}>{t(locale, R + "title")}</span>
+      <span className={styles.receiptAmount}>{t(locale, R + "saving")}</span>
+      <span className={styles.receiptDetail}>{t(locale, R + "detail")}</span>
+      <span className={styles.actions}>
+        <Btn primary>{t(locale, R + "go")}</Btn>
+        <Btn>{t(locale, R + "alert")}</Btn>
+      </span>
+    </div>
   );
 }
 
@@ -82,20 +115,21 @@ export function HeroArt({ locale }: { locale: Locale }) {
             <div className={styles.product}>
               <span className={styles.productShot}><Photo /></span>
               <div className={styles.productInfo}>
-                <span className={styles.productTitle}>{t(locale, V + "pricerowcompact.title")}</span>
-                <span className={styles.productPrice}>{FIG.here}</span>
+                {/* The store page shows the product's full name: the same string as the alert card's. */}
+                <span className={styles.productTitle}>{t(locale, V + "alertcard.title")}</span>
+                <N v={FIG.here} className={styles.productPrice} />
                 <span className={styles.badge}>{t(locale, V + "pricerowcompact.saving")}</span>
               </div>
             </div>
-            <PriceRows locale={locale} className={styles.sidePanel} />
+            <div className={styles.sidePanel}>
+              <Receipt locale={locale} className={styles.receiptMini} />
+              <PriceRows locale={locale} />
+            </div>
           </div>
         </div>
       </div>
       <div className={styles.receiptFrame}>
-        <div className={styles.receipt}>
-          <span className={styles.receiptCaption}>{t(locale, V + "pricerowcompact.store2")}</span>
-          <span className={styles.receiptAmount}>{t(locale, V + "pricerowcompact.saving")}</span>
-        </div>
+        <Receipt locale={locale} />
       </div>
     </div>
   );
@@ -112,15 +146,36 @@ export function RowsArt({ locale }: { locale: Locale }) {
 
 /** Feature 2 (alerts): a triggered alert card and the success toast (visual/alertcard + visual/toast). */
 export function AlertsArt({ locale }: { locale: Locale }) {
+  const A = V + "alertcard.";
   return (
     <div className={styles.card} aria-hidden="true" data-art="alerts">
       <div className={styles.alert}>
         <div className={styles.alertHead}>
           <Thumb large />
-          <span className={styles.rowTitle}>{t(locale, V + "pricerowcompact.title")}</span>
+          <span className={styles.alertTitle}>{t(locale, A + "title")}</span>
         </div>
-        <span className={styles.alertPrice}>{FIG.alert}</span>
-        <span className={styles.progress} />
+        <div className={styles.stack}>
+          <span className={styles.caption}>{t(locale, A + "lastSeen")}</span>
+          <span className={styles.line}>
+            <N v={FIG.alert} className={styles.fig} />
+            <span className={styles.change}>{t(locale, A + "change")}</span>
+          </span>
+        </div>
+        <div className={styles.stack}>
+          <span className={styles.between}>
+            <span className={styles.small}>{t(locale, A + "target")}</span>
+            <span className={styles.reached}>{t(locale, A + "reached")}</span>
+          </span>
+          <span className={styles.progress} />
+        </div>
+        <span className={styles.caption}>{t(locale, A + "updated")}</span>
+        <span className={`${styles.between} ${styles.foot}`}>
+          <Btn>{t(locale, A + "view")}</Btn>
+          <span className={styles.line}>
+            <Btn>{t(locale, A + "edit")}</Btn>
+            <Btn>{t(locale, A + "remove")}</Btn>
+          </span>
+        </span>
       </div>
       <div className={styles.toast}>
         <Tick />
@@ -133,13 +188,34 @@ export function AlertsArt({ locale }: { locale: Locale }) {
   );
 }
 
-/** Feature 3 (history): the savings counter (visual/savingscounter). Its labels and the milestone card have no web keys. */
-export function HistoryArt() {
+/** Feature 3 (history): the savings counter and the milestone card (visual/savingscounter + visual/milestone). */
+export function HistoryArt({ locale }: { locale: Locale }) {
+  const C = V + "savingscounter.";
   return (
     <div className={styles.card} aria-hidden="true" data-art="history">
       <div className={styles.counter}>
-        <span className={styles.counterAmount}>{FIG.saved}</span>
-        <span className={styles.counterMonth}>{FIG.month}</span>
+        <div className={styles.stack}>
+          <span className={styles.small}>{t(locale, C + "title")}</span>
+          <N v={FIG.saved} className={styles.counterAmount} />
+        </div>
+        <div className={styles.stack}>
+          <span className={styles.line}>
+            {t(locale, C + "month")}
+            <N v={FIG.month} className={styles.counterMonth} />
+          </span>
+          <span className={styles.small}>{t(locale, C + "couldHave")}</span>
+        </div>
+        <span className={`${styles.between} ${styles.foot}`}>
+          <span className={styles.small}>{t(locale, C + "orders")}</span>
+          <Btn>{t(locale, C + "seeOrders")}</Btn>
+        </span>
+      </div>
+      <div className={styles.milestone}>
+        <Tick />
+        <span className={styles.stack}>
+          <span className={styles.milestoneTitle}>{t(locale, V + "milestone.title")}</span>
+          <span className={styles.caption}>{t(locale, V + "milestone.date")}</span>
+        </span>
       </div>
     </div>
   );
@@ -155,7 +231,10 @@ export function RivalsArt({ locale }: { locale: Locale }) {
       <ul className={styles.rivals} role="list">
         {[1, 2, 3].map((n) => (
           <li key={n} className={styles.rival}>
-            <span className={styles.rivalName}>{t(locale, `${S}${n}.name`)}</span>
+            <span className={styles.between}>
+              <span className={styles.rivalName}>{t(locale, `${S}${n}.name`)}</span>
+              <span className={styles.caption}>{t(locale, S + "pinned")}</span>
+            </span>
             <span className={styles.rivalStores}>{stores}</span>
             <span className={styles.rivalCount}><span className={styles.mark} />{t(locale, `${S}${n}.count`)}</span>
           </li>

@@ -38,11 +38,36 @@
 .rowCheaper { background: var(--gp-surface-raised); border-radius: var(--gp-r-md); }
 .rowText { flex: 1; min-inline-size: 0; display: flex; flex-direction: column; }
 .rowTitle { font-size: var(--gp-fs-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.rowStore { font-size: var(--gp-fs-caption); }
+.rowStore { display: flex; align-items: center; gap: var(--gp-sp-2); font-size: var(--gp-fs-caption); }
+.match { display: inline-flex; align-items: center; gap: var(--gp-sp-1); }
 .rowPrice { display: flex; flex-direction: column; align-items: flex-end; gap: var(--gp-sp-1); }
 .rowSaving { color: var(--gp-savings); font-size: var(--gp-fs-caption); white-space: nowrap; }
 
 .tick { flex: none; color: var(--gp-savings); margin-block-start: var(--gp-sp-2); }
+.tickSmall { flex: none; inline-size: var(--gp-sp-2); color: var(--gp-ink); }
+
+/* text helpers for the mockups */
+.muted { color: var(--gp-ink-muted); }
+.caption { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); }
+.small { font-size: var(--gp-fs-body-compact); }
+.stack { display: flex; flex-direction: column; gap: var(--gp-sp-1); min-inline-size: 0; }
+.line { display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--gp-sp-2) var(--gp-sp-4); }
+.between { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gp-sp-3); }
+/* card footer: a hairline above the action row */
+.foot { padding-block-start: var(--gp-sp-3); border-block-start: 1px solid var(--gp-hairline); }
+.foot .btnText { font-size: var(--gp-fs-body-compact); }
+
+/* Mockup buttons (spans): ink pill and text button, as drawn on the boards. */
+.btnPrimary, .btnText { font-size: var(--gp-fs-body); font-weight: 500; white-space: nowrap; }
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--gp-target);
+  padding-inline: var(--gp-sp-6);
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+}
 
 /* ---------- feature art card (visual/card): 560x400 on the boards, so 7:5; taller content grows it ---------- */
 .card {
@@ -70,7 +95,7 @@
   border-radius: var(--gp-r-lg);
 }
 
-.alert, .toast, .counter {
+.alert, .toast, .counter, .milestone {
   inline-size: 100%;
   max-inline-size: var(--gp-panel-width-popup);
   border: 1px solid var(--gp-hairline);
@@ -78,8 +103,14 @@
   padding: var(--gp-sp-4);
 }
 .alert, .counter { display: flex; flex-direction: column; gap: var(--gp-sp-3); background: var(--gp-surface); }
+.milestone { display: flex; align-items: flex-start; gap: var(--gp-sp-3); background: var(--gp-surface); }
+.milestone { padding-block: var(--gp-sp-5); }
+.milestone .stack { gap: var(--gp-sp-4); }
+.milestoneTitle { font-size: var(--gp-fs-headline); font-weight: var(--gp-fw-headline); }
 .alertHead { display: flex; align-items: center; gap: var(--gp-sp-3); min-inline-size: 0; }
-.alertPrice { font-size: var(--gp-fs-title); font-weight: 600; }
+.alertTitle { font-size: var(--gp-fs-body); }
+.change { color: var(--gp-savings); font-size: var(--gp-fs-body-compact); }
+.reached { color: var(--gp-savings); font-size: var(--gp-fs-caption); }
 .progress { block-size: var(--gp-sp-1); border-radius: var(--gp-r-pill); background: var(--gp-accent); }
 .toast {
   display: flex;
@@ -91,7 +122,7 @@
 .toastText { flex: 1; font-size: var(--gp-fs-body); }
 .close { flex: none; color: var(--gp-ink-muted); margin-block-start: var(--gp-sp-1); }
 .counterAmount { color: var(--gp-savings); font-size: var(--gp-fs-display); font-weight: 700; line-height: var(--gp-lh-display); }
-.counterMonth { color: var(--gp-savings); font-size: var(--gp-fs-body); }
+.counterMonth { color: var(--gp-savings); }
 
 /* ---------- sellers: rival cards ---------- */
 .rivals { list-style: none; display: flex; flex-direction: column; gap: var(--gp-sp-4); inline-size: 100%; max-inline-size: var(--gp-panel-width-popup); }
@@ -164,26 +195,35 @@
   border: 1px solid var(--gp-hairline-strong);
   border-radius: var(--gp-r-lg);
 }
-/* SavingsHero/default is 168 tall; its price line and buttons have no web keys, so the height is kept, not the content. */
+/* SavingsHero/default */
 .receipt {
   display: flex;
   flex-direction: column;
   gap: var(--gp-sp-1);
-  min-block-size: calc(2 * var(--gp-sp-16) + var(--gp-sp-10));
   padding: var(--gp-sp-4);
   background: var(--gp-surface-raised);
   border-radius: var(--gp-r-md);
 }
 .receiptCaption { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); }
 .receiptAmount { color: var(--gp-savings); font-size: var(--gp-fs-display); font-weight: 700; line-height: var(--gp-lh-display); }
+.receiptDetail { color: var(--gp-ink-muted); font-size: var(--gp-fs-body); }
+.actions { display: flex; align-items: center; gap: var(--gp-sp-4); margin-block-start: var(--gp-sp-3); }
 
 @media (min-width: 768px) {
   .pageBody { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
-  .sidePanel { display: flex; border-inline-start: 1px solid var(--gp-hairline); padding: var(--gp-sp-2); }
+  .sidePanel { display: flex; flex-direction: column; gap: var(--gp-sp-2); min-inline-size: 0; border-inline-start: 1px solid var(--gp-hairline); padding: var(--gp-sp-2); }
+  /* The side panel's own SavingsHero, at the panel's reduced scale. */
+  .receiptMini { gap: 0; padding: var(--gp-sp-2); }
+  .receiptMini > span, .receiptMini .btnPrimary, .receiptMini .btnText { font-size: var(--gp-fs-caption); }
+  .receiptMini .receiptAmount { font-size: var(--gp-fs-headline); }
+  .receiptMini .actions { gap: var(--gp-sp-2); margin-block-start: var(--gp-sp-2); }
+  .receiptMini .btnPrimary { min-block-size: 0; padding: var(--gp-sp-1) var(--gp-sp-2); }
   .sidePanel .row { padding: var(--gp-sp-2); }
   .sidePanel .thumb { inline-size: var(--gp-sp-6); block-size: var(--gp-sp-6); padding: 0; }
   .sidePanel .rowTitle, .sidePanel .fig { font-size: var(--gp-fs-caption); }
   .sidePanel .rowSaving { display: none; }
+  /* The panel is a reduced shot of the extension: one line per text, cut at the edge rather than wrapped. */
+  .sidePanel .rowText > span, .receiptMini > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 
 @media (min-width: 1024px) {

@@ -22,9 +22,9 @@ const NOBTN = "board draws an action button the build omits by design (no web ta
 const FIELD = "board draws the Show/Hide password toggle and the 'At least 8 characters' hint; both need new i18n keys, so they are not built";
 const RASTER = "Sketch and Chromium rasterise short centred card text differently; measured 0.03 at per-pixel threshold 0.1, no layout offset found";
 // Home and Sellers (GP-372 boards, art rebuilt in HTML/CSS, never masked):
-const ART = "board art is rebuilt in HTML/CSS: its worded strings without web keys (prices line, buttons, labels, milestone card) are left out, Sketch and Chromium rasterise the small mockup text and the resampled product photo differently, the board's 390/1440 store badges show at 390 only, and the footer keeps its 96 top margin (board 48)";
-const PHONE = "; on phones the alert and savings mockups are shorter without those strings, so everything below them sits higher";
-const SELLERS = "rival cards drop the unkeyed 'Pinned' label, Arabic body copy wraps a word later in Chromium, and the footer keeps its 96 top margin (board 32) under the back link";
+const ART = "board art is rebuilt in HTML/CSS: Sketch and Chromium rasterise the small mockup text and the resampled product photo differently, the hero store page is drawn at the panel's type scale rather than the board's scaled-down screenshot, the board's 390/1440 store badges show at 390 only, and the footer keeps its 96 top margin (board 48)";
+const PHONE = "; on phones Chromium wraps the mockup and body text a word differently, so sections below drift a few px";
+const SELLERS = "Chromium wraps the hero and feature copy a word differently from Sketch (Arabic most), shifting each block a few px, and the footer keeps its 96 top margin (board 32) under the back link";
 export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Checkout-summary-1440": { max: 0.05, reason: NOTE },
   "Checkout-summary-390": { max: 0.12, reason: NOTE },
@@ -54,8 +54,8 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Pricing-no-prices-390": { max: 0.09, reason: "board draws the Free price '0' and the 'Premium for sellers' row; neither has an i18n key" },
   "Welcome-default-390": { max: 0.05, reason: "board draws decorative art (toolbar icons, store chip) the build does not ship" },
   "NotFound-default-390": { max: 0.05, reason: "Noto Sans Arabic line metrics differ between Sketch and Chromium" },
-  "Home-launch-1440": { max: 0.08, reason: ART + "; measured en 0.05, ar 0.07" },
-  "Home-launch-390": { max: 0.12, reason: ART + PHONE + "; measured en 0.11, ar 0.11" },
+  "Home-launch-1440": { max: 0.07, reason: ART + "; measured en 0.05, ar 0.06" },
+  "Home-launch-390": { max: 0.09, reason: ART + PHONE + "; measured en 0.08, ar 0.07" },
   "Sellers-launch-1440": { max: 0.07, reason: SELLERS + "; measured en 0.04, ar 0.06" },
   "Sellers-launch-390": { max: 0.11, reason: SELLERS + "; measured en 0.10, ar 0.07" },
   "Sellers-prelaunch-1440": { max: 0.06, reason: SELLERS + "; measured en 0.03, ar 0.05" },

@@ -67,6 +67,35 @@ describe("Home GP-372 sections", () => {
   });
 });
 
+describe("Board art copy", () => {
+  const V = en.web.home.visual;
+  const art = (name: string) => document.querySelector(`[data-art="${name}"]`) as HTMLElement;
+  const has = (el: HTMLElement, text: string) => expect(within(el).getAllByText(text).length).toBeGreaterThan(0);
+
+  it("renders every board art string from its key, with decorative buttons only", async () => {
+    mockEnv(true);
+    const { default: HomeContent } = await import("../app/components/HomeSections");
+    render(<HomeContent locale="en" />);
+    Object.values(V.receipt).forEach((s) => has(art("hero"), s));
+    Object.values(V.row).forEach((s) => has(art("rows"), s));
+    Object.values(V.alertcard).forEach((s) => has(art("alerts"), s));
+    [...Object.values(V.savingscounter), ...Object.values(V.milestone)].forEach((s) => has(art("history"), s));
+    document.querySelectorAll("[data-art]").forEach((a) => expect(a.querySelector("a, button, [tabindex]")).toBeNull());
+  });
+
+  it("uses the receipt's own saving in Arabic and keeps figures left-to-right", async () => {
+    mockEnv(true);
+    const { default: HomeContent } = await import("../app/components/HomeSections");
+    render(<HomeContent locale="ar" />);
+    has(art("hero"), ar.web.home.visual.receipt.saving);
+    has(art("rows"), ar.web.home.visual.pricerowcompact.saving);
+    for (const fig of ["24,999", "22,900", "4,210", "+340"]) {
+      const el = [...document.querySelectorAll("[data-art] bdi")].find((b) => b.textContent === fig);
+      expect(el?.getAttribute("dir")).toBe("ltr");
+    }
+  });
+});
+
 describe("Sellers", () => {
   it("renders features 1 to 7 and the rival art, aria-hidden", async () => {
     mockEnv(false);
@@ -80,5 +109,6 @@ describe("Sellers", () => {
     const rivals = document.querySelector('[data-art="rivals"]');
     expect(rivals?.getAttribute("aria-hidden")).toBe("true");
     expect(rivals?.querySelectorAll("li")).toHaveLength(3);
+    expect(within(rivals as HTMLElement).getAllByText(en.web.sellers.visual.rival.pinned)).toHaveLength(3);
   });
 });
