@@ -44,8 +44,11 @@ export function suggestLocale(acceptLanguage: string | null, current: Locale): L
 
 const HOSTED = /^\/(reset-password|checkout)(\/|$)/;
 
+/** Takes the locale-less path (`localeFromPath(...).rest`). Hosted pages carry secrets in the URL and show a minimal shell. */
+export const isHostedPath = (rest: string) => HOSTED.test(rest);
+
 /** Target URL when switching language. Hosted pages carry secrets in the hash, so it is dropped there. */
 export function switchPath(pathname: string, hash: string, to: Locale): string {
   const { rest } = localeFromPath(pathname);
-  return pathFor(to, rest) + (HOSTED.test(rest) ? "" : hash);
+  return pathFor(to, rest) + (isHostedPath(rest) ? "" : hash);
 }

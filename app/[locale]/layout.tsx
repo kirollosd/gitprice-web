@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Analytics from "../components/Analytics";
 import CookieNotice from "../components/CookieNotice";
 import FloatingStack from "../components/FloatingStack";
+import HideOnHosted from "../components/HideOnHosted";
 import LocaleSuggestion from "../components/LocaleSuggestion";
 import WebFooter from "../components/WebFooter";
 import WebNav from "../components/WebNav";
@@ -57,7 +58,7 @@ export default async function LocaleLayout({
       <body>
         <WebNav locale={l} />
         <main>{children}</main>
-        <WebFooter locale={l} />
+        <HideOnHosted><WebFooter locale={l} /></HideOnHosted>
         <FloatingStack>
           <LocaleSuggestion />
           <CookieNotice locale={l} />

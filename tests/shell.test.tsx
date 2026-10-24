@@ -1,8 +1,9 @@
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { switchPath } from "../lib/locale";
+import { isHostedPath, switchPath } from "../lib/locale";
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
+let mockPath = "/";
+vi.mock("next/navigation", () => ({ usePathname: () => mockPath }));
 
 // Controllable matchMedia: tests flip `viewport` and fire change listeners.
 let viewport = 390;
@@ -18,6 +19,13 @@ beforeEach(() => {
   })) as unknown as typeof window.matchMedia;
 });
 const resizeTo = (w: number) => act(() => { viewport = w; listeners.forEach((set) => set.forEach((cb) => cb())); });
+
+describe("isHostedPath", () => {
+  it("matches whole hosted segments only", () => {
+    for (const p of ["/reset-password", "/checkout", "/checkout/return"]) expect(isHostedPath(p)).toBe(true);
+    for (const p of ["/checkoutx", "/", "/sellers", "/reset-passwords"]) expect(isHostedPath(p)).toBe(false);
+  });
+});
 
 describe("switchPath", () => {
   it("keeps the hash on regular pages", () => {
@@ -127,5 +135,27 @@ describe("WebNav hosted", () => {
     expect(links.map((a) => a.getAttribute("href"))).toEqual(["/"]);
     expect(screen.queryByRole("button")).toBeNull();
     expect(screen.queryByRole("navigation")).toBeNull();
+  });
+  it("picks the hosted variant itself on a hosted path in either locale", async () => {
+    const { default: WebNav } = await import("../app/components/WebNav");
+    for (const path of ["/ar/reset-password", "/checkout/return"]) {
+      mockPath = path;
+      const { unmount } = render(<WebNav locale={path.startsWith("/ar") ? "ar" : "en"} />);
+      expect(screen.queryByRole("navigation")).toBeNull();
+      expect(screen.queryByRole("button")).toBeNull();
+      unmount();
+    }
+    mockPath = "/";
+  });
+  it("hides the footer on hosted paths", async () => {
+    const { default: HideOnHosted } = await import("../app/components/HideOnHosted");
+    mockPath = "/ar/reset-password";
+    const { unmount } = render(<HideOnHosted><p>footer</p></HideOnHosted>);
+    expect(screen.queryByText("footer")).toBeNull();
+    unmount();
+    mockPath = "/ar/sellers";
+    render(<HideOnHosted><p>footer</p></HideOnHosted>);
+    expect(screen.getByText("footer")).toBeTruthy();
+    mockPath = "/";
   });
 });

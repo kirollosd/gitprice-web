@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { t, type Locale } from "../../lib/i18n";
-import { pathFor } from "../../lib/locale";
+import { isHostedPath, localeFromPath, pathFor } from "../../lib/locale";
 import LanguageSwitch from "./LanguageSwitch";
 import Logo from "./Logo";
 import { NavCta, NavSellers } from "./NavLinks";
@@ -13,8 +16,9 @@ const N = "web.component.webNav.";
  * Site nav. >=1280 uses the 1440 labels, 1024-1279 the 1024 labels, 768-1023 sellers + CTA + menu,
  * below 768 logo + menu. The hosted variant is a logo only, linking to the launched site root.
  */
-export default function WebNav({ locale, variant = "site" }: { locale: Locale; variant?: "site" | "hosted" }) {
-  if (variant === "hosted") {
+export default function WebNav({ locale, variant }: { locale: Locale; variant?: "site" | "hosted" }) {
+  const hostedPath = isHostedPath(localeFromPath(usePathname()).rest);
+  if ((variant ?? (hostedPath ? "hosted" : "site")) === "hosted") {
     return (
       <header className={styles.header}>
         <div className={`${styles.bar} container`}>
