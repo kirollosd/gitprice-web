@@ -12,6 +12,15 @@ const user = { id: "u1", aud: "authenticated", email: "a@b.co", app_metadata: {}
 const session = { access_token: jwt, refresh_token: "r", expires_in: 3600, token_type: "bearer", user };
 const json = (status: number, body: object) => ({ status, contentType: "application/json", body: JSON.stringify(body) });
 
+// Address-bar search+hash at each Supabase call. Asserted after the flow: a throw inside a route handler would not fail the test.
+let seenUrls: string[] = [];
+let expectsNetwork = true;
+test.beforeEach(() => { seenUrls = []; expectsNetwork = true; });
+test.afterEach(() => {
+  if (expectsNetwork) expect(seenUrls.length).toBeGreaterThan(0);
+  expect(seenUrls.filter((u) => u !== "")).toEqual([]);
+});
+
 type Stub = { verify?: ReturnType<typeof json>; update?: ReturnType<typeof json>[] };
 async function stub(page: Page, s: Stub) {
   const calls = { verify: 0, update: 0 };
@@ -22,7 +31,7 @@ async function stub(page: Page, s: Stub) {
     const { pathname } = new URL(route.request().url());
     // Tokens must be gone from the address bar before the first network call.
     const here = new URL(page.url());
-    expect(here.search + here.hash).toBe("");
+    seenUrls.push(here.search + here.hash);
     if (pathname.endsWith("/verify")) { calls.verify++; return route.fulfill(s.verify ?? json(200, session)); }
     if (pathname.endsWith("/logout")) return route.fulfill({ status: 204 });
     if (pathname.endsWith("/user") && route.request().method() === "PUT") { calls.update++; return route.fulfill(updates.shift() ?? json(200, user)); }
@@ -70,12 +79,14 @@ test("a non-expiry verify failure also lands on link-expired, not a form without
 });
 
 test("a server_error link lands on link-expired", async ({ page }) => {
+  expectsNetwork = false; // dead on arrival: no Supabase call is made
   await stub(page, {});
   await page.goto("/reset-password#error=server_error&error_description=x");
   await expect(page.getByRole("heading", { name: R.linkExpired.title })).toBeVisible();
 });
 
 test("error in the fragment and an empty URL show link-expired", async ({ page }) => {
+  expectsNetwork = false;
   await stub(page, {});
   await page.goto("/reset-password#error=access_denied&error_code=otp_expired");
   await expect(page.getByRole("heading", { name: R.linkExpired.title })).toBeVisible();
@@ -142,8 +153,8 @@ for (const [path, locale] of [["/reset-password", "en"], ["/ar/reset-password", 
   test(`hosted shell on ${path}: logo nav, minimal footer, noindex, no hydration errors`, async ({ page }) => {
     const problems: string[] = [];
     page.on("pageerror", (e) => problems.push(e.message));
-    // /_vercel/insights 404s off Vercel, so resource-load noise is ignored.
-    page.on("console", (m) => m.type() === "error" && !/Failed to load resource/.test(m.text()) && problems.push(m.text()));
+    // /_vercel/insights 404s off Vercel; every other console error, including failed CSS/JS/fonts, fails the test.
+    page.on("console", (m) => m.type() === "error" && !m.location().url.includes("/_vercel/insights") && problems.push(m.text()));
     await stub(page, {});
     const res = await page.goto(`${path}?token_hash=h`);
     expect(res?.headers()["referrer-policy"]).toBe("no-referrer");
@@ -164,6 +175,7 @@ test.describe("390 wide", () => {
   for (const base of ["", "/ar"]) {
     for (const [name, url] of [["form", "?token_hash=h"], ["expired", ""]] as const) {
       test(`no horizontal overflow on ${base}/reset-password (${name})`, async ({ page }) => {
+        expectsNetwork = name === "form"; // the expired case has no token, so no call
         await stub(page, {});
         await page.goto(`${base}/reset-password${url}`);
         await page.waitForSelector("h1");
