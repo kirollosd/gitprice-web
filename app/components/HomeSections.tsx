@@ -18,7 +18,7 @@ export function Waitlist({ locale, label, audience = "shopper" }: { locale: Loca
 /** The numbered steps shared by Home and Sellers. */
 export function Steps({ locale, id, prefix }: { locale: Locale; id?: string; prefix: "web.home.how." | "web.sellers.how." }) {
   return (
-    <section id={id} className={styles.stepsBand} aria-labelledby={`${prefix}h`}>
+    <section id={id} className={styles.stepsBand} aria-labelledby={`${prefix}h`} data-gp-section="how-it-works">
       <div className="container">
         <h2 id={`${prefix}h`} className={styles.h2}>{t(locale, prefix + "heading")}</h2>
         <ol className={styles.steps}>
@@ -38,7 +38,7 @@ export function Steps({ locale, id, prefix }: { locale: Locale; id?: string; pre
 /** Closing band on the ink ground; the form or button sits on a surface card. */
 export function CtaBand({ title, line, children }: { title: string; line?: string; children: ReactNode }) {
   return (
-    <section className={styles.band}>
+    <section className={styles.band} data-gp-section="bottom_cta">
       <div className={`container ${styles.bandInner}`}>
         <div>
           <h2 className={styles.bandTitle}>{title}</h2>
@@ -52,14 +52,14 @@ export function CtaBand({ title, line, children }: { title: string; line?: strin
 
 function Hero({ locale }: { locale: Locale }) {
   return (
-    <section className={styles.hero}>
+    <section className={styles.hero} data-gp-section="hero">
       <div className={`container ${styles.heroGrid}`}>
         <div className={styles.heroText}>
           <p className={styles.chip}>{t(locale, H + "free.label")}</p>
           <h1 className={styles.h1}>{t(locale, H + "hero.headline")}</h1>
           <p className={styles.sub}>{t(locale, H + "hero.sub")}</p>
           <div id="waitlist" className={styles.action}>
-            {env.launch ? <StoreBadges locale={locale} /> : <Waitlist locale={locale} />}
+            {env.launch ? <StoreBadges locale={locale} placement="hero" /> : <Waitlist locale={locale} />}
           </div>
         </div>
         <HeroArt locale={locale} />
@@ -71,7 +71,7 @@ function Hero({ locale }: { locale: Locale }) {
 /** The basics a first-time visitor checks for, in a raised band under the hero. */
 function Baseline({ locale }: { locale: Locale }) {
   return (
-    <section className={styles.baseline}>
+    <section className={styles.baseline} data-gp-section="baseline">
       <ul className={`container ${styles.baselineList}`} role="list">
         {(["free", "pageOnly", "languages", "onPage", "stores"] as const).map((k) => (
           <li key={k}>
@@ -111,7 +111,7 @@ export const GROUPS: { key: string; items: Item[] }[][] = [
 function Features({ locale }: { locale: Locale }) {
   const F = H + "features.";
   return (
-    <section id="features" className={styles.section} aria-labelledby="features-h">
+    <section id="features" className={styles.section} aria-labelledby="features-h" data-gp-section="features">
       <div className="container">
         <h2 id="features-h" className={styles.h2}>{t(locale, F + "heading")}</h2>
         <ul className={styles.bigRows} role="list">
@@ -158,7 +158,7 @@ function Features({ locale }: { locale: Locale }) {
 
 function Privacy({ locale }: { locale: Locale }) {
   return (
-    <section className={styles.section} aria-labelledby="privacy-h">
+    <section className={styles.section} aria-labelledby="privacy-h" data-gp-section="privacy">
       <div className={`container ${styles.privacy}`}>
         <div className={styles.privacyHead}>
           <h2 id="privacy-h" className={styles.h2}>{t(locale, H + "privacy.heading")}</h2>
@@ -176,7 +176,7 @@ function Privacy({ locale }: { locale: Locale }) {
 
 function Faq({ locale }: { locale: Locale }) {
   return (
-    <section className={styles.section} aria-labelledby="faq-h">
+    <section className={styles.section} aria-labelledby="faq-h" data-gp-section="faq">
       <div className="container">
         <h2 id="faq-h" className={styles.h2}>{t(locale, H + "faq.heading")}</h2>
         <ul className={styles.faq} role="list">
@@ -204,7 +204,7 @@ export default function HomeContent({ locale }: { locale: Locale }) {
       <Faq locale={locale} />
       {env.launch ? (
         <CtaBand title={t(locale, H + "launch.cta.title")} line={t(locale, H + "launch.cta.line")}>
-          <StoreBadges locale={locale} />
+          <StoreBadges locale={locale} placement="bottom" />
         </CtaBand>
       ) : (
         <CtaBand title={t(locale, H + "cta.title")} line={t(locale, H + "cta.line")}>

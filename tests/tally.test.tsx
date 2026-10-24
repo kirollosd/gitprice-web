@@ -167,7 +167,7 @@ describe("launch switch", () => {
   it("store badges link to both app stores and use localized labels", async () => {
     mockEnv(true);
     const { default: StoreBadges } = await import("../app/components/StoreBadges");
-    render(<StoreBadges locale="en" />);
+    render(<StoreBadges locale="en" placement="hero" />);
     expect(screen.getByRole("link", { name: /App Store/ }).getAttribute("href")).toBe("https://apps.test/gitprice");
     expect(screen.getByRole("link", { name: /Google Play/ }).getAttribute("href")).toBe("https://play.test/gitprice");
   });

@@ -34,8 +34,8 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
       <div className={`${styles.bar} container`}>
         <Logo locale={locale} />
         <nav aria-label={t(locale, N + "a11y.label.primary")} className={styles.links}>
-          <Link href={`${home}#features`} className={`${styles.link} ${styles.wide}`}>{t(locale, N + "1024.label.features")}</Link>
-          <Link href={`${home}#how-it-works`} className={`${styles.link} ${styles.wide}`}>{t(locale, N + "1024.label.howItWorks")}</Link>
+          <Link href={`${home}#features`} className={`${styles.link} ${styles.wide}`} data-gp-track="cta_click" data-gp-cta-id="features" data-gp-placement="nav">{t(locale, N + "1024.label.features")}</Link>
+          <Link href={`${home}#how-it-works`} className={`${styles.link} ${styles.wide}`} data-gp-track="cta_click" data-gp-cta-id="how_it_works" data-gp-placement="nav">{t(locale, N + "1024.label.howItWorks")}</Link>
           <NavSellers locale={locale} keys="1024" className={`${styles.link} ${styles.sellers} ${styles.l1024}`} />
           <NavSellers locale={locale} keys="1440" className={`${styles.link} ${styles.sellers} ${styles.l1440}`} />
           <NavSellers locale={locale} keys="768" className={`${styles.link} ${styles.sellers} ${styles.l768}`} />

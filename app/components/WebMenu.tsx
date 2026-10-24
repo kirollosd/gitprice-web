@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { env } from "../../lib/env";
 import { t, type Locale } from "../../lib/i18n";
 import { pathFor } from "../../lib/locale";
+import { track } from "../../lib/track";
 import LanguageSwitch from "./LanguageSwitch";
 import { ctaFor, sellersLinkFor, useOnSellers } from "./NavLinks";
 import styles from "./WebMenu.module.css";
@@ -78,7 +79,11 @@ export default function WebMenu({ locale }: { locale: Locale }) {
         aria-expanded={open}
         aria-controls={open ? "web-menu" : undefined}
         aria-label={t(locale, N + (open ? "a11y.label.menuClose" : "a11y.label.menuOpen"))}
-        onClick={() => (open ? close() : setOpen(true))}
+        onClick={() => {
+          if (open) return close();
+          setOpen(true);
+          track("menu_open", {});
+        }}
       >
         <span className={styles.bars} aria-hidden="true" data-open={open} />
       </button>
@@ -87,13 +92,13 @@ export default function WebMenu({ locale }: { locale: Locale }) {
           {/* Unlabelled on purpose: the header nav already owns "Main navigation" at 768-1023. */}
           <nav>
           <ul className={styles.list} role="list">
-            <li><Link href={`${home}#features`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.features`)}</Link></li>
-            <li><Link href={`${home}#how-it-works`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.howItWorks`)}</Link></li>
-            {env.sellersNav && <li><Link href={sellers.href} onClick={() => setOpen(false)}>{sellers.label}</Link></li>}
+            <li><Link href={`${home}#features`} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id="features" data-gp-placement="menu">{t(locale, `${N}${keys}.label.features`)}</Link></li>
+            <li><Link href={`${home}#how-it-works`} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id="how_it_works" data-gp-placement="menu">{t(locale, `${N}${keys}.label.howItWorks`)}</Link></li>
+            {env.sellersNav && <li><Link href={sellers.href} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id={sellers.ctaId} data-gp-placement="menu">{sellers.label}</Link></li>}
             <li><LanguageSwitch locale={locale} icon /></li>
           </ul>
           </nav>
-          <Link href={cta.href} className={styles.cta} onClick={() => setOpen(false)}>{cta.label}</Link>
+          <Link href={cta.href} className={styles.cta} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id={cta.ctaId} data-gp-placement="menu">{cta.label}</Link>
         </div>
       )}
     </>

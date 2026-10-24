@@ -4,6 +4,7 @@ import Script from "next/script";
 import Analytics from "../components/Analytics";
 import CookieNotice from "../components/CookieNotice";
 import FloatingStack from "../components/FloatingStack";
+import TrackListeners from "../components/TrackListeners";
 import LocaleSuggestion from "../components/LocaleSuggestion";
 import WebFooter from "../components/WebFooter";
 import WebNav from "../components/WebNav";
@@ -87,6 +88,7 @@ export default async function LocaleLayout({
         <main tabIndex={-1}>{children}</main>
         <WebFooter locale={l} />
         <Analytics />
+        <TrackListeners />
       </body>
     </html>
   );

@@ -15,34 +15,36 @@ export function useOnSellers(): boolean {
 }
 
 /** `keys` is the webNav label set for the current width, e.g. "1440" or "menuOpen". */
-export function ctaFor(locale: Locale, keys: string, onSellers: boolean): { href: string; label: string } {
+export function ctaFor(locale: Locale, keys: string, onSellers: boolean): { href: string; label: string; ctaId: string } {
   if (env.launch) {
     return {
+      ctaId: "install_extension",
       href: env.chromeStoreUrl!,
       label: t(locale, onSellers ? "web.sellers.launch.nav.label" : "web.home.launch.nav.label"),
     };
   }
   return {
+    ctaId: "join_waitlist",
     href: onSellers ? "#waitlist" : `${pathFor(locale, "/")}#waitlist`,
     label: t(locale, `${N}${keys}.cta.label`),
   };
 }
 
-export function sellersLinkFor(locale: Locale, keys: string, onSellers: boolean): { href: string; label: string } {
-  if (!onSellers) return { href: pathFor(locale, "/sellers"), label: t(locale, `${N}${keys}.label.sellers`) };
+export function sellersLinkFor(locale: Locale, keys: string, onSellers: boolean): { href: string; label: string; ctaId: string } {
+  if (!onSellers) return { ctaId: "for_sellers", href: pathFor(locale, "/sellers"), label: t(locale, `${N}${keys}.label.sellers`) };
   // Below 1440 the shorter "For shoppers" label applies.
   const short = keys === "1024" || keys === "768";
-  return { href: pathFor(locale, "/"), label: t(locale, short ? "web.sellers.nav.label.sellers2" : "web.sellers.nav.label.sellers") };
+  return { ctaId: "for_shoppers", href: pathFor(locale, "/"), label: t(locale, short ? "web.sellers.nav.label.sellers2" : "web.sellers.nav.label.sellers") };
 }
 
 /** Hidden unless NEXT_PUBLIC_SELLERS_NAV=1 (owner flag). */
 export function NavSellers({ locale, keys, className }: { locale: Locale; keys: string; className?: string }) {
-  const { href, label } = sellersLinkFor(locale, keys, useOnSellers());
+  const { href, label, ctaId } = sellersLinkFor(locale, keys, useOnSellers());
   if (!env.sellersNav) return null;
-  return <Link href={href} className={className}>{label}</Link>;
+  return <Link href={href} className={className} data-gp-track="cta_click" data-gp-cta-id={ctaId} data-gp-placement="nav">{label}</Link>;
 }
 
 export function NavCta({ locale, keys, className, onNavigate }: { locale: Locale; keys: string; className?: string; onNavigate?: () => void }) {
-  const { href, label } = ctaFor(locale, keys, useOnSellers());
-  return <Link href={href} className={className} onClick={onNavigate}>{label}</Link>;
+  const { href, label, ctaId } = ctaFor(locale, keys, useOnSellers());
+  return <Link href={href} className={className} onClick={onNavigate} data-gp-track="cta_click" data-gp-cta-id={ctaId} data-gp-placement="nav">{label}</Link>;
 }

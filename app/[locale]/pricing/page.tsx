@@ -54,7 +54,7 @@ export default async function PricingPage({ params }: Props) {
           <p className={styles.price}>{t(locale, P + "plan.pro.price")}</p>
           <p className={styles.period}>{t(locale, P + "plan.pro.period")}</p>
           {features("pro")}
-          {env.launch ? <StoreBadges locale={locale} /> : cta(t(locale, P + "plan.pro.label"), false)}
+          {env.launch ? <StoreBadges locale={locale} placement="bottom" /> : cta(t(locale, P + "plan.pro.label"), false)}
         </article>
       </div>
       <aside className={styles.sellersRow}>

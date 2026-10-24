@@ -18,19 +18,19 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 export default async function SellersPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   const waitlistLabel = t(locale, S + "prelaunch.hero.waitlist.button.submitLabel");
-  const access = (key: string) => (
-    <a className={styles.accessBtn} href={env.chromeStoreUrl}>{t(locale, S + key)}</a>
+  const access = (key: string, placement: "hero" | "bottom") => (
+    <a className={styles.accessBtn} href={env.chromeStoreUrl} data-gp-track="cta_click" data-gp-cta-id="install_extension" data-gp-placement={placement}>{t(locale, S + key)}</a>
   );
   return (
     <>
-      <section className={`${styles.hero} ${styles.sellersHero}`}>
+      <section className={`${styles.hero} ${styles.sellersHero}`} data-gp-section="hero">
         <div className={`container ${styles.heroGrid}`}>
           <div className={styles.heroText}>
             <h1 className={styles.h1}>{t(locale, S + "hero.headline")}</h1>
             <p className={styles.sub}>{t(locale, S + "hero.sub")}</p>
             <p className={styles.micro}>{t(locale, S + "hero.micro")}</p>
             <div id="waitlist" className={styles.action}>
-              {env.launch ? access("launch.hero.access.label") : <Waitlist locale={locale} label={waitlistLabel} audience="seller" />}
+              {env.launch ? access("launch.hero.access.label", "hero") : <Waitlist locale={locale} label={waitlistLabel} audience="seller" />}
             </div>
             {/* Not on the board; kept by owner ruling: it says what the email field's address is used for. */}
             {!env.launch && <p className={styles.note}>{t(locale, S + "prelaunch.hero.waitlist.note")}</p>}
@@ -39,7 +39,7 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
         </div>
       </section>
 
-      <section id="features" className={styles.section} aria-labelledby="sellers-features-h">
+      <section id="features" className={styles.section} aria-labelledby="sellers-features-h" data-gp-section="features">
         <div className="container">
           <h2 id="sellers-features-h" className={styles.h2}>{t(locale, S + "features.heading")}</h2>
           <ul className={styles.sellerItems} role="list">
@@ -55,7 +55,7 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
 
       <Steps locale={locale} id="how-it-works" prefix="web.sellers.how." />
 
-      <section className={styles.section}>
+      <section className={styles.section} data-gp-section="who">
         <div className="container">
           <p className={styles.who}>{t(locale, S + "who")}</p>
         </div>
@@ -63,7 +63,7 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
 
       {env.launch ? (
         <CtaBand title={t(locale, S + "launch.cta.title")}>
-          {access("launch.cta.access.label")}
+          {access("launch.cta.access.label", "bottom")}
         </CtaBand>
       ) : (
         <CtaBand title={t(locale, S + "cta.title")} line={t(locale, S + "cta.line")}>
@@ -71,7 +71,7 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
         </CtaBand>
       )}
       <div className={`container ${styles.backRow}`}>
-        <Link href={pathFor(locale, "/")} className={styles.back}>{t(locale, S + "backToShoppers")}</Link>
+        <Link href={pathFor(locale, "/")} className={styles.back} data-gp-track="cta_click" data-gp-cta-id="back_to_shoppers" data-gp-placement="bottom">{t(locale, S + "backToShoppers")}</Link>
       </div>
     </>
   );
