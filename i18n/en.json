@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@d8b6ca9e",
+  "_source": "gitprice@f5561093",
   "web": {
     "component": {
       "webNav": {
@@ -332,6 +332,69 @@
         "history": {
           "title": "Keep track of what you saved",
           "body": "Purchases you make at a lower price add to your total, so you can see what GitPrice has saved you."
+        },
+        "tag": {
+          "pro": "Pro",
+          "soon": "Coming soon"
+        },
+        "groups": {
+          "compare": "Compare",
+          "when": "Know when to buy",
+          "addUp": "See it add up",
+          "yourWay": "Your way"
+        },
+        "match": {
+          "title": "Same product, or it tells you",
+          "body": "GitPrice matches on brand, model, size and storage. When it isn’t sure, it says “May be a different variant”, so you can check."
+        },
+        "variant": {
+          "title": "Follows your choice",
+          "body": "Switch colour or size and GitPrice checks again for that version."
+        },
+        "soldOut": {
+          "title": "Sold out here?",
+          "body": "GitPrice still shows the other stores that list it."
+        },
+        "emailAlerts": {
+          "title": "Alerts by email",
+          "body": "The same alert, in your inbox."
+        },
+        "phoneAlerts": {
+          "title": "Alerts on your phone",
+          "body": "Push notifications from the GitPrice app."
+        },
+        "priceHistory": {
+          "title": "See how the price moved",
+          "body": "A price history chart shows whether now is a good time to buy.",
+          "pro": "Pro: the longer history."
+        },
+        "proLimits": {
+          "title": "More alerts, faster checks",
+          "body": "100 alerts instead of 3, and prices refreshed more often."
+        },
+        "orders": {
+          "title": "Orders counted for you",
+          "body": "GitPrice notices your order confirmation. Missed one? Tap “I bought this”. Any order can be undone."
+        },
+        "milestones": {
+          "title": "Milestones and achievements, kept private",
+          "body": "Quiet markers as your total grows (500, 1,000, 2,500 saved and up) and for habits like checking before you buy. Never ranked against anyone."
+        },
+        "pace": {
+          "title": "You set the pace",
+          "body": "Choose how often GitPrice checks in the background, or turn notifications off."
+        },
+        "theme": {
+          "title": "Light or dark",
+          "body": "Follows your system setting."
+        },
+        "sync": {
+          "title": "Same account on every device",
+          "body": "Alerts and savings sync between the extension and the app."
+        },
+        "suggestStore": {
+          "title": "Suggest a store",
+          "body": "Tell us where you shop, and we’ll add it to the list."
         }
       },
       "visual": {
@@ -403,6 +466,28 @@
           "title": "Check your next purchase against other stores.",
           "line": "Free on Chrome, iPhone and Android."
         }
+      },
+      "baseline": {
+        "free": {
+          "title": "Free to start",
+          "body": "No card. Comparing, alerts and your savings total cost nothing."
+        },
+        "pageOnly": {
+          "title": "Reads product pages only",
+          "body": "The product, its title and its price. Never your history, passwords or payments. Never sold."
+        },
+        "languages": {
+          "title": "Arabic and English",
+          "body": "Every screen, both directions."
+        },
+        "onPage": {
+          "title": "Stays on your page",
+          "body": "No new tab, no copy-pasting. The price shows where you’re already shopping."
+        },
+        "stores": {
+          "title": "More stores over time",
+          "body": "The list keeps growing. Where a store isn’t supported, GitPrice stays quiet instead of guessing."
+        }
       }
     },
     "sellers": {
@@ -459,6 +544,18 @@
         "4": {
           "title": "Check many listings at once",
           "body": "Add your listings in bulk and see which ones are undercut in one list."
+        },
+        "5": {
+          "title": "Price to win",
+          "body": "See what would put you on top. GitPrice never changes your prices."
+        },
+        "6": {
+          "title": "Add listings your way",
+          "body": "Your storefront link or a CSV import."
+        },
+        "7": {
+          "title": "Everything in Pro",
+          "body": "Premium includes every Pro feature."
         },
         "heading": "What you get"
       },
