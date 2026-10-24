@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import Nav from "../components/Nav";
-import LocaleSuggestion from "../components/LocaleSuggestion";
 import { notFound } from "next/navigation";
-import type { Locale } from "../../lib/i18n";
 import Footer from "../components/Footer";
 import HeapAnalytics from "../components/HeapAnalytics";
+import LocaleSuggestion from "../components/LocaleSuggestion";
+import Nav from "../components/Nav";
 import { env } from "../../lib/env";
-import { dir, t } from "../../lib/i18n";
+import { dir, t, type Locale } from "../../lib/i18n";
 import "../globals.css";
 
 const title = "GitPrice";
@@ -33,6 +32,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+export const dynamicParams = false;
 export const generateStaticParams = () => [{ locale: "en" }, { locale: "ar" }];
 
 export default async function LocaleLayout({

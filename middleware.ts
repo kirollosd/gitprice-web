@@ -9,7 +9,11 @@ export function middleware(req: NextRequest) {
     url.pathname = pathname.slice(3) || "/";
     return NextResponse.redirect(url, 308); // query preserved by clone
   }
-  if (pathname === "/ar" || pathname.startsWith("/ar/")) return NextResponse.next();
+  if (pathname === "/ar" || pathname.startsWith("/ar/")) {
+    const res = NextResponse.next();
+    if (req.cookies.has("gp_suggest")) res.cookies.set("gp_suggest", "", { path: "/", maxAge: 0 });
+    return res;
+  }
 
   const url = req.nextUrl.clone();
   url.pathname = `/en${pathname === "/" ? "" : pathname}`;
@@ -26,5 +30,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|api|fonts|_vercel|.*\\..*).*)"],
+  matcher: ["/((?!(?:_next|api|fonts|_vercel)(?:/|$)|.*\\..*).*)"],
 };

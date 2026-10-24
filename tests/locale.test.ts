@@ -7,6 +7,8 @@ describe("localeFromPath", () => {
     expect(localeFromPath("/ar")).toEqual({ locale: "ar", rest: "/" });
     expect(localeFromPath("/")).toEqual({ locale: "en", rest: "/" });
     expect(localeFromPath("/sellers")).toEqual({ locale: "en", rest: "/sellers" });
+    expect(localeFromPath("/ar/")).toEqual({ locale: "ar", rest: "/" });
+    expect(localeFromPath("/sellers/")).toEqual({ locale: "en", rest: "/sellers/" });
     expect(localeFromPath("/arabic")).toEqual({ locale: "en", rest: "/arabic" });
   });
 });

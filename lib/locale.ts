@@ -2,6 +2,7 @@ import type { Locale } from "./i18n";
 
 export const LOCALES: Locale[] = ["en", "ar"];
 
+/** Takes a pathname only (no query string). */
 export function localeFromPath(pathname: string): { locale: Locale; rest: string } {
   if (pathname === "/ar" || pathname.startsWith("/ar/")) {
     return { locale: "ar", rest: pathname.slice(3) || "/" };

@@ -1,6 +1,5 @@
 import { t } from "../../lib/i18n";
 
-// Placeholder until Task 6 builds the real Home.
 export default async function HomePage({ params }: { params: Promise<{ locale: "en" | "ar" }> }) {
   const { locale } = await params;
   return (

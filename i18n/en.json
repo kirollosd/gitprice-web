@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@3865e6a8",
+  "_source": "gitprice@69bd7434",
   "web": {
     "component": {
       "webNav": {
@@ -271,6 +271,20 @@
         "1440": {
           "headline": "See where it costs less, before you buy.",
           "sub": "Open a product and GitPrice shows how much less it costs at other stores, right on the page. Prefer to wait? Set an alert for the drop."
+        }
+      },
+      "webLocaleSuggest": {
+        "default": {
+          "label": "Language",
+          "body": "This page is also available in Arabic.",
+          "button": {
+            "switch": {
+              "label": "العربية"
+            },
+            "dismiss": {
+              "label": "Dismiss"
+            }
+          }
         }
       }
     },
