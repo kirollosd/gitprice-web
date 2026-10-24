@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     twitter: { card: "summary_large_image", title, description },
     icons: {
       icon: [{ url: "/logo_icon.svg", type: "image/svg+xml" }],
-      apple: "/logo_icon.svg",
+      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
     },
     robots: { index: true, follow: true },
   };
