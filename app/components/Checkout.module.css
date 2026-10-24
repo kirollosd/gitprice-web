@@ -1,0 +1,36 @@
+/* Hosted checkout cards. Tokens only; logical properties so Arabic mirrors. */
+.page { padding-block: var(--gp-sp-12) var(--gp-sp-16); }
+.card { display: flex; flex-direction: column; gap: var(--gp-sp-4); inline-size: 100%; max-inline-size: 420px; margin-inline: auto; min-inline-size: 0; }
+.h1 { font-size: var(--gp-fs-display); line-height: var(--gp-lh-display); overflow-wrap: anywhere; }
+.muted { color: var(--gp-ink-muted); overflow-wrap: anywhere; }
+.rows { display: flex; flex-direction: column; margin: 0; border-block: 1px solid var(--gp-hairline); }
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--gp-sp-4); padding-block: var(--gp-sp-3); }
+.row + .row { border-block-start: 1px solid var(--gp-hairline); }
+.row dt { color: var(--gp-ink-muted); }
+.row dd { margin: 0; font-weight: 600; text-align: end; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--gp-target);
+  padding-inline: var(--gp-sp-6);
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.button:focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
+.button:disabled { opacity: 0.6; cursor: not-allowed; }
+.spinner {
+  inline-size: var(--gp-sp-6);
+  block-size: var(--gp-sp-6);
+  border: 3px solid var(--gp-hairline-strong);
+  border-block-start-color: var(--gp-accent);
+  border-radius: var(--gp-r-pill);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }

@@ -3,8 +3,11 @@ import { defineConfig } from "@playwright/test";
 // NEXT_PUBLIC_* is inlined at build time, so each launch mode needs its own build and server.
 const PRELAUNCH = 3000;
 const LAUNCH = 3001;
-// Fake Supabase project: the e2e specs stub every call and abort anything else.
-const supabaseEnv = { NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co", NEXT_PUBLIC_SUPABASE_ANON_KEY: "e2e-anon-key" };
+// Fake Supabase project and API host: the e2e specs stub every call and abort anything else.
+const supabaseEnv = {
+  NEXT_PUBLIC_API_BASE_URL: "https://api.example.test",
+  NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co", NEXT_PUBLIC_SUPABASE_ANON_KEY: "e2e-anon-key",
+};
 const launchEnv = {
   ...supabaseEnv,
   NEXT_PUBLIC_LAUNCH: "1",
