@@ -41,3 +41,11 @@ export function suggestLocale(acceptLanguage: string | null, current: Locale): L
   if (!q) return null;
   return (q.get("ar") ?? 0) > (q.get("en") ?? 0) ? "ar" : null;
 }
+
+const HOSTED = /^\/(reset-password|checkout)(\/|$)/;
+
+/** Target URL when switching language. Hosted pages carry secrets in the hash, so it is dropped there. */
+export function switchPath(pathname: string, hash: string, to: Locale): string {
+  const { rest } = localeFromPath(pathname);
+  return pathFor(to, rest) + (HOSTED.test(rest) ? "" : hash);
+}

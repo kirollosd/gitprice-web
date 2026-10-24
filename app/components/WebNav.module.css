@@ -1,0 +1,34 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--gp-surface);
+  border-block-end: 1px solid var(--gp-hairline);
+}
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gp-sp-6);
+  min-height: var(--gp-nav-height);
+}
+.links { display: flex; align-items: center; gap: var(--gp-sp-6); margin-inline-start: auto; }
+.link { color: var(--gp-ink); font-weight: 600; font-size: var(--gp-fs-body); white-space: nowrap; }
+.actions { display: flex; align-items: center; gap: var(--gp-sp-4); }
+.cta {
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+  padding: var(--gp-sp-2) var(--gp-sp-5);
+  border-radius: var(--gp-r-pill);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.cta:hover { text-decoration: none; }
+
+/* Which label set shows where: <768 none, 768 / 1024 / 1440 sets by width. */
+.wide, .l1024, .l1440, .l768 { display: none; }
+@media (max-width: 767px) { .links, .hideSmall { display: none; } }
+@media (min-width: 768px) and (max-width: 1023px) { .l768 { display: inline; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .l1024 { display: inline; } }
+@media (min-width: 1280px) { .l1440 { display: inline; } }
+@media (min-width: 1024px) { .wide { display: inline; } }

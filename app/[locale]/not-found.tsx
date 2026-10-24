@@ -1,17 +1,19 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Page Not Found",
-  description: "The page you are looking for does not exist.",
-};
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { t } from "../../lib/i18n";
+import { localeFromPath, pathFor } from "../../lib/locale";
+
+const K = "web.notFound.";
 
 export default function NotFound() {
+  const { locale } = localeFromPath(usePathname());
   return (
-    <div style={{ textAlign: "center", padding: "4rem 1rem" }}>
-      <h1>404 — Page Not Found</h1>
-      <p>The page you are looking for does not exist.</p>
-      <Link href="/">Go back home</Link>
-    </div>
+    <section className="container" style={{ paddingBlock: "var(--gp-sp-24)", textAlign: "center" }}>
+      <h1 style={{ fontSize: "var(--gp-fs-display)", lineHeight: "var(--gp-lh-display)" }}>{t(locale, K + "title")}</h1>
+      <p style={{ marginBlock: "var(--gp-sp-4) var(--gp-sp-6)", color: "var(--gp-ink-muted)" }}>{t(locale, K + "body")}</p>
+      <Link href={pathFor(locale, "/")}>{t(locale, K + "back.label")}</Link>
+    </section>
   );
 }

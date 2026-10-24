@@ -1,23 +1,17 @@
 .root {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--gp-sp-2);
   text-decoration: none;
 }
-
-.root:hover {
-  text-decoration: none;
-}
-
-.icon {
-  flex-shrink: 0;
-}
-
+.root:hover { text-decoration: none; }
+.icon { flex-shrink: 0; }
+.tile { fill: var(--gp-brand-navy); }
+.glyph { fill: var(--gp-brand-on-navy); font-family: var(--gp-font); }
 .wordmark {
-  font-family: var(--font-heading);
-  font-size: var(--text-xl);
+  font-size: var(--gp-fs-xl);
   font-weight: 700;
-  color: var(--color-brand-dark);
+  color: var(--gp-ink);
   letter-spacing: -0.3px;
   line-height: 1;
 }

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Footer from "../components/Footer";
 import HeapAnalytics from "../components/HeapAnalytics";
 import LocaleSuggestion from "../components/LocaleSuggestion";
-import Nav from "../components/Nav";
+import WebFooter from "../components/WebFooter";
+import WebNav from "../components/WebNav";
 import { env } from "../../lib/env";
 import { dir, t, type Locale } from "../../lib/i18n";
 import "../globals.css";
@@ -49,9 +49,9 @@ export default async function LocaleLayout({
       </head>
       <body>
         <LocaleSuggestion />
-        <Nav />
+        <WebNav locale={l} />
         <main>{children}</main>
-        <Footer />
+        <WebFooter locale={l} />
         <HeapAnalytics />
       </body>
     </html>

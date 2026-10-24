@@ -39,7 +39,7 @@ test.describe("Arabic Accept-Language", () => {
     expect(res.headers()["x-gp-suggest"]).toBe("ar");
     await page.goto("/privacy");
     await expect(page).toHaveURL(/\/privacy$/);
-    const link = page.getByRole("link", { name: "العربية" });
+    const link = page.getByRole("region").getByRole("link", { name: "العربية" });
     await expect(link).toHaveAttribute("href", "/ar/privacy");
     await page.getByRole("button", { name: "Dismiss" }).click();
     await expect(link).toBeHidden();
@@ -57,8 +57,8 @@ test.describe("Arabic Accept-Language", () => {
 
   test("banner is gone after following the switch link", async ({ page }) => {
     await page.goto("/privacy");
-    await page.getByRole("link", { name: "العربية" }).click();
+    await page.getByRole("region").getByRole("link", { name: "العربية" }).click();
     await expect(page).toHaveURL(/\/ar\/privacy$/);
-    await expect(page.getByRole("link", { name: "العربية" })).toBeHidden();
+    await expect(page.getByRole("region").getByRole("link", { name: "العربية" })).toBeHidden();
   });
 });
