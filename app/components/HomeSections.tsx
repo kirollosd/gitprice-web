@@ -11,8 +11,8 @@ import styles from "./HomeSections.module.css";
 const H = "web.home.";
 
 /** Prelaunch: the Tally waitlist form. Home is the shopper list unless a page says otherwise. */
-export function Waitlist({ locale, label, audience = "shopper" }: { locale: Locale; label?: string; audience?: "shopper" | "seller" }) {
-  return <TallyEmbed formId={env.tallyFormId} locale={locale} label={label} audience={audience} />;
+export function Waitlist({ locale, label, audience = "shopper", placement }: { locale: Locale; label?: string; audience?: "shopper" | "seller"; placement: "hero" | "bottom" }) {
+  return <TallyEmbed formId={env.tallyFormId} locale={locale} label={label} audience={audience} placement={placement} />;
 }
 
 /** The numbered steps shared by Home and Sellers. */
@@ -59,7 +59,7 @@ function Hero({ locale }: { locale: Locale }) {
           <h1 className={styles.h1}>{t(locale, H + "hero.headline")}</h1>
           <p className={styles.sub}>{t(locale, H + "hero.sub")}</p>
           <div id="waitlist" className={styles.action}>
-            {env.launch ? <StoreBadges locale={locale} placement="hero" /> : <Waitlist locale={locale} />}
+            {env.launch ? <StoreBadges locale={locale} placement="hero" /> : <Waitlist locale={locale} placement="hero" />}
           </div>
         </div>
         <HeroArt locale={locale} />
@@ -208,7 +208,7 @@ export default function HomeContent({ locale }: { locale: Locale }) {
         </CtaBand>
       ) : (
         <CtaBand title={t(locale, H + "cta.title")} line={t(locale, H + "cta.line")}>
-          <Waitlist locale={locale} />
+          <Waitlist locale={locale} placement="bottom" />
         </CtaBand>
       )}
     </>

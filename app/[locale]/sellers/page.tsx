@@ -30,7 +30,7 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
             <p className={styles.sub}>{t(locale, S + "hero.sub")}</p>
             <p className={styles.micro}>{t(locale, S + "hero.micro")}</p>
             <div id="waitlist" className={styles.action}>
-              {env.launch ? access("launch.hero.access.label", "hero") : <Waitlist locale={locale} label={waitlistLabel} audience="seller" />}
+              {env.launch ? access("launch.hero.access.label", "hero") : <Waitlist locale={locale} label={waitlistLabel} audience="seller" placement="hero" />}
             </div>
             {/* Not on the board; kept by owner ruling: it says what the email field's address is used for. */}
             {!env.launch && <p className={styles.note}>{t(locale, S + "prelaunch.hero.waitlist.note")}</p>}
@@ -67,7 +67,7 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
         </CtaBand>
       ) : (
         <CtaBand title={t(locale, S + "cta.title")} line={t(locale, S + "cta.line")}>
-          <Waitlist locale={locale} label={t(locale, S + "cta.waitlist.button.submitLabel")} audience="seller" />
+          <Waitlist locale={locale} label={t(locale, S + "cta.waitlist.button.submitLabel")} audience="seller" placement="bottom" />
         </CtaBand>
       )}
       <div className={`container ${styles.backRow}`}>

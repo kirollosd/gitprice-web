@@ -1,8 +1,9 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { t, type Locale } from "../../lib/i18n";
+import { track } from "../../lib/track";
 import styles from "./TallyEmbed.module.css";
 
 const W = "web.component.webWaitlistForm.";
@@ -20,6 +21,7 @@ export default function TallyEmbed({
   formId,
   locale,
   audience,
+  placement,
   height = DEFAULT_HEIGHT,
   label,
 }: {
@@ -27,6 +29,8 @@ export default function TallyEmbed({
   locale: Locale;
   /** Tally hidden field `audience`: tells shopper and seller sign-ups apart in the one form. */
   audience: "shopper" | "seller";
+  /** Where on the page this embed sits, for the waitlist_submit event. */
+  placement: "hero" | "bottom";
   height?: number;
   /** Fallback link text; defaults to the waitlist button label. */
   label?: string;
@@ -34,6 +38,22 @@ export default function TallyEmbed({
   const [failed, setFailed] = useState(false);
   const [ready, setReady] = useState(false);
   const [filled, setFilled] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Tally posts "Tally.FormSubmitted" to the parent. Only this embed's own frame counts, so two embeds never double-fire.
+  // The payload (form answers) is deliberately never read.
+  useEffect(() => {
+    const onMessage = (e: MessageEvent) => {
+      if (e.origin !== "https://tally.so" || e.source !== iframeRef.current?.contentWindow) return;
+      let data: unknown = e.data;
+      if (typeof data === "string") {
+        try { data = JSON.parse(data); } catch { return; }
+      }
+      if ((data as { event?: unknown } | null)?.event === "Tally.FormSubmitted") track("waitlist_submit", { audience, placement });
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, [audience, placement]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -74,6 +94,7 @@ export default function TallyEmbed({
             </div>
           )}
           <iframe
+            ref={iframeRef}
             data-tally-src={`https://tally.so/embed/${id}?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=${locale}&audience=${audience}`}
             title={text}
             width="100%"
