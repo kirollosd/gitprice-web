@@ -9,11 +9,39 @@ export const INDEXABLE_PATHS = ["/", "/sellers", "/privacy", "/terms"] as const;
 /** Unlisted or hosted pages: noindex, never in the sitemap. Reset-password and checkout pages import this. */
 export const NOINDEX_PATHS = ["/pricing", "/welcome", "/reset-password", "/checkout", "/checkout/return"] as const;
 
-export const absoluteUrl = (locale: Locale, path: string) =>
-  env.siteUrl.replace(/\/+$/, "") + pathFor(locale, path);
+/** The English root is the bare origin (no trailing slash), matching what Next renders for canonical and og:url. */
+export const absoluteUrl = (locale: Locale, path: string) => {
+  const p = pathFor(locale, path);
+  return env.siteUrl.replace(/\/+$/, "") + (p === "/" ? "" : p);
+};
 
-export function pageMeta(locale: Locale, path: string, opts: { noindex?: boolean } = {}): Metadata {
+export const SITE_NAME = "GitPrice";
+/** Title template shared by the layout and the share cards (Next applies the template to <title> only). */
+export const fullTitle = (title: string) => `${title} | ${SITE_NAME}`;
+export const OG_LOCALE: Record<Locale, string> = { en: "en_US", ar: "ar_AR" };
+
+type PageOpts = { noindex?: boolean; title?: string; description?: string };
+
+/**
+ * Per-page head: canonical, hreflang, robots, and the share cards. A page-level `openGraph` replaces the layout's
+ * whole object, so every field is set here; the image comes from the [locale]/opengraph-image file convention.
+ */
+export function pageMeta(locale: Locale, path: string, opts: PageOpts = {}): Metadata {
+  const { title, description } = opts;
+  const card = { ...(title ? { title: fullTitle(title) } : {}), ...(description ? { description } : {}) };
   return {
+    // absolute: the layout template does not reach a page in the layout's own segment (Home), so apply it here.
+    ...(title ? { title: { absolute: fullTitle(title) } } : {}),
+    ...(description ? { description } : {}),
+    openGraph: {
+      type: "website",
+      siteName: SITE_NAME,
+      locale: OG_LOCALE[locale],
+      alternateLocale: OG_LOCALE[locale === "ar" ? "en" : "ar"],
+      url: absoluteUrl(locale, path),
+      ...card,
+    },
+    twitter: { card: "summary_large_image", ...card },
     alternates: {
       canonical: absoluteUrl(locale, path),
       languages: {

@@ -12,7 +12,7 @@ const S = "web.sellers.";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
-  return { ...pageMeta(locale, "/sellers"), title: t(locale, S + "hero.headline"), description: t(locale, S + "hero.sub") };
+  return pageMeta(locale, "/sellers", { title: t(locale, S + "hero.headline"), description: t(locale, S + "hero.sub") });
 }
 
 export default async function SellersPage({ params }: { params: Promise<{ locale: Locale }> }) {

@@ -30,5 +30,6 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!(?:_next|api|fonts|_vercel)(?:/|$)|.*\\..*).*)"],
+  // The per-locale share image is served at its real /en or /ar path; skipping it avoids the /en 308.
+  matcher: ["/((?!(?:_next|api|fonts|_vercel)(?:/|$)|.*\\..*|(?:en|ar)/opengraph-image).*)"],
 };

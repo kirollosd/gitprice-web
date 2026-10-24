@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import type { Metadata } from "next";
 import { describe, expect, it } from "vitest";
 import { INDEXABLE_PATHS, NOINDEX_PATHS, pageMeta } from "../lib/seo";
 import sitemap from "../app/sitemap";
@@ -24,7 +25,7 @@ describe("pageMeta", () => {
   });
   it("uses the bare locale root for the home page", () => {
     expect(pageMeta("ar", "/").alternates?.canonical).toBe(`${SITE}/ar`);
-    expect(pageMeta("en", "/").alternates?.canonical).toBe(`${SITE}/`);
+    expect(pageMeta("en", "/").alternates?.canonical).toBe(SITE);
   });
   it("sets noindex when asked", () => {
     expect(pageMeta("en", "/welcome", { noindex: true }).robots).toEqual({ index: false, follow: false });
@@ -36,7 +37,7 @@ describe("sitemap and robots", () => {
     const urls = sitemap().map((e) => e.url);
     expect(urls).toHaveLength(INDEXABLE_PATHS.length * 2);
     expect(urls).toContain(`${SITE}/ar/terms`);
-    expect(sitemap()[0].alternates?.languages).toHaveProperty("x-default", `${SITE}/`);
+    expect(sitemap()[0].alternates?.languages).toHaveProperty("x-default", SITE);
     expect(urls).toContain(`${SITE}/sellers`);
     for (const p of NOINDEX_PATHS) {
       expect(urls.some((u) => u.replace(SITE, "").replace(/^\/ar(?=\/|$)/, "") === p)).toBe(false);
@@ -102,5 +103,48 @@ describe("pricing link detector", () => {
     expect(linksToPricing('<Link href={pathFor(locale, "/pricing")}>')).toBe(true);
     expect(linksToPricing('href={`${base}/ar/pricing`}')).toBe(true);
     expect(linksToPricing("/* the pricing page */ const a = 'web.pricing.x'")).toBe(false);
+  });
+});
+
+describe("per-page share metadata", () => {
+  const meta = async (mod: Promise<{ generateMetadata: (p: { params: Promise<{ locale: "en" | "ar" }> }) => Promise<Metadata> }>, locale: "en" | "ar" = "en") =>
+    (await mod).generateMetadata({ params: Promise.resolve({ locale }) });
+
+  it("Home titles itself with the hero headline and shares the hero sub", async () => {
+    for (const locale of ["en", "ar"] as const) {
+      const m = await meta(import("../app/[locale]/page"), locale);
+      const full = `${t(locale, "web.home.hero.headline")} | GitPrice`;
+      expect(m.title).toEqual({ absolute: full });
+      expect(m.openGraph).toMatchObject({ title: full, description: t(locale, "web.home.hero.sub"), locale: locale === "en" ? "en_US" : "ar_AR" });
+      expect(m.twitter).toMatchObject({ title: full, description: t(locale, "web.home.hero.sub") });
+    }
+  });
+
+  it("Sellers shares the seller pitch, not the shopper one", async () => {
+    const m = await meta(import("../app/[locale]/sellers/page"));
+    const full = `${t("en", "web.sellers.hero.headline")} | GitPrice`;
+    expect(m.openGraph).toMatchObject({ title: full, description: t("en", "web.sellers.hero.sub"), url: `${SITE}/sellers` });
+    expect(m.twitter).toMatchObject({ title: full, description: t("en", "web.sellers.hero.sub") });
+  });
+
+  it("every page's share card matches its own title and description", async () => {
+    const pages = [
+      [import("../app/[locale]/welcome/page"), "web.welcome.title", "web.welcome.subtitle"],
+      [import("../app/[locale]/pricing/page"), "web.pricing.noPrices.title", "web.pricing.noPrices.subtitle"],
+      [import("../app/[locale]/privacy/page"), "web.privacy.title", "web.privacy.intro"],
+      [import("../app/[locale]/terms/page"), "web.terms.title", "web.terms.intro"],
+    ] as const;
+    for (const [mod, title, description] of pages) {
+      const m = await meta(mod as never, "ar");
+      const full = `${t("ar", title)} | GitPrice`;
+      expect(m.title, title).toEqual({ absolute: full });
+      expect(m.description).toBe(t("ar", description));
+      expect(m.openGraph, title).toMatchObject({ title: full, description: t("ar", description), alternateLocale: "en_US" });
+      expect(m.twitter, title).toMatchObject({ card: "summary_large_image", title: full, description: t("ar", description) });
+    }
+  });
+
+  it("never points at the legacy OG asset", () => {
+    for (const f of files("app").filter((f) => /\.tsx?$/.test(f))) expect(readFileSync(f, "utf8"), f).not.toContain("logo_og.png");
   });
 });

@@ -7,7 +7,7 @@ type Props = { params: Promise<{ locale: Locale }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  return { ...pageMeta(locale, "/terms"), title: t(locale, "web.terms.title"), description: t(locale, "web.terms.intro") };
+  return pageMeta(locale, "/terms", { title: t(locale, "web.terms.title"), description: t(locale, "web.terms.intro") });
 }
 
 export default async function TermsPage({ params }: Props) {

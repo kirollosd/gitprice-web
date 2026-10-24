@@ -10,7 +10,7 @@ type Props = { params: Promise<{ locale: Locale }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  return { ...pageMeta(locale, "/checkout", { noindex: true }), title: t(locale, "web.checkout.summary.title"), referrer: "no-referrer" };
+  return { ...pageMeta(locale, "/checkout", { noindex: true, title: t(locale, "web.checkout.summary.title") }), referrer: "no-referrer" };
 }
 
 export default async function CheckoutPage({ params }: Props) {

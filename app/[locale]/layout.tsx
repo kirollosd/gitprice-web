@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import Analytics from "../components/Analytics";
 import CookieNotice from "../components/CookieNotice";
@@ -8,36 +8,41 @@ import WebFooter from "../components/WebFooter";
 import WebNav from "../components/WebNav";
 import { env } from "../../lib/env";
 import { dir, t, type Locale } from "../../lib/i18n";
+import { fullTitle, OG_LOCALE, SITE_NAME } from "../../lib/seo";
+import { tokenColor } from "../../lib/tokens";
 import "../globals.css";
-
-const title = "GitPrice";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const l: Locale = locale === "ar" ? "ar" : "en";
   const description = t(l, "web.home.hero.sub");
+  // Pages replace openGraph/twitter through pageMeta; these defaults only reach pages without one (404).
   return {
-    title: { template: "%s | GitPrice", default: title },
+    title: { template: fullTitle("%s"), default: SITE_NAME },
     description,
-    authors: [{ name: "GitPrice" }],
-    creator: "GitPrice",
+    authors: [{ name: SITE_NAME }],
+    creator: SITE_NAME,
     metadataBase: new URL(env.siteUrl),
-    openGraph: {
-      type: "website",
-      siteName: "GitPrice",
-      locale: l === "ar" ? "ar_AR" : "en_US",
-      title,
-      description,
-      images: [{ url: "/logo_og.png", width: 1200, height: 630, alt: "GitPrice" }],
-    },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: { type: "website", siteName: SITE_NAME, locale: OG_LOCALE[l], title: SITE_NAME, description },
+    twitter: { card: "summary_large_image", title: SITE_NAME, description },
     icons: {
-      icon: [{ url: "/logo_icon.svg", type: "image/svg+xml" }],
+      // The theme-aware SVG first; the PNG is for browsers and crawlers that skip SVG icons.
+      icon: [
+        { url: "/logo_icon.svg", type: "image/svg+xml" },
+        { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+      ],
       apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
     },
     robots: { index: true, follow: true },
   };
 }
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: tokenColor("surface", "light") },
+    { media: "(prefers-color-scheme: dark)", color: tokenColor("surface", "dark") },
+  ],
+};
 
 export const dynamicParams = false;
 export const generateStaticParams = () => [{ locale: "en" }, { locale: "ar" }];
