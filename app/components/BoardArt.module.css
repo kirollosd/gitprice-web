@@ -1,6 +1,9 @@
 /* Board art (visual/* layers), rebuilt from the app tokens: the mockups show extension UI, so they use the app type scale (--gp-fs-*).
    Widths follow the library parts: 320 rows and cards (--gp-panel-width-popup), 340 savings hero (--gp-panel-width). */
 
+/* Off-scale measures, named once. */
+.hero, .card { --art-mark-w: 2px; /* RivalCard alert mark stroke */ }
+
 .photo { display: block; inline-size: 100%; block-size: 100%; object-fit: contain; }
 .fig { font-size: var(--gp-fs-price); font-weight: var(--gp-fw-price); }
 .figSaving { composes: fig; color: var(--gp-savings); }
@@ -40,7 +43,7 @@
 .rowTitle { font-size: var(--gp-fs-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rowStore { display: flex; align-items: center; gap: var(--gp-sp-2); font-size: var(--gp-fs-caption); }
 .match { display: inline-flex; align-items: center; gap: var(--gp-sp-1); }
-.rowPrice { display: flex; flex-direction: column; align-items: flex-end; gap: var(--gp-sp-1); }
+.rowPrice { display: flex; flex-direction: column; align-items: flex-end; }
 .rowSaving { color: var(--gp-savings); font-size: var(--gp-fs-caption); white-space: nowrap; }
 
 .tick { flex: none; color: var(--gp-savings); margin-block-start: var(--gp-sp-2); }
@@ -140,7 +143,7 @@
 /* Alert mark: a short danger bar over a dot, as drawn on RivalCard. */
 .mark {
   flex: none;
-  inline-size: 2px;
+  inline-size: var(--art-mark-w);
   block-size: var(--gp-sp-3);
   background: linear-gradient(var(--gp-danger) 0 66%, transparent 66% 83%, var(--gp-danger) 83%);
 }

@@ -32,6 +32,8 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
             <div id="waitlist" className={styles.action}>
               {env.launch ? access("launch.hero.access.label") : <Waitlist locale={locale} label={waitlistLabel} />}
             </div>
+            {/* Not on the board; kept by owner ruling: it says what the email field's address is used for. */}
+            {!env.launch && <p className={styles.note}>{t(locale, S + "prelaunch.hero.waitlist.note")}</p>}
           </div>
           <RivalsArt locale={locale} />
         </div>

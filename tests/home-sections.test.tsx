@@ -111,4 +111,19 @@ describe("Sellers", () => {
     expect(rivals?.querySelectorAll("li")).toHaveLength(3);
     expect(within(rivals as HTMLElement).getAllByText(en.web.sellers.visual.rival.pinned)).toHaveLength(3);
   });
+
+  it("shows the waitlist note next to the form before launch only", async () => {
+    const note = en.web.sellers.prelaunch.hero.waitlist.note;
+    mockEnv(false);
+    let { default: SellersPage } = await import("../app/[locale]/sellers/page");
+    render(await SellersPage({ params: Promise.resolve({ locale: "en" }) }));
+    expect(document.querySelector("#waitlist")?.nextElementSibling?.textContent).toBe(note);
+    cleanup();
+    vi.doUnmock("../lib/env");
+    vi.resetModules();
+    mockEnv(true);
+    ({ default: SellersPage } = await import("../app/[locale]/sellers/page"));
+    render(await SellersPage({ params: Promise.resolve({ locale: "en" }) }));
+    expect(document.querySelector("#waitlist")?.nextElementSibling).toBeNull();
+  });
 });
