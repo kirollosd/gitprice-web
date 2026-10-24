@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getHandoffSummary, redeemHandoff, type HandoffSummary } from "../../lib/api";
 import { t, type Locale } from "../../lib/i18n";
+import { formatPrice } from "../../lib/price";
 import CheckoutCard from "./CheckoutCard";
 import styles from "./Checkout.module.css";
 
@@ -22,20 +23,12 @@ const isWebUrl = (u: string) => {
   }
 };
 
-function formatPrice(locale: Locale, priceMinor: number, currency: string) {
-  const amount = priceMinor / 100;
-  try {
-    return new Intl.NumberFormat(locale === "ar" ? "ar" : "en", { style: "currency", currency }).format(amount);
-  } catch {
-    return `${amount} ${currency}`;
-  }
-}
-
 export default function CheckoutFlow({ locale }: { locale: Locale }) {
   const [state, setState] = useState<State>({ kind: "loading" });
   const [redeeming, setRedeeming] = useState(false);
   const code = useRef("");
   const busy = useRef(false);
+  const assigned = useRef(false);
   const started = useRef(false);
 
   useEffect(() => {
@@ -53,6 +46,13 @@ export default function CheckoutFlow({ locale }: { locale: Locale }) {
     });
   }, []);
 
+  // Navigate only after the redirecting state has committed, once even under StrictMode.
+  useEffect(() => {
+    if (state.kind !== "redirecting" || assigned.current) return;
+    assigned.current = true;
+    window.location.assign(state.redirectUrl);
+  }, [state]);
+
   async function onContinue() {
     if (busy.current) return;
     busy.current = true;
@@ -65,12 +65,11 @@ export default function CheckoutFlow({ locale }: { locale: Locale }) {
     }
     if (!isWebUrl(r.data.redirectUrl)) return setState({ kind: "failed" });
     setState({ kind: "redirecting", redirectUrl: r.data.redirectUrl });
-    window.location.assign(r.data.redirectUrl);
   }
 
   switch (state.kind) {
     case "loading":
-      return <CheckoutCard locale={locale} spinner />;
+      return <CheckoutCard locale={locale} spinner busy />;
     case "summary": {
       const { summary } = state;
       return (

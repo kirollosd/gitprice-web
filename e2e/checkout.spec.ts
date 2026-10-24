@@ -55,7 +55,15 @@ const spinner = (page: Page) => page.locator('[role="status"] > [aria-hidden="tr
 
 for (const [base, loc] of LOCALES) {
   const C = COPY[loc];
-  const intl = (minor: number) => new Intl.NumberFormat(loc, { style: "currency", currency: "EGP" }).format(minor / 100);
+  // Hardcoded expectations (not formatPrice): digits and the decimal mark match in either Latin or Arabic-Indic form.
+  const intl = (minor: number) => {
+    const n = minor === 9900 ? "99.00" : "999.00";
+    const digits = n.replace(/\d/g, (d) => `[${d}${String.fromCharCode(0x660 + Number(d))}]`).replace(".", "[.٫]");
+    return loc === "ar" ? digits : `EGP ${n}`;
+  };
+
+  const totalText = (page: Page, tpl: string, minor: number) =>
+    loc === "ar" ? page.getByText(new RegExp(intl(minor))) : page.getByText(tpl.replace("{price}", intl(minor)), { exact: true });
 
   test.describe(`handoff ${loc}`, () => {
     test("summary: plan and formatted total, fragment stripped before the call", async ({ page }) => {
@@ -63,7 +71,7 @@ for (const [base, loc] of LOCALES) {
       await page.goto(`${base}/checkout#code=ab/c`);
       await expect(h1(page, C.summary.title)).toBeVisible();
       await expect(page.getByText(C.summary.plan.month, { exact: true })).toBeVisible();
-      await expect(page.getByText(C.summary.total.month.replace("{price}", intl(9900)), { exact: true })).toBeVisible();
+      await expect(totalText(page, C.summary.total.month, 9900)).toBeVisible();
       await expect(page.getByRole("button", { name: C.summary.button.label })).toBeEnabled();
       expect(await page.evaluate(() => location.hash + location.search)).toBe("");
       expect(calls.summary).toEqual(["/api/v1/subscription/checkout/handoff/ab%2Fc/summary"]);
@@ -75,7 +83,7 @@ for (const [base, loc] of LOCALES) {
       await stub(page, { summary: ok(YEARLY) });
       await page.goto(`${base}/checkout#code=c`);
       await expect(page.getByText(C.summary.plan.year, { exact: true })).toBeVisible();
-      await expect(page.getByText(C.summary.total.year.replace("{price}", intl(99900)), { exact: true })).toBeVisible();
+      await expect(totalText(page, C.summary.total.year, 99900)).toBeVisible();
     });
 
     test("no code shows signed-out and makes no call", async ({ page }) => {
@@ -204,6 +212,47 @@ for (const [base, loc] of LOCALES) {
         await expect(h1(page, C.success.title)).toBeVisible({ timeout: 300 });
       }).toPass();
       expect(calls.returns).toHaveLength(3);
+    });
+
+    test("polls every 2 s: one call before 2000 ms, a second after", async ({ page }) => {
+      // Frozen clock: otherwise real time flows and the 2 s timer can fire early.
+      await page.clock.install({ time: 0 });
+      await page.clock.pauseAt(1000);
+      const calls = await stub(page, { returns: [ok({ status: "pending" })] });
+      await page.goto(`${base}/checkout/return#rt=t&status=success`);
+      await expect.poll(() => calls.returns.length).toBe(1);
+      await page.clock.runFor(1999);
+      await page.waitForTimeout(150);
+      expect(calls.returns).toHaveLength(1);
+      await page.clock.runFor(2);
+      await expect.poll(() => calls.returns.length).toBe(2);
+    });
+
+    test("navigating away stops polling", async ({ page }) => {
+      await page.clock.install();
+      const calls = await stub(page, { returns: [ok({ status: "pending" })] });
+      await page.goto(`${base}/checkout/return#rt=t&status=success`);
+      await expect.poll(() => calls.returns.length).toBe(1);
+      await page.goto("about:blank");
+      await page.waitForTimeout(150);
+      expect(calls.returns).toHaveLength(1);
+    });
+
+    test("a hung poll request times out and polling continues", async ({ page }) => {
+      await page.clock.install();
+      const calls = await stub(page, { returns: [ok({ status: "active" })] });
+      let first = true;
+      // Registered after stub(): the first return request never answers.
+      await page.route(`${API}/subscription/checkout/return/**`, (route) => {
+        if (first) { first = false; seenUrls.push(""); return; }
+        return route.fallback();
+      });
+      await page.goto(`${base}/checkout/return#rt=t&status=success`);
+      await expect(async () => {
+        await page.clock.runFor(2000);
+        await expect(h1(page, C.success.title)).toBeVisible({ timeout: 500 });
+      }).toPass({ timeout: 20_000 });
+      expect(calls.returns.length).toBeGreaterThanOrEqual(1);
     });
 
     test("5xx and network errors keep polling", async ({ page }) => {

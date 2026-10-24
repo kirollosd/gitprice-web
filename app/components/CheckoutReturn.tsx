@@ -9,6 +9,7 @@ type View = "waiting" | "timedOut" | "success" | "failed" | "cancelled";
 
 const POLL_MS = 2_000;
 const POLL_CAP_MS = 60_000;
+const FETCH_TIMEOUT_MS = 5_000;
 
 export default function CheckoutReturn({ locale }: { locale: Locale }) {
   const [view, setView] = useState<View>("waiting");
@@ -26,16 +27,17 @@ export default function CheckoutReturn({ locale }: { locale: Locale }) {
     if (cancelled) return setView("cancelled");
     if (!token) return setView("timedOut");
 
+    const unmount = new AbortController();
     let stopped = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
     const deadline = Date.now() + POLL_CAP_MS;
 
     async function poll() {
-      const r = await getReturnStatus(token);
+      const r = await getReturnStatus(token, AbortSignal.any([unmount.signal, AbortSignal.timeout(FETCH_TIMEOUT_MS)]));
       if (stopped) return;
       if (r.ok && r.data.status === "active") return setView("success");
       if (r.ok && r.data.status === "failed") return setView("failed");
-      // An unknown or expired token will never resolve; 5xx and network errors may, so they keep polling.
+      // An unknown or expired token will never resolve; 5xx, network errors and timeouts may, so they keep polling.
       if (!r.ok && r.status === 404) return setView("timedOut");
       if (Date.now() >= deadline) return setView("timedOut");
       timer = setTimeout(poll, POLL_MS);
@@ -43,6 +45,7 @@ export default function CheckoutReturn({ locale }: { locale: Locale }) {
     void poll();
     return () => {
       stopped = true;
+      unmount.abort();
       clearTimeout(timer);
     };
   }, []);

@@ -20,11 +20,17 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<ApiResult<
       credentials: "omit",
       referrerPolicy: "no-referrer",
     });
-    const body = (await res.json()) as Envelope<T>;
+    let body: Envelope<T>;
+    try {
+      body = (await res.json()) as Envelope<T>;
+    } catch {
+      // Not JSON (a proxy page, plain text): keep the HTTP status so a 404/410 still maps.
+      return { ok: false, status: res.status, code: "NETWORK" };
+    }
     if (res.ok && body.success && body.data !== null) return { ok: true, data: body.data };
     return { ok: false, status: res.status, code: body.error?.code ?? "UNKNOWN" };
   } catch {
-    // A throw, or a body that is not JSON.
+    // A throw, an abort or a timeout.
     return { ok: false, status: 0, code: "NETWORK" };
   }
 }
@@ -40,5 +46,5 @@ export const redeemHandoff = (code: string, locale: Locale) =>
     body: JSON.stringify({ locale }),
   });
 
-export const getReturnStatus = (token: string) =>
-  call<ReturnStatus>(`/subscription/checkout/return/${encodeURIComponent(token)}`);
+export const getReturnStatus = (token: string, signal?: AbortSignal) =>
+  call<ReturnStatus>(`/subscription/checkout/return/${encodeURIComponent(token)}`, { signal });

@@ -32,7 +32,19 @@ describe("api", () => {
     mockFetch(new TypeError("down"));
     expect(await getReturnStatus("t")).toEqual({ ok: false, status: 0, code: "NETWORK" });
     mockFetch(reply(502, "<html>bad gateway</html>"));
-    expect(await getReturnStatus("t")).toEqual({ ok: false, status: 0, code: "NETWORK" });
+    expect(await getReturnStatus("t")).toEqual({ ok: false, status: 502, code: "NETWORK" });
+  });
+
+  it("a plain-text 404 keeps its status", async () => {
+    mockFetch(reply(404, "not found"));
+    expect(await getHandoffSummary("x")).toEqual({ ok: false, status: 404, code: "NETWORK" });
+  });
+
+  it("passes the abort signal to fetch", async () => {
+    const f = mockFetch(reply(200, ok({ status: "pending" })));
+    const signal = new AbortController().signal;
+    await getReturnStatus("t", signal);
+    expect((f.mock.calls[0] as unknown[])[1]).toMatchObject({ signal });
   });
 
   it("url-encodes the code and token", async () => {
