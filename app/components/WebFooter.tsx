@@ -27,7 +27,7 @@ export default function WebFooter({ locale }: { locale: Locale }) {
         </nav>
         <div className={styles.legal}>
           <p className={styles.copy}>{t(locale, K + "copyright")}</p>
-          <CookieSettingsButton locale={locale} className={styles.cookie} />
+          <CookieSettingsButton locale={locale} className={`${styles.cookie} hit-target`} />
         </div>
        </div>
       </div>

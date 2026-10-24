@@ -14,7 +14,7 @@ export default function Logo({ locale, href, className }: LogoProps) {
   return (
     <Link
       href={href ?? (locale === "ar" ? "/ar" : "/")}
-      className={`${styles.root} ${className ?? ""}`}
+      className={`${styles.root} hit-target ${className ?? ""}`}
       aria-label={t(locale, "web.component.webNav.a11y.label.home")}
     >
       <span aria-hidden="true" className={styles.wordmark} />

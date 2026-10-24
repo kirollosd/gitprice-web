@@ -162,7 +162,7 @@ function Privacy({ locale }: { locale: Locale }) {
       <div className={`container ${styles.privacy}`}>
         <div className={styles.privacyHead}>
           <h2 id="privacy-h" className={styles.h2}>{t(locale, H + "privacy.heading")}</h2>
-          <Link href={pathFor(locale, "/privacy")} className={styles.textLink}>{t(locale, H + "privacy.link")}</Link>
+          <Link href={pathFor(locale, "/privacy")} className={`${styles.textLink} hit-target`}>{t(locale, H + "privacy.link")}</Link>
         </div>
         <ul className={styles.points} role="list">
           {[1, 2, 3].map((n) => (
