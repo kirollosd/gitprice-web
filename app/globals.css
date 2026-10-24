@@ -133,10 +133,10 @@ h1[tabindex="-1"]:focus-visible { outline: none; }
    tokens.css only carries the desktop scale (--gp-fs-*), so these are local to the site.
    Line heights follow the boards' text styles: en body/title/headline 1.6, caption 1.4, display 1.33; ar 1.8, 1.6, 1.6. */
 :root {
-  --web-fs-hero: var(--web-fs-display);   /* 56/64 from 1024, mobile display (32) below */
+  --web-fs-hero: var(--web-fs-display);   /* web/hero from 1024 (Home and Sellers from 768), mobile display (32) below */
   --web-lh-hero: 40px;
   --web-fs-display: 32px;
-  --web-fs-h2: var(--web-fs-title);       /* section heading: title on phones, display from 1024 */
+  --web-fs-h2: var(--web-fs-title);       /* section heading: title on phones, display from 1024 (Home and Sellers from 768) */
   --web-fs-feature: var(--web-fs-title);  /* large feature row title: 28 from 1024 */
   --web-fs-title: 22px;
   --web-fs-body: 17px;
@@ -145,7 +145,12 @@ h1[tabindex="-1"]:focus-visible { outline: none; }
   --web-lh-text: 1.6;
   --web-lh-caption: 1.4;
   --web-lh-display: 1.33;
+  /* The web/hero text style (en 56/64, ar 56/84): every page from 1024, Home and Sellers from 768. */
+  --web-fs-hero-web: 56px;
+  --web-lh-hero-web: 64px;
 }
-[dir="rtl"] { --web-lh-text: 1.8; --web-lh-caption: 1.6; --web-lh-display: 1.6; }
-@media (min-width: 1024px) { :root { --web-fs-hero: 56px; --web-lh-hero: 64px; --web-fs-h2: var(--web-fs-display); --web-fs-feature: 28px; } }
-@media (min-width: 1024px) { [dir="rtl"] { --web-lh-hero: 84px; } }
+[dir="rtl"] { --web-lh-text: 1.8; --web-lh-caption: 1.6; --web-lh-display: 1.6; --web-lh-hero-web: 84px; }
+@media (min-width: 1024px) {
+  :root, [dir="rtl"] { --web-fs-hero: var(--web-fs-hero-web); --web-lh-hero: var(--web-lh-hero-web); }
+  :root { --web-fs-h2: var(--web-fs-display); --web-fs-feature: 28px; }
+}

@@ -13,6 +13,7 @@
   --web-w-access: 17.5rem;     /* seller access button 280 */
   --web-w-form: 25rem;         /* waitlist form 400 */
   --web-lh-feature: 1.2;       /* feature row title: 28/34 in both scripts */
+  --web-w-hero: 40rem;         /* hero headline at 768: 640, two lines */
 }
 
 /* ---------- hero ---------- */
@@ -151,8 +152,17 @@
 .accessBtn:hover { text-decoration: none; }
 .bandCard .accessBtn { inline-size: 100%; }
 
+/* 768 boards: the web/hero headline over two lines, mobile/display section headings, sellers list in two columns. */
 @media (min-width: 768px) {
+  .hero, .section, .baseline, .stepsBand, .band {
+    --web-fs-hero: var(--web-fs-hero-web);
+    --web-lh-hero: var(--web-lh-hero-web);
+    --web-fs-h2: var(--web-fs-display);
+  }
+  .h1 { line-height: var(--web-lh-hero); max-inline-size: var(--web-w-hero); }
+  .h2, .bandTitle { line-height: var(--web-lh-display); }
   .faq { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sellerItems { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gp-sp-12); }
 }
 
 @media (min-width: 1024px) {
@@ -160,7 +170,7 @@
   .hero { padding-block: calc(var(--gp-sp-16) + var(--gp-sp-12)); }
   .heroGrid { grid-template-columns: minmax(0, 7fr) minmax(0, 8fr); gap: 0; align-items: start; }
   .chip { margin-block-end: var(--gp-sp-6); }
-  .h1 { line-height: var(--web-lh-hero); margin-block-end: var(--gp-sp-6); }
+  .h1 { margin-block-end: var(--gp-sp-6); }
   .sub { margin-block-end: var(--gp-sp-8); }
   .micro { margin-block-end: var(--gp-sp-8); }
   .accessBtn { inline-size: var(--web-w-access); }
@@ -172,7 +182,7 @@
   .baselineList { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--gp-sp-6); }
   .baselineTitle { font-size: var(--web-fs-title); }
 
-  .h2 { line-height: var(--web-lh-display); margin-block-end: var(--gp-sp-10); }
+  .h2 { margin-block-end: var(--gp-sp-10); }
   .bigRows { gap: var(--gp-sp-16); }
   .bigRow { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: calc(var(--gp-sp-16) + var(--gp-sp-4)); align-items: center; }
   .bigRow:nth-child(even) > :last-child { order: -1; }
@@ -180,8 +190,6 @@
   .bigText { max-inline-size: var(--web-w-sub); }
   .bigTitle { line-height: var(--web-lh-feature); margin-block-end: var(--gp-sp-4); }
   .more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-  .sellerItems { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gp-sp-12); }
 
   .stepsBand { padding-block: calc(var(--gp-sp-16) + var(--gp-sp-2)) var(--gp-sp-12); }
   .stepsBand .h2 { margin-block-end: var(--gp-sp-12); }
@@ -191,5 +199,4 @@
   .stepTitle { margin-block-start: 0; }
 
   .privacy { grid-template-columns: minmax(0, 7fr) minmax(0, 8fr); gap: 0; }
-  .bandTitle { line-height: var(--web-lh-display); }
 }
