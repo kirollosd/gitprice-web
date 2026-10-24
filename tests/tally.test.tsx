@@ -72,12 +72,15 @@ describe("TallyEmbed", () => {
     act(() => { vi.advanceTimersByTime(5001); });
     expect(screen.getByRole("link")).toBeTruthy();
     expect(document.querySelector("iframe")).toBeNull();
-    const loadEmbeds = vi.fn();
+    let iframeMounted = false;
+    const loadEmbeds = vi.fn(() => { iframeMounted = document.querySelector("iframe[data-tally-src]") !== null; });
     w.Tally = { loadEmbeds };
     act(() => script!.onReady!());
     expect(screen.queryByRole("link")).toBeNull();
     expect(document.querySelector("iframe")).not.toBeNull();
-    expect(loadEmbeds).toHaveBeenCalled();
+    expect(loadEmbeds).toHaveBeenCalledTimes(1);
+    // Tally scans the DOM for the iframe, so it must already be mounted.
+    expect(iframeMounted).toBe(true);
   });
 
   it("encodes the form id in both URLs", async () => {

@@ -13,6 +13,7 @@ afterEach(cleanup);
 describe("WebFooter tagline", () => {
   const cases: [string, "en" | "ar", string][] = [
     ["/sellers", "en", "Shows which rivals undercut you."],
+    ["/sellers/", "en", "Shows which rivals undercut you."],
     ["/ar/sellers", "ar", ""],
     ["/", "en", "Compares prices while you shop."],
     ["/privacy", "en", "Compares prices while you shop."],
@@ -24,10 +25,10 @@ describe("WebFooter tagline", () => {
       const { default: WebFooter } = await import("../app/components/WebFooter");
       const { t } = await import("../lib/i18n");
       render(<WebFooter locale={locale} />);
-      const key = path.endsWith("/sellers") ? "web.sellers.footer.tagline" : "web.component.webFooter.default.tagline";
+      const key = /\/sellers\/?$/.test(path) ? "web.sellers.footer.tagline" : "web.component.webFooter.default.tagline";
       const expected = text || t(locale, key);
       expect(screen.getByText(expected)).toBeTruthy();
-      const other = path.endsWith("/sellers") ? "web.component.webFooter.default.tagline" : "web.sellers.footer.tagline";
+      const other = /\/sellers\/?$/.test(path) ? "web.component.webFooter.default.tagline" : "web.sellers.footer.tagline";
       expect(screen.queryByText(t(locale, other))).toBeNull();
     });
   }

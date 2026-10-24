@@ -28,6 +28,7 @@ export default function TallyEmbed({
   label?: string;
 }) {
   const [failed, setFailed] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -38,11 +39,16 @@ export default function TallyEmbed({
 
   const text = label ?? t(locale, W + "empty.button.submit.label");
 
+  // Tally scans the DOM for the iframe, so scan only once it is mounted (not inside the script callback).
+  useEffect(() => {
+    if (ready && !failed) (window as TallyWindow).Tally?.loadEmbeds();
+  }, [ready, failed]);
+
   const id = encodeURIComponent(formId);
   // Script stays mounted when the fallback shows, so a late load can bring the form back.
   const onReady = () => {
+    setReady(true);
     setFailed(false);
-    (window as TallyWindow).Tally?.loadEmbeds();
   };
 
   return (
