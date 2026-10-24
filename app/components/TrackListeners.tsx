@@ -47,7 +47,7 @@ export default function TrackListeners() {
         seen.add(id);
         track("section_view", { section_id: id });
       }
-    }, { threshold: [0.25, 0.5] });
+    }, { threshold: [0, 0.05, 0.1, 0.25, 0.5] });
     document.querySelectorAll("[data-gp-section]").forEach((s) => io.observe(s));
     return () => io.disconnect();
   }, [pathname]);

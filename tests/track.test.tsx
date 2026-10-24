@@ -84,10 +84,62 @@ describe("TrackListeners", () => {
   });
 });
 
+describe("TrackListeners gating and cleanup", () => {
+  const views = () => ((w.dataLayer ?? []) as { event?: string }[]).filter((e) => e.event === "section_view");
+  const sectionEntry = (o: object) => {
+    const target = document.createElement("section");
+    target.setAttribute("data-gp-section", "faq");
+    return { target, isIntersecting: true, intersectionRatio: 0, intersectionRect: { height: 0 }, ...o };
+  };
+  const fire = (o: object) => act(() => observers.at(-1)!.cb([sectionEntry(o)] as never, {} as never));
+
+  it("ignores a short section at ratio 0.3", () => {
+    render(<TrackListeners />);
+    fire({ intersectionRatio: 0.3, intersectionRect: { height: 10 } });
+    expect(views()).toHaveLength(0);
+  });
+  it("counts a tall section once half a viewport shows", () => {
+    render(<TrackListeners />);
+    fire({ intersectionRatio: 0.1, intersectionRect: { height: window.innerHeight / 2 + 1 } });
+    expect(views()).toHaveLength(1);
+  });
+  it("ignores entries that are not intersecting", () => {
+    render(<TrackListeners />);
+    fire({ isIntersecting: false, intersectionRatio: 0.9, intersectionRect: { height: 9999 } });
+    expect(views()).toHaveLength(0);
+  });
+  it("maps store_click and drops unknown stores", () => {
+    render(<><TrackListeners />
+      <a href="#a" data-gp-track="store_click" data-gp-store="play" data-gp-placement="hero">play</a>
+      <a href="#b" data-gp-track="store_click" data-gp-store="huawei" data-gp-placement="hero">huawei</a></>);
+    w.dataLayer = [];
+    fireEvent.click(screen.getByText("play"));
+    fireEvent.click(screen.getByText("huawei"));
+    expect(w.dataLayer).toEqual([{ event: "store_click", store: "play", placement: "hero", locale: "ar" }]);
+  });
+  it("removes the click listener on unmount", () => {
+    const { unmount } = render(<><TrackListeners />
+      <a href="#a" data-gp-track="cta_click" data-gp-cta-id="terms" data-gp-placement="footer">t</a></>);
+    const link = screen.getByText("t");
+    unmount();
+    document.body.appendChild(link);
+    w.dataLayer = [];
+    fireEvent.click(link);
+    expect(w.dataLayer).toEqual([]);
+  });
+});
+
 describe("WebMenu", () => {
   it("pushes menu_open when opened", () => {
     render(<WebMenu locale="en" />);
     fireEvent.click(screen.getByRole("button"));
+    expect((w.dataLayer as { event?: string }[]).filter((e) => e.event === "menu_open")).toHaveLength(1);
+  });
+  it("does not push menu_open when closing", () => {
+    render(<WebMenu locale="en" />);
+    const btn = screen.getByRole("button");
+    fireEvent.click(btn);
+    fireEvent.click(btn);
     expect((w.dataLayer as { event?: string }[]).filter((e) => e.event === "menu_open")).toHaveLength(1);
   });
 });
