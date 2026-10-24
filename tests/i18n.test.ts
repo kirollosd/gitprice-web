@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 import { dir, t } from "../lib/i18n";
@@ -14,10 +14,21 @@ describe("i18n", () => {
   });
 
   test("t interpolates {email}", () => {
-    // Uses a real key that carries an {email} placeholder, if any; else checks the engine via a synthetic lookup.
-    const k = keys(en.web).find((x) => /\{email\}/.test(lookup(en, `web.${x}`)));
-    if (!k) return;
-    expect(t("en", `web.${k}`, { email: "a@b.co" })).toContain("a@b.co");
+    const out = t("en", "web.resetPassword.body", { email: "a@b.co" });
+    expect(out).toContain("a@b.co");
+    expect(out).not.toContain("{email}");
+  });
+
+  test("t returns the key instead of throwing in production", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      expect(t("en", "web.nope.nothing")).toBe("web.nope.nothing");
+      expect(warn).toHaveBeenCalled();
+    } finally {
+      warn.mockRestore();
+      vi.unstubAllEnvs();
+    }
   });
 
   test("t throws on a missing key", () => {
@@ -33,8 +44,3 @@ describe("i18n", () => {
     expect(dir("en")).toBe("ltr");
   });
 });
-
-function lookup(root: unknown, path: string): string {
-  const v = path.split(".").reduce<unknown>((o, k) => (o as Record<string, unknown>)?.[k], root);
-  return typeof v === "string" ? v : "";
-}

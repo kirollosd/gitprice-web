@@ -15,7 +15,7 @@ const ds = join(root, "design-system");
 mkdirSync("styles", { recursive: true });
 mkdirSync("i18n", { recursive: true });
 
-// Drop the legacy Sora/Karla @font-face blocks: their relative urls do not exist here and the fonts are retired.
+// Deliberate exception to "copied verbatim": drop the legacy Sora/Karla @font-face blocks: their relative urls break the build here and the fonts are retired. Everything else is verbatim.
 const css = readFileSync(join(ds, "colors_and_type.css"), "utf8").replace(
   /@font-face\s*\{[^}]*font-family:\s*'(?:Sora|Karla)'[^}]*\}\s*/g,
   "",

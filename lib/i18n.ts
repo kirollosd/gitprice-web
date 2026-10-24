@@ -7,13 +7,21 @@ const messages: Record<Locale, unknown> = { en, ar };
 
 export const dir = (l: Locale) => (l === "ar" ? "rtl" : "ltr");
 
-/** Key is a dotted path such as 'web.home.hero.headline'. Throws on a missing key so gaps fail the build. */
+/**
+ * Key is a dotted path such as 'web.home.hero.headline'.
+ * A missing key throws in dev/test so gaps surface early; in production it warns and returns the key.
+ */
 export function t(locale: Locale, key: string, vars: Record<string, string> = {}): string {
   const value = key
     .split(".")
     .reduce<unknown>((o, k) => (o && typeof o === "object" ? (o as Record<string, unknown>)[k] : undefined), messages[locale]);
   if (typeof value !== "string") {
-    throw new Error(`Missing i18n key "${key}" for locale "${locale}"`);
+    const msg = `Missing i18n key "${key}" for locale "${locale}"`;
+    if (process.env.NODE_ENV === "production") {
+      console.warn(msg);
+      return key;
+    }
+    throw new Error(msg);
   }
   return value.replace(/\{(\w+)\}/g, (m, name: string) => vars[name] ?? m);
 }
