@@ -244,3 +244,45 @@
     margin-inline-start: calc(-1 * var(--gp-sp-6));
   }
 }
+
+/* ---------- Welcome step art (screen/<theme>/Welcome/default boards) ---------- */
+.mark16 { flex: none; color: var(--gp-ink); }
+.welcomeIcons { display: flex; align-items: center; gap: var(--gp-sp-3); margin-block-start: var(--gp-sp-3); }
+.puzzle { color: var(--gp-ink-muted); }
+.pin { color: var(--gp-accent); }
+.toolbarIcon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: var(--gp-sp-12);
+  block-size: var(--gp-sp-10);
+  background: var(--gp-surface-raised);
+  border-radius: var(--gp-r-sm);
+}
+.toolbarCheck {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  display: grid;
+  place-items: center;
+  inline-size: var(--gp-sp-8);
+  block-size: var(--gp-sp-4);
+  border: 2px solid var(--gp-surface-raised);
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-accent);
+}
+.toolbarCheck .tickSmall { color: var(--gp-on-accent); }
+.readyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gp-sp-2);
+  min-block-size: var(--gp-sp-8);
+  margin-block-start: var(--gp-sp-3);
+  padding-inline: var(--gp-sp-4) var(--gp-sp-3);
+  background: var(--gp-surface);
+  border: 1px solid var(--gp-hairline);
+  border-radius: var(--gp-r-pill);
+  color: var(--gp-savings);
+  font-size: var(--gp-fs-body-compact);
+  font-weight: 600;
+}

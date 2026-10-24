@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import styles from "../../components/InfoPage.module.css";
+import { BadgeStepArt, PinStepArt } from "../../components/BoardArt";
 import { t, type Locale } from "../../../lib/i18n";
 import { pageMeta } from "../../../lib/seo";
 
@@ -24,6 +25,7 @@ export default async function WelcomePage({ params }: Props) {
             <p className={styles.eyebrow}>{t(locale, `${W}step${n}.eyebrow`)}</p>
             <h2 className={styles.h2}>{t(locale, `${W}step${n}.title`)}</h2>
             <p className={styles.muted}>{t(locale, `${W}step${n}.body`)}</p>
+            {n === 1 ? <PinStepArt /> : <BadgeStepArt locale={locale} />}
           </li>
         ))}
       </ol>

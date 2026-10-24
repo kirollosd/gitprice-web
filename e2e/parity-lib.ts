@@ -58,7 +58,7 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Privacy-default-390": { max: 0.09, reason: TEXT + "; plus the paragraph added after the board was drawn" },
   "Pricing-no-prices-1440": { max: 0.04, reason: "board draws the Free price '0' and the 'Premium for sellers' row; neither has an i18n key" },
   "Pricing-no-prices-390": { max: 0.09, reason: "board draws the Free price '0' and the 'Premium for sellers' row; neither has an i18n key" },
-  "Welcome-default-390": { max: 0.05, reason: "board draws decorative art (toolbar icons, store chip) the build does not ship" },
+  "Welcome-default-390": { max: 0.05, reason: "step art now shipped (GP-262 P1-11), no change in ratio: footer margin is 96 where the 390 board leaves 48, and the sign-in lines sit 7px lower; measured en 0.05, ar 0.05" },
   "NotFound-default-390": { max: 0.05, reason: "Noto Sans Arabic line metrics differ between Sketch and Chromium" },
   "Home-launch-1440": { max: 0.07, reason: HOME_1440 + "; measured en 0.05, ar 0.06" },
   "Home-launch-390": { max: 0.09, reason: HOME_390 + PRO_SOON + "; measured en 0.08, ar 0.07" },

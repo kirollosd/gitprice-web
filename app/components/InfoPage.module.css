@@ -10,7 +10,8 @@
 .steps, .plans { list-style: none; display: grid; gap: var(--gp-sp-4); margin-block-start: var(--gp-sp-6); inline-size: 100%; }
 .plans { max-inline-size: 792px; text-align: start; }
 .steps + .muted { margin-block-start: var(--gp-sp-6); }
-.muted strong { font-weight: 400; color: var(--gp-ink); text-decoration: underline; }
+/* The sign-in line is plain text (the account lives in the extension): its own line in ink, no link styling. */
+.muted strong { display: block; margin-block-start: var(--gp-sp-1); font-weight: 400; color: var(--gp-ink); }
 .card {
   display: flex;
   flex-direction: column;
