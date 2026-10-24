@@ -7,64 +7,50 @@
 | Repo | URL | Contains | Deploy Target |
 |------|-----|----------|---------------|
 | **gitprice** | `kirollosd/gitprice` | Chrome extension, backend services (scraper, matcher), mobile app, DB migrations | Chrome Web Store, server infra |
-| **gitprice-web** (this repo) | `kirollosd/gitprice-web` | Marketing/landing site (Next.js), privacy policy, terms of service | GitHub Pages (`kirollosd.github.io/gitprice-web`) |
+| **gitprice-web** (this repo) | `kirollosd/gitprice-web` | Marketing/landing site (Next.js), privacy policy, terms of service | Vercel (`gitprice.com`, `www` redirects to apex) |
 
 **Rule:** All web/marketing site code goes here. Extension/backend code goes in `gitprice`. Never add Chrome extension, scraper, or matcher code to this repo.
 
 ## Project Overview
 
-**gitprice-web** — Marketing and landing page site for GitPrice. Next.js 15 (App Router) with TypeScript, statically exported to GitHub Pages.
+**gitprice-web** — Marketing and landing page site for GitPrice. Next.js 15 (App Router) with TypeScript, deployed on Vercel. GitHub Pages is retired.
 
 ## Architecture
 
 ```
 gitprice-web/
-├── app/
-│   ├── layout.tsx              # Root layout: nav, footer, fonts, metadata
-│   ├── page.tsx                # Landing page (hero, features, how-it-works, waitlist)
-│   ├── globals.css             # Design system tokens, font-face, shared styles
-│   ├── privacy/page.tsx        # Privacy Policy
-│   ├── terms/page.tsx          # Terms of Service
-│   └── components/
-│       ├── Nav.tsx             # Top navigation (server component)
-│       ├── MobileNav.tsx       # Hamburger menu ('use client')
-│       ├── Footer.tsx          # Site footer
-│       ├── Logo.tsx            # SVG logo (icon + wordmark variants)
-│       ├── HeroMockup.tsx      # Browser chrome mockup (server component)
-│       ├── StoreChip.tsx       # Store badge (Amazon.eg, Noon, Jumia)
-│       ├── ScrollReveal.tsx    # IntersectionObserver animation ('use client')
-│       └── TallyButton.tsx     # Tally waitlist form trigger ('use client')
-├── public/
-│   ├── fonts/                  # Self-hosted: Sora (display) + Karla (body) woff2
-│   ├── logo_full.svg           # Full wordmark
-│   └── logo_icon.svg           # Icon-only mark
-├── next.config.ts              # Static export, basePath for GitHub Pages
-└── package.json
+├── app/                  # App Router pages, layout, globals.css, components/
+├── lib/env.ts            # Typed, validated NEXT_PUBLIC_* config (build fails if required vars missing)
+├── lib/i18n.ts           # t(locale, 'web.…'), dir(); throws on missing key
+├── i18n/{en,ar}.json     # GENERATED copy of web.* strings. Do not hand-edit
+├── styles/tokens.css     # GENERATED design tokens. Do not hand-edit
+├── scripts/sync-design.mjs  # node scripts/sync-design.mjs <path-to-gitprice-monorepo>
+├── public/fonts/         # Self-hosted Fustat + Noto Sans Arabic woff2 (no CDN)
+├── tests/                # vitest
+└── vercel.json           # www -> apex redirect
 ```
 
 ## Design System
 
-- **Fonts:** Sora (headings), Karla (body) — self-hosted woff2, NO Google Fonts CDN
-- **Colors:** Apple-inspired grays + emerald green accent (`#34d399`)
-- **Tokens:** CSS custom properties in `globals.css`
-- **Style:** Apple-aesthetic, frosted glass nav, dark waitlist section
+- **Source of truth:** the gitprice monorepo (`design-system/`). Run `npm run sync -- <monorepoPath>` to refresh tokens and copy.
+- **Fonts:** Fustat (Latin) + Noto Sans Arabic, self-hosted. Light/dark follows `prefers-color-scheme` via `data-gp="app"`.
+- **Copy:** pages read strings only through `t()`; Arabic comes from the synced `ar.json`.
 
 ## Development
 
 ```bash
 npm install
+cp .env.example .env.local   # placeholders; real values live in Vercel
 npm run dev     # http://localhost:3000
-npm run build   # Static export to out/
+npm test        # vitest
+npm run build
 ```
 
 ## Deployment
 
-GitHub Pages via GitHub Actions. Static export with:
-- `output: 'export'`
-- `basePath: '/gitprice-web'` (production only)
-- `trailingSlash: true`
+Vercel, on `gitprice.com`. Flipping prelaunch to launch means changing `NEXT_PUBLIC_LAUNCH` and the store URLs in Vercel and redeploying. If `LAUNCH=1` and a store URL is missing, the build fails.
 
 ## Key Integrations
 
-- **Tally form** (ID: `ODdMyk`) — waitlist signup, loaded via `next/script`
-- **No backend/API** — pure static marketing site
+- **Tally form**: ID from `NEXT_PUBLIC_TALLY_FORM_ID`
+- **API / Supabase**: `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (publishable key only)

@@ -1,0 +1,760 @@
+{
+  "_source": "gitprice@3865e6a8",
+  "web": {
+    "component": {
+      "webNav": {
+        "768": {
+          "cta": {
+            "label": "Join the waitlist"
+          },
+          "label": {
+            "sellers": "For sellers"
+          }
+        },
+        "1024": {
+          "label": {
+            "features": "Features",
+            "howItWorks": "How it works",
+            "sellers": "For sellers"
+          },
+          "cta": {
+            "label": "Join the waitlist"
+          }
+        },
+        "1440": {
+          "label": {
+            "features": "Features",
+            "howItWorks": "How it works",
+            "sellers": "GitPrice for marketplace sellers"
+          },
+          "cta": {
+            "label": "Join the waitlist"
+          }
+        },
+        "menuOpen": {
+          "label": {
+            "features": "Features",
+            "howItWorks": "How it works",
+            "sellers": "GitPrice for marketplace sellers"
+          },
+          "cta": {
+            "label": "Join the waitlist"
+          }
+        },
+        "menuOpen768": {
+          "label": {
+            "features": "Features",
+            "howItWorks": "How it works",
+            "sellers": "GitPrice for marketplace sellers"
+          },
+          "cta": {
+            "label": "Join the waitlist"
+          }
+        }
+      },
+      "webStoreStrip": {
+        "default": {
+          "caption": "Works on stores you already shop at"
+        }
+      },
+      "webFeatureCard": {
+        "savings": {
+          "title": "See what you’d save",
+          "body": "A badge on the product page says how much less it costs elsewhere. Open the side panel for each store’s price."
+        },
+        "alerts": {
+          "title": "Hear when the price drops",
+          "body": "Set the price you want to pay. GitPrice tells you when a store reaches it."
+        },
+        "sellers": {
+          "title": "A seller mode, too",
+          "body": "See which of your listings a rival undercuts, and by how much."
+        }
+      },
+      "webPricingCard": {
+        "free": {
+          "plan": "Free",
+          "period": "Free forever",
+          "feature": {
+            "1": "3 price alerts",
+            "2": "Compare prices across stores",
+            "3": "Your savings history"
+          },
+          "cta": {
+            "label": "Get started"
+          }
+        },
+        "pro": {
+          "plan": "Pro",
+          "price": "XX",
+          "period": "per month, placeholder price",
+          "feature": {
+            "1": "100 price alerts",
+            "2": "Faster price checks",
+            "3": "Everything in Free"
+          },
+          "cta": {
+            "label": "Go Pro"
+          }
+        },
+        "sellersRow": {
+          "title": "Premium for sellers",
+          "body": "See which of your listings a rival undercuts, and by how much.",
+          "cta": {
+            "label": "See seller features"
+          }
+        },
+        "sellersRow358": {
+          "title": "Premium for sellers",
+          "body": "See which of your listings a rival undercuts, and by how much.",
+          "cta": {
+            "label": "See seller features"
+          }
+        }
+      },
+      "webWaitlistForm": {
+        "empty": {
+          "input": {
+            "email": {
+              "label": "Email"
+            }
+          },
+          "button": {
+            "submit": {
+              "label": "Join the waitlist"
+            }
+          },
+          "note": "One email when we launch. No spam."
+        },
+        "submitting": {
+          "input": {
+            "email": {
+              "label": "Email",
+              "value": "sara@example.com"
+            }
+          },
+          "button": {
+            "submit": {
+              "label": "Joining…"
+            }
+          },
+          "note": "One email when we launch. No spam."
+        },
+        "joined": {
+          "title": "You’re on the list",
+          "body": "We’ll email you once, when GitPrice launches."
+        },
+        "alreadyJoined": {
+          "title": "You’re already on the list",
+          "body": "This email joined earlier. We’ll write when we launch."
+        },
+        "error": {
+          "input": {
+            "email": {
+              "label": "Email",
+              "value": "sara@example",
+              "message": "Enter a full email address, like name@example.com."
+            }
+          },
+          "button": {
+            "submit": {
+              "label": "Join the waitlist"
+            }
+          }
+        },
+        "failed": {
+          "input": {
+            "email": {
+              "label": "Email",
+              "value": "sara@example.com"
+            }
+          },
+          "button": {
+            "submit": {
+              "label": "Try again"
+            }
+          },
+          "message": "We couldn’t add you just now. Check your connection and try again."
+        }
+      },
+      "webCookieNotice": {
+        "default": {
+          "title": "Analytics cookies",
+          "body": "This site uses Heap analytics cookies. No ads, and we never sell your data.",
+          "label": {
+            "privacy": "Read the privacy policy"
+          },
+          "button": {
+            "decline": {
+              "label": "Decline"
+            },
+            "allow": {
+              "label": "Allow"
+            }
+          }
+        }
+      },
+      "webStoreBadges": {
+        "default": {
+          "button": {
+            "addToChrome": {
+              "label": "Add GitPrice to Chrome"
+            }
+          },
+          "label": {
+            "appStore": {
+              "top": "Download on the"
+            },
+            "appStoreText": "App Store",
+            "googlePlay": {
+              "top": "Get it on"
+            },
+            "googlePlayText": "Google Play"
+          }
+        }
+      },
+      "webFooter": {
+        "default": {
+          "tagline": "Compares prices while you shop.",
+          "label": {
+            "privacy": "Privacy",
+            "terms": "Terms"
+          },
+          "copyright": "© 2026 GitPrice"
+        }
+      },
+      "webLegalToc": {
+        "default": {
+          "heading": "On this page",
+          "label": {
+            "section1": "1. Information We Collect",
+            "section2": "2. How We Use Your Information",
+            "section3": "3. Third-Party Services and Affiliate Links",
+            "section4": "4. Data Storage and Security",
+            "section5": "5. Data Sharing",
+            "section6": "6. Your Rights",
+            "section7": "7. Cookies and Tracking",
+            "section8": "8. Children’s Privacy",
+            "section9": "9. Changes to This Policy"
+          }
+        },
+        "terms": {
+          "heading": "On this page",
+          "label": {
+            "section1": "1. Description of Service",
+            "section2": "2. Eligibility and Account",
+            "section3": "3. User Obligations",
+            "section4": "4. Affiliate Disclosure",
+            "section5": "5. Privacy and Data",
+            "section6": "6. Disclaimer of Warranties",
+            "section7": "7. Limitation of Liability",
+            "section8": "8. Third-Party Platforms",
+            "section9": "9. Modifications to the Service and Terms",
+            "section10": "10. Termination",
+            "section11": "11. Governing Law"
+          }
+        }
+      },
+      "webHero": {
+        "390": {
+          "headline": "See where it costs less, before you buy.",
+          "sub": "Open a product and GitPrice shows how much less it costs at other stores, right on the page. Prefer to wait? Set an alert for the drop."
+        },
+        "768": {
+          "headline": "See where it costs less, before you buy.",
+          "sub": "Open a product and GitPrice shows how much less it costs at other stores, right on the page. Prefer to wait? Set an alert for the drop."
+        },
+        "1024": {
+          "headline": "See where it costs less, before you buy.",
+          "sub": "Open a product and GitPrice shows how much less it costs at other stores, right on the page. Prefer to wait? Set an alert for the drop."
+        },
+        "1440": {
+          "headline": "See where it costs less, before you buy.",
+          "sub": "Open a product and GitPrice shows how much less it costs at other stores, right on the page. Prefer to wait? Set an alert for the drop."
+        }
+      }
+    },
+    "home": {
+      "free": {
+        "label": "Free to use."
+      },
+      "hero": {
+        "headline": "See where it costs less, before you buy.",
+        "sub": "Open a product and GitPrice shows how much less it costs at other stores, right on the page. Prefer to wait? Set an alert for the drop."
+      },
+      "proof": {
+        "1": "Free",
+        "2": "Works on the stores you already use",
+        "3": "Quiet until it finds a lower price"
+      },
+      "features": {
+        "heading": "Features",
+        "rows": {
+          "title": "See what you’d save",
+          "body": "A badge on the product page says how much less it costs elsewhere. Open the side panel for each store’s price."
+        },
+        "alerts": {
+          "title": "Hear when the price drops",
+          "body": "Set the price you want to pay. GitPrice tells you when a store reaches it."
+        },
+        "history": {
+          "title": "Keep track of what you saved",
+          "body": "Purchases you make at a lower price add to your total, so you can see what GitPrice has saved you."
+        }
+      },
+      "visual": {
+        "pricerowcompact": {
+          "store": "Store A",
+          "title": "Wireless headphones",
+          "store2": "Store B",
+          "saving": "1,250 less",
+          "store3": "Store C"
+        },
+        "toast": {
+          "message": "Alert set · we’ll tell you when it drops below 23,000"
+        }
+      },
+      "how": {
+        "1": {
+          "title": "Open a product",
+          "body": "Shop as you always do. GitPrice stays quiet until it has a price to show."
+        },
+        "2": {
+          "title": "See the difference",
+          "body": "A badge shows how much less it costs elsewhere. The side panel lists each store’s price."
+        },
+        "3": {
+          "title": "Buy where it costs less",
+          "body": "Go to that store from the panel, or set an alert and wait for the drop."
+        },
+        "heading": "How it works"
+      },
+      "privacy": {
+        "heading": "What GitPrice looks at",
+        "link": "Read the privacy policy",
+        "point1": "Product pages only: the product, its title and its price. Not your browsing history, passwords or payment details.",
+        "point2": "We never sell your data or use it for advertising.",
+        "point3": "We ask for your email only if you create an account."
+      },
+      "faq": {
+        "1": {
+          "q": "Is GitPrice free?",
+          "a": "Yes. Comparing prices, price alerts and your savings history are free."
+        },
+        "2": {
+          "q": "Which stores does it work on?",
+          "a": "On a growing list of online stores. If a store isn’t supported, GitPrice stays quiet instead of guessing."
+        },
+        "3": {
+          "q": "Is it the same product?",
+          "a": "GitPrice matches products by their details. When it isn’t sure, it says so, for example “May be a different variant”, so you can check."
+        },
+        "4": {
+          "q": "What does GitPrice see?",
+          "a": "Product pages only: the product, its title and its price. Not your browsing history, passwords or payment details."
+        },
+        "5": {
+          "q": "How do price alerts work?",
+          "a": "Set the price you want to pay on a product. GitPrice tells you when a store reaches it."
+        },
+        "heading": "Questions"
+      },
+      "cta": {
+        "title": "Get one email when GitPrice launches.",
+        "line": "Free to use."
+      },
+      "launch": {
+        "nav": {
+          "label": "Add GitPrice to Chrome"
+        },
+        "cta": {
+          "title": "Check your next purchase against other stores.",
+          "line": "Free on Chrome, iPhone and Android."
+        }
+      }
+    },
+    "sellers": {
+      "nav": {
+        "label": {
+          "sellers": "GitPrice for shoppers",
+          "sellers2": "For shoppers"
+        }
+      },
+      "hero": {
+        "headline": "Know which listings a rival undercuts.",
+        "sub": "GitPrice Premium shows where your price stands on each listing you track, and by how much a rival is below you.",
+        "micro": "Premium is a paid plan for sellers. Pricing is announced at launch."
+      },
+      "prelaunch": {
+        "hero": {
+          "waitlist": {
+            "button": {
+              "submitLabel": "Join the seller waitlist"
+            },
+            "note": "One email when seller access opens. No spam."
+          }
+        }
+      },
+      "visual": {
+        "rival": {
+          "1": {
+            "name": "TechZone",
+            "count": "Lower than you on 14 listings"
+          },
+          "2": {
+            "name": "Mobile Hub",
+            "count": "Lower than you on 6 listings"
+          },
+          "3": {
+            "name": "Gadget Corner",
+            "count": "Lower than you on 3 listings"
+          }
+        }
+      },
+      "features": {
+        "1": {
+          "title": "Hear when a rival undercuts you",
+          "body": "Get an alert when another seller lists the same product for less than you."
+        },
+        "2": {
+          "title": "See where each listing stands",
+          "body": "For every listing, see whether you hold the lowest price. If not, see who beats you and by how much."
+        },
+        "3": {
+          "title": "Follow each listing over time",
+          "body": "See how prices moved on a listing, so you know when you were undercut."
+        },
+        "4": {
+          "title": "Check many listings at once",
+          "body": "Add your listings in bulk and see which ones are undercut in one list."
+        },
+        "heading": "What you get"
+      },
+      "how": {
+        "1": {
+          "title": "Add your listings",
+          "body": "Add them one by one or in bulk."
+        },
+        "2": {
+          "title": "GitPrice checks rivals",
+          "body": "We compare each listing with the same product from other sellers."
+        },
+        "3": {
+          "title": "Act on the gap",
+          "body": "See who undercuts you and by how much, then adjust your price or hold it."
+        },
+        "heading": "How it works"
+      },
+      "who": "For resellers who sell on online marketplaces and want to know, listing by listing, whether they hold the lowest price.",
+      "cta": {
+        "title": "Get seller access when it opens.",
+        "line": "One email when seller access opens. No spam.",
+        "waitlist": {
+          "button": {
+            "submitLabel": "Join the seller waitlist"
+          },
+          "note": "One email when seller access opens. No spam."
+        }
+      },
+      "backToShoppers": "GitPrice for shoppers",
+      "footer": {
+        "tagline": "Shows which rivals undercut you."
+      },
+      "prelaunchJoined": {
+        "hero": {
+          "waitlist": {
+            "body": "We’ll email you once, when seller access opens."
+          }
+        }
+      },
+      "launch": {
+        "nav": {
+          "label": "Get seller access"
+        },
+        "hero": {
+          "access": {
+            "label": "Get seller access"
+          }
+        },
+        "cta": {
+          "title": "See who undercuts you today.",
+          "access": {
+            "label": "Get seller access"
+          }
+        }
+      }
+    },
+    "notFound": {
+      "title": "Page not found",
+      "body": "The link may be broken, or the page has moved.",
+      "back": {
+        "label": "Back to home"
+      }
+    },
+    "pricing": {
+      "default": {
+        "title": "Plans",
+        "subtitle": "Free covers most shoppers. Pro is for tracking more products."
+      },
+      "noPrices": {
+        "title": "GitPrice is free",
+        "subtitle": "Compare prices and set alerts at no cost. Pro comes later, for people who track more products.",
+        "plan": {
+          "free": {
+            "plan": "Free",
+            "period": "Free forever. No card needed.",
+            "feature": {
+              "1": "3 price alerts",
+              "2": "Compare prices across stores",
+              "3": "Your savings history"
+            },
+            "label": "Get started"
+          },
+          "pro": {
+            "plan": "Pro",
+            "price": "Coming later",
+            "period": "No price yet",
+            "feature": {
+              "1": "100 price alerts",
+              "2": "Faster price checks",
+              "3": "Everything in Free"
+            },
+            "label": "Notify me"
+          }
+        }
+      }
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "meta": "Effective May 11, 2026 · Last updated May 11, 2026",
+      "intro": "GitPrice is a browser extension that helps you compare prices across supported online stores. This Privacy Policy explains what information we collect, how we use it, and your rights as a user.",
+      "section1": {
+        "heading": "1. Information We Collect",
+        "p1": "GitPrice collects the minimum data necessary to provide price comparison functionality.",
+        "p2": "Data collected automatically while using the extension:",
+        "li3": "•  Product identifiers (ASIN, SKU) and product titles from the pages you browse on supported stores",
+        "li4": "•  Current prices displayed on those pages",
+        "li5": "•  Your extension settings stored in chrome.storage.sync",
+        "li6": "•  Anonymous error and crash reports (opt-out available in Settings → Privacy)",
+        "p7": "Account data (if you sign in):",
+        "li8": "•  Email address used to create your GitPrice account",
+        "li9": "•  Authentication tokens stored locally in chrome.storage.local",
+        "p10": "We do not collect your browsing history outside supported store pages, financial information, passwords, or any personally identifiable information beyond your email if you register."
+      },
+      "section2": {
+        "heading": "2. How We Use Your Information",
+        "li1": "•  To search for and display competing prices across supported stores",
+        "li2": "•  To send price-drop notifications for products you are tracking (if enabled)",
+        "li3": "•  To improve extension reliability by diagnosing crashes and errors",
+        "li4": "•  To authenticate your account and manage Pro subscription status",
+        "p5": "We do not use your data for advertising, profiling, or sale to third parties."
+      },
+      "section3": {
+        "heading": "3. Third-Party Services and Affiliate Links",
+        "p1": "GitPrice may redirect you to supported stores using affiliate links. These links allow us to earn a small commission when you make a purchase, at no additional cost to you.",
+        "p2": "When you follow an affiliate link, the destination store’s own privacy policy applies. GitPrice does not share your personal information with affiliate stores."
+      },
+      "section4": {
+        "heading": "4. Data Storage and Security",
+        "p1": "Your extension settings and authentication tokens are stored locally in your browser using Chrome’s secure storage APIs (chrome.storage.local and chrome.storage.sync). Server-side data is stored on secured servers with access controls and encryption at rest.",
+        "p2": "We retain price comparison data only as long as necessary. Account data is retained until you delete your account."
+      },
+      "section5": {
+        "heading": "5. Data Sharing",
+        "p1": "We do not sell, rent, or trade your personal information. We may share data only in these limited circumstances:",
+        "li2": "•  Service providers: Third-party vendors assisting in operating the extension under strict confidentiality agreements",
+        "li3": "•  Legal requirements: If required by applicable law, court order, or governmental authority",
+        "li4": "•  Business transfers: In connection with a merger, acquisition, or sale of assets, with notice to users"
+      },
+      "section6": {
+        "heading": "6. Your Rights",
+        "p1": "Depending on your jurisdiction, you may have the right to:",
+        "li2": "•  Access: Request a copy of the personal data we hold about you",
+        "li3": "•  Correction: Ask us to correct inaccurate data",
+        "li4": "•  Deletion: Request deletion of your account and associated data",
+        "li5": "•  Portability: Receive your data in a machine-readable format",
+        "li6": "•  Objection: Object to processing based on legitimate interests",
+        "li7": "•  Opt-out of error reporting: Disable anonymous error reports in Settings → Privacy",
+        "p8": "To exercise these rights, contact us at privacy@gitprice.com."
+      },
+      "section7": {
+        "heading": "7. Cookies and Tracking",
+        "p1": "The GitPrice extension itself does not set cookies. When you visit store pages, those sites may set their own cookies — their respective privacy policies govern that activity.",
+        "p2": "This website uses Heap Analytics to understand how visitors use it (pages viewed, clicks, and general device and browser information). Heap sets its own cookies on this site. We do not use this data for advertising."
+      },
+      "section8": {
+        "heading": "8. Children’s Privacy",
+        "p1": "GitPrice is not directed at children under 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, contact us at privacy@gitprice.com and we will promptly delete it."
+      },
+      "section9": {
+        "heading": "9. Changes to This Policy",
+        "p1": "We may update this Privacy Policy from time to time. We will post the revised policy on this page with an updated effective date. For significant changes, we will notify you via a notice in the extension."
+      }
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "meta": "Effective May 11, 2026 · Last updated May 11, 2026",
+      "intro": "Please read these Terms of Service carefully before installing or using the GitPrice Chrome extension. By installing or using the Service, you agree to be bound by these Terms. If you do not agree, do not install or use the Service.",
+      "section1": {
+        "heading": "1. Description of Service",
+        "p1": "GitPrice is a browser extension that automatically detects product pages on supported online stores and displays price comparisons for the same or equivalent products across those stores. The Service also provides optional price-drop alerts and a 6-month local price history for tracked products.",
+        "p2": "GitPrice is a pre-launch MVP product offered free of charge during its initial release. The scope of supported stores and features may change over time."
+      },
+      "section2": {
+        "heading": "2. Eligibility and Account",
+        "p1": "You must be at least 13 years of age to use the Service. You may use GitPrice without creating an account. Certain features (such as syncing alerts across devices) require registration. You are responsible for maintaining the confidentiality of your account credentials."
+      },
+      "section3": {
+        "heading": "3. User Obligations",
+        "p1": "By using the Service, you agree to:",
+        "li2": "•  Use the Service only for personal, non-commercial price-comparison purposes.",
+        "li3": "•  Not attempt to reverse-engineer, decompile, or scrape the Service itself.",
+        "li4": "•  Not use the Service to automate bulk purchases, generate fraudulent affiliate clicks, or circumvent the terms of any supported store.",
+        "li5": "•  Not interfere with or disrupt the Service’s infrastructure or the servers of third-party stores it accesses.",
+        "li6": "•  Comply with all applicable laws and regulations in your jurisdiction."
+      },
+      "section4": {
+        "heading": "4. Affiliate Disclosure",
+        "p1": "GitPrice participates in affiliate programmes operated by supported stores. When you click a price-comparison result or a “Go to Store” link provided by the Service, that link may contain an affiliate tracking code. If you complete a purchase after following such a link, GitPrice may receive a commission from the retailer at no additional cost to you. Affiliate commissions do not influence the prices displayed or the ranking of results — GitPrice always shows you the best available price regardless of affiliate relationships."
+      },
+      "section5": {
+        "heading": "5. Privacy and Data",
+        "p1": "GitPrice stores product data and price history locally on your device. No personal shopping data is transmitted to GitPrice servers in the current MVP release. For details on what data is collected and how it is used, please see our Privacy Policy."
+      },
+      "section6": {
+        "heading": "6. Disclaimer of Warranties",
+        "p1": "THE SERVICE IS PROVIDED “AS IS” AND “AS AVAILABLE” WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. GITPRICE DOES NOT WARRANT THAT PRICES DISPLAYED ARE ACCURATE, COMPLETE, OR UP TO DATE. PRICES ON THIRD-PARTY STORES MAY CHANGE AT ANY TIME, AND GITPRICE IS NOT RESPONSIBLE FOR DISCREPANCIES BETWEEN DISPLAYED AND ACTUAL PRICES."
+      },
+      "section7": {
+        "heading": "7. Limitation of Liability",
+        "p1": "TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, GITPRICE AND ITS OFFICERS, EMPLOYEES, AND CONTRIBUTORS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES — INCLUDING LOSS OF PROFITS, DATA, OR GOODWILL — ARISING FROM YOUR USE OF OR INABILITY TO USE THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. GITPRICE’S TOTAL LIABILITY TO YOU FOR ANY CLAIMS ARISING UNDER THESE TERMS SHALL NOT EXCEED USD 10."
+      },
+      "section8": {
+        "heading": "8. Third-Party Platforms",
+        "p1": "The Service accesses publicly available data on third-party online stores. GitPrice is not affiliated with, endorsed by, or sponsored by any retailer. Each store’s own terms of service govern your use of that store, and GitPrice makes no representations regarding those terms."
+      },
+      "section9": {
+        "heading": "9. Modifications to the Service and Terms",
+        "p1": "GitPrice reserves the right to modify or discontinue the Service at any time without notice. We may also update these Terms from time to time. We will indicate the date of the last revision at the top of this page. Your continued use of the Service after a change in Terms constitutes your acceptance of the revised Terms."
+      },
+      "section10": {
+        "heading": "10. Termination",
+        "p1": "You may stop using the Service at any time by uninstalling the extension. GitPrice may suspend or terminate your access to the Service if you violate these Terms. Upon termination, the obligations and limitations set forth in Sections 4–7 and 11 survive."
+      },
+      "section11": {
+        "heading": "11. Governing Law",
+        "p1": "These Terms are governed by and construed in accordance with the laws of the Arab Republic of Egypt, without regard to its conflict-of-law principles. Any dispute arising out of or relating to these Terms or the Service shall be subject to the exclusive jurisdiction of the courts located in Cairo, Egypt."
+      }
+    },
+    "resetPassword": {
+      "verifying": {
+        "title": "Checking your link",
+        "body": "One moment while we check your reset link."
+      },
+      "title": "Set a new password",
+      "body": "Choose a new password for {email}.",
+      "field": {
+        "label": "New password"
+      },
+      "button": {
+        "label": "Save password"
+      },
+      "saving": {
+        "button": {
+          "label": "Saving…"
+        }
+      },
+      "success": {
+        "title": "Password updated",
+        "body": "Sign in with your new password in the GitPrice extension or app."
+      },
+      "linkExpired": {
+        "title": "This link has expired",
+        "body": "Request a new one from the app."
+      },
+      "error": {
+        "field": {
+          "message": "Something went wrong on our side. Your password wasn’t changed. Try again."
+        }
+      }
+    },
+    "checkout": {
+      "summary": {
+        "title": "Upgrade to GitPrice Pro",
+        "body": "100 price alerts and faster checks. Payment happens on a secure provider page.",
+        "row": {
+          "label": "Plan",
+          "value": "Pro · monthly",
+          "label2": "Total",
+          "value2": "000 / month"
+        },
+        "note": "Prices are placeholders until launch.",
+        "button": {
+          "label": "Continue to payment"
+        }
+      },
+      "redirecting": {
+        "title": "Taking you to payment",
+        "body": "Sending you to the payment provider’s secure page.",
+        "fallback": "Nothing happened? Use the button to continue.",
+        "button": {
+          "label": "Open payment page"
+        }
+      },
+      "waiting": {
+        "title": "Waiting for payment…",
+        "body": "Finish on the payment page. Pro unlocks once your payment is confirmed."
+      },
+      "success": {
+        "title": "You’re on GitPrice Pro",
+        "body": "Pro is on for this account on every device.",
+        "button": {
+          "label": "Return to the extension"
+        }
+      },
+      "failed": {
+        "title": "Payment didn’t go through",
+        "body": "You were not charged. Try again or use another card.",
+        "button": {
+          "label": "Try again"
+        }
+      },
+      "cancelled": {
+        "title": "Checkout cancelled",
+        "body": "You were not charged. Your plan hasn’t changed.",
+        "button": {
+          "label": "Back to summary"
+        }
+      },
+      "signedOut": {
+        "title": "Your session has ended",
+        "body": "Sign in from the GitPrice extension, then choose Pro again. You were not charged."
+      },
+      "alreadyPro": {
+        "title": "You’re already on Pro",
+        "body": "Every Pro feature is on for this account.",
+        "button": {
+          "label": "Manage subscription"
+        }
+      }
+    },
+    "welcome": {
+      "title": "GitPrice is installed",
+      "subtitle": "Two quick steps, then it works while you shop.",
+      "step1": {
+        "eyebrow": "Step 1",
+        "title": "Pin the toolbar icon",
+        "body": "Click the puzzle-piece icon in Chrome’s toolbar, then the pin next to GitPrice. The icon tells you when a lower price is found."
+      },
+      "step2": {
+        "eyebrow": "Step 2",
+        "title": "Try it on a product page",
+        "body": "Open a product on a store you already shop at. GitPrice shows other stores’ prices right on the page."
+      },
+      "signin": {
+        "text": "Want your alerts backed up? An account is optional.",
+        "link": "Sign in to back up your alerts"
+      }
+    }
+  }
+}
