@@ -27,7 +27,7 @@ gitprice-web/
 ├── scripts/sync-design.mjs  # node scripts/sync-design.mjs <path-to-gitprice-monorepo>
 ├── public/fonts/         # Self-hosted Fustat + Noto Sans Arabic woff2 (no CDN)
 ├── tests/                # vitest
-└── vercel.json           # www -> apex redirect
+└── next.config.ts        # www -> apex redirect (redirects())
 ```
 
 ## Design System
