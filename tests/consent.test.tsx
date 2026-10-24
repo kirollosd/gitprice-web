@@ -9,7 +9,15 @@ vi.mock("next/link", () => ({
 }));
 vi.mock("@vercel/analytics/react", () => ({ Analytics: () => <i data-testid="vercel" /> }));
 // next/script caches loaded ids module-wide, so stand in a plain element: only our gating is under test.
-vi.mock("next/script", () => ({ default: ({ id }: { id: string }) => <script id={id} /> }));
+const scriptMounts = vi.hoisted(() => ({ ids: [] as string[] }));
+vi.mock("next/script", async () => {
+  const { useEffect } = await import("react");
+  function Script({ id }: { id: string }) {
+    useEffect(() => { scriptMounts.ids.push(id); }, [id]);
+    return <script id={id} />;
+  }
+  return { default: Script };
+});
 const mockEnv = vi.hoisted(() => ({ heapId: "12345" as string | undefined }));
 vi.mock("../lib/env", () => ({ env: mockEnv }));
 
@@ -22,6 +30,7 @@ const clearCookies = () =>
 beforeEach(() => {
   clearCookies();
   mockEnv.heapId = "12345";
+  scriptMounts.ids.length = 0;
   vi.stubEnv("NODE_ENV", "production");
   reload.mockReset();
   vi.stubGlobal("location", { ...window.location, hostname: "localhost", reload });
@@ -139,6 +148,8 @@ describe("cookie notice and Heap", () => {
     click(en.web.component.webFooter.default.label.cookies);
     click(N.button.allow.label);
     expect(document.querySelectorAll("#heap")).toHaveLength(1);
+    // A DOM count alone would hide a second mount that replaces the first.
+    expect(scriptMounts.ids).toEqual(["heap"]);
   });
 
   it("moves focus to main after the first choice, and to the footer control after a reopen", async () => {

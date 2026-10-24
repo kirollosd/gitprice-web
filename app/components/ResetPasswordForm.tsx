@@ -74,7 +74,7 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
     }
   }
 
-  if (status === "verifying") return <Message locale={locale} k="verifying" live heading={heading} />;
+  if (status === "verifying") return <Message locale={locale} k="verifying" heading={heading} />;
   if (status === "expired") return <Message locale={locale} k="linkExpired" heading={heading} />;
   if (status === "success") return <Message locale={locale} k="success" heading={heading} />;
 
@@ -108,11 +108,14 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
   );
 }
 
-function Message({ locale, k, live, heading }: { locale: Locale; k: string; live?: boolean; heading: RefObject<HTMLHeadingElement | null> }) {
+/** The status region stays mounted across message views, so a swap (verifying to expired) is announced. */
+function Message({ locale, k, heading }: { locale: Locale; k: string; heading: RefObject<HTMLHeadingElement | null> }) {
   return (
-    <div className={styles.card} role={live ? "status" : undefined}>
-      <h1 ref={heading} tabIndex={-1} className={styles.h1}>{t(locale, `${K}${k}.title`)}</h1>
-      <p className={styles.muted}>{t(locale, `${K}${k}.body`)}</p>
+    <div className={styles.card}>
+      <div role="status" aria-live="polite" className={styles.card}>
+        <h1 ref={heading} tabIndex={-1} className={styles.h1}>{t(locale, `${K}${k}.title`)}</h1>
+        <p className={styles.muted}>{t(locale, `${K}${k}.body`)}</p>
+      </div>
     </div>
   );
 }

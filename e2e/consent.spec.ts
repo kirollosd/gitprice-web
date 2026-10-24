@@ -102,4 +102,20 @@ test.describe("with the Arabic suggestion banner", () => {
     expect(a!.y).toBeGreaterThanOrEqual(0);
     expect(b!.y + b!.height).toBeLessThanOrEqual(800);
   });
+
+  test("on a short 390x300 viewport the stack scrolls and both banners are reachable", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 300 });
+    await page.goto("/privacy");
+    const banner = page.getByRole("region", { name: en.web.component.webLocaleSuggest.default.label });
+    await expect(banner).toBeVisible();
+    await expect(notice(page)).toBeVisible();
+    const stack = banner.locator("xpath=..");
+    const m = await stack.evaluate((el) => ({ scroll: el.scrollHeight, client: el.clientHeight }));
+    expect(m.scroll).toBeGreaterThan(m.client);
+    expect(m.client).toBeLessThan(300);
+    await stack.evaluate((el) => { el.scrollTop = 0; });
+    await expect(banner).toBeInViewport();
+    await stack.evaluate((el) => { el.scrollTop = el.scrollHeight; });
+    await expect(notice(page).getByRole("button", { name: N.button.allow.label })).toBeInViewport();
+  });
 });
