@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@bf05c07e",
+  "_source": "gitprice@d8b6ca9e",
   "web": {
     "component": {
       "webNav": {
@@ -728,6 +728,14 @@
         "note": "Prices are placeholders until launch.",
         "button": {
           "label": "Continue to payment"
+        },
+        "plan": {
+          "month": "Pro · monthly",
+          "year": "Pro · yearly"
+        },
+        "total": {
+          "month": "{price} / month",
+          "year": "{price} / year"
         }
       },
       "redirecting": {

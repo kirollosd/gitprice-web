@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@bf05c07e",
+  "_source": "gitprice@d8b6ca9e",
   "web": {
     "component": {
       "webNav": {
@@ -728,6 +728,14 @@
         "note": "الأسعار مؤقتة حتى الإطلاق.",
         "button": {
           "label": "المتابعة إلى الدفع"
+        },
+        "plan": {
+          "month": "Pro · شهرية",
+          "year": "Pro · سنوية"
+        },
+        "total": {
+          "month": "{price} / شهريًا",
+          "year": "{price} / سنويًا"
         }
       },
       "redirecting": {
