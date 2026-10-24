@@ -25,8 +25,10 @@ test("GTM loads with consent default denied, no _ga cookies, no Heap", async ({ 
   await page.goto("/");
   await expect.poll(() => gtmRequests.some((u) => u.includes("gtm.js?id=GTM-TEST000"))).toBe(true);
   const dl = await layer(page);
-  const def = dl.find((e) => Array.isArray(e) && e[0] === "consent" && e[1] === "default") as unknown[];
-  expect(def[2]).toMatchObject({ analytics_storage: "denied" });
+  const def = dl.find((e) => Array.isArray(e) && e[0] === "consent" && e[1] === "default") as unknown[] | undefined;
+  expect(def).toBeDefined();
+  expect(def![2]).toMatchObject({ analytics_storage: "denied" });
+  // GTM is stubbed, so GA can't set _ga here; this guards against the site itself writing it, not GA's consent handling.
   expect((await context.cookies()).filter((c) => c.name.startsWith("_ga"))).toEqual([]);
   expect(heapRequests).toEqual([]);
 });
@@ -67,8 +69,10 @@ test("with GTM blocked the page renders, Allow works, no page errors", async ({ 
   const errors: Error[] = [];
   page.on("pageerror", (e) => errors.push(e));
   await page.unroute(GTM);
-  await page.route(GTM, (r) => r.abort());
+  const aborted: string[] = [];
+  await page.route(GTM, (r) => { aborted.push(r.request().url()); return r.abort(); });
   await page.goto("/");
+  await expect.poll(() => aborted.length).toBeGreaterThan(0);
   const notice = page.getByRole("region", { name: en.web.component.webCookieNotice.default.title });
   await expect(page.locator("main")).toBeVisible();
   await notice.getByRole("button", { name: en.web.component.webCookieNotice.default.button.allow.label }).click();
