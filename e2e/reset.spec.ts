@@ -3,7 +3,7 @@ import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 
 // The build points at a fake Supabase host; every auth call is stubbed, nothing leaves the machine.
-const SUPABASE = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://example.supabase.co";
+const SUPABASE = "https://example.supabase.co"; // matches playwright.config.ts
 const R = en.web.resetPassword;
 const GOOD = "Abcdef12";
 const b64 = (o: object) => Buffer.from(JSON.stringify(o)).toString("base64url");
@@ -15,9 +15,14 @@ const json = (status: number, body: object) => ({ status, contentType: "applicat
 type Stub = { verify?: ReturnType<typeof json>; update?: ReturnType<typeof json>[] };
 async function stub(page: Page, s: Stub) {
   const calls = { verify: 0, update: 0 };
+  // Safety net: registered first, so the specific stubs below win and anything else is aborted.
+  await page.route(/supabase\.co/, (route) => route.abort());
   const updates = [...(s.update ?? [json(200, user)])];
   await page.route(`${SUPABASE}/auth/v1/**`, (route) => {
     const { pathname } = new URL(route.request().url());
+    // Tokens must be gone from the address bar before the first network call.
+    const here = new URL(page.url());
+    expect(here.search + here.hash).toBe("");
     if (pathname.endsWith("/verify")) { calls.verify++; return route.fulfill(s.verify ?? json(200, session)); }
     if (pathname.endsWith("/logout")) return route.fulfill({ status: 204 });
     if (pathname.endsWith("/user") && route.request().method() === "PUT") { calls.update++; return route.fulfill(updates.shift() ?? json(200, user)); }
@@ -55,6 +60,19 @@ test("expired otp shows link-expired", async ({ page }) => {
   await page.goto("/reset-password?token_hash=h&type=recovery");
   await expect(page.getByRole("heading", { name: R.linkExpired.title })).toBeVisible();
   expect(await page.evaluate(() => location.search)).toBe("");
+});
+
+test("a non-expiry verify failure also lands on link-expired, not a form without a session", async ({ page }) => {
+  await stub(page, { verify: json(500, { code: 500, msg: "boom" }) });
+  await page.goto("/reset-password?token_hash=h&type=recovery");
+  await expect(page.getByRole("heading", { name: R.linkExpired.title })).toBeVisible();
+  await expect(page.getByLabel(R.field.label)).toHaveCount(0);
+});
+
+test("a server_error link lands on link-expired", async ({ page }) => {
+  await stub(page, {});
+  await page.goto("/reset-password#error=server_error&error_description=x");
+  await expect(page.getByRole("heading", { name: R.linkExpired.title })).toBeVisible();
 });
 
 test("error in the fragment and an empty URL show link-expired", async ({ page }) => {
@@ -120,15 +138,26 @@ test("the submit button is disabled while saving", async ({ page }) => {
   await expect(page.getByRole("heading", { name: R.success.title })).toBeVisible();
 });
 
-test("hosted shell: logo only nav, no footer, noindex", async ({ page }) => {
-  await stub(page, {});
-  await page.goto("/ar/reset-password?token_hash=h");
-  await expect(page.getByLabel(ar.web.resetPassword.field.label)).toBeVisible();
-  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-  await expect(page.locator("header nav")).toHaveCount(0);
-  await expect(page.locator("footer")).toHaveCount(0);
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-});
+for (const [path, locale] of [["/reset-password", "en"], ["/ar/reset-password", "ar"]] as const) {
+  test(`hosted shell on ${path}: logo nav, minimal footer, noindex, no hydration errors`, async ({ page }) => {
+    const problems: string[] = [];
+    page.on("pageerror", (e) => problems.push(e.message));
+    // /_vercel/insights 404s off Vercel, so resource-load noise is ignored.
+    page.on("console", (m) => m.type() === "error" && !/Failed to load resource/.test(m.text()) && problems.push(m.text()));
+    await stub(page, {});
+    const res = await page.goto(`${path}?token_hash=h`);
+    expect(res?.headers()["referrer-policy"]).toBe("no-referrer");
+    const copy = (locale === "ar" ? ar : en).web.resetPassword.field.label;
+    await expect(page.getByLabel(copy)).toBeFocused();
+    await expect(page.locator("html")).toHaveAttribute("dir", locale === "ar" ? "rtl" : "ltr");
+    await expect(page.locator("header nav")).toHaveCount(0);
+    await expect(page.locator('a[href*="sellers"], a[href*="terms"]')).toHaveCount(0);
+    await expect(page.locator('footer a[href$="/privacy"]')).toHaveCount(1);
+    await expect(page.locator("footer [data-cookie-settings]")).toHaveCount(1);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+    expect(problems).toEqual([]);
+  });
+}
 
 test.describe("390 wide", () => {
   test.use({ viewport: { width: 390, height: 800 } });

@@ -22,8 +22,8 @@ const resizeTo = (w: number) => act(() => { viewport = w; listeners.forEach((set
 
 describe("isHostedPath", () => {
   it("matches whole hosted segments only", () => {
-    for (const p of ["/reset-password", "/checkout", "/checkout/return"]) expect(isHostedPath(p)).toBe(true);
-    for (const p of ["/checkoutx", "/", "/sellers", "/reset-passwords"]) expect(isHostedPath(p)).toBe(false);
+    for (const p of ["/reset-password", "/checkout", "/checkout/return", "/en/reset-password", "/en/checkout/return"]) expect(isHostedPath(p)).toBe(true);
+    for (const p of ["/checkoutx", "/", "/sellers", "/reset-passwords", "/en/checkoutx", "/enx/checkout"]) expect(isHostedPath(p)).toBe(false);
   });
 });
 
@@ -136,6 +136,13 @@ describe("WebNav hosted", () => {
     expect(screen.queryByRole("button")).toBeNull();
     expect(screen.queryByRole("navigation")).toBeNull();
   });
+  it("treats the rewritten /en prefix as hosted too", async () => {
+    const { default: WebNav } = await import("../app/components/WebNav");
+    mockPath = "/en/reset-password";
+    render(<WebNav locale="en" />);
+    expect(screen.queryByRole("navigation")).toBeNull();
+    mockPath = "/";
+  });
   it("picks the hosted variant itself on a hosted path in either locale", async () => {
     const { default: WebNav } = await import("../app/components/WebNav");
     for (const path of ["/ar/reset-password", "/checkout/return"]) {
@@ -147,14 +154,15 @@ describe("WebNav hosted", () => {
     }
     mockPath = "/";
   });
-  it("hides the footer on hosted paths", async () => {
+  it("swaps the footer for the fallback on hosted paths", async () => {
     const { default: HideOnHosted } = await import("../app/components/HideOnHosted");
     mockPath = "/ar/reset-password";
-    const { unmount } = render(<HideOnHosted><p>footer</p></HideOnHosted>);
+    const { unmount } = render(<HideOnHosted fallback={<p>mini</p>}><p>footer</p></HideOnHosted>);
     expect(screen.queryByText("footer")).toBeNull();
+    expect(screen.getByText("mini")).toBeTruthy();
     unmount();
     mockPath = "/ar/sellers";
-    render(<HideOnHosted><p>footer</p></HideOnHosted>);
+    render(<HideOnHosted fallback={<p>mini</p>}><p>footer</p></HideOnHosted>);
     expect(screen.getByText("footer")).toBeTruthy();
     mockPath = "/";
   });

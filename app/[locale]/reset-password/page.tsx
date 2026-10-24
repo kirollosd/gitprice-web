@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import styles from "../../components/ResetPasswordForm.module.css";
 import ResetPasswordForm from "../../components/ResetPasswordForm";
 import { t, type Locale } from "../../../lib/i18n";
 import { pageMeta } from "../../../lib/seo";
@@ -13,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ResetPasswordPage({ params }: Props) {
   const { locale } = await params;
   return (
-    <section className="container" style={{ paddingBlock: "var(--gp-sp-12) var(--gp-sp-16)" }}>
+    <section className={`container ${styles.page}`}>
       <ResetPasswordForm locale={locale} />
     </section>
   );

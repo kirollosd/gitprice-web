@@ -36,20 +36,19 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
     window.history.replaceState(null, "", window.location.pathname);
 
     async function verify() {
-      if (input.kind === "none") return setStatus("expired");
-      if (input.kind === "error") return setStatus(isExpired({ code: input.code }) ? "expired" : "error");
+      // Any failure before a session exists is a dead link: the form could not save without one.
+      if (input.kind === "none" || input.kind === "error") return setStatus("expired");
       try {
         const auth = supabase().auth;
         const { data, error } =
           input.kind === "implicit"
             ? await auth.setSession({ access_token: input.accessToken, refresh_token: input.refreshToken })
             : await auth.verifyOtp({ type: "recovery", token_hash: input.tokenHash });
-        if (error) return setStatus(isExpired(error) ? "expired" : "error");
-        if (!data.session) return setStatus("expired");
+        if (error || !data.session) return setStatus("expired");
         setEmail(data.user?.email ?? "");
         setStatus("ready");
       } catch {
-        setStatus("error");
+        setStatus("expired");
       }
     }
     void verify();
@@ -91,6 +90,7 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
           autoComplete="new-password"
           dir="ltr"
           required
+          autoFocus
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           aria-describedby="password-feedback"

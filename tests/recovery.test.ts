@@ -16,6 +16,9 @@ describe("parseRecovery", () => {
     expect(parseRecovery("", "")).toEqual({ kind: "none" });
     expect(parseRecovery("", "#access_token=a")).toEqual({ kind: "none" });
   });
+  it("prefers the fragment tokens when both forms are present", () => {
+    expect(parseRecovery("?token_hash=h", "#access_token=a&refresh_token=r")).toEqual({ kind: "implicit", accessToken: "a", refreshToken: "r" });
+  });
   it("prefers an error over tokens", () => {
     expect(parseRecovery("?token_hash=h", "#error=access_denied").kind).toBe("error");
   });

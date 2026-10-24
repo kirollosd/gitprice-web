@@ -4,6 +4,7 @@ import Analytics from "../components/Analytics";
 import CookieNotice from "../components/CookieNotice";
 import FloatingStack from "../components/FloatingStack";
 import HideOnHosted from "../components/HideOnHosted";
+import HostedFooter from "../components/HostedFooter";
 import LocaleSuggestion from "../components/LocaleSuggestion";
 import WebFooter from "../components/WebFooter";
 import WebNav from "../components/WebNav";
@@ -58,7 +59,7 @@ export default async function LocaleLayout({
       <body>
         <WebNav locale={l} />
         <main>{children}</main>
-        <HideOnHosted><WebFooter locale={l} /></HideOnHosted>
+        <HideOnHosted fallback={<HostedFooter locale={l} />}><WebFooter locale={l} /></HideOnHosted>
         <FloatingStack>
           <LocaleSuggestion />
           <CookieNotice locale={l} />
