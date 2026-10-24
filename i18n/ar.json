@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@7ca51b18",
+  "_source": "gitprice@90375068",
   "web": {
     "component": {
       "webNav": {
@@ -366,7 +366,7 @@
         "priceHistory": {
           "title": "شاهد كيف تغيّر السعر",
           "body": "يوضح رسم تاريخ السعر هل هذا وقت مناسب للشراء.",
-          "pro": "في Pro: تاريخ أطول."
+          "pro": "التاريخ الأطول قادم مع Pro."
         },
         "proLimits": {
           "title": "تنبيهات أكثر وفحص أسرع",
