@@ -51,7 +51,7 @@
 .baseline { background: var(--gp-surface-raised); padding-block: var(--gp-sp-10); }
 .baselineList { list-style: none; display: grid; gap: var(--gp-sp-5); }
 .baselineList li { display: flex; flex-direction: column; gap: var(--gp-sp-1); }
-.baselineTitle { font-size: var(--web-fs-body); font-weight: 600; line-height: var(--web-lh-text); }
+.baselineTitle { font-size: var(--web-fs-body); font-weight: 600; line-height: var(--web-lh-text); text-wrap: balance; } /* no orphaned last word in the narrow 5-column grid (AR 1440) */
 
 /* ---------- sections ---------- */
 .section { padding-block-start: var(--section); scroll-margin-block-start: var(--gp-sp-16); }
