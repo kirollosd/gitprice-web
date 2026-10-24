@@ -48,3 +48,12 @@ describe("readEnv", () => {
     }
   });
 });
+
+describe("sellersNav flag", () => {
+  test("is off unless NEXT_PUBLIC_SELLERS_NAV=1", () => {
+    expect(readEnv(base).sellersNav).toBe(false);
+    expect(readEnv({ ...base, NEXT_PUBLIC_SELLERS_NAV: "0" }).sellersNav).toBe(false);
+    expect(readEnv({ ...base, NEXT_PUBLIC_SELLERS_NAV: "true" }).sellersNav).toBe(false);
+    expect(readEnv({ ...base, NEXT_PUBLIC_SELLERS_NAV: "1" }).sellersNav).toBe(true);
+  });
+});

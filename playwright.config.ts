@@ -4,7 +4,9 @@ import { defineConfig } from "@playwright/test";
 const PRELAUNCH = 3000;
 const LAUNCH = 3001;
 // Fake Supabase project and API host: the e2e specs stub every call and abort anything else.
+// NEXT_PUBLIC_SELLERS_NAV=1: the boards draw the header sellers toggle; the flag-off state is unit-tested.
 const supabaseEnv = {
+  NEXT_PUBLIC_SELLERS_NAV: "1",
   NEXT_PUBLIC_API_BASE_URL: "https://api.example.test",
   NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co", NEXT_PUBLIC_SUPABASE_ANON_KEY: "e2e-anon-key",
 };

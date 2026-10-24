@@ -35,8 +35,10 @@ export function sellersLinkFor(locale: Locale, keys: string, onSellers: boolean)
   return { href: pathFor(locale, "/"), label: t(locale, short ? "web.sellers.nav.label.sellers2" : "web.sellers.nav.label.sellers") };
 }
 
+/** Hidden unless NEXT_PUBLIC_SELLERS_NAV=1 (owner flag). */
 export function NavSellers({ locale, keys, className }: { locale: Locale; keys: string; className?: string }) {
   const { href, label } = sellersLinkFor(locale, keys, useOnSellers());
+  if (!env.sellersNav) return null;
   return <Link href={href} className={className}>{label}</Link>;
 }
 

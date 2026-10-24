@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { env } from "../../lib/env";
 import { t, type Locale } from "../../lib/i18n";
 import { pathFor } from "../../lib/locale";
 import LanguageSwitch from "./LanguageSwitch";
@@ -88,7 +89,7 @@ export default function WebMenu({ locale }: { locale: Locale }) {
           <ul className={styles.list} role="list">
             <li><Link href={`${home}#features`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.features`)}</Link></li>
             <li><Link href={`${home}#how-it-works`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.howItWorks`)}</Link></li>
-            <li><Link href={sellers.href} onClick={() => setOpen(false)}>{sellers.label}</Link></li>
+            {env.sellersNav && <li><Link href={sellers.href} onClick={() => setOpen(false)}>{sellers.label}</Link></li>}
             <li><LanguageSwitch locale={locale} icon /></li>
           </ul>
           </nav>
