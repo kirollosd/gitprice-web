@@ -2,11 +2,13 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { t } from "../../lib/i18n";
+import { OG_IMAGE } from "../../lib/seo";
 import { tokenColor } from "../../lib/tokens";
 
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
-export const alt = "GitPrice";
+// Kept equal to OG_IMAGE, which pageMeta puts in every page's og:image and twitter:image.
+export const size = { width: OG_IMAGE.width, height: OG_IMAGE.height };
+export const contentType = OG_IMAGE.type;
+export const alt = OG_IMAGE.alt;
 // Build-time only: the font and token files are read at build, never at request time on Vercel.
 export const dynamic = "force-static";
 export const generateStaticParams = () => [{ locale: "en" }, { locale: "ar" }];

@@ -144,6 +144,18 @@ describe("per-page share metadata", () => {
     }
   });
 
+  it("every page carries the locale's generated share image in og:image and twitter:image", async () => {
+    const pages = ["page", "sellers/page", "welcome/page", "pricing/page", "privacy/page", "terms/page"];
+    for (const locale of ["en", "ar"] as const) {
+      const image = { url: `${SITE}/${locale}/opengraph-image`, width: 1200, height: 630, type: "image/png", alt: "GitPrice" };
+      for (const p of pages) {
+        const m = await meta(import(`../app/[locale]/${p}`), locale);
+        expect((m.openGraph as { images?: unknown }).images, `${locale} ${p}`).toEqual([image]);
+        expect((m.twitter as { images?: unknown }).images, `${locale} ${p}`).toEqual([image]);
+      }
+    }
+  });
+
   it("never points at the legacy OG asset", () => {
     for (const f of files("app").filter((f) => /\.tsx?$/.test(f))) expect(readFileSync(f, "utf8"), f).not.toContain("logo_og.png");
   });

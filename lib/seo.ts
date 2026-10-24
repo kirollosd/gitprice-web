@@ -19,12 +19,15 @@ export const SITE_NAME = "GitPrice";
 /** Title template shared by the layout and the share cards (Next applies the template to <title> only). */
 export const fullTitle = (title: string) => `${title} | ${SITE_NAME}`;
 export const OG_LOCALE: Record<Locale, string> = { en: "en_US", ar: "ar_AR" };
+/** The generated share card ([locale]/opengraph-image): one per locale, the same for every page. */
+export const OG_IMAGE = { width: 1200, height: 630, type: "image/png", alt: SITE_NAME } as const;
+export const ogImage = (locale: Locale) => ({ url: `${env.siteUrl.replace(/\/+$/, "")}/${locale}/opengraph-image`, ...OG_IMAGE });
 
 type PageOpts = { noindex?: boolean; title?: string; description?: string };
 
 /**
- * Per-page head: canonical, hreflang, robots, and the share cards. A page-level `openGraph` replaces the layout's
- * whole object, so every field is set here; the image comes from the [locale]/opengraph-image file convention.
+ * Per-page head: canonical, hreflang, robots, and the share cards. A page-level `openGraph` or `twitter` replaces the
+ * layout's whole object (the file-convention image included), so every field is set here, the image too.
  */
 export function pageMeta(locale: Locale, path: string, opts: PageOpts = {}): Metadata {
   const { title, description } = opts;
@@ -39,9 +42,10 @@ export function pageMeta(locale: Locale, path: string, opts: PageOpts = {}): Met
       locale: OG_LOCALE[locale],
       alternateLocale: OG_LOCALE[locale === "ar" ? "en" : "ar"],
       url: absoluteUrl(locale, path),
+      images: [ogImage(locale)],
       ...card,
     },
-    twitter: { card: "summary_large_image", ...card },
+    twitter: { card: "summary_large_image", images: [ogImage(locale)], ...card },
     alternates: {
       canonical: absoluteUrl(locale, path),
       languages: {

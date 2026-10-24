@@ -53,3 +53,15 @@ test("sitemap and robots", async ({ request }) => {
   expect(sm).not.toMatch(/pricing|welcome|checkout|reset-password/);
   expect(await (await request.get("/robots.txt")).text()).toMatch(/Sitemap: .*\/sitemap\.xml/);
 });
+
+test("non-Home pages keep the generated share image", async ({ page, request }) => {
+  for (const [path, locale] of [["/sellers", "en"], ["/ar/privacy", "ar"]] as const) {
+    await page.goto(path);
+    for (const sel of ['meta[property="og:image"]', 'meta[name="twitter:image"]']) {
+      await expect(page.locator(sel), `${path} ${sel}`).toHaveAttribute("content", new RegExp(`/${locale}/opengraph-image$`));
+    }
+    const res = await request.get(`/${locale}/opengraph-image`);
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toBe("image/png");
+  }
+});
