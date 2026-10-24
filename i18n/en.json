@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@f5561093",
+  "_source": "gitprice@7ca51b18",
   "web": {
     "component": {
       "webNav": {
@@ -407,6 +407,39 @@
         },
         "toast": {
           "message": "Alert set · we’ll tell you when it drops below 23,000"
+        },
+        "receipt": {
+          "title": "Cheapest same product · Store B",
+          "saving": "1,250 less",
+          "detail": "23,749 on Store B · 24,999 here",
+          "go": "Go to Store B",
+          "alert": "Set price alert"
+        },
+        "row": {
+          "thisPage": "This page",
+          "exactMatch": "Exact match"
+        },
+        "alertcard": {
+          "title": "Wireless noise-cancelling headphones",
+          "lastSeen": "Last seen",
+          "change": "▼ 8% from 24,999",
+          "target": "Drops below 23,000",
+          "reached": "Target reached",
+          "updated": "Updated 4 min ago",
+          "view": "View on Store A",
+          "edit": "Edit",
+          "remove": "Remove"
+        },
+        "savingscounter": {
+          "title": "Saved with GitPrice",
+          "month": "This month",
+          "couldHave": "Could have saved 1,180 more",
+          "orders": "From 23 orders",
+          "seeOrders": "See orders"
+        },
+        "milestone": {
+          "title": "You’ve saved 5,000 with GitPrice",
+          "date": "Reached 12 Oct"
         }
       },
       "how": {
@@ -525,7 +558,8 @@
           "3": {
             "name": "Gadget Corner",
             "count": "Lower than you on 3 listings"
-          }
+          },
+          "pinned": "Pinned"
         }
       },
       "features": {
