@@ -1,4 +1,4 @@
-/* Sits inside FloatingStack (fixed), so revealing it after mount causes no layout shift. */
+/* Sits inside FloatingStack (fixed, hidden while empty), so revealing it after mount causes no layout shift. */
 .notice {
   pointer-events: auto;
   inline-size: 100%;

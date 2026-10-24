@@ -12,3 +12,5 @@
   pointer-events: none;
 }
 .stack > * { pointer-events: auto; }
+/* Empty until a notice mounts: a padded empty box would grow upward when the notice appears, which counts as a layout shift. */
+.stack:empty { display: none; }
