@@ -18,11 +18,14 @@ type TallyWindow = Window & { Tally?: { loadEmbeds: () => void } };
 export default function TallyEmbed({
   formId,
   locale,
+  audience,
   height = DEFAULT_HEIGHT,
   label,
 }: {
   formId: string;
   locale: Locale;
+  /** Tally hidden field `audience`: tells shopper and seller sign-ups apart in the one form. */
+  audience: "shopper" | "seller";
   height?: number;
   /** Fallback link text; defaults to the waitlist button label. */
   label?: string;
@@ -62,7 +65,7 @@ export default function TallyEmbed({
         // an opaque white canvas behind it. In dark theme the frame is a deliberate light panel instead (CSS).
         <div className={styles.frame} data-gp="app" data-theme="light" style={{ minBlockSize: height }}>
           <iframe
-            data-tally-src={`https://tally.so/embed/${id}?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=${locale}`}
+            data-tally-src={`https://tally.so/embed/${id}?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=${locale}&audience=${audience}`}
             title={text}
             width="100%"
             height={height}

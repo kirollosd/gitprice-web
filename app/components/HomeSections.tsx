@@ -10,9 +10,9 @@ import styles from "./HomeSections.module.css";
 
 const H = "web.home.";
 
-/** Prelaunch: the Tally waitlist form. */
-export function Waitlist({ locale, label }: { locale: Locale; label?: string }) {
-  return <TallyEmbed formId={env.tallyFormId} locale={locale} label={label} />;
+/** Prelaunch: the Tally waitlist form. Home is the shopper list unless a page says otherwise. */
+export function Waitlist({ locale, label, audience = "shopper" }: { locale: Locale; label?: string; audience?: "shopper" | "seller" }) {
+  return <TallyEmbed formId={env.tallyFormId} locale={locale} label={label} audience={audience} />;
 }
 
 /** The numbered steps shared by Home and Sellers. */

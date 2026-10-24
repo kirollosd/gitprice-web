@@ -31,7 +31,7 @@ test.describe("Home prelaunch", () => {
     for (const id of ["features", "how-it-works", "waitlist"]) await expect(page.locator(`#${id}`)).toHaveCount(1);
     const srcs = await page.locator("iframe[data-tally-src]").evaluateAll((els) => els.map((e) => e.getAttribute("data-tally-src")));
     expect(srcs.length).toBe(2);
-    srcs.forEach((s) => expect(s).toMatch(/^https:\/\/tally\.so\/embed\/[^?]+\?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=en$/));
+    srcs.forEach((s) => expect(s).toMatch(/^https:\/\/tally\.so\/embed\/[^?]+\?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=en&audience=shopper$/));
     await expect(page.getByRole("link", { name: "Add GitPrice to Chrome" })).toHaveCount(0);
   });
 
@@ -39,7 +39,7 @@ test.describe("Home prelaunch", () => {
     await stubTally(page);
     await page.goto("/ar");
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-    await expect(page.locator("iframe[data-tally-src]").first()).toHaveAttribute("data-tally-src", /lang=ar$/);
+    await expect(page.locator("iframe[data-tally-src]").first()).toHaveAttribute("data-tally-src", /lang=ar&audience=shopper$/);
   });
 
   test("loads the Tally script once the page is idle and asks it to load the embeds", async ({ page }) => {
@@ -82,7 +82,7 @@ test.describe("Sellers prelaunch", () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/sellers");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Know which listings a rival undercuts.");
-    await expect(page.locator("iframe[data-tally-src]").first()).toHaveAttribute("data-tally-src", /lang=en$/);
+    await expect(page.locator("iframe[data-tally-src]").first()).toHaveAttribute("data-tally-src", /lang=en&audience=seller$/);
     const header = page.locator("header");
     await expect(header.getByRole("link", { name: "GitPrice for shoppers" })).toHaveAttribute("href", "/");
     await expect(header.getByRole("link", { name: "Join the waitlist" })).toHaveAttribute("href", "#waitlist");

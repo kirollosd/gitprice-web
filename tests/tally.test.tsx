@@ -26,7 +26,7 @@ afterEach(() => {
 describe("TallyEmbed", () => {
   it("shows the fallback link when Tally fails to load", async () => {
     const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
-    render(<TallyEmbed formId="mYLGEG" locale="en" />);
+    render(<TallyEmbed formId="mYLGEG" locale="en" audience="shopper" />);
     expect(screen.queryByRole("link")).toBeNull();
     act(() => script!.onError!());
     const link = screen.getByRole("link", { name: "Join the waitlist" });
@@ -39,7 +39,7 @@ describe("TallyEmbed", () => {
   it("shows the fallback link when Tally is still undefined after 5 seconds", async () => {
     vi.useFakeTimers();
     const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
-    render(<TallyEmbed formId="mYLGEG" locale="en" />);
+    render(<TallyEmbed formId="mYLGEG" locale="en" audience="shopper" />);
     act(() => { vi.advanceTimersByTime(4999); });
     expect(screen.queryByRole("link")).toBeNull();
     act(() => { vi.advanceTimersByTime(2); });
@@ -49,7 +49,7 @@ describe("TallyEmbed", () => {
   it("keeps the form when Tally is defined at 5 seconds", async () => {
     vi.useFakeTimers();
     const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
-    render(<TallyEmbed formId="mYLGEG" locale="en" />);
+    render(<TallyEmbed formId="mYLGEG" locale="en" audience="shopper" />);
     w.Tally = { loadEmbeds: vi.fn() };
     act(() => { vi.advanceTimersByTime(6000); });
     expect(screen.queryByRole("link")).toBeNull();
@@ -58,17 +58,23 @@ describe("TallyEmbed", () => {
 
   it("passes lang=ar to the embed and loads embed.js with the lazyOnload strategy", async () => {
     const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
-    render(<TallyEmbed formId="mYLGEG" locale="ar" />);
+    render(<TallyEmbed formId="mYLGEG" locale="ar" audience="shopper" />);
     expect(document.querySelector("iframe")!.getAttribute("data-tally-src")).toBe(
-      "https://tally.so/embed/mYLGEG?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=ar",
+      "https://tally.so/embed/mYLGEG?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=ar&audience=shopper",
     );
     expect(script).toMatchObject({ src: "https://tally.so/widgets/embed.js", strategy: "lazyOnload" });
+  });
+
+  it("passes the audience hidden field", async () => {
+    const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
+    render(<TallyEmbed formId="mYLGEG" locale="en" audience="seller" />);
+    expect(document.querySelector("iframe")!.getAttribute("data-tally-src")).toMatch(/[?&]audience=seller$/);
   });
 
   it("brings the form back when Tally arrives after the 5 second fallback", async () => {
     vi.useFakeTimers();
     const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
-    render(<TallyEmbed formId="mYLGEG" locale="en" />);
+    render(<TallyEmbed formId="mYLGEG" locale="en" audience="shopper" />);
     act(() => { vi.advanceTimersByTime(5001); });
     expect(screen.getByRole("link")).toBeTruthy();
     expect(document.querySelector("iframe")).toBeNull();
@@ -85,7 +91,7 @@ describe("TallyEmbed", () => {
 
   it("encodes the form id in both URLs", async () => {
     const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
-    render(<TallyEmbed formId="a b&c" locale="en" />);
+    render(<TallyEmbed formId="a b&c" locale="en" audience="shopper" />);
     expect(document.querySelector("iframe")!.getAttribute("data-tally-src")).toContain("/embed/a%20b%26c?");
     act(() => script!.onError!());
     expect(screen.getByRole("link").getAttribute("href")).toBe("https://tally.so/r/a%20b%26c");
@@ -93,7 +99,7 @@ describe("TallyEmbed", () => {
 
   it("calls Tally.loadEmbeds once the script is ready", async () => {
     const { default: TallyEmbed } = await import("../app/components/TallyEmbed");
-    render(<TallyEmbed formId="mYLGEG" locale="en" />);
+    render(<TallyEmbed formId="mYLGEG" locale="en" audience="shopper" />);
     const loadEmbeds = vi.fn();
     w.Tally = { loadEmbeds };
     act(() => script!.onReady!());
@@ -128,8 +134,19 @@ describe("launch switch", () => {
     mockEnv(false);
     const { default: HomeContent } = await import("../app/components/HomeSections");
     render(<HomeContent locale="en" />);
-    expect(document.querySelectorAll("iframe[data-tally-src]").length).toBe(2);
+    const srcs = [...document.querySelectorAll("iframe[data-tally-src]")].map((f) => f.getAttribute("data-tally-src"));
+    expect(srcs).toHaveLength(2);
+    srcs.forEach((s) => expect(s).toMatch(/&audience=shopper$/));
     expect(screen.queryByRole("link", { name: "Add GitPrice to Chrome" })).toBeNull();
+  });
+
+  it("launch=0 sellers page tags both embeds audience=seller", async () => {
+    mockEnv(false);
+    const { default: SellersPage } = await import("../app/[locale]/sellers/page");
+    render(await SellersPage({ params: Promise.resolve({ locale: "en" }) }));
+    const srcs = [...document.querySelectorAll("iframe[data-tally-src]")].map((f) => f.getAttribute("data-tally-src"));
+    expect(srcs).toHaveLength(2);
+    srcs.forEach((s) => expect(s).toMatch(/&audience=seller$/));
   });
 
   it("store badges link to both app stores and use localized labels", async () => {
