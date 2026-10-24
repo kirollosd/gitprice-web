@@ -9,15 +9,24 @@
 .tocHeading { font-size: var(--gp-fs-caption); color: var(--gp-ink-muted); padding-inline-start: var(--gp-sp-4); }
 .tocList { list-style: none; display: flex; flex-direction: column; }
 .tocLink {
+  position: relative;
   display: flex;
   align-items: center;
   min-block-size: var(--gp-target);
   color: var(--gp-ink-muted);
   font-size: var(--gp-fs-body-compact);
-  border-inline-start: 3px solid transparent;
-  padding-inline-start: calc(var(--gp-sp-4) - 3px);
+  padding-inline-start: var(--gp-sp-4);
 }
-.tocLink:hover { color: var(--gp-ink); text-decoration: none; border-inline-start-color: var(--gp-ink); }
+.tocLink:hover, .tocLink[aria-current] { color: var(--gp-ink); text-decoration: none; }
+/* The board's indicator: a 3px ink rule beside the current item's label. */
+.tocLink[aria-current]::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  block-size: var(--gp-sp-5);
+  background: var(--gp-ink);
+}
 
 .article { min-inline-size: 0; max-inline-size: 720px; }
 .section { scroll-margin-block-start: var(--gp-sp-16); }

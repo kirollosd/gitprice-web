@@ -1,5 +1,6 @@
 import en from "../../i18n/en.json";
 import { t, type Locale } from "../../lib/i18n";
+import LegalToc from "./LegalToc";
 import styles from "./LegalPage.module.css";
 
 export type LegalName = "privacy" | "terms";
@@ -33,14 +34,10 @@ export default function LegalPage({ locale, name }: { locale: Locale; name: Lega
       </header>
       <p className={styles.intro}>{t(locale, P + "intro")}</p>
       <div className={styles.layout}>
-        <nav className={styles.toc} aria-label={t(locale, toc + "heading")}>
-          <p className={styles.tocHeading} aria-hidden="true">{t(locale, toc + "heading")}</p>
-          <ol className={styles.tocList}>
-            {sections.map((s) => (
-              <li key={s.id}><a className={styles.tocLink} href={`#${s.id}`}>{t(locale, `${toc}label.${s.id}`)}</a></li>
-            ))}
-          </ol>
-        </nav>
+        <LegalToc
+          heading={t(locale, toc + "heading")}
+          items={sections.map((s) => ({ id: s.id, label: t(locale, `${toc}label.${s.id}`) }))}
+        />
         <article className={styles.article}>
           {sections.map((s) => (
             <section key={s.id} id={s.id} className={styles.section} aria-labelledby={`${s.id}-h`}>
