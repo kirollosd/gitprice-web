@@ -119,3 +119,13 @@ test.describe("with the Arabic suggestion banner", () => {
     await expect(notice(page).getByRole("button", { name: N.button.allow.label })).toBeInViewport();
   });
 });
+
+test("the cookie notice comes before main in DOM and tab order", async ({ page }) => {
+  await page.goto("/");
+  await expect(notice(page)).toBeVisible();
+  const before = await page.evaluate(() => {
+    const n = document.querySelector("#cookie-notice-title")!;
+    return !!(n.compareDocumentPosition(document.querySelector("main")!) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  expect(before).toBe(true);
+});

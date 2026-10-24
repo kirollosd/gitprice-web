@@ -44,6 +44,12 @@ export const viewport: Viewport = {
   ],
 };
 
+const FUSTAT = ["fustat-latin-400-normal", "fustat-latin-600-normal", "fustat-latin-700-normal"];
+const PRELOAD: Record<Locale, string[]> = {
+  en: FUSTAT,
+  ar: ["fustat-latin-400-normal", "noto-sans-arabic-arabic-400-normal", "noto-sans-arabic-arabic-600-normal", "noto-sans-arabic-arabic-700-normal"],
+};
+
 export const dynamicParams = false;
 export const generateStaticParams = () => [{ locale: "en" }, { locale: "ar" }];
 
@@ -57,16 +63,20 @@ export default async function LocaleLayout({
   return (
     <html lang={l} dir={dir(l)} data-gp="app">
       <head>
-        <link rel="preload" href="/fonts/fustat-latin-400-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        {/* Every weight the first screen uses, so the cookie notice and headings do not reflow on a font swap (CLS). */}
+        {PRELOAD[l].map((f) => (
+          <link key={f} rel="preload" href={`/fonts/${f}.woff2`} as="font" type="font/woff2" crossOrigin="anonymous" />
+        ))}
       </head>
       <body>
         <WebNav locale={l} />
-        <main tabIndex={-1}>{children}</main>
-        <WebFooter locale={l} />
+        {/* Fixed at the bottom, but first after the header in DOM and tab order so keyboard users meet the notice early. */}
         <FloatingStack>
           <LocaleSuggestion />
           <CookieNotice locale={l} />
         </FloatingStack>
+        <main tabIndex={-1}>{children}</main>
+        <WebFooter locale={l} />
         <Analytics />
       </body>
     </html>
