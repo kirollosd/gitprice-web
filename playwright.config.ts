@@ -22,9 +22,8 @@ const launchEnv = {
 const REMOTE = process.env.PLAYWRIGHT_BASE_URL;
 // SKIP_PARITY drops the pixel-parity specs (CI's functional job): baselines are board exports, not Linux renders.
 const noParity = process.env.SKIP_PARITY ? [/parity/] : [];
-// Vercel previews can sit behind Deployment Protection; the automation bypass secret lets the runner in.
-const bypass = process.env.VERCEL_BYPASS_SECRET;
-const extraHTTPHeaders = bypass ? { "x-vercel-protection-bypass": bypass } : undefined;
+// Vercel previews can sit behind Deployment Protection; global-setup.ts trades the bypass secret for a cookie on that origin only.
+const storageState = REMOTE && process.env.VERCEL_BYPASS_SECRET ? "e2e/.auth/bypass.json" : undefined;
 const baseFor = (port: number) => REMOTE ?? `http://localhost:${port}`;
 
 // A stale `next start` on :3000 or :3001 is reused outside CI; kill it first or you test old code.
@@ -32,10 +31,12 @@ export default defineConfig({
   testDir: "e2e",
   // Parity baselines are the board exports in e2e/refs, copied (and masked) into e2e/.parity by each test.
   snapshotPathTemplate: "{testDir}/.parity/{arg}{ext}",
-  expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.02 } },
+  globalSetup: "./e2e/global-setup.ts",
+  // threshold 0.1 (default 0.2) so small colour and token shifts show up; the ratio budget is per test.
+  expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.02, threshold: 0.1 } },
   projects: [
-    { name: "prelaunch", testIgnore: [/\.launch\.spec\.ts$/, ...noParity], use: { baseURL: baseFor(PRELAUNCH), extraHTTPHeaders } },
-    { name: "launch", testMatch: /\.launch\.spec\.ts$/, testIgnore: noParity, use: { baseURL: baseFor(LAUNCH), extraHTTPHeaders } },
+    { name: "prelaunch", testIgnore: [/\.launch\.spec\.ts$/, ...noParity], use: { baseURL: baseFor(PRELAUNCH), storageState } },
+    { name: "launch", testMatch: /\.launch\.spec\.ts$/, testIgnore: noParity, use: { baseURL: baseFor(LAUNCH), storageState } },
   ],
   webServer: REMOTE ? undefined : [
     {

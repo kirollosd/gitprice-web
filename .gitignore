@@ -46,3 +46,4 @@ test-results/
 playwright-report/
 /.next-launch/
 /e2e/.parity/
+/e2e/.auth/

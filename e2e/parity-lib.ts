@@ -1,4 +1,4 @@
-import { expect, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 import { appendFileSync, copyFileSync, mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import sharp from "sharp";
@@ -47,10 +47,7 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
 };
 
 /** Boards the build cannot match yet; reported, never loosened. Key: `<Screen>`. */
-export const DIVERGED: Record<string, string> = {
-  Home: "board composes a product mockup image, receipt cards, alternating feature rows with product art, shaded bands and an inline waitlist form; the build ships a text-and-cards layout with the Tally embed (measured 0.15 to 0.19)",
-  Sellers: "same board vocabulary as Home (mockups, bands, seller access card); the build has no such art (measured 0.19 to 0.26)",
-};
+export const DIVERGED: Record<string, string> = {};
 export const isDiverged = (screen: string) => !process.env.PARITY_MEASURE && screen in DIVERGED;
 
 /** One masked region: where it sits in the build, why it intentionally differs from the board. */
@@ -84,9 +81,9 @@ export async function sizeToBoard(page: Page, s: Shot) {
   if (s.theme === "dark") await page.emulateMedia({ colorScheme: "dark" });
 }
 
-/** Cookie consent decided, so the notice does not overlay states that are not about it. */
+/** Cookie consent decided, so the notice does not overlay states that are not about it. The cookie is set for the project's baseURL (local server or PLAYWRIGHT_BASE_URL). */
 export const decideConsent = (page: Page) =>
-  page.context().addCookies([{ name: "gp_consent", value: "decline", url: page.url().startsWith("http") ? page.url() : "http://localhost:3000" }]);
+  page.context().addCookies([{ name: "gp_consent", value: "decline", url: String(test.info().project.use.baseURL) }]);
 
 /** Compare the page with the board. Masked regions are painted in both images at the build's box. */
 export async function expectParity(page: Page, s: Shot) {
@@ -138,8 +135,12 @@ const jwt = `${b64({ alg: "HS256", typ: "JWT" })}.${b64({ sub: "u1", exp: 410244
 const user = { id: "u1", aud: "authenticated", email: "you@example.com", app_metadata: {}, user_metadata: {}, created_at: "2026-01-01T00:00:00Z" };
 const hang = () => new Promise<never>(() => {});
 
-/** Tally never loads: the waitlist iframe stays an empty frame, masked where it matters. */
-export const stubTally = (page: Page) => page.route("https://tally.so/**", (route) => route.abort());
+/** Tally's script is a stub that loads nothing: the waitlist iframe stays a blank frame (no fallback link), masked where it matters. */
+export const stubTally = (page: Page) =>
+  page.route("https://tally.so/**", (route) =>
+    route.request().url().endsWith("/widgets/embed.js")
+      ? route.fulfill({ contentType: "text/javascript", body: "window.Tally={loadEmbeds(){}};" })
+      : route.abort());
 
 export type ResetState = "verifying" | "set-new-password" | "weak-password" | "saving" | "error" | "success" | "link-expired";
 
@@ -204,6 +205,10 @@ export async function seedCheckout(page: Page, state: CheckoutState, path: strin
 export const spinnerMask: Mask = {
   locator: (p) => p.locator('[role="status"] > [aria-hidden="true"]'),
   reason: "spinner: animated, drawn by the board as a static ring at a different phase",
+};
+export const artMask: Mask = {
+  locator: (p) => p.locator("[data-art]"),
+  reason: "product art (device mockup, receipt cards, rival cards): owner assets not supplied, so the build draws empty panels at the board's size",
 };
 export const tallyMask: Mask = {
   locator: (p) => p.locator("iframe[data-tally-src]"),

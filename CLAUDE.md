@@ -88,7 +88,7 @@ npx tsc --noEmit --incremental false
 npm run lint
 ```
 
-Free ports 3000 and 3001 first. `PLAYWRIGHT_BASE_URL=<url>` runs the suite against a deployed preview instead of local builds (set `VERCEL_BYPASS_SECRET` if Deployment Protection is on; pick the project matching the deployment's `NEXT_PUBLIC_LAUNCH`).
+Free ports 3000 and 3001 first. `PLAYWRIGHT_BASE_URL=<url>` runs the suite against a deployed preview instead of local builds (set `VERCEL_BYPASS_SECRET` if Deployment Protection is on: `e2e/global-setup.ts` trades it for a cookie on that origin only; pick the project matching the deployment's `NEXT_PUBLIC_LAUNCH`).
 
 ### Visual parity
 
@@ -101,7 +101,7 @@ Free ports 3000 and 3001 first. `PLAYWRIGHT_BASE_URL=<url>` runs the suite again
 ## CI
 
 - `.github/workflows/ci.yml` (pull requests): lint, typecheck, vitest, build, then the functional Playwright suite (`SKIP_PARITY=1`).
-- `.github/workflows/preview.yml` (`deployment_status`, successful Vercel deployments only): Lighthouse budgets (`lighthouserc.json`) plus Playwright parity and layout against `deployment_status.target_url`. Optional secret `VERCEL_AUTOMATION_BYPASS_SECRET` and variable `SITE_MODE` (`prelaunch` or `launch`, default `prelaunch`).
+- `.github/workflows/preview.yml` (`deployment_status`, successful Vercel Preview deployments only, never Production): Lighthouse budgets (`lighthouserc.json`; `npm run lighthouse` starts the local server, CI passes `--collect.url` instead) plus a non-blocking Playwright parity and layout step against `deployment_status.target_url`. Optional secret `VERCEL_AUTOMATION_BYPASS_SECRET` and variable `SITE_MODE` (`prelaunch` or `launch`, default `prelaunch`).
 
 ## Key Integrations
 

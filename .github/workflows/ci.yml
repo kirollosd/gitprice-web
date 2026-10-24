@@ -9,6 +9,7 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     env:
       NEXT_PUBLIC_LAUNCH: "0"
       NEXT_PUBLIC_TALLY_FORM_ID: ci
@@ -18,6 +19,8 @@ jobs:
       NEXT_PUBLIC_SITE_URL: https://gitprice.com
     steps:
       - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4.4.0
         with:
           node-version: 22
@@ -32,6 +35,7 @@ jobs:
     # Functional Playwright suite against local builds (prelaunch :3000 and launch :3001, both started by playwright.config.ts).
     # Pixel parity is skipped here: its baselines are Sketch exports, checked on the Vercel preview instead.
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     env:
       CI: "true"
       SKIP_PARITY: "1"
@@ -39,6 +43,8 @@ jobs:
       NEXT_PUBLIC_SITE_URL: https://gitprice.com
     steps:
       - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4.4.0
         with:
           node-version: 22

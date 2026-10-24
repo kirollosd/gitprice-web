@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "lighthouse": "lhci autorun --config=lighthouserc.json",
+    "lighthouse": "lhci autorun --config=lighthouserc.json --collect.startServerCommand=\"npm run start\"",
     "test": "vitest run",
     "sync": "node scripts/sync-design.mjs"
   },
