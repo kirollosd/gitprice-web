@@ -1,0 +1,203 @@
+/* Board art (visual/* layers), rebuilt from the app tokens: the mockups show extension UI, so they use the app type scale (--gp-fs-*).
+   Widths follow the library parts: 320 rows and cards (--gp-panel-width-popup), 340 savings hero (--gp-panel-width). */
+
+.photo { display: block; inline-size: 100%; block-size: 100%; object-fit: contain; }
+.fig { font-size: var(--gp-fs-price); font-weight: var(--gp-fw-price); }
+.figSaving { composes: fig; color: var(--gp-savings); }
+
+/* ---------- shared parts ---------- */
+.thumb {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: var(--gp-sp-8);
+  block-size: var(--gp-sp-8);
+  padding: var(--gp-sp-1);
+  background: var(--gp-surface-raised);
+  border: 1px solid var(--gp-hairline);
+  border-radius: var(--gp-r-sm);
+}
+.thumbLarge { inline-size: var(--gp-thumb); block-size: var(--gp-thumb); }
+
+.rows { list-style: none; display: flex; flex-direction: column; inline-size: 100%; max-inline-size: var(--gp-panel-width-popup); }
+.row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gp-sp-2);
+  padding: var(--gp-sp-3) var(--gp-sp-4);
+  background: var(--gp-surface);
+}
+.row:first-child::after {
+  content: "";
+  position: absolute;
+  inset-inline: var(--gp-sp-4);
+  inset-block-end: 0;
+  border-block-end: 1px solid var(--gp-hairline);
+}
+.rowCheaper { background: var(--gp-surface-raised); border-radius: var(--gp-r-md); }
+.rowText { flex: 1; min-inline-size: 0; display: flex; flex-direction: column; }
+.rowTitle { font-size: var(--gp-fs-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rowStore { font-size: var(--gp-fs-caption); }
+.rowPrice { display: flex; flex-direction: column; align-items: flex-end; gap: var(--gp-sp-1); }
+.rowSaving { color: var(--gp-savings); font-size: var(--gp-fs-caption); white-space: nowrap; }
+
+.tick { flex: none; color: var(--gp-savings); margin-block-start: var(--gp-sp-2); }
+
+/* ---------- feature art card (visual/card): 560x400 on the boards, so 7:5; taller content grows it ---------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gp-sp-3);
+  aspect-ratio: 7 / 5;
+  padding: var(--gp-sp-6) var(--gp-sp-4);
+  background: var(--gp-surface-raised);
+  border-radius: var(--gp-r-lg);
+  min-inline-size: 0;
+}
+.cardTight { padding-block: var(--gp-sp-4); }
+
+.panel {
+  display: flex;
+  justify-content: center;
+  inline-size: 100%;
+  max-inline-size: calc(var(--gp-panel-width-popup) + 2 * var(--gp-sp-4));
+  padding: var(--gp-sp-4) 0;
+  background: var(--gp-surface);
+  border: 1px solid var(--gp-hairline);
+  border-radius: var(--gp-r-lg);
+}
+
+.alert, .toast, .counter {
+  inline-size: 100%;
+  max-inline-size: var(--gp-panel-width-popup);
+  border: 1px solid var(--gp-hairline);
+  border-radius: var(--gp-r-md);
+  padding: var(--gp-sp-4);
+}
+.alert, .counter { display: flex; flex-direction: column; gap: var(--gp-sp-3); background: var(--gp-surface); }
+.alertHead { display: flex; align-items: center; gap: var(--gp-sp-3); min-inline-size: 0; }
+.alertPrice { font-size: var(--gp-fs-title); font-weight: 600; }
+.progress { block-size: var(--gp-sp-1); border-radius: var(--gp-r-pill); background: var(--gp-accent); }
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gp-sp-3);
+  padding-block: var(--gp-sp-3);
+  background: var(--gp-surface-raised);
+}
+.toastText { flex: 1; font-size: var(--gp-fs-body); }
+.close { flex: none; color: var(--gp-ink-muted); margin-block-start: var(--gp-sp-1); }
+.counterAmount { color: var(--gp-savings); font-size: var(--gp-fs-display); font-weight: 700; line-height: var(--gp-lh-display); }
+.counterMonth { color: var(--gp-savings); font-size: var(--gp-fs-body); }
+
+/* ---------- sellers: rival cards ---------- */
+.rivals { list-style: none; display: flex; flex-direction: column; gap: var(--gp-sp-4); inline-size: 100%; max-inline-size: var(--gp-panel-width-popup); }
+.rival {
+  display: flex;
+  flex-direction: column;
+  padding: var(--gp-sp-4);
+  background: var(--gp-surface);
+  border: 1px solid var(--gp-hairline);
+  border-radius: var(--gp-r-md);
+}
+.rivalName { font-size: var(--web-fs-body); font-weight: 600; }
+.rivalStores { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); }
+.rivalCount { display: flex; align-items: center; gap: var(--gp-sp-2); margin-block-start: var(--gp-sp-2); font-size: var(--gp-fs-body); }
+/* Alert mark: a short danger bar over a dot, as drawn on RivalCard. */
+.mark {
+  flex: none;
+  inline-size: 2px;
+  block-size: var(--gp-sp-3);
+  background: linear-gradient(var(--gp-danger) 0 66%, transparent 66% 83%, var(--gp-danger) 83%);
+}
+
+/* ---------- hero: store page with the side panel, receipt card over its corner ---------- */
+.hero {
+  display: grid;
+  min-inline-size: 0;
+  padding: var(--gp-sp-2) var(--gp-sp-2) var(--gp-sp-4);
+  background: var(--gp-surface-raised);
+  border-radius: var(--gp-r-lg);
+}
+/* The store page keeps the board shot's proportions (2880x1640). */
+.page {
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 2880 / 1640;
+  overflow: hidden;
+  background: var(--gp-surface);
+  border-radius: var(--gp-r-sm);
+}
+.pageBar {
+  display: flex;
+  align-items: center;
+  gap: var(--gp-sp-4);
+  padding: var(--gp-sp-2) var(--gp-sp-4);
+  border-block-end: 1px solid var(--gp-hairline);
+}
+.pageStore { font-size: var(--gp-fs-headline); font-weight: var(--gp-fw-headline); }
+.search { flex: 1; max-inline-size: 50%; block-size: var(--gp-sp-6); border: 1px solid var(--gp-hairline); border-radius: var(--gp-r-pill); }
+.pageBody { flex: 1; min-block-size: 0; display: grid; }
+.product { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--gp-sp-4); padding: var(--gp-sp-4); align-content: start; }
+.productShot { display: grid; place-items: center; aspect-ratio: 1; overflow: hidden; background: var(--gp-surface-raised); border-radius: var(--gp-r-md); }
+.productShot .photo { inline-size: 50%; block-size: auto; }
+.productInfo { display: flex; flex-direction: column; align-items: flex-start; gap: var(--gp-sp-2); min-inline-size: 0; }
+.productTitle { font-size: var(--gp-fs-headline); font-weight: var(--gp-fw-headline); }
+.productPrice { font-size: var(--gp-fs-title); font-weight: 700; }
+.badge {
+  padding-inline: var(--gp-sp-2);
+  border: 1px solid var(--gp-hairline-strong);
+  border-radius: var(--gp-r-pill);
+  color: var(--gp-savings);
+  font-size: var(--gp-fs-caption);
+}
+.sidePanel { display: none; }
+
+.receiptFrame {
+  position: relative;
+  margin-block-start: calc(-1 * var(--gp-sp-6));
+  padding: var(--gp-sp-2);
+  background: var(--gp-surface);
+  border: 1px solid var(--gp-hairline-strong);
+  border-radius: var(--gp-r-lg);
+}
+/* SavingsHero/default is 168 tall; its price line and buttons have no web keys, so the height is kept, not the content. */
+.receipt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gp-sp-1);
+  min-block-size: calc(2 * var(--gp-sp-16) + var(--gp-sp-10));
+  padding: var(--gp-sp-4);
+  background: var(--gp-surface-raised);
+  border-radius: var(--gp-r-md);
+}
+.receiptCaption { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); }
+.receiptAmount { color: var(--gp-savings); font-size: var(--gp-fs-display); font-weight: 700; line-height: var(--gp-lh-display); }
+
+@media (min-width: 768px) {
+  .pageBody { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+  .sidePanel { display: flex; border-inline-start: 1px solid var(--gp-hairline); padding: var(--gp-sp-2); }
+  .sidePanel .row { padding: var(--gp-sp-2); }
+  .sidePanel .thumb { inline-size: var(--gp-sp-6); block-size: var(--gp-sp-6); padding: 0; }
+  .sidePanel .rowTitle, .sidePanel .fig { font-size: var(--gp-fs-caption); }
+  .sidePanel .rowSaving { display: none; }
+}
+
+@media (min-width: 1024px) {
+  .hero { padding: 0; background: none; border-radius: 0; }
+  .browser {
+    padding: var(--gp-sp-3);
+    background: var(--gp-surface-raised);
+    border: 1px solid var(--gp-hairline);
+    border-radius: var(--gp-r-lg);
+  }
+  /* The receipt sits 80 above the browser's bottom edge and 24 past its inline start (boards). */
+  .receiptFrame {
+    inline-size: calc(var(--gp-panel-width) + 2 * var(--gp-sp-2));
+    margin-block-start: calc(-1 * (var(--gp-sp-16) + var(--gp-sp-4)));
+    margin-inline-start: calc(-1 * var(--gp-sp-6));
+  }
+}
