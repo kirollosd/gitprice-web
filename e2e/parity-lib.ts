@@ -21,6 +21,10 @@ const TEXT = "~5000px of body text: Sketch and Chromium rasterise Fustat differe
 const NOBTN = "board draws an action button the build omits by design (no web target; e2e asserts no actions)";
 const FIELD = "board draws the Show/Hide password toggle and the 'At least 8 characters' hint; both need new i18n keys, so they are not built";
 const RASTER = "Sketch and Chromium rasterise short centred card text differently; measured 0.03 at per-pixel threshold 0.1, no layout offset found";
+// Home and Sellers (GP-372 boards, art rebuilt in HTML/CSS, never masked):
+const ART = "board art is rebuilt in HTML/CSS: its worded strings without web keys (prices line, buttons, labels, milestone card) are left out, Sketch and Chromium rasterise the small mockup text and the resampled product photo differently, the board's 390/1440 store badges show at 390 only, and the footer keeps its 96 top margin (board 48)";
+const PHONE = "; on phones the alert and savings mockups are shorter without those strings, so everything below them sits higher";
+const SELLERS = "rival cards drop the unkeyed 'Pinned' label, Arabic body copy wraps a word later in Chromium, and the footer keeps its 96 top margin (board 32) under the back link";
 export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Checkout-summary-1440": { max: 0.05, reason: NOTE },
   "Checkout-summary-390": { max: 0.12, reason: NOTE },
@@ -50,14 +54,23 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Pricing-no-prices-390": { max: 0.09, reason: "board draws the Free price '0' and the 'Premium for sellers' row; neither has an i18n key" },
   "Welcome-default-390": { max: 0.05, reason: "board draws decorative art (toolbar icons, store chip) the build does not ship" },
   "NotFound-default-390": { max: 0.05, reason: "Noto Sans Arabic line metrics differ between Sketch and Chromium" },
+  "Home-launch-1440": { max: 0.08, reason: ART + "; measured en 0.05, ar 0.07" },
+  "Home-launch-390": { max: 0.12, reason: ART + PHONE + "; measured en 0.11, ar 0.11" },
+  "Sellers-launch-1440": { max: 0.07, reason: SELLERS + "; measured en 0.04, ar 0.06" },
+  "Sellers-launch-390": { max: 0.11, reason: SELLERS + "; measured en 0.10, ar 0.07" },
+  "Sellers-prelaunch-1440": { max: 0.06, reason: SELLERS + "; measured en 0.03, ar 0.05" },
+  "Sellers-prelaunch-390": { max: 0.10, reason: SELLERS + "; measured en 0.09, ar 0.04" },
 };
 
-/** Boards the build cannot match yet; reported, never loosened. Key: `<Screen>`. */
+/** Boards the build cannot match yet; reported, never loosened. Key: `<Screen>-<state>`. */
+const PRELAUNCH = "prelaunch boards predate the GP-372 sections; owner ruled prelaunch shows them (baseline strip, feature art, grouped rows), so the page runs about 1100px past the board (measured 0.11 to 0.12)";
 export const DIVERGED: Record<string, string> = {
-  Home: "board composes owner product art (device mockup, receipt cards, feature art) and an inline waitlist form the build does not have; parked until the owner supplies assets (measured 0.15 to 0.19)",
-  Sellers: "same board vocabulary as Home (mockups, bands, seller access card); parked until the owner supplies assets (measured 0.19 to 0.26)",
+  "Home-prelaunch": PRELAUNCH,
+  "Home-cookie-notice": PRELAUNCH,
 };
-export const isDiverged = (screen: string) => !process.env.PARITY_MEASURE && screen in DIVERGED;
+const key = (screen: string, state: string) => [screen, state].filter(Boolean).join("-");
+export const isDiverged = (screen: string, state: string) => !process.env.PARITY_MEASURE && key(screen, state) in DIVERGED;
+export const divergedReason = (screen: string, state: string) => DIVERGED[key(screen, state)];
 
 /** One masked region: where it sits in the build, why it intentionally differs from the board. */
 export type Mask = { locator: (page: Page) => Locator; reason: string };

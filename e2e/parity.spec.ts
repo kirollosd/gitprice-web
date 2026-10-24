@@ -2,14 +2,14 @@ import { test } from "@playwright/test";
 import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 import {
-  decideConsent, DIVERGED, expectParity, isDiverged, LOCALES, seedCheckout, seedReset, sizeToBoard, spinnerMask, stubTally, tallyMask, WIDTHS,
+  decideConsent, divergedReason, expectParity, isDiverged, LOCALES, seedCheckout, seedReset, sizeToBoard, spinnerMask, stubTally, tallyMask, WIDTHS,
   type CheckoutState, type Mask, type ResetState, type Shot,
 } from "./parity-lib";
 
 // Prelaunch project (:3000). Launch-only boards live in parity.launch.spec.ts.
 // Not pixel-compared, Tally draws these: Home and Sellers prelaunch-submitting, -joined, -error, -failed.
 // Not pixel-compared, no build counterpart: Pricing-default (the priced plans page, copy and price keys do not exist; the build ships only the no-prices page).
-// Home and Sellers are test.fixme: see DIVERGED in parity-lib.ts.
+// Home prelaunch and cookie-notice are test.fixme: see DIVERGED in parity-lib.ts. Sellers and Home launch are compared without masks on the art.
 
 const COPY = { en: en.web, ar: ar.web };
 type Locale = "en" | "ar";
@@ -53,7 +53,7 @@ for (const width of WIDTHS) {
         const themes = !cookieNotice && screen === "Home" && darkOnly(width) ? (["light", "dark"] as const) : (["light"] as const);
         for (const theme of themes) {
           test(`${screen} ${state} ${tag} ${theme}`, async ({ page }) => {
-            test.fixme(isDiverged(screen), DIVERGED[screen]);
+            test.fixme(isDiverged(screen, state), divergedReason(screen, state));
             const s = shot(screen, state, width, locale, { theme, masks: [tallyMask] });
             await stubTally(page);
             if (!cookieNotice) await decideConsent(page);
