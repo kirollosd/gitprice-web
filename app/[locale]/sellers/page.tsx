@@ -5,12 +5,13 @@ import styles from "../../components/HomeSections.module.css";
 import { env } from "../../../lib/env";
 import { t, type Locale } from "../../../lib/i18n";
 import { pathFor } from "../../../lib/locale";
+import { pageMeta } from "../../../lib/seo";
 
 const S = "web.sellers.";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
-  return { title: t(locale, S + "hero.headline"), description: t(locale, S + "hero.sub") };
+  return { ...pageMeta(locale, "/sellers"), title: t(locale, S + "hero.headline"), description: t(locale, S + "hero.sub") };
 }
 
 export default async function SellersPage({ params }: { params: Promise<{ locale: Locale }> }) {

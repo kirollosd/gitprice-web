@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
 import HomeContent from "../components/HomeSections";
 import type { Locale } from "../../lib/i18n";
+import { pageMeta } from "../../lib/seo";
 
-export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
+type Props = { params: Promise<{ locale: Locale }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  return pageMeta(locale, "/");
+}
+
+export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   return <HomeContent locale={locale} />;
 }

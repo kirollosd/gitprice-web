@@ -9,28 +9,33 @@ import { dir, t, type Locale } from "../../lib/i18n";
 import "../globals.css";
 
 const title = "GitPrice";
-const description = t("en", "web.home.hero.sub");
 
-export const metadata: Metadata = {
-  title: { template: "%s | GitPrice", default: title },
-  description,
-  authors: [{ name: "GitPrice" }],
-  creator: "GitPrice",
-  metadataBase: new URL(env.siteUrl),
-  openGraph: {
-    type: "website",
-    siteName: "GitPrice",
-    title,
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const l: Locale = locale === "ar" ? "ar" : "en";
+  const description = t(l, "web.home.hero.sub");
+  return {
+    title: { template: "%s | GitPrice", default: title },
     description,
-    images: [{ url: "/logo_og.png", width: 1200, height: 630, alt: "GitPrice" }],
-  },
-  twitter: { card: "summary_large_image", title, description },
-  icons: {
-    icon: [{ url: "/logo_icon.svg", type: "image/svg+xml" }],
-    apple: "/logo_icon.svg",
-  },
-  robots: { index: true, follow: true },
-};
+    authors: [{ name: "GitPrice" }],
+    creator: "GitPrice",
+    metadataBase: new URL(env.siteUrl),
+    openGraph: {
+      type: "website",
+      siteName: "GitPrice",
+      locale: l === "ar" ? "ar" : "en_US",
+      title,
+      description,
+      images: [{ url: "/logo_og.png", width: 1200, height: 630, alt: "GitPrice" }],
+    },
+    twitter: { card: "summary_large_image", title, description },
+    icons: {
+      icon: [{ url: "/logo_icon.svg", type: "image/svg+xml" }],
+      apple: "/logo_icon.svg",
+    },
+    robots: { index: true, follow: true },
+  };
+}
 
 export const dynamicParams = false;
 export const generateStaticParams = () => [{ locale: "en" }, { locale: "ar" }];
