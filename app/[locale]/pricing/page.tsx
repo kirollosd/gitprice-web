@@ -8,6 +8,9 @@ import { pathFor } from "../../../lib/locale";
 import { pageMeta } from "../../../lib/seo";
 
 const P = "web.pricing.noPrices.";
+const S = "web.component.webPricingCard.sellersRow.";
+// The board's Free price is the numeral 0: a figure, not copy, the same in both locales (no i18n key exists for it).
+const FREE_PRICE = "0";
 type Props = { params: Promise<{ locale: Locale }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -25,7 +28,12 @@ export default async function PricingPage({ params }: Props) {
   const features = (plan: "free" | "pro") => (
     <ul className={styles.features}>
       {[1, 2, 3].map((n) => (
-        <li key={n}><span aria-hidden="true" className={styles.check}>✓</span>{t(locale, `${P}plan.${plan}.feature.${n}`)}</li>
+        <li key={n}>
+          <svg aria-hidden="true" className={styles.check} viewBox="0 0 20 20" width="20" height="20" fill="none">
+            <path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          {t(locale, `${P}plan.${plan}.feature.${n}`)}
+        </li>
       ))}
     </ul>
   );
@@ -36,6 +44,7 @@ export default async function PricingPage({ params }: Props) {
       <div className={styles.plans}>
         <article className={`${styles.card} ${styles.cardPro}`}>
           <h2 className={styles.h2}>{t(locale, P + "plan.free.plan")}</h2>
+          <p className={styles.price}><bdi dir="ltr">{FREE_PRICE}</bdi></p>
           <p className={styles.period}>{t(locale, P + "plan.free.period")}</p>
           {features("free")}
           {cta(t(locale, P + "plan.free.label"), true)}
@@ -48,6 +57,11 @@ export default async function PricingPage({ params }: Props) {
           {env.launch ? <StoreBadges locale={locale} /> : cta(t(locale, P + "plan.pro.label"), false)}
         </article>
       </div>
+      <aside className={styles.sellersRow}>
+        <h2 className={styles.sellersTitle}>{t(locale, S + "title")}</h2>
+        <p className={styles.muted}>{t(locale, S + "body")}</p>
+        <Link href={pathFor(locale, "/sellers")} className={styles.btn}>{t(locale, S + "cta.label")}</Link>
+      </aside>
     </section>
   );
 }

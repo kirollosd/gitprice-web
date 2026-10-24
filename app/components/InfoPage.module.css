@@ -1,7 +1,7 @@
 /* Welcome and plans pages. Tokens only; logical properties so Arabic mirrors. */
 .band { background: var(--gp-surface-raised); }
 .page { padding-block: var(--gp-sp-12); display: flex; flex-direction: column; gap: var(--gp-sp-4); }
-.center { align-items: center; text-align: center; }
+.center { align-items: center; text-align: center; padding-block-end: 0; } /* Pricing has no band: the footer's own margin is the gap below */
 .h1 { font-size: var(--web-fs-hero); line-height: var(--web-lh-hero); }
 .sub, .muted { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-body); }
 .period { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); }
@@ -23,11 +23,30 @@
   padding: var(--gp-sp-6);
   min-inline-size: 0;
 }
-.plans .card { border-color: var(--gp-hairline-strong); }
-.cardPro { border: 2px solid var(--gp-ink); }
-.price { font-size: var(--web-fs-title); font-weight: 700; line-height: var(--gp-lh-tight); }
+.plans .card { gap: 0; padding: var(--gp-sp-8); border-color: var(--gp-hairline-strong); }
+.plans .h2 { line-height: var(--web-lh-body); }
+.plans .price { margin-block-start: var(--gp-sp-2); }
+.plans .features { gap: var(--gp-sp-3); margin-block: var(--gp-sp-6) var(--gp-sp-8); }
+.plans .features li { display: flex; align-items: flex-start; gap: var(--gp-sp-3); }
+.sellersRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gp-sp-1);
+  inline-size: 100%;
+  max-inline-size: 792px;
+  margin-block-start: var(--gp-sp-2);
+  padding: var(--gp-sp-6);
+  border: 1px solid var(--gp-hairline-strong);
+  border-radius: var(--gp-r-lg);
+  text-align: start;
+}
+.sellersTitle { font-size: var(--web-fs-body); font-weight: 600; line-height: var(--web-lh-body); }
+.sellersRow .btn { inline-size: auto; margin-block-start: var(--gp-sp-3); }
+.plans .cardPro { border: 2px solid var(--gp-ink); } /* the featured Free card: same specificity as .plans .card, declared after it */
+.price { font-size: var(--web-fs-display); font-weight: 700; line-height: var(--web-lh-display); }
 .features { list-style: none; display: flex; flex-direction: column; gap: var(--gp-sp-2); flex: 1; font-size: var(--web-fs-body); line-height: var(--web-lh-body); }
-.check { color: var(--gp-ink); font-weight: 700; margin-inline-end: var(--gp-sp-2); }
+.check { flex: none; color: var(--gp-ink); margin-block-start: var(--gp-sp-1); }
 .btn, .btnPrimary {
   display: flex;
   align-items: center;

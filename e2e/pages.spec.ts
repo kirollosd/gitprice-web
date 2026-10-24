@@ -41,8 +41,10 @@ test("indexable pages are not noindex and nothing links to pricing", async ({ pa
 
 test("prelaunch pricing CTAs go to the waitlist", async ({ page }) => {
   await page.goto("/ar/pricing");
-  const hrefs = await page.locator("main a").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
+  // The plan CTAs; the sellers row links to the sellers page (Pricing/no-prices board).
+  const hrefs = await page.locator("main article a").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
   expect(hrefs).toEqual(["/ar#waitlist", "/ar#waitlist"]);
+  await expect(page.locator("main aside a")).toHaveAttribute("href", "/ar/sellers");
 });
 
 test("sitemap and robots", async ({ request }) => {
