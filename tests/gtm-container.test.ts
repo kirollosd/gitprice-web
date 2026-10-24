@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 type Param = { type: string; key?: string; value?: string; list?: Param[]; map?: Param[] };
 type Entity = { name: string; type: string; parameter?: Param[] };
 type Tag = Entity & { firingTriggerId?: string[]; consentSettings?: { consentStatus: string } };
-type Trigger = Entity & { triggerId: string };
+type Trigger = Entity & { triggerId: string; filter?: { type: string; parameter: Param[] }[] };
 
 const raw = readFileSync(join(__dirname, "../docs/analytics/gtm-container.json"), "utf8");
 const cv = JSON.parse(raw).containerVersion as {
@@ -37,6 +37,16 @@ describe("GTM container export", () => {
     const pv = events.find((t) => param(t, "eventName") === "page_view")!;
     const trig = cv.trigger.find((t) => t.triggerId === pv.firingTriggerId![0])!;
     expect(trig.type).toBe("HISTORY_CHANGE");
+  });
+
+  it("skips replaceState history changes so Next.js hydration does not double-count page_view", () => {
+    const trig = cv.trigger.find((t) => t.type === "HISTORY_CHANGE")!;
+    expect(trig.filter).toEqual([{ type: "EQUALS", parameter: [
+      { type: "TEMPLATE", key: "arg0", value: "{{History Source}}" },
+      { type: "TEMPLATE", key: "arg1", value: "replaceState" },
+      { type: "BOOLEAN", key: "negate", value: "true" },
+    ] }]);
+    expect(cv.builtInVariable.map((v) => v.name)).toContain("History Source");
   });
 
   it("fires every tag on a defined trigger", () => {

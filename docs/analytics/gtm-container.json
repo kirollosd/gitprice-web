@@ -879,6 +879,28 @@
         "triggerId": "25",
         "name": "History Change",
         "type": "HISTORY_CHANGE",
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{History Source}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "replaceState"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
+            ]
+          }
+        ],
         "fingerprint": "0"
       }
     ],
@@ -1143,6 +1165,12 @@
         "containerId": "0",
         "type": "SCROLL_DEPTH_THRESHOLD",
         "name": "Scroll Depth Threshold"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "type": "HISTORY_SOURCE",
+        "name": "History Source"
       }
     ],
     "fingerprint": "0"
