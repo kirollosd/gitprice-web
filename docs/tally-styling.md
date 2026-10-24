@@ -1,6 +1,6 @@
 # Tally form styling (owner task)
 
-The site embeds Tally form `NEXT_PUBLIC_TALLY_FORM_ID` (`mYLGEG` today) on Home (twice: hero and closing band) and on Sellers (twice). The embed URL is
+The site embeds Tally form `NEXT_PUBLIC_TALLY_FORM_ID` (`ODdMyk` today) on Home (twice: hero and closing band) and on Sellers (twice). The embed URL is
 `https://tally.so/embed/<id>?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=<en|ar>`.
 The code cannot style inside the iframe, so match the `WebWaitlistForm/*` masters in the Tally dashboard (Design tab, then Custom CSS on a paid plan).
 

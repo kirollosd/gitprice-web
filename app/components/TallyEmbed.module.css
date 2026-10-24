@@ -1,5 +1,10 @@
 .frame { inline-size: 100%; max-inline-size: 400px; }
-.iframe { display: block; inline-size: 100%; border: 0; }
+.iframe { display: block; inline-size: 100%; border: 0; color-scheme: light; }
+/* Dark theme: Tally draws dark text and white fields, so the form sits on a light panel (light tokens via data-theme="light"). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .frame { padding: var(--gp-sp-4); background: var(--gp-surface-raised); border-radius: var(--gp-r-lg); }
+}
+:root[data-theme="dark"] .frame { padding: var(--gp-sp-4); background: var(--gp-surface-raised); border-radius: var(--gp-r-lg); }
 .fallback {
   display: inline-flex;
   align-items: center;

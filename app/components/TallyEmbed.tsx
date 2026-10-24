@@ -58,7 +58,9 @@ export default function TallyEmbed({
           {text}
         </a>
       ) : (
-        <div className={styles.frame} style={{ minBlockSize: height }}>
+        // Light tokens and color-scheme inside the frame: the Tally page is light, so a dark iframe scheme would paint
+        // an opaque white canvas behind it. In dark theme the frame is a deliberate light panel instead (CSS).
+        <div className={styles.frame} data-gp="app" data-theme="light" style={{ minBlockSize: height }}>
           <iframe
             data-tally-src={`https://tally.so/embed/${id}?transparentBackground=1&hideTitle=1&dynamicHeight=1&lang=${locale}`}
             title={text}
