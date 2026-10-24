@@ -5,6 +5,8 @@ import sharp from "sharp";
 
 // Visual parity against the Sketch board exports in e2e/refs (<Screen>-<state>-<width>-<locale>-<theme>.png).
 // Run `PARITY_MEASURE=1` to record each diff ratio to test-results/parity-ratios.jsonl instead of failing.
+// Coverage gap: every board draws the header sellers toggle and both e2e builds set NEXT_PUBLIC_SELLERS_NAV=1, so no parity
+// board or e2e build covers the production default (flag off, toggle hidden); only tests/sellers-nav.test.tsx and tests/env.test.ts do.
 
 const REFS = join(__dirname, "refs");
 const BASELINES = join(__dirname, ".parity");
