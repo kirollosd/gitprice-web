@@ -1,8 +1,8 @@
 .link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gp-sp-2);
   color: var(--gp-ink);
-  font-weight: 600;
-  padding: var(--gp-sp-2) var(--gp-sp-3);
-  border-radius: var(--gp-r-pill);
-  border: 1px solid var(--gp-hairline-strong);
   white-space: nowrap;
 }
+.globe { flex: none; }

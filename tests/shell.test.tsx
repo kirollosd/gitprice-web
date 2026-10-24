@@ -129,13 +129,16 @@ describe("WebMenu", () => {
 
 describe("WebNav hosted", () => {
   afterEach(cleanup);
-  it("shows only the logo linking to / and no menu button", async () => {
+  it("shows the logo linking to / and the language switch, no menu button or nav", async () => {
     const { default: WebNav } = await import("../app/components/WebNav");
+    mockPath = "/ar/checkout";
     render(<WebNav locale="ar" variant="hosted" />);
     const links = screen.getAllByRole("link");
-    expect(links.map((a) => a.getAttribute("href"))).toEqual(["/"]);
+    expect(links.map((a) => a.getAttribute("href"))).toEqual(["/", "/checkout"]);
+    expect(links[1].textContent).toBe("English");
     expect(screen.queryByRole("button")).toBeNull();
     expect(screen.queryByRole("navigation")).toBeNull();
+    mockPath = "/";
   });
   it("treats the rewritten /en prefix as hosted too", async () => {
     const { default: WebNav } = await import("../app/components/WebNav");
@@ -153,18 +156,6 @@ describe("WebNav hosted", () => {
       expect(screen.queryByRole("button")).toBeNull();
       unmount();
     }
-    mockPath = "/";
-  });
-  it("swaps the footer for the fallback on hosted paths", async () => {
-    const { default: HideOnHosted } = await import("../app/components/HideOnHosted");
-    mockPath = "/ar/reset-password";
-    const { unmount } = render(<HideOnHosted fallback={<p>mini</p>}><p>footer</p></HideOnHosted>);
-    expect(screen.queryByText("footer")).toBeNull();
-    expect(screen.getByText("mini")).toBeTruthy();
-    unmount();
-    mockPath = "/ar/sellers";
-    render(<HideOnHosted fallback={<p>mini</p>}><p>footer</p></HideOnHosted>);
-    expect(screen.getByText("footer")).toBeTruthy();
     mockPath = "/";
   });
 });

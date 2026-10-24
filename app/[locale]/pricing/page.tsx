@@ -30,22 +30,22 @@ export default async function PricingPage({ params }: Props) {
     </ul>
   );
   return (
-    <section className={`container ${styles.page}`}>
+    <section className={`container ${styles.page} ${styles.center}`}>
       <h1 className={styles.h1}>{t(locale, P + "title")}</h1>
       <p className={styles.sub}>{t(locale, P + "subtitle")}</p>
       <div className={styles.plans}>
-        <article className={styles.card}>
-          <h2 className={styles.h2}>{t(locale, P + "plan.free.plan")}</h2>
-          <p className={styles.muted}>{t(locale, P + "plan.free.period")}</p>
-          {features("free")}
-          {cta(t(locale, P + "plan.free.label"), false)}
-        </article>
         <article className={`${styles.card} ${styles.cardPro}`}>
+          <h2 className={styles.h2}>{t(locale, P + "plan.free.plan")}</h2>
+          <p className={styles.period}>{t(locale, P + "plan.free.period")}</p>
+          {features("free")}
+          {cta(t(locale, P + "plan.free.label"), true)}
+        </article>
+        <article className={styles.card}>
           <h2 className={styles.h2}>{t(locale, P + "plan.pro.plan")}</h2>
           <p className={styles.price}>{t(locale, P + "plan.pro.price")}</p>
-          <p className={styles.muted}>{t(locale, P + "plan.pro.period")}</p>
+          <p className={styles.period}>{t(locale, P + "plan.pro.period")}</p>
           {features("pro")}
-          {env.launch ? <StoreBadges locale={locale} /> : cta(t(locale, P + "plan.pro.label"), true)}
+          {env.launch ? <StoreBadges locale={locale} /> : cta(t(locale, P + "plan.pro.label"), false)}
         </article>
       </div>
     </section>

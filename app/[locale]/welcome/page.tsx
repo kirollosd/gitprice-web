@@ -14,6 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function WelcomePage({ params }: Props) {
   const { locale } = await params;
   return (
+    <div className={styles.band}>
     <section className={`container ${styles.page}`}>
       <h1 className={styles.h1}>{t(locale, W + "title")}</h1>
       <p className={styles.sub}>{t(locale, W + "subtitle")}</p>
@@ -31,5 +32,6 @@ export default async function WelcomePage({ params }: Props) {
         {t(locale, W + "signin.text")} <strong>{t(locale, W + "signin.link")}</strong>
       </p>
     </section>
+    </div>
   );
 }

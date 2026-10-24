@@ -89,10 +89,10 @@ export default function WebMenu({ locale }: { locale: Locale }) {
             <li><Link href={`${home}#features`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.features`)}</Link></li>
             <li><Link href={`${home}#how-it-works`} onClick={() => setOpen(false)}>{t(locale, `${N}${keys}.label.howItWorks`)}</Link></li>
             <li><Link href={sellers.href} onClick={() => setOpen(false)}>{sellers.label}</Link></li>
+            <li><LanguageSwitch locale={locale} icon /></li>
           </ul>
           </nav>
           <Link href={cta.href} className={styles.cta} onClick={() => setOpen(false)}>{cta.label}</Link>
-          <LanguageSwitch locale={locale} />
         </div>
       )}
     </>

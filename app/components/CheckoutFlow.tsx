@@ -107,8 +107,10 @@ export default function CheckoutFlow({ locale }: { locale: Locale }) {
     case "redirecting":
       return (
         <CheckoutCard locale={locale} k="redirecting" spinner>
-          <p className={styles.muted}>{t(locale, K + "redirecting.fallback")}</p>
-          <a className={styles.button} href={state.redirectUrl}>{t(locale, K + "redirecting.button.label")}</a>
+          <div className={styles.group}>
+            <p className={styles.note}>{t(locale, K + "redirecting.fallback")}</p>
+            <a className={`${styles.button} ${styles.secondary}`} href={state.redirectUrl}>{t(locale, K + "redirecting.button.label")}</a>
+          </div>
         </CheckoutCard>
       );
     default:

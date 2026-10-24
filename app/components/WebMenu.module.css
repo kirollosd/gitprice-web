@@ -5,8 +5,7 @@
   width: 44px;
   height: 44px;
   background: none;
-  border: 1px solid var(--gp-hairline-strong);
-  border-radius: var(--gp-r-pill);
+  border: 0;
   cursor: pointer;
   color: var(--gp-ink);
 }
@@ -32,21 +31,28 @@
   z-index: 40;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--gp-sp-6);
-  padding: var(--gp-sp-8) var(--gp-sp-6) var(--gp-sp-6);
+  align-items: stretch;
+  padding: 0 var(--gp-sp-4) var(--gp-sp-6);
   background: var(--gp-surface);
   overflow-y: auto;
 }
-.list { list-style: none; display: flex; flex-direction: column; gap: var(--gp-sp-5); }
-.list a { color: var(--gp-ink); font-size: var(--gp-fs-title); font-weight: 600; }
+/* 56-tall rows with a hairline between, as on the board. */
+.list { list-style: none; display: flex; flex-direction: column; }
+.list li { display: flex; align-items: center; min-block-size: 56px; border-block-end: 1px solid var(--gp-hairline); }
+.list li > a { flex: 1; }
+.list a { color: var(--gp-ink); font-size: var(--web-fs-body); font-weight: 500; }
 .cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--gp-target);
+  margin-block-start: var(--gp-sp-6);
   background: var(--gp-ink);
   color: var(--gp-surface);
-  padding: var(--gp-sp-3) var(--gp-sp-6);
   border-radius: var(--gp-r-pill);
   font-weight: 600;
 }
+.cta:hover { text-decoration: none; }
 
 @media (max-width: 1023px) { .button { display: inline-flex; } }
 @media (min-width: 1024px) { .overlay { display: none; } }

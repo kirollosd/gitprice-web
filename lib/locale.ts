@@ -48,6 +48,11 @@ const HOSTED = /^(\/en)?\/(reset-password|checkout)(\/|$)/;
 /** Takes the locale-less path (`localeFromPath(...).rest`). Hosted pages carry secrets in the URL and show a minimal shell. */
 export const isHostedPath = (rest: string) => HOSTED.test(rest);
 
+const MINIMAL_NAV = /^(\/en)?\/(reset-password|checkout|welcome)(\/|$)/;
+
+/** Boards draw the logo-and-language nav on the hosted pages and on /welcome (the post-install page, no secrets). */
+export const hasMinimalNav = (rest: string) => MINIMAL_NAV.test(rest);
+
 /** Target URL when switching language. Hosted pages carry secrets in the hash, so it is dropped there. */
 export function switchPath(pathname: string, hash: string, to: Locale): string {
   const { rest } = localeFromPath(pathname);

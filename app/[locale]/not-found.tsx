@@ -14,7 +14,7 @@ export default function NotFound() {
     <section className={`container ${styles.root}`}>
       <h1 className={styles.title}>{t(locale, K + "title")}</h1>
       <p className={styles.body}>{t(locale, K + "body")}</p>
-      <Link href={pathFor(locale, "/")}>{t(locale, K + "back.label")}</Link>
+      <Link href={pathFor(locale, "/")} className={styles.button}>{t(locale, K + "back.label")}</Link>
     </section>
   );
 }

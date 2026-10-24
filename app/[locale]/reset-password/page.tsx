@@ -14,8 +14,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ResetPasswordPage({ params }: Props) {
   const { locale } = await params;
   return (
-    <section className={`container ${styles.page}`}>
-      <ResetPasswordForm locale={locale} />
-    </section>
+    <div className={styles.band}>
+      <section className="container">
+        <ResetPasswordForm locale={locale} />
+      </section>
+    </div>
   );
 }

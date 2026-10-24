@@ -14,8 +14,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CheckoutReturnPage({ params }: Props) {
   const { locale } = await params;
   return (
-    <section className={`container ${styles.page}`}>
-      <CheckoutReturn locale={locale} />
-    </section>
+    <div className={styles.band}>
+      <section className="container">
+        <CheckoutReturn locale={locale} />
+      </section>
+    </div>
   );
 }

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type FormEvent, type RefObject } from "rea
 import { env } from "../../lib/env";
 import { t, type Locale } from "../../lib/i18n";
 import { parseRecovery, validatePassword } from "../../lib/recovery";
+import StatusIcon, { type IconKind } from "./StatusIcon";
 import { useHeadingFocus } from "./useHeadingFocus";
 import styles from "./ResetPasswordForm.module.css";
 
@@ -81,8 +82,11 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
   const feedback = status === "weak" ? t(locale, K + "weak.message") : status === "error" ? t(locale, K + "error.field.message") : "";
   return (
     <form className={styles.card} onSubmit={onSubmit} noValidate>
-      <h1 className={styles.h1}>{t(locale, K + "title")}</h1>
-      {email && <p className={styles.muted}>{t(locale, K + "body", { email })}</p>}
+      <div className={styles.head}>
+        <StatusIcon kind="lock" />
+        <h1 className={styles.h1}>{t(locale, K + "title")}</h1>
+        {email && <p className={styles.muted}>{t(locale, K + "body", { email })}</p>}
+      </div>
       <div className={styles.field}>
         <label htmlFor="password" className={styles.label}>{t(locale, K + "field.label")}</label>
         <input
@@ -108,11 +112,14 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
   );
 }
 
+const ICON: Record<string, IconKind> = { success: "check", linkExpired: "clock" };
+
 /** The status region stays mounted across message views, so a swap (verifying to expired) is announced. */
 function Message({ locale, k, heading }: { locale: Locale; k: string; heading: RefObject<HTMLHeadingElement | null> }) {
   return (
     <div className={styles.card}>
-      <div role="status" aria-live="polite">
+      <div role="status" aria-live="polite" className={styles.head}>
+        {k === "verifying" ? <div className={styles.spinner} aria-hidden="true" /> : <StatusIcon kind={ICON[k]} />}
         <h1 ref={heading} tabIndex={-1} className={styles.h1}>{t(locale, `${K}${k}.title`)}</h1>
         <p className={styles.muted}>{t(locale, `${K}${k}.body`)}</p>
       </div>

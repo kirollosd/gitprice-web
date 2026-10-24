@@ -26,38 +26,40 @@ export default function LegalPage({ locale, name }: { locale: Locale; name: Lega
   const toc = `web.component.webLegalToc.${name === "privacy" ? "default" : "terms"}.`;
   const sections = sectionKeys(name);
   return (
-    <div className={`container ${styles.layout}`}>
-      <nav className={styles.toc} aria-label={t(locale, toc + "heading")}>
-        <p className={styles.tocHeading} aria-hidden="true">{t(locale, toc + "heading")}</p>
-        <ol className={styles.tocList}>
+    <div className={`container ${styles.page}`}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>{t(locale, P + "title")}</h1>
+        <p className={styles.meta}>{t(locale, P + "meta")}</p>
+      </header>
+      <p className={styles.intro}>{t(locale, P + "intro")}</p>
+      <div className={styles.layout}>
+        <nav className={styles.toc} aria-label={t(locale, toc + "heading")}>
+          <p className={styles.tocHeading} aria-hidden="true">{t(locale, toc + "heading")}</p>
+          <ol className={styles.tocList}>
+            {sections.map((s) => (
+              <li key={s.id}><a className={styles.tocLink} href={`#${s.id}`}>{t(locale, `${toc}label.${s.id}`)}</a></li>
+            ))}
+          </ol>
+        </nav>
+        <article className={styles.article}>
           {sections.map((s) => (
-            <li key={s.id}><a className={styles.tocLink} href={`#${s.id}`}>{t(locale, `${toc}label.${s.id}`)}</a></li>
+            <section key={s.id} id={s.id} className={styles.section} aria-labelledby={`${s.id}-h`}>
+              <h2 id={`${s.id}-h`} className={styles.sectionTitle}>{t(locale, `${P}${s.id}.heading`)}</h2>
+              {group(s.items).map((g, i) =>
+                g.kind === "p" ? (
+                  <p key={i} className={styles.body}>{t(locale, `${P}${s.id}.${g.keys[0]}`)}</p>
+                ) : (
+                  <ul key={i} className={styles.list}>
+                    {g.keys.map((k) => (
+                      <li key={k}>{t(locale, `${P}${s.id}.${k}`).replace(BULLET, "")}</li>
+                    ))}
+                  </ul>
+                ),
+              )}
+            </section>
           ))}
-        </ol>
-      </nav>
-      <article className={styles.article}>
-        <header className={styles.header}>
-          <h1 className={styles.title}>{t(locale, P + "title")}</h1>
-          <p className={styles.meta}>{t(locale, P + "meta")}</p>
-        </header>
-        <p className={styles.intro}>{t(locale, P + "intro")}</p>
-        {sections.map((s) => (
-          <section key={s.id} id={s.id} className={styles.section} aria-labelledby={`${s.id}-h`}>
-            <h2 id={`${s.id}-h`} className={styles.sectionTitle}>{t(locale, `${P}${s.id}.heading`)}</h2>
-            {group(s.items).map((g, i) =>
-              g.kind === "p" ? (
-                <p key={i} className={styles.body}>{t(locale, `${P}${s.id}.${g.keys[0]}`)}</p>
-              ) : (
-                <ul key={i} className={styles.list}>
-                  {g.keys.map((k) => (
-                    <li key={k}>{t(locale, `${P}${s.id}.${k}`).replace(BULLET, "")}</li>
-                  ))}
-                </ul>
-              ),
-            )}
-          </section>
-        ))}
-      </article>
+        </article>
+      </div>
     </div>
   );
 }
