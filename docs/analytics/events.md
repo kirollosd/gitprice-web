@@ -8,7 +8,7 @@ Code: `lib/track.ts` (`track()`), `app/components/TrackListeners.tsx` (delegated
 
 | event | params | source |
 |---|---|---|
-| `waitlist_submit` | `audience` (shopper\|seller), `placement` (hero\|bottom) | Tally `postMessage` from **this embed's own iframe**: `event.origin === "https://tally.so"`, `event.source === iframe.contentWindow`, and an event of `Tally.FormSubmitted`. There's one Tally form for both audiences. `audience` and `placement` are `TallyEmbed` props:<br>• `audience` comes from audit fix P0-2 (task 16, on `gp-262-web-build`). This branch rebases onto it before the build starts.<br>• `placement` is new here.<br>Never forward the payload's answers. |
+| `waitlist_submit` | `audience` (shopper\|seller), `placement` (hero\|bottom) | Tally `postMessage` from **this embed's own iframe**: `event.origin === "https://tally.so"`, `event.source === iframe.contentWindow`, and an event of `Tally.FormSubmitted`. There's one Tally form for both audiences. `audience` and `placement` are `TallyEmbed` props:<br>• `audience` comes from audit fix P0-2.<br>• `placement` marks the embed's position on the page.<br>Never forward the payload's answers. |
 | `cta_click` | `cta_id`, `placement` (nav\|hero\|bottom\|menu\|footer) | `data-gp-track` on the waitlist/primary CTAs, "For sellers"/"For shoppers" and the anchor links |
 | `store_click` | `store` (chrome\|app_store\|play), `placement` | the store badges (launch mode) |
 | `section_view` | `section_id` | IntersectionObserver at 50% visible (or half a viewport visible, for sections taller than the screen), once per section per page view, on the Home and Sellers top-level sections (hero, baseline, features rows, groups, privacy, faq, bottom CTA) |
