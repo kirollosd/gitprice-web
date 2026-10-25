@@ -24,7 +24,7 @@ test("Allow loads Heap, Decline reloads and removes it and its cookies", async (
   await notice(page).getByRole("button", { name: N.button.allow.label }).click();
   await expect(notice(page)).toBeHidden();
   await expect.poll(() => hasHeap(page)).toBe(true);
-  await context.addCookies([{ name: "_hp2_id.e2e", value: "x", url: "http://localhost:3000" }]);
+  await context.addCookies(["_hp2_id.e2e", "_hp5_meta.e2e"].map((name) => ({ name, value: "x", url: "http://localhost:3000" })));
 
   await page.getByRole("button", { name: COOKIES }).click();
   await expect(notice(page)).toBeVisible();
@@ -35,7 +35,7 @@ test("Allow loads Heap, Decline reloads and removes it and its cookies", async (
   await expect(notice(page)).toBeHidden();
   const names = (await context.cookies()).map((c) => c.name);
   expect(names).toContain("gp_consent");
-  expect(names.filter((n) => n.startsWith("_hp2_"))).toEqual([]);
+  expect(names.filter((n) => n.startsWith("_hp2_") || n.startsWith("_hp5_"))).toEqual([]);
 });
 
 test("focus moves to main after the first choice, Allow or Decline", async ({ page }) => {

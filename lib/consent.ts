@@ -4,7 +4,7 @@ export type Consent = "allow" | "decline" | null;
 export const CONSENT_COOKIE = "gp_consent";
 export const CONSENT_EVENT = "gp:consent";
 export const REOPEN_EVENT = "gp:cookie-settings";
-export const ANALYTICS_COOKIE_PREFIXES = ["_hp2_", "_ga", "_gid"] as const;
+export const ANALYTICS_COOKIE_PREFIXES = ["_hp2_", "_hp5_", "_ga", "_gid"] as const;
 
 export function readConsent(cookie: string): Consent {
   const hit = cookie.split(";").map((p) => p.trim()).find((p) => p.startsWith(`${CONSENT_COOKIE}=`));

@@ -13,7 +13,7 @@ This is the owner's one-sitting setup for gitprice.com. You need edit access to:
 - **Consent (Consent Mode v2).**
   - Before a choice, every consent signal is `denied`. GA runs cookieless and receives only anonymous pings.
   - **Allow** grants `analytics_storage` only. GA then sets its cookies, and Heap loads.
-  - **Decline** keeps it `denied` and deletes any `_ga`, `_ga_*` and `_gid` cookies. A first-time Decline doesn't reload the page. Allow then Decline (from Cookie settings) also reloads it, because Heap can't be unloaded.
+  - **Decline** keeps it `denied` and deletes any `_ga`, `_ga_*` and `_gid` cookies, and Heap's `_hp2_*` and `_hp5_*` cookies. A first-time Decline doesn't reload the page. Allow then Decline (from Cookie settings) also reloads it, because Heap can't be unloaded.
   - The ad signals (`ad_storage`, `ad_user_data`, `ad_personalization`) are never granted. The site promises no ads.
 - **Events.** The site pushes `{event, ...params, locale}` to `window.dataLayer`. GTM turns each push into a GA4 event. Heap also gets the event once it's loaded.
 - **Redaction.** On `/reset-password`, `/checkout`, `/checkout/return` and `/welcome` (each with or without `/ar`), `page_location` is sent without its query string or fragment, because those URLs can carry tokens.

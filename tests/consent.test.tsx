@@ -117,14 +117,16 @@ describe("cookie notice and Heap", () => {
     expect(screen.getByRole("region", { name: N.title })).toBeTruthy();
   });
 
-  it("Allow then Decline clears _hp2_ cookies and reloads", async () => {
+  it("Allow then Decline clears Heap _hp2_ and _hp5_ cookies and reloads", async () => {
     await mount();
     click(N.button.allow.label);
     document.cookie = "_hp2_id.123=abc; Path=/";
+    document.cookie = "_hp5_meta.123=abc; Path=/";
     click(en.web.component.webFooter.default.label.cookies);
     click(N.button.decline.label);
     expect(document.cookie).toContain("gp_consent=decline");
     expect(document.cookie).not.toContain("_hp2_");
+    expect(document.cookie).not.toContain("_hp5_");
     expect(reload).toHaveBeenCalledTimes(1);
   });
 
