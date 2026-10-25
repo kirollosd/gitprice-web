@@ -1,0 +1,13 @@
+/* Lives in FloatingStack (fixed), so mounting after hydration never shifts the nav (CLS). */
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gp-sp-4);
+  align-items: center;
+  justify-content: center;
+  padding: var(--gp-sp-3) var(--gp-sp-4);
+  background: var(--gp-surface-raised);
+  border: 1px solid var(--gp-hairline);
+  border-radius: var(--gp-r-md);
+  box-shadow: var(--gp-shadow-toast);
+}

@@ -1,0 +1,31 @@
+import type { ReactNode } from "react";
+import { t, type Locale } from "../../lib/i18n";
+import StatusIcon, { type IconKind } from "./StatusIcon";
+import { useHeadingFocus } from "./useHeadingFocus";
+import styles from "./Checkout.module.css";
+
+// The summary has no icon; each result state has one (spinner states draw the spinner instead).
+const ICON: Record<string, IconKind> = { success: "check", alreadyPro: "check", failed: "alert", cancelled: "alert", signedOut: "user", waiting: "clock" };
+
+/** The live region stays mounted across states so a screen reader hears each change. */
+export default function CheckoutCard({ locale, k, spinner, busy, children }: {
+  locale: Locale;
+  k?: string;
+  spinner?: boolean;
+  busy?: boolean;
+  children?: ReactNode;
+}) {
+  const heading = useHeadingFocus(k ?? "");
+  const icon = k && !spinner ? ICON[k] : undefined;
+  return (
+    <div className={styles.card}>
+      <div role="status" aria-live="polite" aria-busy={busy || undefined} className={styles.head}>
+        {spinner && <div className={styles.spinner} aria-hidden="true" />}
+        {icon && <StatusIcon kind={icon} />}
+        {k && <h1 ref={heading} tabIndex={-1} className={styles.h1}>{t(locale, `web.checkout.${k}.title`)}</h1>}
+        {k && <p className={styles.muted}>{t(locale, `web.checkout.${k}.body`)}</p>}
+      </div>
+      {children}
+    </div>
+  );
+}

@@ -1,0 +1,202 @@
+/* Home and Sellers, laid out from the screen/<theme>/<dir>/<width>/{Home,Sellers}/* boards.
+   Type comes from the local --web-* scale (globals.css), spacing from the token scale. Sections sit 56 apart on phones
+   and 96 from 1024 (--section). The product art lives in BoardArt. */
+.hero, .section, .baseline, .stepsBand, .band { --section: calc(var(--gp-sp-12) + var(--gp-sp-2)); }
+/* Off-scale measures from the boards, named once. */
+.hero, .section, .baseline, .stepsBand, .band, .bandCard, .backRow {
+  --web-w-sub: 30rem;          /* hero sub and feature text column: 480 */
+  --web-w-feature-body: 27.5rem; /* feature row body: 440 */
+  --web-w-item: 32.5rem;       /* grouped row body: 520 */
+  --web-w-who: 55rem;          /* sellers "who" line: 880 */
+  --web-w-step: 22.5rem;       /* step column: 360 */
+  --web-w-badges: 19.5rem;     /* CTA card content: store badges 312 */
+  --web-w-access: 17.5rem;     /* seller access button 280 */
+  --web-w-form: 25rem;         /* waitlist form 400 */
+  --web-lh-feature: 1.2;       /* feature row title: 28/34 in both scripts */
+  --web-w-hero: 40rem;         /* hero headline at 768: 640, two lines */
+}
+
+/* ---------- hero ---------- */
+.hero { padding-block: var(--gp-sp-8) var(--gp-sp-16); }
+.heroGrid { display: grid; gap: var(--gp-sp-8); }
+.heroText { display: flex; flex-direction: column; align-items: flex-start; min-inline-size: 0; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--gp-sp-8);
+  padding-inline: var(--gp-sp-6);
+  margin-block-end: var(--gp-sp-2);
+  background: var(--gp-surface-raised);
+  border-radius: var(--gp-r-pill);
+  font-size: var(--gp-fs-caption);
+  line-height: var(--web-lh-caption);
+}
+.h1 {
+  font-size: var(--web-fs-hero);
+  line-height: var(--web-lh-display);
+  overflow-wrap: anywhere;
+  margin-block-end: var(--gp-sp-4);
+}
+.sub { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-text); max-inline-size: var(--web-w-sub); margin-block-end: var(--gp-sp-6); }
+.sub:has(+ .micro) { margin-block-end: var(--gp-sp-3); }
+.micro { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); margin-block-end: var(--gp-sp-6); }
+.action { inline-size: 100%; scroll-margin-block-start: calc(var(--gp-sp-16) + var(--gp-sp-4)); }
+.muted { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-text); }
+
+/* Sellers hero: no chip, the rival art sits a little higher than the headline. */
+.sellersHero { padding-block: var(--section) 0; }
+.sellersHero .heroGrid { gap: var(--gp-sp-10); }
+
+/* ---------- baseline band ---------- */
+.baseline { background: var(--gp-surface-raised); padding-block: var(--gp-sp-10); }
+.baselineList { list-style: none; display: grid; gap: var(--gp-sp-5); }
+.baselineList li { display: flex; flex-direction: column; gap: var(--gp-sp-1); }
+.baselineTitle { font-size: var(--web-fs-body); font-weight: 600; line-height: var(--web-lh-text); text-wrap: balance; } /* no orphaned last word in the narrow 5-column grid (AR 1440) */
+
+/* ---------- sections ---------- */
+.section { padding-block-start: var(--section); scroll-margin-block-start: var(--gp-sp-16); }
+.h2 { font-size: var(--web-fs-h2); line-height: var(--web-lh-text); font-weight: 700; margin-block-end: var(--gp-sp-6); }
+
+/* Large feature rows: text and an art card, alternating sides from 1024. */
+.bigRows { list-style: none; display: grid; gap: var(--gp-sp-12); }
+.bigRow { display: grid; gap: var(--gp-sp-4); }
+.bigText { min-inline-size: 0; }
+.bigTitle { font-size: var(--web-fs-feature); line-height: var(--web-lh-text); font-weight: 600; margin-block-end: var(--gp-sp-2); }
+.bigText .muted { max-inline-size: var(--web-w-feature-body); }
+
+/* Grouped rows: a rule above each, the tag pill at the inline end of the title. */
+.more { display: grid; gap: var(--gp-sp-12); margin-block-start: var(--section); }
+.moreColumn { display: flex; flex-direction: column; gap: var(--gp-sp-12); min-inline-size: 0; }
+.groupTitle { font-size: var(--web-fs-title); line-height: var(--web-lh-text); font-weight: 600; margin-block-end: var(--gp-sp-4); }
+.items { list-style: none; }
+.item { border-block-start: 1px solid var(--gp-hairline); padding-block: var(--gp-sp-4); }
+.item:last-child { padding-block-end: 0; }
+.itemHead { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--gp-sp-4); }
+.itemTitle { font-size: var(--web-fs-body); line-height: var(--web-lh-text); font-weight: 600; }
+.itemBody { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-text); max-inline-size: var(--web-w-item); margin-block-start: var(--gp-sp-1); }
+.note { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); margin-block-start: var(--gp-sp-1); }
+/* Label centred in the 24px pill (the Arabic caption line is taller than the pill). */
+.tag {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  block-size: var(--gp-sp-6);
+  padding-inline: var(--gp-sp-3);
+  background: var(--gp-surface-raised);
+  border-radius: var(--gp-r-pill);
+  color: var(--gp-ink-muted);
+  font-size: var(--gp-fs-caption);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Sellers feature list: two columns from 1024, a rule above each item. */
+.sellerItems { list-style: none; display: grid; }
+.sellerItem { border-block-start: 1px solid var(--gp-hairline); padding-block: var(--gp-sp-5) var(--gp-sp-10); }
+.sellerItem:last-child { padding-block-end: 0; }
+.sellerTitle { font-size: var(--web-fs-title); line-height: var(--web-lh-text); font-weight: 600; }
+.sellerItem .itemBody { margin-block-start: var(--gp-sp-2); }
+.section:has(.sellerItems) .h2 { margin-block-end: var(--gp-sp-8); }
+
+/* ---------- how it works (raised band) ---------- */
+.stepsBand {
+  background: var(--gp-surface-raised);
+  margin-block-start: var(--section);
+  padding-block: var(--gp-sp-12) calc(var(--gp-sp-16) + var(--gp-sp-4));
+  scroll-margin-block-start: var(--gp-sp-16);
+}
+.stepsBand .h2 { margin-block-end: var(--gp-sp-8); }
+.steps { list-style: none; display: grid; gap: var(--gp-sp-12); }
+.step { display: grid; grid-template-columns: var(--gp-target) minmax(0, 1fr); column-gap: var(--gp-sp-3); align-content: start; }
+.num { grid-row: span 2; font-size: var(--web-fs-display); line-height: var(--web-lh-display); font-weight: 700; }
+.stepTitle { font-size: var(--web-fs-title); line-height: var(--web-lh-text); font-weight: 600; margin-block-start: var(--gp-sp-1); }
+
+/* ---------- privacy and questions ---------- */
+.privacy { display: grid; gap: var(--gp-sp-6); }
+.privacyHead { display: flex; flex-direction: column; align-items: flex-start; }
+.privacyHead .h2 { margin-block-end: var(--gp-sp-4); }
+.points { list-style: none; display: grid; gap: var(--gp-sp-4); font-size: var(--web-fs-body); line-height: var(--web-lh-text); }
+.textLink { color: var(--gp-ink); text-decoration: underline; font-size: var(--web-fs-body); line-height: var(--web-lh-text); }
+
+.section:has(.faq) .h2 { margin-block-end: var(--gp-sp-8); }
+.faq { list-style: none; display: grid; gap: var(--gp-sp-8) var(--gp-sp-10); }
+.q { font-size: var(--web-fs-title); line-height: var(--web-lh-text); font-weight: 600; margin-block-end: var(--gp-sp-2); }
+
+/* ---------- closing band ---------- */
+.band { background: var(--gp-ink); color: var(--gp-surface); margin-block-start: var(--section); padding-block: calc(var(--gp-sp-16) + var(--gp-sp-2)); }
+.bandInner { display: flex; flex-direction: column; align-items: center; gap: var(--gp-sp-8); text-align: center; }
+.bandTitle { color: var(--gp-surface); font-size: var(--web-fs-h2); line-height: var(--web-lh-text); }
+.bandLine { color: var(--gp-surface); font-size: var(--web-fs-body); line-height: var(--web-lh-text); margin-block-start: var(--gp-sp-4); }
+/* The card hugs its content: store badges 312, seller access button 280, waitlist form 400. */
+.bandCard { background: var(--gp-surface); color: var(--gp-ink); border-radius: var(--gp-r-lg); padding: var(--gp-sp-4); inline-size: 100%; max-inline-size: calc(var(--web-w-badges) + 2 * var(--gp-sp-4)); text-align: start; }
+.bandCard:has(.accessBtn) { max-inline-size: calc(var(--web-w-access) + 2 * var(--gp-sp-4)); }
+.bandCard:has(iframe, a[target]) { max-inline-size: calc(var(--web-w-form) + 2 * var(--gp-sp-4)); }
+
+.who { font-size: var(--web-fs-h2); line-height: var(--web-lh-text); font-weight: 600; max-inline-size: var(--web-w-who); }
+.back { display: inline-flex; align-items: center; min-block-size: var(--gp-target); color: var(--gp-ink); text-decoration: underline; font-size: var(--web-fs-body); }
+.backRow { margin-block-start: var(--gp-sp-8); }
+
+/* Button/primary-block: 280 wide, full width on phones. */
+.accessBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  min-block-size: var(--gp-target);
+  padding-inline: var(--gp-sp-6);
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+  font-weight: 600;
+}
+.accessBtn:hover { text-decoration: none; }
+.bandCard .accessBtn { inline-size: 100%; }
+
+/* 768 boards: the web/hero headline over two lines, mobile/display section headings, sellers list in two columns. */
+@media (min-width: 768px) {
+  .hero, .section, .baseline, .stepsBand, .band {
+    --web-fs-hero: var(--web-fs-hero-web);
+    --web-lh-hero: var(--web-lh-hero-web);
+    --web-fs-h2: var(--web-fs-display);
+  }
+  .h1 { line-height: var(--web-lh-hero); max-inline-size: var(--web-w-hero); }
+  .h2, .bandTitle { line-height: var(--web-lh-display); }
+  .faq { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sellerItems { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gp-sp-12); }
+}
+
+@media (min-width: 1024px) {
+  .hero, .section, .baseline, .stepsBand, .band { --section: calc(var(--gp-sp-16) + var(--gp-sp-8)); }
+  .hero { padding-block: calc(var(--gp-sp-16) + var(--gp-sp-12)); }
+  .heroGrid { grid-template-columns: minmax(0, 7fr) minmax(0, 8fr); gap: 0; align-items: start; }
+  .chip { margin-block-end: var(--gp-sp-6); }
+  .h1 { margin-block-end: var(--gp-sp-6); }
+  .sub { margin-block-end: var(--gp-sp-8); }
+  .micro { margin-block-end: var(--gp-sp-8); }
+  .accessBtn { inline-size: var(--web-w-access); }
+
+  .sellersHero { padding-block: var(--section) 0; }
+  .sellersHero .heroGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: calc(var(--gp-sp-16) + var(--gp-sp-4)); }
+  .sellersHero .heroText { padding-block-start: var(--gp-sp-4); }
+
+  .baselineList { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--gp-sp-6); }
+  .baselineTitle { font-size: var(--web-fs-title); }
+
+  .h2 { margin-block-end: var(--gp-sp-10); }
+  .bigRows { gap: var(--gp-sp-16); }
+  .bigRow { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: calc(var(--gp-sp-16) + var(--gp-sp-4)); align-items: center; }
+  .bigRow:nth-child(even) > :last-child { order: -1; }
+  .bigRow:nth-child(even) .bigText { padding-inline-start: var(--gp-sp-10); }
+  .bigText { max-inline-size: var(--web-w-sub); }
+  .bigTitle { line-height: var(--web-lh-feature); margin-block-end: var(--gp-sp-4); }
+  .more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .stepsBand { padding-block: calc(var(--gp-sp-16) + var(--gp-sp-2)) var(--gp-sp-12); }
+  .stepsBand .h2 { margin-block-end: var(--gp-sp-12); }
+  .steps { grid-template-columns: repeat(3, minmax(0, var(--web-w-step))); column-gap: var(--gp-sp-12); }
+  .step { display: block; }
+  .num { display: block; font-size: var(--web-fs-hero); line-height: var(--web-lh-hero); margin-block-end: var(--gp-sp-8); }
+  .stepTitle { margin-block-start: 0; }
+
+  .privacy { grid-template-columns: minmax(0, 7fr) minmax(0, 8fr); gap: 0; }
+}
