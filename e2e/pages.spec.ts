@@ -64,5 +64,7 @@ test("non-Home pages keep the generated share image", async ({ page, request }) 
     const res = await request.get(`/${locale}/opengraph-image`);
     expect(res.status()).toBe(200);
     expect(res.headers()["content-type"]).toBe("image/png");
+    const png = await res.body();
+    expect([png.readUInt32BE(16), png.readUInt32BE(20)], `${locale} card is 1200x630`).toEqual([1200, 630]);
   }
 });

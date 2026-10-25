@@ -20,12 +20,14 @@ const wordmark = () => "data:image/svg+xml;base64," + readFileSync(join(root, "p
 
 /**
  * Share card: wordmark, hero line and a jade rule on the light surface.
- * Arabic gets the wordmark alone: Satori has no bidi or Arabic contextual shaping (it throws on Noto Sans Arabic's
- * GSUB and lays Arabic out left to right), so an Arabic hero line would render broken.
+ * Arabic is a committed PNG of the same card from scripts/render-og-ar.mjs: Satori has no bidi or Arabic contextual
+ * shaping (it throws on Noto Sans Arabic's GSUB and lays Arabic out left to right), so it would render broken.
  */
 export default async function OpengraphImage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const isAr = locale === "ar";
+  if (locale === "ar") {
+    return new Response(readFileSync(join(root, "app/[locale]/og-ar.png")), { headers: { "Content-Type": contentType } });
+  }
   return new ImageResponse(
     (
       <div
@@ -34,8 +36,8 @@ export default async function OpengraphImage({ params }: { params: Promise<{ loc
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: isAr ? "center" : "space-between",
-          alignItems: isAr ? "center" : "flex-start",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
           padding: 80,
           background: tokenColor("surface"),
           // Satori has no logical properties; the rule is physical-bottom in both locales.
@@ -43,12 +45,10 @@ export default async function OpengraphImage({ params }: { params: Promise<{ loc
           fontFamily: "Fustat",
         }}
       >
-        <img src={wordmark()} width={isAr ? 556 : 278} height={isAr ? 160 : 80} alt="" />
-        {!isAr && (
-          <div style={{ display: "flex", color: tokenColor("ink"), fontSize: 72, fontWeight: 700, lineHeight: 1.15, maxWidth: 1040 }}>
-            {t("en", "web.home.hero.headline")}
-          </div>
-        )}
+        <img src={wordmark()} width={278} height={80} alt="" />
+        <div style={{ display: "flex", color: tokenColor("ink"), fontSize: 72, fontWeight: 700, lineHeight: 1.15, maxWidth: 1040 }}>
+          {t("en", "web.home.hero.headline")}
+        </div>
       </div>
     ),
     { ...size, fonts: [{ name: "Fustat", data: fustat700(), weight: 700 }] },
