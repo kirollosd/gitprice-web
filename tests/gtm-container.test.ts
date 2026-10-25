@@ -101,7 +101,10 @@ describe("GTM container export", () => {
   });
 
   it("sends locale on every event and percent on scroll_depth", () => {
-    for (const t of events) expect(refs(t), t.name).toContain("DLV - locale");
+    const urlBound = ["page_view", "scroll_depth"];
+    for (const t of events) {
+      expect(refs(t), t.name).toContain(urlBound.includes(param(t, "eventName")!) ? "Page Locale" : "DLV - locale");
+    }
     const scroll = events.find((t) => param(t, "eventName") === "scroll_depth")!;
     expect(refs(scroll)).toContain("Scroll Depth Threshold");
     const trig = cv.trigger.find((t) => t.triggerId === scroll.firingTriggerId![0])!;
@@ -112,6 +115,20 @@ describe("GTM container export", () => {
   it("leaves GA tags under built-in consent checks with no additional consent", () => {
     for (const t of [...googtag, ...events]) expect(t.consentSettings?.consentStatus, t.name).toBe("NOT_NEEDED");
     expect(raw).not.toMatch(/ad_storage[\s\S]{0,80}granted/);
+  });
+
+  it("sends locale from the current URL on every tag through GA4 Event Settings", () => {
+    const settings = cv.variable.find((v) => v.name === "GA4 Event Settings")!;
+    const rows = settings.parameter!.find((p) => p.key === "eventSettingsTable")!.list!.map((r) => r.map!.map((m) => m.value));
+    expect(rows).toContainEqual(["locale", "{{Page Locale}}"]);
+    expect(cv.variable.find((v) => v.name === "Page Locale")?.type).toBe("jsm");
+    expect(cv.builtInVariable.map((v) => v.name)).toContain("Page Path");
+  });
+
+  describe("Page Locale", () => {
+    it.each([
+      ["/", "en"], ["/sellers", "en"], ["/ar", "ar"], ["/ar/", "ar"], ["/ar/sellers", "ar"], ["/arabic", "en"], ["/about/ar", "en"],
+    ])("%s -> %s", (path, expected) => expect(runJsm("Page Locale", { "Page Path": path })).toBe(expected));
   });
 
   describe("Redacted Page Location", () => {

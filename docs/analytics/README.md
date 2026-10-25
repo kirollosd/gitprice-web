@@ -30,7 +30,7 @@ This is the owner's one-sitting setup for gitprice.com. You need edit access to:
 
 ### Events
 
-`locale` is sent with every event.
+`locale` is sent with every event, including the Google Tag's first page view. The `Page Locale` variable reads it from the current URL (`ar` under `/ar`, else `en`) through `GA4 Event Settings`, so it is right even just after a language switch.
 
 | Event | Params | When it fires |
 |---|---|---|
@@ -54,11 +54,11 @@ This is the owner's one-sitting setup for gitprice.com. You need edit access to:
    1. Choose the downloaded `gtm-container.json`.
    2. Workspace: **Default Workspace**.
    3. Import option: **Merge**, then **Rename conflicting tags, triggers and variables**.
-   4. Review the summary and click **Confirm**. It should add 9 tags, 8 triggers and 13 variables.
+   4. Review the summary and click **Confirm**. It should add 9 tags, 8 triggers and 14 variables.
 
 ### After import, check
 
-- **Variables → Built-in Variables → Configure.** **Scroll Depth Threshold** and **History Source** are ticked. If either isn't, tick it.
+- **Variables → Built-in Variables → Configure.** **Page Path**, **Scroll Depth Threshold** and **History Source** are ticked. If any isn't, tick it.
 - **Tags → GA4 - Google Tag.**
   - The Tag ID is `G-SM4YKS90F0`, and the trigger is **All Pages**.
   - Under **Configuration settings → Shared event settings**, the event settings variable is `{{GA4 Event Settings}}`. If it's empty, select it.

@@ -591,7 +591,7 @@
                   {
                     "type": "TEMPLATE",
                     "key": "parameterValue",
-                    "value": "{{DLV - locale}}"
+                    "value": "{{Page Locale}}"
                   }
                 ]
               }
@@ -667,7 +667,7 @@
                   {
                     "type": "TEMPLATE",
                     "key": "parameterValue",
-                    "value": "{{DLV - locale}}"
+                    "value": "{{Page Locale}}"
                   }
                 ]
               }
@@ -1161,6 +1161,21 @@
                     "value": "{{Redacted Page Location}}"
                   }
                 ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "locale"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{Page Locale}}"
+                  }
+                ]
               }
             ]
           }
@@ -1232,6 +1247,22 @@
           }
         ],
         "fingerprint": "0"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "14",
+        "name": "Page Locale",
+        "type": "jsm",
+        "notes": "Locale of the current URL: \"ar\" for /ar and /ar/..., else \"en\". Read at fire time, so it is never stale after a soft language switch.",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  return /^\\/ar(\\/|$)/.test({{Page Path}}) ? \"ar\" : \"en\";\n}"
+          }
+        ],
+        "fingerprint": "0"
       }
     ],
     "builtInVariable": [
@@ -1252,6 +1283,12 @@
         "containerId": "0",
         "type": "HISTORY_SOURCE",
         "name": "History Source"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "type": "PAGE_PATH",
+        "name": "Page Path"
       }
     ],
     "fingerprint": "0"
