@@ -14,11 +14,12 @@ test.describe("390 wide", () => {
   }
 });
 
-test("privacy names Vercel, Tally and Heap and exposes hreflang + canonical", async ({ page }) => {
+test("privacy names Vercel and Heap, not Tally, and exposes hreflang + canonical", async ({ page }) => {
   await page.goto("/ar/privacy");
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   const body = await page.locator("main").innerText();
-  for (const n of ["Vercel", "Tally", "Heap"]) expect(body).toContain(n);
+  for (const n of ["Vercel", "Heap"]) expect(body).toContain(n);
+  expect(body).not.toContain("Tally");
   const hreflang = await page.locator('link[rel="alternate"][hreflang]').evaluateAll((els) =>
     els.map((e) => [e.getAttribute("hreflang"), new URL(e.getAttribute("href")!).pathname]),
   );

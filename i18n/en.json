@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@26384c79",
+  "_source": "gitprice@bca5fae6",
   "web": {
     "component": {
       "webNav": {
@@ -127,7 +127,8 @@
         "empty": {
           "input": {
             "email": {
-              "label": "Email"
+              "label": "Email",
+              "placeholder": "you@example.com"
             }
           },
           "button": {
@@ -719,7 +720,7 @@
         "heading": "3. Third-Party Services and Affiliate Links",
         "p1": "GitPrice may redirect you to supported stores using affiliate links. These links allow us to earn a small commission when you make a purchase, at no additional cost to you.",
         "p2": "When you follow an affiliate link, the destination store’s own privacy policy applies. GitPrice does not share your personal information with affiliate stores.",
-        "p3": "We use a small number of service providers to run this website. Vercel hosts the site and processes standard request data (such as IP address and browser type) to deliver it. If you join the waitlist, the form is provided by Tally, which stores the email address and any answers you submit on our behalf."
+        "p3": "We use a small number of service providers to run this website. Vercel hosts the site and processes standard request data (such as IP address and browser type) to deliver it. If you join the waitlist, our own form collects your email address and stores it on GitPrice’s servers. We use it only to send you the launch email, and we remove it on request."
       },
       "section4": {
         "heading": "4. Data Storage and Security",

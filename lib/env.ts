@@ -7,7 +7,6 @@ export type SiteEnv = {
   chromeStoreUrl?: string;
   appStoreUrl?: string;
   playStoreUrl?: string;
-  tallyFormId: string;
   apiBaseUrl: string;
   supabaseUrl: string;
   supabaseAnonKey: string;
@@ -17,7 +16,6 @@ export type SiteEnv = {
 };
 
 const REQUIRED = {
-  tallyFormId: "NEXT_PUBLIC_TALLY_FORM_ID",
   apiBaseUrl: "NEXT_PUBLIC_API_BASE_URL",
   supabaseUrl: "NEXT_PUBLIC_SUPABASE_URL",
   supabaseAnonKey: "NEXT_PUBLIC_SUPABASE_ANON_KEY",
@@ -49,7 +47,6 @@ export function readEnv(src: Record<string, string | undefined>): SiteEnv {
     chromeStoreUrl: get(STORES.chromeStoreUrl),
     appStoreUrl: get(STORES.appStoreUrl),
     playStoreUrl: get(STORES.playStoreUrl),
-    tallyFormId: get(REQUIRED.tallyFormId)!,
     apiBaseUrl: get(REQUIRED.apiBaseUrl)!,
     supabaseUrl: get(REQUIRED.supabaseUrl)!,
     supabaseAnonKey: get(REQUIRED.supabaseAnonKey)!,
@@ -67,7 +64,6 @@ export const env: SiteEnv = readEnv({
   NEXT_PUBLIC_CHROME_STORE_URL: process.env.NEXT_PUBLIC_CHROME_STORE_URL,
   NEXT_PUBLIC_APP_STORE_URL: process.env.NEXT_PUBLIC_APP_STORE_URL,
   NEXT_PUBLIC_PLAY_STORE_URL: process.env.NEXT_PUBLIC_PLAY_STORE_URL,
-  NEXT_PUBLIC_TALLY_FORM_ID: process.env.NEXT_PUBLIC_TALLY_FORM_ID,
   NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,

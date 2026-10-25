@@ -5,14 +5,14 @@ import { t, type Locale } from "../../lib/i18n";
 import { pathFor } from "../../lib/locale";
 import { AlertsArt, HeroArt, HistoryArt, RowsArt } from "./BoardArt";
 import StoreBadges from "./StoreBadges";
-import TallyEmbed from "./TallyEmbed";
+import WaitlistForm from "./WaitlistForm";
 import styles from "./HomeSections.module.css";
 
 const H = "web.home.";
 
-/** Prelaunch: the Tally waitlist form. Home is the shopper list unless a page says otherwise. */
+/** Prelaunch: the native waitlist form. Home is the shopper list unless a page says otherwise. */
 export function Waitlist({ locale, label, audience = "shopper", placement }: { locale: Locale; label?: string; audience?: "shopper" | "seller"; placement: "hero" | "bottom" }) {
-  return <TallyEmbed formId={env.tallyFormId} locale={locale} label={label} audience={audience} placement={placement} />;
+  return <WaitlistForm locale={locale} label={label} audience={audience} placement={placement} />;
 }
 
 /** The numbered steps shared by Home and Sellers. */

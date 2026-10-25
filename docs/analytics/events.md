@@ -8,7 +8,7 @@ Code: `lib/track.ts` (`track()`), `app/components/TrackListeners.tsx` (delegated
 
 | event | params | source |
 |---|---|---|
-| `waitlist_submit` | `audience` (shopper\|seller), `placement` (hero\|bottom) | Tally `postMessage` from **this embed's own iframe**: `event.origin === "https://tally.so"`, `event.source === iframe.contentWindow`, and an event of `Tally.FormSubmitted`. There's one Tally form for both audiences. `audience` and `placement` are `TallyEmbed` props:<br>• `audience` comes from audit fix P0-2.<br>• `placement` marks the embed's position on the page.<br>Never forward the payload's answers. |
+| `waitlist_submit` | `audience` (shopper\|seller), `placement` (hero\|bottom) | The native `WaitlistForm` (`app/components/WaitlistForm.tsx`) after `POST /api/v1/waitlist` answers 201 (joined) or 200 (already joined), once per successful submit. `audience` and `placement` are `WaitlistForm` props. Never carries the email. |
 | `cta_click` | `cta_id`, `placement` (nav\|hero\|bottom\|menu\|footer) | `data-gp-track` on the waitlist/primary CTAs, "For sellers"/"For shoppers" and the anchor links |
 | `store_click` | `store` (chrome\|app_store\|play), `placement` | the store badges (launch mode) |
 | `section_view` | `section_id` | IntersectionObserver at 50% visible (or half a viewport visible, for sections taller than the screen), once per section per page view, on the Home and Sellers top-level sections (hero, baseline, features rows, groups, privacy, faq, bottom CTA) |

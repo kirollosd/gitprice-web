@@ -12,7 +12,6 @@ jobs:
     timeout-minutes: 20
     env:
       NEXT_PUBLIC_LAUNCH: "0"
-      NEXT_PUBLIC_TALLY_FORM_ID: ci
       NEXT_PUBLIC_API_BASE_URL: https://api.example.com
       NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-publishable-key
@@ -39,7 +38,6 @@ jobs:
     env:
       CI: "true"
       SKIP_PARITY: "1"
-      NEXT_PUBLIC_TALLY_FORM_ID: ci
       NEXT_PUBLIC_SITE_URL: https://gitprice.com
     steps:
       - uses: actions/checkout@v4.2.2

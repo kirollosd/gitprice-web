@@ -11,7 +11,7 @@ vi.mock("next/link", () => ({
 
 const mockEnv = (launch: boolean) =>
   vi.doMock("../lib/env", () => ({
-    env: { launch, chromeStoreUrl: "https://c.test", appStoreUrl: "https://a.test", playStoreUrl: "https://p.test", tallyFormId: "mYLGEG" },
+    env: { launch, chromeStoreUrl: "https://c.test", appStoreUrl: "https://a.test", playStoreUrl: "https://p.test" },
   }));
 
 afterEach(() => {
@@ -113,12 +113,13 @@ describe("Sellers", () => {
     expect(within(rivals as HTMLElement).getAllByText(en.web.sellers.visual.rival.pinned)).toHaveLength(3);
   });
 
-  it("shows the waitlist note next to the form before launch only", async () => {
+  it("shows the seller waitlist note once, inside the form, before launch only", async () => {
     const note = en.web.sellers.prelaunch.hero.waitlist.note;
     mockEnv(false);
     let { default: SellersPage } = await import("../app/[locale]/sellers/page");
     render(await SellersPage({ params: Promise.resolve({ locale: "en" }) }));
-    expect(document.querySelector("#waitlist")?.nextElementSibling?.textContent).toBe(note);
+    expect(within(document.querySelector("#waitlist") as HTMLElement).getAllByText(note)).toHaveLength(1);
+    expect(document.querySelector("#waitlist")?.nextElementSibling).toBeNull();
     cleanup();
     vi.doUnmock("../lib/env");
     vi.resetModules();

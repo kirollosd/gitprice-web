@@ -95,7 +95,7 @@ Open [analytics.google.com](https://analytics.google.com) and the GitPrice prope
    - Keep **Page views** on (that's the first page view of each full page load), but under **Show advanced settings**, turn **Page changes based on browser history events** **off**. GTM's History Change tag sends those page views instead, with the URL redacted. Leaving both on would double-count, and GA's own version can send a stale or unredacted URL.
    - Keep **Outbound clicks** on.
    - Turn **Scrolls** **off**. GTM's scroll-depth trigger replaces it; leaving both on double-counts at 90%.
-   - Turn **Form interactions** **off**. The waitlist form is a Tally iframe, and `waitlist_submit` already covers it.
+   - Turn **Form interactions** **off**. `waitlist_submit` already covers the waitlist form, and GA's own form events would double-count it.
 4. **Data retention.** Go to **Admin → Data collection and modification → Data retention** and set event data retention to **14 months**.
 5. **No advertising features.** Leave **Admin → Data collection and modification → Data collection → Google signals** **off**, and don't link Google Ads (**Admin → Product links → Google Ads links** stays empty). The site's privacy copy promises no advertising; either of these would break that promise.
 6. **Search Console.** Go to **Admin → Product links → Search Console links → Link**, and choose the gitprice.com property.
