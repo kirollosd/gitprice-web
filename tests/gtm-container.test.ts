@@ -117,6 +117,11 @@ describe("GTM container export", () => {
     expect(raw).not.toMatch(/ad_storage[\s\S]{0,80}granted/);
   });
 
+  it("also sets the redacted page_location in the Google Tag's configuration settings", () => {
+    const table = googtag[0].parameter!.find((p) => p.key === "configSettingsTable")!;
+    expect(table.list!.map((r) => r.map!.map((m) => m.value))).toContainEqual(["page_location", "{{Redacted Page Location}}"]);
+  });
+
   it("sends locale from the current URL on every tag through GA4 Event Settings", () => {
     const settings = cv.variable.find((v) => v.name === "GA4 Event Settings")!;
     const rows = settings.parameter!.find((p) => p.key === "eventSettingsTable")!.list!.map((r) => r.map!.map((m) => m.value));

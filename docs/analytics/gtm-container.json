@@ -34,6 +34,27 @@
             "type": "TEMPLATE",
             "key": "eventSettingsVariable",
             "value": "{{GA4 Event Settings}}"
+          },
+          {
+            "type": "LIST",
+            "key": "configSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "page_location"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{Redacted Page Location}}"
+                  }
+                ]
+              }
+            ]
           }
         ],
         "firingTriggerId": [

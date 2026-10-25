@@ -28,6 +28,9 @@ test("GTM loads with consent default denied, no _ga cookies, no Heap", async ({ 
   const def = dl.find((e) => Array.isArray(e) && e[0] === "consent" && e[1] === "default") as unknown[] | undefined;
   expect(def).toBeDefined();
   expect(def![2]).toMatchObject({ analytics_storage: "denied" });
+  const gtmJs = dl.findIndex((e) => (e as { event?: string }).event === "gtm.js");
+  expect(gtmJs).toBeGreaterThan(-1);
+  expect(dl.indexOf(def!)).toBeLessThan(gtmJs);
   // GTM is stubbed, so GA can't set _ga here; this guards against the site itself writing it, not GA's consent handling.
   expect((await context.cookies()).filter((c) => c.name.startsWith("_ga"))).toEqual([]);
   expect(heapRequests).toEqual([]);

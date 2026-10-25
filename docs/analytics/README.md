@@ -18,7 +18,7 @@ This is the owner's one-sitting setup for gitprice.com. You need edit access to:
 - **Events.** The site pushes `{event, ...params, locale}` to `window.dataLayer`. GTM turns each push into a GA4 event. Heap also gets the event once it's loaded.
 - **Redaction.** On `/reset-password`, `/checkout`, `/checkout/return` and `/welcome` (each with or without `/ar`), `page_location` is sent without its query string or fragment, because those URLs can carry tokens.
   - The `Redacted Page Location` variable does this.
-  - It reaches every GA tag through the `GA4 Event Settings` variable.
+  - It reaches every GA tag through the `GA4 Event Settings` variable. The Google Tag also sets it directly as a configuration parameter, as a second layer.
 - **Page views.**
   - The Google Tag sends the first page view of each visit.
   - In-app navigation (the site is a single-page app) fires GTM's **History Change** trigger. That trigger sends a `page_view` through the **GA4 Event - page_view** tag.
@@ -61,7 +61,8 @@ This is the owner's one-sitting setup for gitprice.com. You need edit access to:
 - **Variables → Built-in Variables → Configure.** **Page Path**, **Scroll Depth Threshold** and **History Source** are ticked. If any isn't, tick it.
 - **Tags → GA4 - Google Tag.**
   - The Tag ID is `G-SM4YKS90F0`, and the trigger is **All Pages**.
-  - Under **Configuration settings → Shared event settings**, the event settings variable is `{{GA4 Event Settings}}`. If it's empty, select it.
+  - Under **Configuration settings**, the parameter `page_location` is `{{Redacted Page Location}}`.
+  - Under **Shared event settings** (its own section, below Configuration settings), the event settings variable is `{{GA4 Event Settings}}`. If it's empty, select it.
 - **Tags → each GA4 Event tag.**
   - **Measurement ID** is `G-SM4YKS90F0`.
   - **Event Settings Variable** is `{{GA4 Event Settings}}`.
@@ -97,7 +98,8 @@ Open [analytics.google.com](https://analytics.google.com) and the GitPrice prope
    - Turn **Scrolls** **off**. GTM's scroll-depth trigger replaces it; leaving both on double-counts at 90%.
    - Turn **Form interactions** **off**. The waitlist form is a Tally iframe, and `waitlist_submit` already covers it.
 4. **Data retention.** Go to **Admin → Data collection and modification → Data retention** and set event data retention to **14 months**.
-5. **Search Console.** Go to **Admin → Product links → Search Console links → Link**, and choose the gitprice.com property.
+5. **No advertising features.** Leave **Admin → Data collection and modification → Data collection → Google signals** **off**, and don't link Google Ads (**Admin → Product links → Google Ads links** stays empty). The site's privacy copy promises no advertising; either of these would break that promise.
+6. **Search Console.** Go to **Admin → Product links → Search Console links → Link**, and choose the gitprice.com property.
 
 ## 4. Vercel: turn it on
 
