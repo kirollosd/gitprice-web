@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
 
 const mockEnv = (sellersNav: boolean) =>
-  vi.doMock("../lib/env", () => ({ env: { launch: false, sellersNav, tallyFormId: "t", siteUrl: "http://localhost:3000" } }));
+  vi.doMock("../lib/env", () => ({ env: { launch: false, sellersNav, siteUrl: "http://localhost:3000" } }));
 
 afterEach(() => {
   cleanup();

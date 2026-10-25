@@ -62,8 +62,7 @@ Names only. Real values live in Vercel (Production and Preview); `.env.example` 
 | `NEXT_PUBLIC_CHROME_STORE_URL` | Chrome Web Store listing (required when launched) |
 | `NEXT_PUBLIC_APP_STORE_URL` | App Store listing (required when launched) |
 | `NEXT_PUBLIC_PLAY_STORE_URL` | Google Play listing (required when launched) |
-| `NEXT_PUBLIC_TALLY_FORM_ID` | Tally waitlist form |
-| `NEXT_PUBLIC_API_BASE_URL` | GitPrice API, used by checkout |
+| `NEXT_PUBLIC_API_BASE_URL` | GitPrice API, used by checkout and the waitlist form (`POST /api/v1/waitlist`) |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project, used by reset password |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase publishable key only |
 | `NEXT_PUBLIC_HEAP_ID` | Optional. Heap analytics, loaded only after consent |
@@ -107,5 +106,5 @@ Free ports 3000 and 3001 first. `PLAYWRIGHT_BASE_URL=<url>` runs the suite again
 
 ## Key Integrations
 
-- **Tally form**: ID from `NEXT_PUBLIC_TALLY_FORM_ID`
+- **Waitlist form**: native `WaitlistForm`, posts to `${NEXT_PUBLIC_API_BASE_URL}/api/v1/waitlist`
 - **API / Supabase**: `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (publishable key only)

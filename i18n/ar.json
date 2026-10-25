@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@26384c79",
+  "_source": "gitprice@7766c126",
   "web": {
     "component": {
       "webNav": {
@@ -127,7 +127,8 @@
         "empty": {
           "input": {
             "email": {
-              "label": "البريد الإلكتروني"
+              "label": "البريد الإلكتروني",
+              "placeholder": "you@example.com"
             }
           },
           "button": {

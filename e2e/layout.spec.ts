@@ -1,5 +1,4 @@
 import { expect, test } from "./fixtures";
-import { stubTally } from "./parity-lib";
 
 // 1024 and 768 are layout-only checks (no pixel parity): no horizontal scroll, and the right nav variant.
 const ROUTES = ["/", "/sellers", "/pricing", "/welcome", "/privacy", "/terms", "/reset-password", "/checkout", "/checkout/return", "/nope"];
@@ -11,7 +10,6 @@ for (const width of [1024, 768]) {
     for (const base of ["", "/ar"]) {
       for (const route of ROUTES) {
         test(`${base}${route}`, async ({ page }) => {
-          await stubTally(page);
           await page.route(/supabase\.co|api\.example\.test/, (r) => r.abort());
           await page.goto(`${base}${route}`);
           await expect(page.locator("h1").first()).toBeVisible();

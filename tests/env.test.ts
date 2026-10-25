@@ -2,7 +2,6 @@ import { describe, expect, test } from "vitest";
 import { readEnv } from "../lib/env";
 
 const base = {
-  NEXT_PUBLIC_TALLY_FORM_ID: "abc123",
   NEXT_PUBLIC_API_BASE_URL: "https://api.example.com",
   NEXT_PUBLIC_SUPABASE_URL: "https://proj.supabase.co",
   NEXT_PUBLIC_SUPABASE_ANON_KEY: "anon",
@@ -43,8 +42,8 @@ describe("readEnv", () => {
       readEnv({});
     } catch (e) {
       const m = (e as Error).message;
-      expect(m).toMatch(/NEXT_PUBLIC_TALLY_FORM_ID.*NEXT_PUBLIC_API_BASE_URL.*NEXT_PUBLIC_SUPABASE_URL.*NEXT_PUBLIC_SUPABASE_ANON_KEY.*NEXT_PUBLIC_SITE_URL/s);
-      expect(m).not.toMatch(/STORE_URL/);
+      expect(m).toMatch(/NEXT_PUBLIC_API_BASE_URL.*NEXT_PUBLIC_SUPABASE_URL.*NEXT_PUBLIC_SUPABASE_ANON_KEY.*NEXT_PUBLIC_SITE_URL/s);
+      expect(m).not.toMatch(/STORE_URL|TALLY/);
     }
   });
 });

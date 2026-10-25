@@ -32,7 +32,6 @@ const HOME_1440 = ART + PRO_SOON + "; " + BANDS + "; above that, the hero art is
 const HOME_390 = "art text and the product photo rasterise differently in Sketch and Chromium; sections drift down 5 to 27px in steps of at most 8 (hero +5, cheaper price row +4, grouped rows +2 each, unexplained residual text-metric drift); " + BANDS + "; net page +18px";
 const SELLERS_390 = "board steps band is a fixed 600 with a fixed 150px step pitch, the build sizes steps by content (545, -55px); board CTA keeps 53px between title and card with no line, build 32 (-20); band bottom 84 vs 71 (-13); back link row is a 44px target vs 27 text (+17); footer gap 96 vs board 32 (+64)";
 const SELLERS_1440 = "Chromium wraps the hero and feature copy a word differently from Sketch, Arabic most; page +48px en, +112px ar, not split per section (unexplained residual); footer gap 96 vs board 32";
-const NOTE_PRE = "; prelaunch adds the hero waitlist note (one caption line) that the board omits, kept by owner ruling as the email field's data-use disclosure";
 export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Checkout-summary-1440": { max: 0.05, reason: NOTE },
   "Checkout-summary-390": { max: 0.12, reason: NOTE },
@@ -66,8 +65,10 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Home-launch-390": { max: 0.09, reason: HOME_390 + PRO_SOON + "; measured en 0.08, ar 0.07" },
   "Sellers-launch-1440": { max: 0.07, reason: SELLERS_1440 + "; measured en 0.04, ar 0.06" },
   "Sellers-launch-390": { max: 0.11, reason: SELLERS_390 + "; measured en 0.10, ar 0.07" },
-  "Sellers-prelaunch-1440": { max: 0.08, reason: SELLERS_1440 + NOTE_PRE + "; measured en 0.04, ar 0.07" },
-  "Sellers-prelaunch-390": { max: 0.12, reason: SELLERS_390 + NOTE_PRE + "; the two waitlist frames start at 120 (skeleton, Tally's dynamicHeight sets the rest) instead of the old 160 floor (GP-262 P1-12), moving everything below up 80; measured en 0.11 (0.09 at 160), ar 0.08" },
+  "Sellers-prelaunch-1440": { max: 0.08, reason: SELLERS_1440 + "; the waitlist forms are native and unmasked (GP-389), drawn as the board's WebWaitlistForm with the seller note inside the form; measured en 0.03, ar 0.06" },
+  "Sellers-prelaunch-390": { max: 0.13, reason: SELLERS_390 + "; the waitlist forms are native and unmasked (GP-389) and the page height now equals the board's (3819), the remaining diff is the step/CTA/footer deltas above; measured en 0.12, ar 0.05" },
+  "Sellers-prelaunch-joined-1440": { max: 0.08, reason: SELLERS_1440 + "; hero form in the joined state after a stubbed 201; measured en 0.03, ar 0.06" },
+  "Sellers-prelaunch-joined-390": { max: 0.12, reason: SELLERS_390 + "; hero form in the joined state after a stubbed 201; measured en 0.11, ar 0.05" },
 };
 
 /** Boards the build cannot match yet; reported, never loosened. Key: `<Screen>-<state>`. */
@@ -152,7 +153,7 @@ async function appendRatio(name: string, ratio: number, page: Page, note?: strin
   // Content height: where the footer ends (the document is never shorter than the viewport).
   const docHeight = await page.evaluate(() => Math.round(document.querySelector("footer")?.getBoundingClientRect().bottom ?? 0));
   mkdirSync("test-results", { recursive: true });
-  appendFileSync("test-results/parity-ratios.jsonl", JSON.stringify({ name, ratio, note, docHeight, boardHeight: pngSize(join(REFS, name)).height }) + "\n");
+  appendFileSync("test-results/parity-ratios.jsonl", JSON.stringify({ name, ratio, note, docHeight, boardHeight: pngSize(join(REFS, name.replace("-form.png", ".png"))).height }) + "\n");
 }
 
 // ---------- route mocks (host-agnostic, so they also work against a deployed preview) ----------
@@ -165,12 +166,83 @@ const jwt = `${b64({ alg: "HS256", typ: "JWT" })}.${b64({ sub: "u1", exp: 410244
 const user = { id: "u1", aud: "authenticated", email: "you@example.com", app_metadata: {}, user_metadata: {}, created_at: "2026-01-01T00:00:00Z" };
 const hang = () => new Promise<never>(() => {});
 
-/** Tally's script is a stub that loads nothing: the waitlist iframe stays a blank frame (no fallback link), masked where it matters. */
-export const stubTally = (page: Page) =>
-  page.route("https://tally.so/**", (route) =>
-    route.request().url().endsWith("/widgets/embed.js")
-      ? route.fulfill({ contentType: "text/javascript", body: "window.Tally={loadEmbeds(){}};" })
-      : route.abort());
+export type WaitlistState = "empty" | "submitting" | "error" | "failed" | "joined";
+
+/** The API's envelope for POST /api/v1/waitlist (201 joined, 200 already_joined, errors as { error: { code } }). */
+export const waitlistReply = (status: 201 | 200 | 400 | 429 | 503, code = "UNAVAILABLE") =>
+  status === 201 || status === 200
+    ? json(status, { success: true, data: { status: status === 201 ? "joined" : "already_joined" }, meta: {} })
+    : json(status, { success: false, error: { code, message: code }, meta: {} });
+
+/**
+ * Puts the hero waitlist form into a board state against a stubbed API: submitting hangs, failed answers 503, joined 201.
+ * Values are the boards' (copy keys `<state>.input.email.value`).
+ */
+export async function seedWaitlist(page: Page, state: WaitlistState, values: { error: string; filled: string }, button: string) {
+  await page.route("**/api/v1/waitlist", (route) =>
+    state === "submitting" ? hang() : route.fulfill(waitlistReply(state === "joined" ? 201 : 503)));
+  if (state === "empty") return;
+  const form = page.locator("#waitlist form");
+  await form.locator('input[name="email"]').fill(state === "error" ? values.error : values.filled);
+  await form.getByRole("button", { name: button }).click();
+  const settled = { submitting: '[data-waitlist="submitting"]', error: '[data-waitlist="error"]', failed: '[data-waitlist="failed"]', joined: '[data-waitlist="joined"]' }[state];
+  await page.locator(`#waitlist ${settled}`).waitFor();
+}
+
+/**
+ * Hero form rectangle on the Home prelaunch boards, measured in Web.sketch (frame of the hero/waitlist instance):
+ * x and y by width and locale, height by state and locale. The rest of those boards predates GP-372 (see DIVERGED),
+ * so the form is compared on its own: the board crop against the same-size box at the build's form.
+ */
+const FORM_AT: Record<string, { x: number; y: number; w: number }> = {
+  "1440-en": { x: 120, y: 505, w: 400 }, "1440-ar": { x: 920, y: 557, w: 400 },
+  "390-en": { x: 16, y: 343, w: 358 }, "390-ar": { x: 16, y: 371, w: 358 },
+};
+const FORM_H: Record<WaitlistState, { en: number; ar: number }> = {
+  empty: { en: 158, ar: 161 }, submitting: { en: 158, ar: 164 }, error: { en: 154, ar: 157 }, failed: { en: 182, ar: 167 }, joined: { en: 118, ar: 126 },
+};
+
+/** Per-state form tolerances above the 0.02 default, each with the measured ratio and the reason. Key: `<state>-<width>`. */
+// en measures 0.01 to 0.02 in every state at both widths; the budgets below are for Arabic.
+const AR_TEXT = "Noto Sans Arabic rasterises differently in Sketch and Chromium: every Arabic line (label, button, note, message) diffs with no layout offset";
+const AR_FILLED = "; the rtl Input/email-filled master is 75 tall where rtl Input/empty is 72, so the board drops the button 3px in this state only; the build keeps the empty state's 72 (one form, no jump on submit)";
+export const FORM_TOLERANCE: Record<string, { max: number; reason: string }> = {
+  "empty-1440": { max: 0.04, reason: AR_TEXT + "; measured en 0.01 (dark 0.01), ar 0.03 (dark 0.03)" },
+  "empty-390": { max: 0.04, reason: AR_TEXT + "; measured en 0.02, ar 0.03" },
+  "error-1440": { max: 0.05, reason: AR_TEXT + "; measured en 0.02, ar 0.04" },
+  "error-390": { max: 0.05, reason: AR_TEXT + "; measured en 0.02, ar 0.04" },
+  "joined-1440": { max: 0.05, reason: AR_TEXT + "; measured en 0.02, ar 0.04" },
+  "joined-390": { max: 0.05, reason: AR_TEXT + "; measured en 0.02, ar 0.04" },
+  "submitting-1440": { max: 0.08, reason: AR_TEXT + AR_FILLED + "; measured en 0.02, ar 0.07" },
+  "submitting-390": { max: 0.08, reason: AR_TEXT + AR_FILLED + "; measured en 0.02, ar 0.07" },
+  "failed-1440": { max: 0.08, reason: AR_TEXT + AR_FILLED + "; measured en 0.02, ar 0.07" },
+  "failed-390": { max: 0.09, reason: AR_TEXT + AR_FILLED + "; measured en 0.02, ar 0.08" },
+};
+
+/** Compares the hero waitlist form alone with the same rectangle of the board export. */
+export async function expectFormParity(page: Page, s: Shot & { state: WaitlistState }) {
+  const at = FORM_AT[`${s.width}-${s.locale}`];
+  const h = FORM_H[s.state][s.locale];
+  const ref = refName({ ...s, state: s.state === "empty" ? "prelaunch" : `prelaunch-${s.state}` });
+  const name = ref.replace(/\.png$/, "-form.png");
+  await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+  await page.evaluate(() => document.fonts.ready);
+  mkdirSync(BASELINES, { recursive: true });
+  await sharp(join(REFS, ref)).extract({ left: at.x, top: at.y, width: at.w, height: h }).png().toFile(join(BASELINES, name));
+  const box = await page.locator("#waitlist [data-waitlist]").boundingBox();
+  if (!box) throw new Error("hero waitlist form not rendered");
+  const clip = { x: Math.round(box.x), y: Math.round(box.y), width: at.w, height: h };
+  const max = FORM_TOLERANCE[`${s.state}-${s.width}`]?.max;
+  const options = { clip, ...(max === undefined ? {} : { maxDiffPixelRatio: max }) };
+  if (!process.env.PARITY_MEASURE) return expect(page).toHaveScreenshot(name, options);
+  try {
+    await expect(page).toHaveScreenshot(name, { ...options, maxDiffPixelRatio: 0 });
+    await appendRatio(name, 0, page, `form at ${clip.x},${clip.y}`);
+  } catch (e) {
+    const m = /ratio (\d+\.\d+)/.exec(String(e));
+    await appendRatio(name, m ? Number(m[1]) : NaN, page, `form at ${clip.x},${clip.y}`);
+  }
+}
 
 export type ResetState = "verifying" | "set-new-password" | "weak-password" | "saving" | "error" | "success" | "link-expired";
 
@@ -237,8 +309,4 @@ export async function seedCheckout(page: Page, state: CheckoutState, path: strin
 export const spinnerMask: Mask = {
   locator: (p) => p.locator('[role="status"] > [aria-hidden="true"]'),
   reason: "spinner: animated, drawn by the board as a static ring at a different phase",
-};
-export const tallyMask: Mask = {
-  locator: (p) => p.locator("iframe[data-tally-src]"),
-  reason: "Tally embed: third-party iframe, not loaded in tests; the board draws a stand-in form",
 };
