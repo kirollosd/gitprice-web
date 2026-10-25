@@ -131,13 +131,13 @@ SEO strings (generic, both languages) and the Sellers, goodbye and install-page 
 - Which parity cases to skip and the skip reason text.
 - Commit granularity (one per goal is fine).
 
-## Open questions (owner)
+## Resolved owner answers (2026-10-25)
 
-1. **Hero video flag.** "Vercel flags" can mean (a) a Vercel environment variable (e.g. `NEXT_PUBLIC_HERO_VIDEO=1`), toggled in project settings and applied on the next deploy, keeping pages fully static; or (b) the Vercel Flags SDK, toggled live from the Vercel toolbar without redeploy, but it evaluates per request, which works against goal 4 unless precomputed. Builder's default if unanswered: (a).
-2. **/goodbye answers.** Storing "Why did you leave?" needs somewhere to go: a new API endpoint + table (like the waitlist, monorepo work) or a GA4/Heap event only (no server change, answers visible in analytics). Builder's default if unanswered: analytics event.
-3. **Support link target.** `mailto:support@gitprice.com` (address already used in the extension) or a `/support` page.
-4. **Chrome Web Store URL.** Not known until the listing exists; config placeholder `[CWS_URL]` until then.
-5. **"You choose how often it checks"** (f2) and **"Email and phone alerts · Sync across devices"** (nextUp): confirm both are true of the extension/roadmap before they ship.
+1. **Hero video flag:** Vercel Flags SDK (`flags` package), toggled from the Vercel toolbar without redeploy. It must not make Home dynamic: use the SDK's precompute pattern (middleware evaluates the flag and rewrites to a statically generated variant), so goal 4 still holds. Flag off renders the static mock exactly as today; flag on renders `<video autoplay muted loop playsinline>` with the mock as poster. No video asset is required for launch.
+2. **/goodbye answers:** analytics event only (GA4 + Heap, consent rules as today), carrying the chosen reason. No server change.
+3. **Support link:** `mailto:support@gitprice.com`, also used as the Chrome Web Store support URL.
+4. **Claims:** "You choose how often it checks" and the Next-up line are both true; ship as written.
+5. **Chrome Web Store URL:** config placeholder `[CWS_URL]` until the listing exists.
 
 ## Builder notes
 
