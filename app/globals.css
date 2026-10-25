@@ -123,6 +123,14 @@ h1[tabindex="-1"]:focus-visible { outline: none; }
   inset-inline: min(0px, calc(50% - var(--gp-target) / 2));
 }
 
+/* Off-screen until focused, then pinned above the sticky header (z 50) and the floating stack (z 60). */
+.skip-link {
+  position: absolute; inset-block-start: var(--gp-sp-2); inset-inline-start: var(--gp-sp-2); z-index: 70;
+  padding: var(--gp-sp-2) var(--gp-sp-4); background: var(--gp-surface); color: var(--gp-accent);
+  border-radius: var(--gp-r-xs); transform: translateY(-200%);
+}
+.skip-link:focus-visible { transform: none; }
+
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;

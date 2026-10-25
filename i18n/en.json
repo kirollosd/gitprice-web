@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@18009ce1",
+  "_source": "gitprice@26384c79",
   "web": {
     "component": {
       "webNav": {
@@ -58,6 +58,9 @@
             "menuOpen": "Open menu",
             "menuClose": "Close menu"
           }
+        },
+        "skipLink": {
+          "label": "Skip to content"
         }
       },
       "webStoreStrip": {

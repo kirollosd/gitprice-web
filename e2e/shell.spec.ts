@@ -56,3 +56,15 @@ test("growing the viewport to 1024 closes the open menu", async ({ page }) => {
   await expect(btn).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator("#web-menu")).toHaveCount(0);
 });
+
+for (const [path, label] of [["/", "Skip to content"], ["/ar/nope", "انتقل إلى المحتوى"]] as const) {
+  test(`first Tab on ${path} shows the skip link, which moves focus to main`, async ({ page }) => {
+    await page.goto(path);
+    await page.keyboard.press("Tab");
+    const skip = page.getByRole("link", { name: label });
+    await expect(skip).toBeFocused();
+    await expect(skip).toBeInViewport();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("main")).toBeFocused();
+  });
+}

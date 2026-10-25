@@ -7,6 +7,7 @@ import FloatingStack from "../components/FloatingStack";
 import TrackListeners from "../components/TrackListeners";
 import LocaleSuggestion from "../components/LocaleSuggestion";
 import WebFooter from "../components/WebFooter";
+import SkipLink from "../components/SkipLink";
 import WebNav from "../components/WebNav";
 import { env } from "../../lib/env";
 import { consentDefaultScript, gtmScript } from "../../lib/gtm";
@@ -79,13 +80,14 @@ export default async function LocaleLayout({
         ))}
       </head>
       <body>
+        <SkipLink locale={l} />
         <WebNav locale={l} />
         {/* Fixed at the bottom, but first after the header in DOM and tab order so keyboard users meet the notice early. */}
         <FloatingStack>
           <LocaleSuggestion />
           <CookieNotice locale={l} />
         </FloatingStack>
-        <main tabIndex={-1}>{children}</main>
+        <main id="main" tabIndex={-1}>{children}</main>
         <WebFooter locale={l} />
         <Analytics />
         <TrackListeners />

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import NotFound from "./[locale]/not-found";
 import WebFooter from "./components/WebFooter";
+import SkipLink from "./components/SkipLink";
 import WebNav from "./components/WebNav";
 import { dir, t, type Locale } from "../lib/i18n";
 import { fullTitle } from "../lib/seo";
@@ -22,8 +23,9 @@ export default async function GlobalNotFound() {
   return (
     <html lang={l} dir={dir(l)} data-gp="app">
       <body>
+        <SkipLink locale={l} />
         <WebNav locale={l} />
-        <main tabIndex={-1}>
+        <main id="main" tabIndex={-1}>
           <NotFound />
         </main>
         <WebFooter locale={l} />
