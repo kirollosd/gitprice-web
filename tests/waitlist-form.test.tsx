@@ -197,6 +197,23 @@ describe("WaitlistForm", () => {
     expect((await screen.findByRole("alert")).textContent).toBe(COPY.en.failed.message);
   });
 
+  it("a 200 that is not the API's already_joined shows failed and fires nothing", async () => {
+    fetchMock.mockResolvedValue(new Response("<html>portal</html>", { status: 200 }));
+    mount();
+    await submit("sara@example.com");
+    expect((await screen.findByRole("alert")).textContent).toBe(COPY.en.failed.message);
+    expect(dl()).toHaveLength(0);
+  });
+
+  it("typing after an invalid submit clears the field error", async () => {
+    mount();
+    await submit("sara@example");
+    expect(field().getAttribute("aria-invalid")).toBe("true");
+    fireEvent.change(field(), { target: { value: "sara@example.c" } });
+    expect(field().getAttribute("aria-invalid")).toBeNull();
+    expect(screen.queryByText(COPY.en.error.input.email.message)).toBeNull();
+  });
+
   it("never logs the email", async () => {
     const spies = (["log", "warn", "error", "info"] as const).map((m) => vi.spyOn(console, m).mockImplementation(() => {}));
     fetchMock.mockRejectedValue(new TypeError("Failed to fetch"));

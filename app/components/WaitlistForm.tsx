@@ -28,12 +28,11 @@ export function isValidEmail(raw: string): boolean {
 /** Maps the API reply to a state: branch on the HTTP status; the error code only tells INVALID_EMAIL apart. */
 async function outcome(res: Response): Promise<Status> {
   if (res.status === 201) return "joined";
-  if (res.status === 200) return "alreadyJoined";
-  if (res.status === 400) {
-    const body = (await res.json().catch(() => null)) as { error?: { code?: unknown } } | null;
-    if (body?.error?.code === "INVALID_EMAIL") return "error";
-  }
-  return "failed";
+  if (res.status !== 200 && res.status !== 400) return "failed";
+  const body = (await res.json().catch(() => null)) as { data?: { status?: unknown }; error?: { code?: unknown } } | null;
+  // A bare 200 (captive portal, misrouted proxy) is not a join.
+  if (res.status === 200) return body?.data?.status === "already_joined" ? "alreadyJoined" : "failed";
+  return body?.error?.code === "INVALID_EMAIL" ? "error" : "failed";
 }
 
 /** The prelaunch waitlist form (WebWaitlistForm boards): posts to the GitPrice API, never logs the email. */
@@ -128,6 +127,7 @@ export default function WaitlistForm({
           dir="ltr"
           required
           placeholder={t(locale, W + "empty.input.email.placeholder")}
+          onChange={() => status === "error" && setStatus("empty")}
           aria-invalid={status === "error" ? true : undefined}
           aria-describedby={status === "error" ? errorId : undefined}
         />

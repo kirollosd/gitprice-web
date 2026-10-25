@@ -55,7 +55,7 @@ export const TOLERANCE: Record<string, { max: number; reason: string }> = {
   "Checkout-waiting-390": { max: 0.04, reason: RASTER },
   "Terms-default-1440": { max: 0.04, reason: TEXT },
   "Terms-default-390": { max: 0.09, reason: TEXT },
-  "Privacy-default-1440": { max: 0.04, reason: TEXT + "; the build's privacy copy gained the Vercel/Tally paragraph after the board was drawn" },
+  "Privacy-default-1440": { max: 0.04, reason: TEXT + "; the build's privacy copy gained the Vercel/waitlist paragraph after the board was drawn" },
   "Privacy-default-390": { max: 0.09, reason: TEXT + "; plus the paragraph added after the board was drawn" },
   "Pricing-no-prices-1440": { max: 0.04, reason: "Free 0, featured border and sellers row now drawn (GP-262 P2-1); remaining: sellers row text metrics; measured en 0.02, ar 0.03" },
   "Pricing-no-prices-390": { max: 0.08, reason: "Free 0, featured border and sellers row now drawn (GP-262 P2-1); footer margin is 96 where the 390 board leaves 48; measured en 0.04, ar 0.07" },
