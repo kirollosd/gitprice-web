@@ -47,8 +47,7 @@ This is the owner's one-sitting setup for gitprice.com. You need edit access to:
 ## 1. GTM: import
 
 1. Download the container file, `gtm-container.json`. You don't need a copy of the code:
-   1. Open [github.com/kirollosd/gitprice-web](https://github.com/kirollosd/gitprice-web), go to `docs/analytics/gtm-container.json`, and click **Download raw file** (the download icon above the file).
-   2. If the change isn't merged yet, switch to the `gp-376-ga-gtm` branch first.
+   - Open [github.com/kirollosd/gitprice-web](https://github.com/kirollosd/gitprice-web), go to `docs/analytics/gtm-container.json`, and click **Download raw file** (the download icon above the file).
 2. Open [tagmanager.google.com](https://tagmanager.google.com) and open container **GTM-PLZZJV54**.
 3. Go to **Admin → Import Container**.
    1. Choose the downloaded `gtm-container.json`.
