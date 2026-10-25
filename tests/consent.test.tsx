@@ -186,10 +186,21 @@ describe("setConsent and the dataLayer", () => {
     const { setConsent } = await import("../lib/consent");
     setConsent("allow");
     document.cookie = "_ga=1; Path=/";
-    reload.mockImplementation(() => { expect(document.cookie).not.toContain("_ga="); });
+    let atReload: unknown[][] = [];
+    reload.mockImplementation(() => { expect(document.cookie).not.toContain("_ga="); atReload = dl(); });
     setConsent("decline");
-    expect(dl()).toContainEqual(["consent", "update", { analytics_storage: "denied" }]);
     expect(reload).toHaveBeenCalledTimes(1);
+    expect(atReload).toContainEqual(["consent", "update", { analytics_storage: "denied" }]);
+  });
+  it("first-time decline expires existing _ga cookies without a reload", async () => {
+    const { setConsent } = await import("../lib/consent");
+    document.cookie = "_ga=1; Path=/";
+    document.cookie = "_ga_SM4YKS90F0=2; Path=/";
+    setConsent("decline");
+    expect(document.cookie).not.toContain("_ga");
+    expect(document.cookie).toContain("gp_consent=decline");
+    expect(dl()).toContainEqual(["consent", "update", { analytics_storage: "denied" }]);
+    expect(reload).not.toHaveBeenCalled();
   });
 });
 

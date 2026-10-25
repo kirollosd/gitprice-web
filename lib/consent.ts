@@ -33,17 +33,23 @@ export function cookieExpiries(cookie: string, hostname: string, prefixes: reado
   ]);
 }
 
-/** Stores the choice and tells listeners. Allow then Decline drops Heap and Google cookies and reloads, since Heap cannot be unloaded. */
+/**
+ * Stores the choice and tells listeners. Decline always drops Heap and Google cookies; Allow then Decline also
+ * reloads, since Heap cannot be unloaded.
+ */
 export function setConsent(value: "allow" | "decline"): void {
   const previous = readConsent(document.cookie);
-  if (value === "decline" && previous === "allow") {
+  const revoking = value === "decline" && previous === "allow";
+  if (revoking) {
     const heap = (window as { heap?: { stopTracking?: () => void } }).heap;
     try { heap?.stopTracking?.(); } catch { /* best effort; the reload removes Heap anyway */ }
   }
   document.cookie = consentCookie(value);
   gtag("consent", "update", { analytics_storage: value === "allow" ? "granted" : "denied" });
-  if (value === "decline" && previous === "allow") {
+  if (value === "decline") {
     cookieExpiries(document.cookie, location.hostname, ANALYTICS_COOKIE_PREFIXES).forEach((c) => { document.cookie = c; });
+  }
+  if (revoking) {
     location.reload();
     return;
   }
