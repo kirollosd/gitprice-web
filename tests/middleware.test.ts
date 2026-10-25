@@ -23,3 +23,16 @@ describe("x-gp-locale request header (for app/global-not-found)", () => {
     expect(routed("http://localhost:3000/nope")).toBe("en");
   });
 });
+
+describe("checkout while NEXT_PUBLIC_CHECKOUT is off", () => {
+  const rewrite = (url: string) => middleware(new NextRequest(url)).headers.get("x-middleware-rewrite") ?? "";
+  it("rewrites the checkout pages to an unmatched path, so global-not-found sets lang and dir", () => {
+    expect(rewrite("http://localhost:3000/checkout")).toBe("http://localhost:3000/en/__gp404");
+    expect(rewrite("http://localhost:3000/checkout/return?code=x")).toBe("http://localhost:3000/en/__gp404");
+    expect(rewrite("http://localhost:3000/ar/checkout/")).toBe("http://localhost:3000/ar/__gp404");
+  });
+  it("leaves look-alike paths alone", () => {
+    expect(rewrite("http://localhost:3000/checkoutx")).toBe("http://localhost:3000/en/checkoutx");
+    expect(rewrite("http://localhost:3000/ar/checkoutx")).toBe("");
+  });
+});

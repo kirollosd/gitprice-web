@@ -13,5 +13,8 @@ for (const path of ["/checkout", "/checkout/return", "/ar/checkout", "/ar/checko
   test(`${path} is a 404 while checkout is off`, async ({ page }) => {
     const res = await page.goto(path);
     expect(res?.status()).toBe(404);
+    const ar = path.startsWith("/ar/");
+    await expect(page.locator("html")).toHaveAttribute("lang", ar ? "ar" : "en");
+    await expect(page.locator("html")).toHaveAttribute("dir", ar ? "rtl" : "ltr");
   });
 }
