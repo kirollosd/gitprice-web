@@ -90,7 +90,17 @@ describe("GTM container export", () => {
 
   it("resolves every {{reference}} in tags and variables", () => {
     const names = new Set([...cv.variable, ...cv.builtInVariable].map((v) => v.name));
-    for (const e of [...cv.tag, ...cv.variable]) for (const r of refs(e)) expect(names.has(r), `${e.name} -> {{${r}}}`).toBe(true);
+    const filters = cv.trigger.map((t) => ({ ...t, parameter: (t.filter ?? []).flatMap((f) => f.parameter).concat(t.parameter ?? []) }));
+    for (const e of [...cv.tag, ...cv.variable, ...filters]) for (const r of refs(e)) expect(names.has(r), `${e.name} -> {{${r}}}`).toBe(true);
+  });
+
+  it("keeps entity ids unique and matches the README import counts", () => {
+    for (const [list, key] of [[cv.tag, "tagId"], [cv.trigger, "triggerId"], [cv.variable, "variableId"]] as const) {
+      const ids = list.map((e) => (e as unknown as Record<string, string>)[key]);
+      expect(new Set(ids).size, key).toBe(ids.length);
+    }
+    const readme = readFileSync(join(__dirname, "../docs/analytics/README.md"), "utf8");
+    expect(readme).toContain(`add ${cv.tag.length} tags, ${cv.trigger.length} triggers and ${cv.variable.length} variables`);
   });
 
   it("attaches GA4 Event Settings to the Google Tag and every event tag", () => {
