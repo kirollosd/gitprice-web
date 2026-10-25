@@ -12,13 +12,16 @@ const SELLER_NOTE = { hero: "web.sellers.prelaunch.hero.waitlist.note", bottom: 
 const SELLER_JOINED_BODY = "web.sellers.prelaunchJoined.hero.waitlist.body";
 const TIMEOUT_MS = 10_000;
 const MAX_EMAIL = 254;
+// A meaningless name so autofill never fills the trap; it is still sent as the API's `website` field.
+const HONEYPOT = "gp_hp";
 
 type Status = "empty" | "error" | "submitting" | "joined" | "alreadyJoined" | "failed";
 
-/** The API's rule (POST /api/v1/waitlist): trimmed, at most 254 chars, one @, a local part, and a dotted domain that neither starts nor ends with a dot. */
+/** The API's rule (POST /api/v1/waitlist): trimmed, at most 254 bytes, no spaces or control characters, one @, a local part, and a dotted domain that neither starts nor ends with a dot. */
 export function isValidEmail(raw: string): boolean {
   const email = raw.trim();
-  if (!email || email.length > MAX_EMAIL) return false;
+  if (!email || new TextEncoder().encode(email).length > MAX_EMAIL) return false;
+  if (/[\u0000-\u0020\u007f]/.test(email)) return false;
   const parts = email.split("@");
   if (parts.length !== 2) return false;
   const [local, domain] = parts;
@@ -77,7 +80,9 @@ export default function WaitlistForm({
       const res = await fetch(`${env.apiBaseUrl}/api/v1/waitlist`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), audience, locale, website: String(data.get("website") ?? "") }),
+        credentials: "omit",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify({ email: email.trim(), audience, locale, website: String(data.get(HONEYPOT) ?? "") }),
         signal: AbortSignal.timeout(TIMEOUT_MS),
       });
       next = await outcome(res);
@@ -135,7 +140,7 @@ export default function WaitlistForm({
       </div>
       {/* Honeypot: people never see or reach it; a bot that fills it gets a normal-looking join and no row. */}
       <div className={styles.trap} aria-hidden="true">
-        <input type="text" name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
+        <input type="text" name={HONEYPOT} tabIndex={-1} autoComplete="off" defaultValue="" />
       </div>
       <button type="submit" className={styles.button} disabled={status === "submitting"}>{submit}</button>
       {status === "failed" ? (

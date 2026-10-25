@@ -47,6 +47,9 @@ describe("isValidEmail (the API's rule)", () => {
     ["Name@Example.co.uk", true],
     ["a@b.c", true],
     ["sara@example", false],
+    ["sara smith@example.com", false],
+    ["sa\u0001ra@example.com", false],
+    ["é".repeat(126) + "@x.co", false],
     ["", false],
     ["   ", false],
     ["@example.com", false],
@@ -77,7 +80,7 @@ describe("WaitlistForm", () => {
       expect(input.placeholder).toBe(C.empty.input.email.placeholder);
       expect(screen.getByRole("button", { name: C.empty.button.submit.label })).toBeTruthy();
       expect(screen.getByText(C.empty.note)).toBeTruthy();
-      const hp = document.querySelector('input[name="website"]') as HTMLInputElement;
+      const hp = document.querySelector('input[name="gp_hp"]') as HTMLInputElement;
       expect(hp.tabIndex).toBe(-1);
       expect(hp.getAttribute("autocomplete")).toBe("off");
       expect(hp.closest("[aria-hidden='true']")).not.toBeNull();
@@ -164,7 +167,7 @@ describe("WaitlistForm", () => {
   it("posts the trimmed email, audience, locale and the honeypot as JSON with a timeout", async () => {
     fetchMock.mockResolvedValue(ok(201, "joined"));
     mount("ar", { audience: "seller" });
-    (document.querySelector('input[name="website"]') as HTMLInputElement).value = "bot.example";
+    (document.querySelector('input[name="gp_hp"]') as HTMLInputElement).value = "bot.example";
     await submit("  sara@example.com ", "ar");
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
