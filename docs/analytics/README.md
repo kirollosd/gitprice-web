@@ -23,6 +23,7 @@ This is the owner's one-sitting setup for gitprice.com. You need edit access to:
   - The Google Tag sends the first page view of each visit.
   - In-app navigation (the site is a single-page app) fires GTM's **History Change** trigger. That trigger sends a `page_view` through the **GA4 Event - page_view** tag.
   - The trigger ignores `replaceState`, because Next.js calls it on load and on internal URL updates that aren't page changes. Only `pushState` (a link click) and `popstate` (Back/Forward) count.
+  - The trigger also needs the path or query to change (the `History Page Changed` variable compares `gtm.oldUrl` with `gtm.newUrl`). In-page anchor links (Features, How it works, Join waitlist) and Back after them change only the `#fragment`, so they send no `page_view`.
   - That tag recomputes the redacted `page_location` on every fire. GA4's own "browser history" page views would reuse the URL captured when the page first loaded, which can be stale or unredacted, so that setting is turned off (step 3).
   - The site's code sends no `page_view`.
 - **Source of truth.** `gtm-container.json` in this folder is the source of truth. If you change anything in the GTM UI, export the container and commit it back here.
@@ -53,7 +54,7 @@ This is the owner's one-sitting setup for gitprice.com. You need edit access to:
    1. Choose the downloaded `gtm-container.json`.
    2. Workspace: **Default Workspace**.
    3. Import option: **Merge**, then **Rename conflicting tags, triggers and variables**.
-   4. Review the summary and click **Confirm**. It should add 9 tags, 8 triggers and 10 variables.
+   4. Review the summary and click **Confirm**. It should add 9 tags, 8 triggers and 13 variables.
 
 ### After import, check
 
@@ -67,7 +68,7 @@ This is the owner's one-sitting setup for gitprice.com. You need edit access to:
 - **Every GA tag → Advanced Settings → Consent Settings.** It shows the built-in `analytics_storage` check and **No additional consent required**. Don't add `ad_storage` or any ad signal.
 - **Triggers.**
   - **Scroll Depth - 25/50/75/90:** Vertical scroll depths, Percentages `25,50,75,90`, enabled on All Pages.
-  - **History Change:** fires **GA4 Event - page_view**, on **Some History Changes** where `History Source` **does not equal** `replaceState`.
+  - **History Change:** fires **GA4 Event - page_view**, on **Some History Changes** where `History Source` **does not equal** `replaceState` **and** `History Page Changed` **equals** `true`.
 - **Renamed items.** If the import renamed anything (a name ending in `_1` or similar), an older copy already existed. Delete the old one, or compare it with the imported one.
 
 ## 2. GTM: publish
@@ -113,6 +114,7 @@ In GTM, click **Preview** and enter `https://gitprice.com`. Tag Assistant opens 
 - [ ] Before you choose in the cookie notice, **GA4 - Google Tag** fires and consent shows `analytics_storage: denied`.
 - [ ] Click **Allow**. Consent updates to `analytics_storage: granted`.
 - [ ] Click a CTA, scroll the page, open the mobile menu, switch language, and move between pages (for example Home → Sellers). The matching **GA4 Event** tags fire, including **page_view** on each in-app page change. On the first load there should be **no** extra `page_view` from History Change; the first page view comes from the Google Tag alone.
+- [ ] On Home, click **Features** (and **How it works**), then press Back. **No** new `page_view` fires.
 - [ ] **Submit the waitlist form** (use a test address you can remove later). **GA4 Event - waitlist_submit** fires.
 
 ### Fresh browser profile

@@ -19,6 +19,13 @@ const strings = (ps: Param[] = []): string[] =>
   ps.flatMap((p) => [p.value ?? "", ...strings(p.list), ...strings(p.map)]);
 const refs = (e: Entity) => strings(e.parameter).flatMap((s) => [...s.matchAll(/\{\{([^}]+)\}\}/g)].map((m) => m[1]));
 
+/** Runs a Custom JavaScript variable with each {{Name}} replaced by the given value, as GTM inlines it. */
+const runJsm = (name: string, vars: Record<string, unknown>, globals: Record<string, unknown> = {}) => {
+  const js = param(cv.variable.find((v) => v.name === name)!, "javascript")!
+    .replace(/\{\{([^}]+)\}\}/g, (_, n: string) => JSON.stringify(vars[n]));
+  return new Function(...Object.keys(globals), `return (${js})();`)(...Object.values(globals));
+};
+
 const googtag = cv.tag.filter((t) => t.type === "googtag");
 const events = cv.tag.filter((t) => t.type === "gaawe");
 
@@ -41,12 +48,36 @@ describe("GTM container export", () => {
 
   it("skips replaceState history changes so Next.js hydration does not double-count page_view", () => {
     const trig = cv.trigger.find((t) => t.type === "HISTORY_CHANGE")!;
-    expect(trig.filter).toEqual([{ type: "EQUALS", parameter: [
+    expect(trig.filter).toContainEqual({ type: "EQUALS", parameter: [
       { type: "TEMPLATE", key: "arg0", value: "{{History Source}}" },
       { type: "TEMPLATE", key: "arg1", value: "replaceState" },
       { type: "BOOLEAN", key: "negate", value: "true" },
-    ] }]);
+    ] });
     expect(cv.builtInVariable.map((v) => v.name)).toContain("History Source");
+  });
+
+  it("fires the History Change trigger only when the path or query changed", () => {
+    const trig = cv.trigger.find((t) => t.type === "HISTORY_CHANGE")!;
+    expect(trig.filter).toHaveLength(2);
+    expect(trig.filter).toContainEqual({ type: "EQUALS", parameter: [
+      { type: "TEMPLATE", key: "arg0", value: "{{History Page Changed}}" },
+      { type: "TEMPLATE", key: "arg1", value: "true" },
+    ] });
+    expect(cv.variable.find((v) => v.name === "History Page Changed")?.type).toBe("jsm");
+  });
+
+  describe("History Page Changed", () => {
+    const changed = (oldUrl: unknown, newUrl: unknown) =>
+      runJsm("History Page Changed", { "DLV - gtm.oldUrl": oldUrl, "DLV - gtm.newUrl": newUrl });
+    it.each([
+      ["https://gitprice.com/", "https://gitprice.com/#features", false],
+      ["https://gitprice.com/#features", "https://gitprice.com/", false],
+      ["https://gitprice.com/ar", "https://gitprice.com/ar#waitlist", false],
+      ["https://gitprice.com/", "https://gitprice.com/sellers", true],
+      ["https://gitprice.com/", "https://gitprice.com/ar", true],
+      ["https://gitprice.com/sellers", "https://gitprice.com/sellers?utm_source=x", true],
+      [undefined, "https://gitprice.com/sellers", false],
+    ])("%s -> %s is %s", (o, n, expected) => expect(changed(o, n)).toBe(expected));
   });
 
   it("fires every tag on a defined trigger", () => {

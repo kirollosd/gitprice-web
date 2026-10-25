@@ -899,6 +899,21 @@
                 "value": "true"
               }
             ]
+          },
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{History Page Changed}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              }
+            ]
           }
         ],
         "fingerprint": "0"
@@ -1148,6 +1163,72 @@
                 ]
               }
             ]
+          }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "11",
+        "name": "DLV - gtm.oldUrl",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "gtm.oldUrl"
+          }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "12",
+        "name": "DLV - gtm.newUrl",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "gtm.newUrl"
+          }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "13",
+        "name": "History Page Changed",
+        "type": "jsm",
+        "notes": "True only when the path or query changed, so hash-only pushState (in-page anchors) and Back to them do not count as page views.",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  try {\n    var o = new URL({{DLV - gtm.oldUrl}}), n = new URL({{DLV - gtm.newUrl}});\n    return o.pathname + o.search !== n.pathname + n.search;\n  } catch (e) {\n    return false;\n  }\n}"
           }
         ],
         "fingerprint": "0"
