@@ -13,14 +13,14 @@ This is the owner's one-sitting setup for gitprice.com. You need edit access to:
 - **Consent (Consent Mode v2).**
   - Before a choice, every consent signal is `denied`. GA runs cookieless and receives only anonymous pings.
   - **Allow** grants `analytics_storage` only. GA then sets its cookies, and Heap loads.
-  - **Decline** keeps it `denied` and deletes any `_ga`, `_ga_*` and `_gid` cookies.
+  - **Decline** keeps it `denied` and deletes any `_ga`, `_ga_*` and `_gid` cookies. A first-time Decline doesn't reload the page. Allow then Decline (from Cookie settings) also reloads it, because Heap can't be unloaded.
   - The ad signals (`ad_storage`, `ad_user_data`, `ad_personalization`) are never granted. The site promises no ads.
 - **Events.** The site pushes `{event, ...params, locale}` to `window.dataLayer`. GTM turns each push into a GA4 event. Heap also gets the event once it's loaded.
 - **Redaction.** On `/reset-password`, `/checkout`, `/checkout/return` and `/welcome` (each with or without `/ar`), `page_location` is sent without its query string or fragment, because those URLs can carry tokens.
   - The `Redacted Page Location` variable does this.
   - It reaches every GA tag through the `GA4 Event Settings` variable. The Google Tag also sets it directly as a configuration parameter, as a second layer.
 - **Page views.**
-  - The Google Tag sends the first page view of each visit.
+  - The Google Tag sends the first page view of each full page load.
   - In-app navigation (the site is a single-page app) fires GTM's **History Change** trigger. That trigger sends a `page_view` through the **GA4 Event - page_view** tag.
   - The trigger ignores `replaceState`, because Next.js calls it on load and on internal URL updates that aren't page changes. Only `pushState` (a link click) and `popstate` (Back/Forward) count.
   - The trigger also needs the path or query to change (the `History Page Changed` variable compares `gtm.oldUrl` with `gtm.newUrl`). In-page anchor links (Features, How it works, Join waitlist) and Back after them change only the `#fragment`, so they send no `page_view`.
@@ -37,7 +37,7 @@ This is the owner's one-sitting setup for gitprice.com. You need edit access to:
 | `waitlist_submit` | `audience` (shopper / seller), `placement` (hero / bottom) | A visitor submits the waitlist form. **This is the key event (conversion).** |
 | `cta_click` | `cta_id`, `placement` (nav / hero / bottom / menu / footer) | A visitor clicks a waitlist or primary CTA, "For sellers" / "For shoppers", or an anchor link. |
 | `store_click` | `store` (chrome / app_store / play), `placement` | A visitor clicks a store badge (launch mode). |
-| `section_view` | `section_id` | A top-level section on Home or Sellers is at least 50% visible. Fires once per section per page view. |
+| `section_view` | `section_id` | A top-level section on Home or Sellers is at least 50% visible, or, for a section taller than the screen, at least half a viewport of it is visible. Fires once per section per page view. |
 | `scroll_depth` | `percent` (25 / 50 / 75 / 90) | GTM's scroll-depth trigger. GA only; Heap autocaptures scrolling. |
 | `locale_switch` | `from`, `to` | A visitor uses the language switch. |
 | `menu_open` | none | A visitor opens the mobile menu. |
@@ -93,7 +93,7 @@ Open [analytics.google.com](https://analytics.google.com) and the GitPrice prope
    - `store`
    - `locale`
 3. **Enhanced measurement.** Go to **Admin → Data collection and modification → Data streams →** the web stream **→ Enhanced measurement** (gear icon).
-   - Keep **Page views** on (that's the first page view of each visit), but under **Show advanced settings**, turn **Page changes based on browser history events** **off**. GTM's History Change tag sends those page views instead, with the URL redacted. Leaving both on would double-count, and GA's own version can send a stale or unredacted URL.
+   - Keep **Page views** on (that's the first page view of each full page load), but under **Show advanced settings**, turn **Page changes based on browser history events** **off**. GTM's History Change tag sends those page views instead, with the URL redacted. Leaving both on would double-count, and GA's own version can send a stale or unredacted URL.
    - Keep **Outbound clicks** on.
    - Turn **Scrolls** **off**. GTM's scroll-depth trigger replaces it; leaving both on double-counts at 90%.
    - Turn **Form interactions** **off**. The waitlist form is a Tally iframe, and `waitlist_submit` already covers it.
@@ -125,7 +125,8 @@ Use a new browser profile (or a private window with no extensions), open DevTool
 
 - [ ] **Before choosing.** In the Network tab, GTM (`googletagmanager.com/gtm.js`) loads and a GA4 hit is sent (`/g/collect`). **No** `_ga` or `_ga_*` cookie exists, and there's **no** Heap request.
 - [ ] **Allow.** Click Allow. `_ga` and `_ga_*` cookies appear, and Heap loads.
-- [ ] **Decline.** In another fresh profile, click Decline. No `_ga`, `_ga_*` or `_gid` cookie exists, before or after the page reloads.
+- [ ] **Decline.** In another fresh profile, click Decline. The page doesn't reload, and no `_ga`, `_ga_*` or `_gid` cookie exists.
+- [ ] **Allow then Decline.** In another fresh profile, click Allow and confirm `_ga` exists. Reopen **Cookie settings** in the footer and click Decline. The page reloads, no `_ga`, `_ga_*` or `_gid` cookie remains, and none appears as you keep browsing (GA stays cookieless).
 - [ ] **Events.** In GA4 **Admin → Data display → DebugView** (with Tag Assistant open), each event in the table above appears when you do its action.
 - [ ] **Redaction.** Open `https://gitprice.com/reset-password?x=1#token=abc`. In DebugView, `page_location` is `https://gitprice.com/reset-password`, with no `?` or `#`.
 - [ ] **Previews stay quiet.** On a Vercel preview URL, no request goes to `googletagmanager.com`.
