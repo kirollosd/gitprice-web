@@ -1,5 +1,6 @@
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
+import GMark from "./GMark";
 import { html } from "./html";
 import { Price, priceHtml } from "./Price";
 import type { Product } from "./products";
@@ -7,6 +8,11 @@ import { StoreText, storeTextHtml } from "./StoreMark";
 import s from "./How.module.css";
 
 const K = "web.landing.how.";
+/** "≠ different variant": the sign is decoration, the words are the reason. */
+const reason = (r: string) => {
+  const m = /^(≠\s*)(.*)$/.exec(r);
+  return m ? <><span aria-hidden="true">{m[1]}</span>{m[2]}</> : r;
+};
 
 /**
  * 2 · how it works: a pinned browser with three swapping steps. First state: step 01 on, slab and browser tilted,
@@ -43,7 +49,7 @@ export default function How({ locale, product: P }: { locale: Locale; product: P
               </div>
             </div>
             <div className={s.badge} id="badge">
-              <span className={s.eq} aria-hidden="true">=</span>
+              <GMark className={s.eq} state="same" settleOnView label="" />
               <span dangerouslySetInnerHTML={html(locale, K + "badgeOn", {}, { price: priceHtml(P.best.price), store: storeTextHtml(locale, P.best.store) })} />
             </div>
             <div className={`${b.kick} ${s.bnote}`} id="bnote">{t(locale, K + "badgeNote")}</div>
@@ -53,7 +59,7 @@ export default function How({ locale, product: P }: { locale: Locale; product: P
               <div className={s.r}><span><StoreText label={P.other.store} locale={locale} /></span><b><Price v={P.other.price} /></b></div>
               <div className={s.r}><span><StoreText label={P.on} locale={locale} /> · {t(locale, K + "youreHere")}</span><b><s><Price v={P.from} /></s></b></div>
               <div className={`${s.r} ${s.lk}`}>
-                <span><StoreText label={P.lookalike.label} locale={locale} bdiRest /> <em>{P.lookalike.reason}</em></span>
+                <span><StoreText label={P.lookalike.label} locale={locale} bdiRest /> <em>{reason(P.lookalike.reason)}</em></span>
                 <b><Price v={P.lookalike.price} /></b>
               </div>
             </div>

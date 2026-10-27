@@ -1,7 +1,8 @@
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
+import GMark from "./GMark";
 import { html, nb } from "./html";
-import { Price } from "./Price";
+import { Price, priceHtml } from "./Price";
 import type { Product } from "./products";
 import { marksHtml, StoreText, storeTextHtml } from "./StoreMark";
 import s from "./Room.module.css";
@@ -19,10 +20,20 @@ export function Art({ c }: { c: string }) {
  * (Task 5 adds `in`, then `picked`, `rev`, `out` per card; fills #verdict; swaps #roomh copy; moves `on` along #dots).
  */
 export default function Room({ locale, product: P }: { locale: Locale; product: Product }) {
+  // round one's scrubbed end: what ScrollScenes writes into #roomh and #verdict
+  const E = P.lineup.find((x) => x[4] === 1)!;
+  const done = E[2] < P.from
+    ? html(locale, K + "verdictCheaper", {}, { price: priceHtml(E[2]), store: storeTextHtml(locale, E[0]), ref: priceHtml(P.from) })
+    : html(locale, K + "verdictPricier", {}, { store: storeTextHtml(locale, E[0]) });
   return (
     <section id="room" className={s.room}>
       <div className={s.top}>
-        <h2 id="roomh" dangerouslySetInnerHTML={html(locale, K + "title")} />
+        <h2
+          id="roomh"
+          data-checking={html(locale, K + "checking", { checks: P.checks }).__html}
+          data-found={html(locale, K + "found").__html}
+          dangerouslySetInnerHTML={html(locale, K + "title")}
+        />
         <div className={s.ref}>
           <div className={s.img} id="refimg"><Art c={P.art} /></div>
           <div>
@@ -40,12 +51,12 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
         </div>
         <div className={s.sus} id="sus">
           {P.lineup.map(([store, name, price, art, exact, why], k) => (
-            <button key={k} type="button" className={s.s} data-k={k}>
+            <button key={k} type="button" className={s.s} data-k={k} data-exact={exact === 1 ? "" : undefined}>
               <div className={s.img}><Art c={art} /></div>
               {exact === 1 ? (
-                <span className={s.stamp}><span className={s.eq} aria-hidden="true">=</span>{t(locale, K + "stamp")}</span>
+                <span className={s.stamp}><GMark className={s.eq} state="same" settleOnView label="" />{t(locale, K + "stamp")}</span>
               ) : (
-                <span className={s.why}><span className={s.eq} aria-hidden="true">≠</span>{why}</span>
+                <span className={s.why}><GMark className={s.eq} state="ne" settleOnView label="" />{why}</span>
               )}
               <div className={s.store}><StoreText label={store} locale={locale} /></div>
               <h3>{nb(name)}</h3>
@@ -56,7 +67,7 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
         </div>
       </div>
       <div className={s.lbar}>
-        <p className={s.verdict} id="verdict" aria-live="polite" />
+        <p className={s.verdict} id="verdict" aria-live="polite" data-done={done.__html} />
         <div className={s.ctl}>
           <span className={s.dots} id="dots" aria-hidden="true"><i className="on" /><i /><i /></span>
           <button type="button" className={s.g} id="reveal">{t(locale, K + "show")}</button>

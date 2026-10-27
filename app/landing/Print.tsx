@@ -1,5 +1,6 @@
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
+import GMark from "./GMark";
 import { esc, html } from "./html";
 import { Price } from "./Price";
 import { products, type Product, type StoreLabel } from "./products";
@@ -43,7 +44,7 @@ export default function Print({ locale, product: P }: { locale: Locale; product:
     <div id="rcpt" className={s.rcpt} data-gp-section="rcpt">
       <section id="print" className={s.print}>
         <div className={s.stage}>
-          <div className={s.copy}>
+          <div className={s.copy} data-copy="">
             {copy.map(([h, p], i) => (
               <div key={h} className={`${s.c} ${i === 0 ? "on" : ""}`}>
                 <h2>{t(locale, K + h)}</h2>
@@ -66,20 +67,20 @@ export default function Print({ locale, product: P }: { locale: Locale; product:
               </div>
               <div id="items">
                 {items.map(([id, name, p, a, best, on]) => (
-                  <div key={id || name} className={s.it}>
+                  <div key={id || name} className={s.it} data-save={a ? p - a : undefined}>
                     <div className={s.n}>{name}</div>
                     <div className={s.ln}><span><StoreText label={on} locale={locale} /></span>{a ? <s><Price v={p} /></s> : <b><Price v={p} /></b>}</div>
                     {a ? (
                       <>
                         <div className={`${s.ln} ${s.alt}`}>
-                          <span className={s.ok}><span className={s.eq} aria-hidden="true">=</span><span dangerouslySetInnerHTML={html(locale, K + "lineSame", {}, { store: storeTextHtml(locale, best) })} /></span>
+                          <span className={s.ok}><GMark className={s.eq} state="same" settleOnView label="" /><span dangerouslySetInnerHTML={html(locale, K + "lineSame", {}, { store: storeTextHtml(locale, best) })} /></span>
                           <b><Price v={a} /></b>
                         </div>
                         <div className={`${s.ln} ${s.sv} ${s.alt}`}><span>{t(locale, K + "lineSaved")}</span><span><Price v={p - a} /></span></div>
                       </>
                     ) : (
                       <div className={`${s.ln} ${s.alt}`}>
-                        <span className={s.no}><span className={s.eq} aria-hidden="true">?</span>{t(locale, K + "lineNoMatch")}</span>
+                        <span className={s.no}><GMark className={s.eq} state="none" settleOnView label="" />{t(locale, K + "lineNoMatch")}</span>
                         <span><Price v={0} /></span>
                       </div>
                     )}

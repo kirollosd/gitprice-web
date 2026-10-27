@@ -1,5 +1,6 @@
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
+import GMark from "./GMark";
 import { html } from "./html";
 import { priceHtml } from "./Price";
 import type { Product } from "./products";
@@ -27,7 +28,7 @@ export default function Rail({ locale, product: P }: { locale: Locale; product: 
             <span className={s.tag}><StoreText label={st} locale={locale} /></span>
             <h3>{t(locale, K + "youreOn")}<br /><StoreText label={st} locale={locale} /></h3>
             <div className={s.pill}>
-              <span className={s.eq} aria-hidden="true">=</span>
+              <GMark className={s.eq} state="same" settleOnView label="" />
               {st === P.best.store ? (
                 t(locale, K + "cheapestHere")
               ) : (
@@ -40,7 +41,7 @@ export default function Rail({ locale, product: P }: { locale: Locale; product: 
           <span className={s.tag}><i aria-hidden="true" />{t(locale, K + "anyPage")}</span>
           <h3 dangerouslySetInnerHTML={html(locale, K + "notToday")} />
           <div className={s.pill}>
-            <span className={s.eq} aria-hidden="true">=</span>
+            <GMark className={s.eq} state="same" settleOnView label="" />
             <span dangerouslySetInnerHTML={html(locale, K + "alertSet", {}, { price: mono(P.alert) })} />
           </div>
         </div>

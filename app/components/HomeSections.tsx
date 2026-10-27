@@ -11,6 +11,7 @@ import How from "../landing/How";
 import Print from "../landing/Print";
 import { getProduct, localize } from "../landing/products";
 import Rail from "../landing/Rail";
+import ScrollScenes from "../landing/ScrollScenes";
 import Spot from "../landing/Spot";
 import WaitlistForm from "./WaitlistForm";
 import styles from "./HomeSections.module.css";
@@ -71,6 +72,7 @@ export default function HomeContent({ locale, product }: { locale: Locale; produ
         <Alerts locale={locale} product={P} />
         <Rail locale={locale} product={P} />
         <Foot locale={locale} product={P} />
+        <ScrollScenes locale={locale} />
       </div>
     </div>
   );

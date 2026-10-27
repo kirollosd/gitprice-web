@@ -1,5 +1,6 @@
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
+import GMark from "./GMark";
 import { html } from "./html";
 import { CUR, money, priceHtml } from "./Price";
 import type { Product } from "./products";
@@ -37,7 +38,7 @@ export default function Alerts({ locale, product: P }: { locale: Locale; product
         </div>
         <div className={s.chart} id="chart">
           <div className={s.toast} id="toast">
-            <span className={s.eq} aria-hidden="true">=</span>
+            <GMark className={s.eq} state="same" settleOnView label="" />
             <div>
               <small>{t(locale, K + "toast")}</small>
               <div id="tt" dangerouslySetInnerHTML={tt} />

@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
 import { html } from "./html";
-import { CUR, money } from "./Price";
+import { CUR, money, priceHtml } from "./Price";
 import { products, type Product } from "./products";
 import { StoreText } from "./StoreMark";
 import s from "./Hero.module.css";
@@ -17,6 +17,9 @@ const isFixed = (c: string) => c === "." || c === ",";
 export default function Hero({ locale, product: P }: { locale: Locale; product: Product }) {
   const from = money(P.from, 0);
   const to = money(P.best.price, 0);
+  const less = P.from - P.best.price;
+  // the caption once the board has landed; ScrollScenes swaps #cap to it
+  const done = html(locale, K + "captionDone", { product: P.short }, { less: priceHtml(less, Number.isInteger(less) ? 0 : 2), from: priceHtml(P.from) }).__html;
   return (
     <section className={`${b.sec} ${s.num}`} id="num" data-gp-section="num">
       <div className={b.stage} style={{ "--len": from.length } as CSSProperties}>
@@ -30,7 +33,7 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
         </div>
         <div className={`${b.kick} ${s.kick}`}>{t(locale, K + "eyebrow")}</div>
         <h1 className={s.h1}>{t(locale, K + "headline")}</h1>
-        <p className={s.cap} id="cap" dangerouslySetInnerHTML={html(locale, K + "captionStart", { product: P.name })} />
+        <p className={s.cap} id="cap" data-done={done} dangerouslySetInnerHTML={html(locale, K + "captionStart", { product: P.name })} />
         <div className={`${s.digits} ${b.mono}`} id="digits" aria-hidden="true" data-keep-ls="" data-from={from} data-to={to}>
           {[...from].map((c, i) =>
             isFixed(c) ? (

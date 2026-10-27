@@ -1,0 +1,10 @@
+.root { display: inline-flex; align-items: center; text-decoration: none; color: var(--gp-web-logo); }
+.root:hover { text-decoration: none; }
+/* same box as Logo's mask wordmark; currentColor follows --gp-web-logo across themes */
+.logo { display: block; flex-shrink: 0; inline-size: 77px; block-size: 22px; fill: currentColor; }
+/* price-board entry: each letter flips up from below, staggered (data-board is set by Wordmark.tsx, never under reduced motion) */
+.L { transform-box: view-box; }
+.logo[data-board=""] .L { transform: translateY(420px); }
+.logo[data-board="go"] .L { animation: g-board .55s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i) * 70ms); }
+@keyframes g-board { 0% { transform: translateY(420px); } 70% { transform: translateY(-18px); } 100% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .L { animation: none !important; transform: none !important; } }
