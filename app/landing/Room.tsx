@@ -16,13 +16,13 @@ export function Art({ c }: { c: string }) {
 
 /**
  * 2c · spot the same one: four suspects, one is the exact product. First state: the lineup is dealt but hidden
- * (Task 5 adds `in`, then `picked`, `rev`, `out` per card; fills #verdict; swaps #h1 copy; moves `on` along #dots).
+ * (Task 5 adds `in`, then `picked`, `rev`, `out` per card; fills #verdict; swaps #roomh copy; moves `on` along #dots).
  */
 export default function Room({ locale, product: P }: { locale: Locale; product: Product }) {
   return (
     <section id="room" className={s.room}>
       <div className={s.top}>
-        <h2 id="h1" dangerouslySetInnerHTML={html(locale, K + "title")} />
+        <h2 id="roomh" dangerouslySetInnerHTML={html(locale, K + "title")} />
         <div className={s.ref}>
           <div className={s.img} id="refimg"><Art c={P.art} /></div>
           <div>

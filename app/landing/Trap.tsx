@@ -16,7 +16,7 @@ export function rankRows(P: Product): RankRow[] {
   const trim = (n: string) =>
     n.startsWith(P.short + " · ") ? n.slice(P.short.length + 3) : n.startsWith(P.brand + " ") ? n.slice(P.brand.length + 1) : n;
   return [
-    ...P.lineup.map(([st, n, price, , k, why]) => ({ label: `${st} · ${trim(n)}`, price, exact: k === 1, why: k === 1 ? "" : `≠ ${why}` })),
+    ...P.lineup.map(([st, n, price, , k, why]) => ({ label: `${st} · ${trim(n)}`, price, exact: k === 1, why: k === 1 ? "" : why ?? "" })),
     { label: `${P.other.store} · ${trim(ex[1])}`, price: P.other.price, exact: true, why: "" },
   ].sort((a, b) => a.price - b.price);
 }
@@ -42,7 +42,7 @@ export default function Trap({ locale, product: P }: { locale: Locale; product: 
         <div id="rank">
           {rows.map((r, i) => (
             <div key={r.label + r.price} className={`${s.r} ${i === 0 ? "first w" : ""}`} data-exact={r.exact ? "" : undefined}>
-              <span><bdi><StoreText label={nb(r.label)} locale={locale} /></bdi>{r.why && <em>{r.why}</em>}</span>
+              <span><bdi><StoreText label={nb(r.label)} locale={locale} /></bdi>{r.why && <em><span aria-hidden="true">≠ </span>{r.why}</em>}</span>
               <b><Price v={r.price} /></b>
             </div>
           ))}

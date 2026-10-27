@@ -1,6 +1,6 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 
@@ -22,7 +22,10 @@ afterEach(() => {
 
 const L = { en: en.web.landing, ar: ar.web.landing };
 const IDS = ["num", "how", "film", "spot", "rcpt", "rail", "foot"];
-const BANNED = ["Amazon", "Noon", "Jumia", "Egypt", "مصر", "ج.م", "Nov"];
+const BANNED = ["Amazon", "Noon", "Jumia", "Egypt", "مصر", "ج.م"];
+// The launch date, not any month name: a receipt dated November is fine.
+const LAUNCH = /\b(13\s*Nov|Nov(ember)?\s*13|6\s*Nov|Nov(ember)?\s*6)\b|(13|6)\s*نوفمبر|نوفمبر\s*(13|6)/i;
+const guardHits = (root: HTMLElement) => textNodes(root).filter((s) => BANNED.some((b) => s.includes(b)) || LAUNCH.test(s));
 
 async function renderHome(locale: "en" | "ar") {
   mockEnv(false);
@@ -38,9 +41,6 @@ const textNodes = (root: Node) => {
 };
 
 describe("Coral landing sections", () => {
-  // The receipt header names the current month; pin it so the "Nov" brand guard is deterministic.
-  beforeEach(() => vi.useFakeTimers({ toFake: ["Date"], now: new Date("2026-10-27T12:00:00Z") }));
-  afterEach(() => vi.useRealTimers());
 
   for (const locale of ["en", "ar"] as const) {
     it(`renders each nav anchor section once, tagged for analytics (${locale})`, async () => {
@@ -60,10 +60,9 @@ describe("Coral landing sections", () => {
       expect(h1[0].textContent).toBe(L[locale].hero.headline);
     });
 
-    it(`names no store, country or launch month in any text node (${locale})`, async () => {
+    it(`names no store, country or launch date in any text node (${locale})`, async () => {
       const { container } = await renderHome(locale);
-      const hits = textNodes(container).filter((s) => BANNED.some((b) => s.includes(b)));
-      expect(hits).toEqual([]);
+      expect(guardHits(container)).toEqual([]);
     });
 
     it(`shows the free line from the ship critique (${locale})`, async () => {
@@ -71,6 +70,31 @@ describe("Coral landing sections", () => {
       expect(screen.getByText(L[locale].hero.free)).toBeTruthy();
     });
   }
+
+  it("dates the receipt in #rmonth and a November build still passes the launch-date guard", async () => {
+    vi.useFakeTimers({ toFake: ["Date"], now: new Date("2026-11-13T12:00:00Z") });
+    try {
+      const { container } = await renderHome("en");
+      expect(container.querySelector("#paper #rmonth")?.textContent).toBe("November 2026");
+      expect(guardHits(container)).toEqual([]);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("guard catches launch-date phrasing", () => {
+    for (const s of ["Launching 13 Nov", "November 6", "Nov 13th? no: Nov 13", "يوم 13 نوفمبر"]) expect(LAUNCH.test(s)).toBe(true);
+    expect(LAUNCH.test("Your month · November 2026 · example cart")).toBe(false);
+  });
+
+  it("hides the ≠ glyph in trap reasons and names the room heading", async () => {
+    const { container } = await renderHome("en");
+    const ems = [...container.querySelectorAll("#rank em")];
+    expect(ems.length).toBeGreaterThan(0);
+    ems.forEach((em) => expect(em.querySelector('[aria-hidden="true"]')?.textContent?.trim()).toBe("≠"));
+    expect(container.querySelector("#room h2#roomh")).toBeTruthy();
+    expect(container.querySelector("#h1")).toBeNull();
+  });
 
   it("rolls the charger hero from 699 to 412, whole numbers only", async () => {
     await renderHome("en");

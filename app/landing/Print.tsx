@@ -1,6 +1,6 @@
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
-import { html } from "./html";
+import { esc, html } from "./html";
 import { Price } from "./Price";
 import { products, type Product, type StoreLabel } from "./products";
 import { marksHtml, StoreText, storeTextHtml } from "./StoreMark";
@@ -25,7 +25,7 @@ export const receiptLines = (P: Product) => [line(P), ...BASE.filter((x) => x[0]
 
 /**
  * 3 · the receipt: one long pinned scene; the copy stacks on the left, a receipt prints out of a slot on the right.
- * First state: point one lit, nothing fed (--fed: 0px on #paper). Task 5 feeds #paper, lights .copy > div with `on`
+ * First state: point one lit, nothing fed (--fed: 0px on #paper). #rmonth holds the render-time month; Task 5 sets it client-side. Task 5 feeds #paper, lights .copy > div with `on`
  * (and --f for its bar), counts #tallyN, and flips #tWith / #tWithout (`raw` on #paper and #tally).
  */
 export default function Print({ locale, product: P }: { locale: Locale; product: Product }) {
@@ -62,7 +62,7 @@ export default function Print({ locale, product: P }: { locale: Locale; product:
             <div className={s.paper} id="paper">
               <div className={s.hd}>
                 <span className={s.logo} role="img" aria-label="GitPrice" />
-                <span dangerouslySetInnerHTML={html(locale, K + "header", { month })} />
+                <span dangerouslySetInnerHTML={html(locale, K + "header", {}, { month: `<span id="rmonth">${esc(month)}</span>` })} />
               </div>
               <div id="items">
                 {items.map(([id, name, p, a, best, on]) => (
