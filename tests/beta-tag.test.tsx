@@ -52,14 +52,14 @@ describe("StoreBadges (phase 1: extension only)", () => {
 
 describe("Beta tag in the landing header (phones)", () => {
   for (const locale of ["en", "ar"] as const) {
-    it(`${locale}: sits right after the header Join button and shows only where the hero CTA is hidden (html.lp-m)`, async () => {
+    it(`${locale}: sits right before the header Join button (DOM order = screen order) and shows only where the hero CTA is hidden (html.lp-m)`, async () => {
       vi.doMock("../lib/env", () => ({ env: { launch: false, apiBaseUrl: "http://x", chromeStoreUrl: "https://c.test", sellersNav: false } }));
       vi.doMock("../app/landing/LangMenu", () => ({ default: () => null }));
       const { default: WebNav } = await import("../app/components/WebNav");
       const { JoinProvider } = await import("../app/landing/Dock");
       render(<JoinProvider><WebNav locale={locale} variant="landing" /></JoinProvider>);
       const join = document.querySelector<HTMLElement>('header [data-join][data-gp-placement="nav"]')!;
-      const tag = join.nextElementSibling as HTMLElement;
+      const tag = join.previousElementSibling as HTMLElement;
       expect(tag.hasAttribute("data-beta")).toBe(true);
       expect(tag.textContent).toBe("Beta");
       const fs = await vi.importActual<typeof import("node:fs")>("node:fs");

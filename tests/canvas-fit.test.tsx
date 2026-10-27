@@ -2,7 +2,7 @@ import { act, cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import CanvasFit from "../app/landing/CanvasFit";
 
-afterEach(() => { cleanup(); vi.restoreAllMocks(); document.body.innerHTML = ""; });
+afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); document.body.innerHTML = ""; });
 
 function setup() {
   const sec = document.createElement("section");

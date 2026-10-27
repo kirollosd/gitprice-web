@@ -355,12 +355,20 @@ test.describe("hero strike and landmarks", () => {
 });
 
 for (const width of [390, 1024]) {
-  test(`the dock never covers the last footer row on a site page (${width})`, async ({ page }) => {
+  test(`the dock and the cookie notice never cover the last footer row on a site page (${width})`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
     await page.goto("/privacy");
     await page.locator("#dock").waitFor({ state: "visible" });
+    // the notice mounts after hydration and lifts the dock: measure with both in place
+    const noticeBox = page.getByRole("region", { name: en.web.component.webCookieNotice.default.title });
+    await expect(noticeBox).toBeVisible();
+    await expect.poll(() => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--gp-stack-h"))).not.toBe("");
     await page.evaluate(() => scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
-    const [dock, cookie] = await Promise.all([page.locator("#dock").boundingBox(), page.locator("footer button", { hasText: /cookie/i }).first().boundingBox()]);
-    expect(cookie!.y + cookie!.height).toBeLessThanOrEqual(dock!.y);
+    const row = page.locator("footer button", { hasText: /cookie/i }).first();
+    // the dock slides up over 0.7 s when the notice appears: poll until it settles
+    await expect.poll(async () => {
+      const [dock, notice, r] = await Promise.all([page.locator("#dock").boundingBox(), noticeBox.boundingBox(), row.boundingBox()]);
+      return r!.y + r!.height <= Math.min(dock!.y, notice!.y) + 0.5;
+    }).toBe(true);
   });
 }

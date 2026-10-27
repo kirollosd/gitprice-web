@@ -89,3 +89,16 @@ for (const width of WIDTHS) {
     });
   }
 }
+
+// The one shot with motion on: the dock slides in only once the hero board has landed (every other shot runs in reduced motion).
+test.describe("dock comes in (motion on)", () => {
+  test.use({ reducedMotion: "no-preference", viewport: SIZES[1440], colorScheme: "light" });
+  test.beforeEach(({ page }) => prepare(page));
+  test("hidden until the board lands, then in", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("#dock")).not.toHaveClass(/(^|\s)in(\s|$)/);
+    await expect(page.locator("#num[data-landed]")).toHaveCount(1, { timeout: 15_000 });
+    await expect(page.locator("#dock")).toHaveClass(/(^|\s)in(\s|$)/);
+    await shoot(page, "prelaunch-dock-in-1440-light");
+  });
+});

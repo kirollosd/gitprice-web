@@ -18,6 +18,7 @@
   transition: transform 150ms ease;
 }
 .bars { position: relative; }
+@media (prefers-reduced-motion: reduce) { .bars, .bars::before, .bars::after { transition: none; } }
 .bars::before, .bars::after { content: ""; position: absolute; inset-inline-start: 0; }
 .bars::before { top: -6px; }
 .bars::after { top: 6px; }

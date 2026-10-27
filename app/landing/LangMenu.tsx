@@ -8,6 +8,7 @@ import s from "./LangMenu.module.css";
 
 const K = "web.landing.lang.";
 const LANGS: Locale[] = ["en", "ar"];
+const FOCUS_KEY = "gp-lng-focus";
 
 /**
  * The header's language menu, ported from combo.html: a globe-only button (the accessible name carries the language label) and a
@@ -37,13 +38,26 @@ export default function LangMenu({ locale }: { locale: Locale }) {
     return () => removeEventListener("pointerdown", away);
   }, [open]);
 
+  // ?p= rides along so the product stays. The mock's gp-lang memory is deliberately not ported: the locale is the URL here
+  const target = (to: Locale, query: string, hash: string) => {
+    const dest = switchPath(pathname, hash, to), at = dest.indexOf("#");
+    return at < 0 ? dest + query : dest.slice(0, at) + query + dest.slice(at);
+  };
+  // the query and hash are client-only: read when the menu opens, so a new-tab click on a link keeps ?p= too
+  const [where, setWhere] = useState({ query: "", hash: "" });
+  useEffect(() => { if (open) setWhere({ query: location.search, hash: location.hash }); }, [open, pathname]);
   const pick = (to: Locale) => {
     if (to === locale) { show(false); return; }
     setOpen(false);
-    // ?p= rides along so the product stays. The mock's gp-lang memory is deliberately not ported: the locale is the URL here
-    const dest = switchPath(pathname, location.hash, to), at = dest.indexOf("#");
-    router.push(at < 0 ? dest + location.search : dest.slice(0, at) + location.search + dest.slice(at));
+    try { sessionStorage.setItem(FOCUS_KEY, "1"); } catch { /* no storage: focus is simply not restored */ }
+    router.push(target(to, location.search, location.hash));
   };
+  // the page behind the menu remounts for the other locale: put focus back on the button so keyboard and screen reader users keep their place
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem(FOCUS_KEY)) { sessionStorage.removeItem(FOCUS_KEY); btn.current?.focus({ preventScroll: true }); }
+    } catch { /* ignore */ }
+  }, []);
   // Enter on a link clicks it (pick below); arrows move between the links
   const onList = (e: KeyboardEvent<HTMLUListElement>) => {
     const o = items(), i = o.indexOf(e.target as HTMLElement);
@@ -77,13 +91,18 @@ export default function LangMenu({ locale }: { locale: Locale }) {
           <li key={l}>
             {/* real links (a disclosure, not a listbox): crawlers and no-JS readers find the other language; the click is pick() */}
             <a
-              href={switchPath(pathname, "", l)}
+              href={target(l, where.query, where.hash)}
               lang={l}
               aria-current={l === locale ? "true" : undefined}
               data-gp-track="locale_switch"
               data-gp-from={locale}
               data-gp-to={l}
-              onClick={(e) => { e.preventDefault(); pick(l); }}
+              onClick={(e) => {
+                // a modified or non-primary click is the browser's (new tab, new window, download)
+                if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+                pick(l);
+              }}
             >
               {t(locale, K + l)}
             </a>

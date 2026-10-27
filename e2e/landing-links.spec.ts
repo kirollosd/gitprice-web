@@ -127,6 +127,8 @@ test.describe("landing behaviours (parity with the preview)", () => {
   test("resizing keeps the visitor at the same place in the same scene", async ({ page }) => {
     await page.goto("/?p=charger");
     await page.evaluate(() => scrollTo({ top: 4200, behavior: "instant" }));
+    // let the page see the scroll (its place is tracked from scroll events) before the window changes
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
     const progress = () => page.evaluate(() => {
       const el = [...document.querySelectorAll<HTMLElement>("[data-gp-section]")].find((e) => { const r = e.getBoundingClientRect(); return r.top <= 0 && r.bottom > 0; })!;
       return [el.dataset.gpSection, Math.round((-el.getBoundingClientRect().top / el.getBoundingClientRect().height) * 20) / 20];
@@ -134,8 +136,7 @@ test.describe("landing behaviours (parity with the preview)", () => {
     const start = await progress();
     for (const width of [390, 1024, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      await page.waitForTimeout(500);
-      expect(await progress()).toEqual(start);
+      await expect.poll(progress).toEqual(start);
     }
   });
 });

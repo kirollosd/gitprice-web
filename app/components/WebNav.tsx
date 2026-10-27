@@ -78,9 +78,9 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
           <ThemeToggle locale={locale} />
           {rest === "/" ? (
             <span className={styles.ctaWrap}>
-              <JoinButton locale={locale} placement="nav" className={styles.cta} />
-              {/* the hero CTA (and its tag) is hidden on phones, so the tag moves here, as a corner badge so the bar keeps its width; CSS shows exactly one */}
+              {/* the hero CTA (and its tag) is hidden on phones, so the tag moves here, as a corner badge so the bar keeps its width; CSS shows exactly one. Before the button in the DOM, as on screen */}
               <BetaTag locale={locale} className={styles.navBeta} />
+              <JoinButton locale={locale} placement="nav" className={styles.cta} />
             </span>
           ) : <NavCta locale={locale} keys="1440" className={styles.cta} />}
         </div>

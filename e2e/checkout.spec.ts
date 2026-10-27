@@ -296,13 +296,21 @@ for (const [base, loc] of LOCALES) {
 
     test("a 60 s timeout shows the waiting copy without the spinner", async ({ page }) => {
       await page.clock.install();
+      // Count the poll timers the page arms (added after the clock's own script, so it wraps the fake setTimeout).
+      await page.addInitScript(() => {
+        const w = window as unknown as { __armed: number };
+        const set = window.setTimeout;
+        w.__armed = 0;
+        window.setTimeout = ((fn: TimerHandler, ms?: number, ...a: unknown[]) => { if (ms === 2000) w.__armed++; return set(fn, ms, ...a); }) as typeof setTimeout;
+      });
       const calls = await stub(page, { returns: [ok({ status: "pending" })] });
       await page.goto(`${base}/checkout/return#rt=t&status=success`);
       await expect(spinner(page)).toHaveCount(1);
-      // Each tick is 2 s of fake time; the real pause lets the stubbed fetch resolve and schedule the next poll.
-      for (let i = 0; i < 40 && (await spinner(page).count()) > 0; i++) {
+      // Each tick is 2 s of fake time. Wait until the page has armed its next poll before advancing, so a slow runner
+      // cannot let the fake clock run ahead of the (real) fetch and cost polls; 30 polls fit in the 60 s cap.
+      for (let i = 0; i < 30; i++) {
+        await page.waitForFunction((n) => (window as unknown as { __armed: number }).__armed >= n, i + 1);
         await page.clock.runFor(2000);
-        await page.waitForTimeout(30);
       }
       await expect(spinner(page)).toHaveCount(0);
       await expect(h1(page, C.waiting.title)).toBeVisible();

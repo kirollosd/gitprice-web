@@ -46,6 +46,15 @@ const dock = () => document.getElementById("dock")!;
 const heroJoin = () => document.querySelector('[data-join][data-gp-placement="hero"]') as HTMLElement;
 
 describe("Dock", () => {
+  it("with motion on, the dock stays hidden until the board has landed (but opens with the form)", async () => {
+    stubMotion(false);
+    await page();
+    expect(document.getElementById("num")!.hasAttribute("data-landed")).toBe(false);
+    expect(dock().classList.contains("in")).toBe(false);
+    act(() => { fireEvent.click(heroJoin()); });
+    expect(dock().classList.contains("in")).toBe(true);
+  });
+
   it("a hero Join the waitlist focuses the dock's email field and hides the scroll cue", async () => {
     await page();
     act(() => { fireEvent.click(heroJoin()); });

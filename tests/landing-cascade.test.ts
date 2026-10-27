@@ -67,9 +67,9 @@ describe("Arabic type parity with the mock", () => {
   it("the footer word beats .mono's weight", () => {
     expect(readFileSync("app/landing/Foot.module.css", "utf8")).toMatch(/^\.foot \.word \{[^}]*font-weight: 300/m);
   });
-  it("the phone header Beta tag renders at 12px after the landing zoom", () => {
+  it("the phone header Beta tag renders at the 13px caption floor after the landing zoom", () => {
     const nav = readFileSync("app/components/WebNav.module.css", "utf8");
     expect(nav).not.toMatch(/\.navBeta \{[^}]*font-size: 10px/);
-    expect(nav).toMatch(/\.navBeta \{[^}]*font-size: max\(12px, calc\(12px \/ var\(--z, 1\)\)\)/);
+    expect(nav).toMatch(/\.navBeta \{[^}]*font-size: max\(13px, calc\(13px \/ var\(--z, 1\)\)\)/);
   });
 });

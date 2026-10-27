@@ -145,7 +145,16 @@ export default function Dock({ locale }: { locale: Locale }) {
       document.querySelector("header")?.removeAttribute("data-dk");
       document.querySelector("header")?.removeAttribute("data-solid");
     };
-  }, [home]);
+  }, [home, pathname]);
+
+  // the footers reserve this much page end (--gp-dock-h), so the dock never covers the last row however tall it wraps
+  useEffect(() => {
+    const el = ref.current, root = document.documentElement.style;
+    if (!el || typeof ResizeObserver !== "function") return;
+    const ro = new ResizeObserver(() => root.setProperty("--gp-dock-h", `${el.offsetHeight}px`));
+    ro.observe(el);
+    return () => { ro.disconnect(); root.removeProperty("--gp-dock-h"); };
+  }, []);
 
   // the form takes focus as it opens
   useEffect(() => {

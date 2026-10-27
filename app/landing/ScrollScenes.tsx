@@ -85,6 +85,9 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
     const onScroll = () => { cue?.classList.remove("on"); clearTimeout(cueT); cueT = setTimeout(cueCheck, CUE_STOP_MS); };
     addEventListener("scroll", onScroll, { passive: true });
     const cueFirst = setTimeout(cueCheck, CUE_FIRST_MS);
+    // a notice (cookie, locale) opening or closing changes what covers the cue: check again once it has settled
+    const stack = new MutationObserver(() => { clearTimeout(cueT); cueT = setTimeout(cueCheck, CUE_FIRST_MS); });
+    stack.observe(document.documentElement, { attributes: true, attributeFilter: ["data-gp-stack"] });
 
     // drag rail: pointer drag on top of native scroll-snap, with a "Drag" cursor that follows the pointer (desktop)
     const tr = document.getElementById("track"), dc = document.getElementById("dragc");
@@ -115,6 +118,7 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
       WAKE_ON.forEach((e) => removeEventListener(e, wake));
       removeEventListener("resize", refit);
       removeEventListener("scroll", onScroll);
+      stack.disconnect();
       fonts?.removeEventListener("loadingdone", refit);
       tr?.removeEventListener("pointerenter", enter);
       tr?.removeEventListener("pointerleave", leave);

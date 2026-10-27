@@ -72,4 +72,28 @@ describe("LangMenu", () => {
     act(() => { fireEvent.pointerDown(screen.getByText("elsewhere")); });
     expect(list.hidden).toBe(true);
   });
+
+  it("a modified click is left to the browser, and the links keep ?p= and the hash", async () => {
+    window.history.replaceState(null, "", "/sellers?p=iphone#how");
+    const { btn, list } = await menu();
+    act(() => { fireEvent.click(btn); });
+    const ar = list.querySelector<HTMLAnchorElement>('[lang="ar"]')!;
+    expect(ar.getAttribute("href")).toBe("/ar/sellers?p=iphone#how");
+    const ctrl = new MouseEvent("click", { bubbles: true, cancelable: true, ctrlKey: true });
+    act(() => { ar.dispatchEvent(ctrl); });
+    expect(ctrl.defaultPrevented).toBe(false);
+    expect(push).not.toHaveBeenCalled();
+    act(() => { fireEvent.click(ar); });
+    expect(push).toHaveBeenCalledWith("/ar/sellers?p=iphone#how");
+    window.history.replaceState(null, "", "/");
+  });
+
+  it("after the locale change remounts the menu, focus returns to its button", async () => {
+    const { btn, list } = await menu();
+    act(() => { fireEvent.click(btn); });
+    act(() => { fireEvent.click(list.querySelector('[lang="ar"]')!); });
+    cleanup();
+    const again = await menu("ar");
+    expect(document.activeElement).toBe(again.btn);
+  });
 });

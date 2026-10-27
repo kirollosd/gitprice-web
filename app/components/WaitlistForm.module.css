@@ -78,7 +78,7 @@
 .dock .field { flex: 1; min-inline-size: 0; }
 .dock .label { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .dock .input {
-  block-size: 46px; padding-inline: 18px; border: 1.5px solid color-mix(in srgb, var(--on-dock) 35%, transparent);
+  block-size: 46px; padding-inline: 18px; border: 1.5px solid color-mix(in srgb, var(--on-dock) 55%, transparent);
   border-radius: 999px; background: none; color: var(--on-dock); font: 400 16px / 1.2 inherit; font-family: inherit;
 }
 .dock .input::placeholder { color: color-mix(in srgb, var(--on-dock) 65%, transparent); }

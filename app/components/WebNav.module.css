@@ -64,8 +64,8 @@
 
 /* the hero CTA and its tag are hidden on phones (html.lp-m), so the header carries the tag there, seated beside the CTA */
 .ctaWrap { display: inline-flex; align-items: center; gap: 6px; }
-.site .navBeta { display: none; order: -1; }
-:global(html.lp-m) .site .navBeta { display: inline-flex; padding-block: 0; font-size: max(12px, calc(12px / var(--z, 1))); } /* 12 rendered px: the landing header is zoomed by --z */
+.site .navBeta { display: none; }
+:global(html.lp-m) .site .navBeta { display: inline-flex; padding-block: 0; font-size: max(13px, calc(13px / var(--z, 1))); } /* 13 rendered px, the caption floor: the landing header is zoomed by --z */
 
 /* phones */
 @media (max-width: 767px) {

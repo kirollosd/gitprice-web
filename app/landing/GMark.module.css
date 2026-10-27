@@ -8,7 +8,7 @@
 .gx[data-g="ne"] .slash { stroke-dasharray: 260 0; opacity: 1; }
 .gx[data-g="none"] svg { opacity: .4; }
 .gx[data-g="chk"] .ring { stroke-dasharray: 337 112; animation: g-orbit 1s linear infinite; }
-.gx[data-g="idle"] .ring { animation: g-idle 6s linear infinite; }
+.gx[data-g="idle"] .ring { animation: g-idle 6s linear 3; /* three loops, then still (SC 2.2.2) */ }
 @keyframes g-orbit { to { stroke-dashoffset: -449; } }
 @keyframes g-idle {
   0%, 80% { stroke-dasharray: 449 0; stroke-dashoffset: 0; }
