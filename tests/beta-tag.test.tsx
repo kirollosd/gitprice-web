@@ -46,3 +46,23 @@ describe("StoreBadges (phase 1: extension only)", () => {
     expect(document.querySelector('[data-gp-store="app_store"], [data-gp-store="play"]')).toBeNull();
   });
 });
+
+describe("Beta tag in the landing header (phones)", () => {
+  for (const locale of ["en", "ar"] as const) {
+    it(`${locale}: sits right after the header Join button and shows only where the hero CTA is hidden (html.lp-m)`, async () => {
+      vi.doMock("../lib/env", () => ({ env: { launch: false, apiBaseUrl: "http://x", chromeStoreUrl: "https://c.test", sellersNav: false } }));
+      vi.doMock("../app/landing/LangMenu", () => ({ default: () => null }));
+      const { default: WebNav } = await import("../app/components/WebNav");
+      const { JoinProvider } = await import("../app/landing/Dock");
+      render(<JoinProvider><WebNav locale={locale} variant="landing" /></JoinProvider>);
+      const join = document.querySelector<HTMLElement>('header [data-join][data-gp-placement="nav"]')!;
+      const tag = join.nextElementSibling as HTMLElement;
+      expect(tag.hasAttribute("data-beta")).toBe(true);
+      expect(tag.textContent).toBe(label(locale));
+      const fs = await vi.importActual<typeof import("node:fs")>("node:fs");
+      const css = fs.readFileSync("app/components/WebNav.module.css", "utf8");
+      expect(css).toMatch(/\.navBeta \{ display: none/);
+      expect(css).toMatch(/html\.lp-m\) [^{]*\.navBeta \{ display: inline-flex/);
+    });
+  }
+});

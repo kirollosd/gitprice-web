@@ -27,6 +27,7 @@ afterEach(() => {
   vi.doUnmock("../lib/env");
   vi.resetModules();
   delete document.documentElement.dataset.gpJoin;
+  history.replaceState(null, "", "/");
 });
 
 /** The layout's order: provider around everything, the page in <main>, the dock after it. */
@@ -53,6 +54,37 @@ describe("Dock", () => {
     expect(document.activeElement).toBe(input);
     expect(dock().classList.contains("in")).toBe(true);
     expect(document.documentElement.dataset.gpJoin).toBe("open");
+  });
+
+  it("the Beta tag stays in the dock while its form is open", async () => {
+    await page();
+    expect(dock().querySelector("[data-beta]")).toBeTruthy();
+    act(() => { fireEvent.click(heroJoin()); });
+    expect(dock().querySelector('input[type="email"]')).toBeTruthy();
+    expect(dock().querySelectorAll("[data-beta]")).toHaveLength(1);
+  });
+
+  it("a #join hash opens the form with the email field focused, then clears the hash", async () => {
+    location.hash = "#join";
+    await page();
+    const input = dock().querySelector('input[type="email"]');
+    expect(input).toBeTruthy();
+    expect(document.activeElement).toBe(input);
+    expect(location.hash).toBe("");
+  });
+
+  it("a #join hashchange on the landing opens the form too", async () => {
+    await page();
+    expect(dock().querySelector('input[type="email"]')).toBeNull();
+    act(() => { location.hash = "#join"; dispatchEvent(new HashChangeEvent("hashchange")); });
+    expect(document.activeElement).toBe(dock().querySelector('input[type="email"]'));
+  });
+
+  it("launch: #join opens nothing", async () => {
+    location.hash = "#join";
+    await page(true);
+    expect(dock().querySelector('input[type="email"]')).toBeNull();
+    history.replaceState(null, "", "/");
   });
 
   it("Escape closes the form and returns focus to the button that opened it", async () => {

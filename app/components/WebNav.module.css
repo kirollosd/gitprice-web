@@ -46,6 +46,13 @@
 .cta:hover { text-decoration: none; }
 .site[data-dk] .cta { background: var(--gp-web-on-dark); color: var(--gp-web-dark); }
 
+/* the hero CTA and its tag are hidden on phones (html.lp-m), so the header carries the tag there */
+.ctaWrap { position: relative; display: inline-flex; }
+.site .navBeta { display: none; }
+/* a corner badge: no width taken from the bar (the launched Arabic CTA already fills it at 390) */
+:global(html.lp-m) .site .navBeta { display: inline-flex; position: absolute; inset-block-start: -7px; inset-inline-end: -3px; padding-block: 0; font-size: 10px; background: var(--gp-web-ground); pointer-events: none; }
+:global(html.lp-m) .site[data-dk] .navBeta { background: var(--gp-web-dark); }
+
 /* phones */
 @media (max-width: 767px) {
   .site .bar { padding-inline: 20px; }

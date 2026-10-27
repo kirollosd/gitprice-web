@@ -25,7 +25,7 @@ export function ctaFor(locale: Locale, keys: string, onSellers: boolean): { href
   }
   return {
     ctaId: "join_waitlist",
-    href: onSellers ? "#waitlist" : `${pathFor(locale, "/")}#foot`,
+    href: onSellers ? "#waitlist" : `${pathFor(locale, "/")}#join`,
     label: t(locale, `${N}${keys}.cta.label`),
   };
 }

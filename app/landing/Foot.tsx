@@ -17,6 +17,8 @@ export default function Foot({ locale, product: P }: { locale: Locale; product: 
   const [word] = splitMoney(useMoney()(P.best.price, 2));
   return (
     <section id="foot" className={s.foot} data-gp-section="foot">
+      {/* no-JS landing spot for /#join links; with JS the Dock opens its form instead */}
+      <span id="join" />
       <div className={s.cta}>
         <div className={b.kick}>{t(locale, K + "eyebrow")}</div>
         <h2 className={b.big} dangerouslySetInnerHTML={html(locale, K + "title")} />

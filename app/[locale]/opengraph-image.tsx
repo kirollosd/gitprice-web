@@ -14,8 +14,8 @@ export const dynamic = "force-static";
 export const generateStaticParams = () => [{ locale: "en" }, { locale: "ar" }];
 
 const root = process.cwd();
-// Satori reads woff but not woff2, so the font comes from the @fontsource package public/fonts was copied from (Outfit, as on the landing hero).
-const outfit500 = () => readFileSync(join(root, "node_modules/@fontsource/outfit/files/outfit-latin-500-normal.woff"));
+// Weight 400, as on the hero h1. Satori reads woff but not woff2, so the font comes from the @fontsource package public/fonts was copied from (Outfit, as on the landing hero).
+const outfit400 = () => readFileSync(join(root, "node_modules/@fontsource/outfit/files/outfit-latin-400-normal.woff"));
 const wordmark = () => "data:image/svg+xml;base64," + Buffer.from(readFileSync(join(root, "public/logo_wordmark.svg"), "utf8").replaceAll("#2D415E", tokenColor("web-logo"))).toString("base64");
 
 /**
@@ -46,11 +46,11 @@ export default async function OpengraphImage({ params }: { params: Promise<{ loc
         }}
       >
         <img src={wordmark()} width={278} height={80} alt="" />
-        <div style={{ display: "flex", color: tokenColor("web-ink"), fontSize: 72, fontWeight: 500, lineHeight: 1.15, maxWidth: 1040 }}>
+        <div style={{ display: "flex", color: tokenColor("web-ink"), fontSize: 72, fontWeight: 400, lineHeight: 1.15, maxWidth: 1040 }}>
           {t("en", "web.landing.hero.headline")}
         </div>
       </div>
     ),
-    { ...size, fonts: [{ name: "Outfit", data: outfit500(), weight: 500 }] },
+    { ...size, fonts: [{ name: "Outfit", data: outfit400(), weight: 400 }] },
   );
 }

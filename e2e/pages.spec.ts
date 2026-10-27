@@ -44,7 +44,7 @@ test("prelaunch pricing CTAs go to the waitlist", async ({ page }) => {
   await page.goto("/ar/pricing");
   // The plan CTAs; the sellers row links to the sellers page (Pricing/no-prices board).
   const hrefs = await page.locator("main article a").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
-  expect(hrefs).toEqual(["/ar#foot", "/ar#foot"]);
+  expect(hrefs).toEqual(["/ar#join", "/ar#join"]);
   await expect(page.locator("main aside a")).toHaveAttribute("href", "/ar/sellers");
 });
 
@@ -69,12 +69,12 @@ test("non-Home pages keep the generated share image", async ({ page, request }) 
   }
 });
 
-for (const [name, label] of [["How it works", /how it works/i], ["Features", /features/i]] as const) {
-  test(`/sellers header "${name}" lands on a landing section`, async ({ page }) => {
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/sellers");
-    await page.locator("header nav").getByRole("link", { name: label }).click();
-    await expect(page).toHaveURL(/\/#how$/);
-    await expect(page.locator("#how")).toBeInViewport();
-  });
-}
+test(`/sellers header "How it works" lands on a landing section, and there is no separate Features item`, async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/sellers");
+  const nav = page.locator("header nav");
+  await expect(nav.getByRole("link", { name: /features/i })).toHaveCount(0);
+  await nav.getByRole("link", { name: /how it works/i }).click();
+  await expect(page).toHaveURL(/\/#how$/);
+  await expect(page.locator("#how")).toBeInViewport();
+});

@@ -90,7 +90,8 @@ function read(): { msg: Msg; from: number; best: number } {
  * it flips light (`dk`), and it flips the header too.
  */
 export default function Dock({ locale }: { locale: Locale }) {
-  const home = localeFromPath(usePathname() ?? "/").rest === "/";
+  const pathname = usePathname();
+  const home = localeFromPath(pathname ?? "/").rest === "/";
   const { isOpen, joined, open, close, join } = useContext(JoinCtx);
   const [seen, setSeen] = useState({ cta: true, foot: false });
   const [view, setView] = useState<{ msg: Msg; from: number; best: number; dk: boolean; aside: boolean }>({ msg: null, from: 0, best: 0, dk: false, aside: false });
@@ -140,6 +141,19 @@ export default function Dock({ locale }: { locale: Locale }) {
     };
   }, [home]);
 
+  // /#join (the header CTA on other pages) opens the form; without JS the link still lands on #foot's anchor (Foot)
+  useEffect(() => {
+    if (!home || env.launch) return;
+    const go = () => {
+      if (location.hash !== "#join") return;
+      history.replaceState(null, "", location.pathname + location.search);
+      open(null);
+    };
+    go();
+    addEventListener("hashchange", go);
+    return () => removeEventListener("hashchange", go);
+  }, [home, open, pathname]);
+
   // the form takes focus as it opens
   useEffect(() => {
     if (isOpen) ref.current?.querySelector<HTMLInputElement>('input[type="email"]')?.focus({ preventScroll: true });
@@ -159,7 +173,7 @@ export default function Dock({ locale }: { locale: Locale }) {
     <div ref={ref} className={cls} id="dock" onKeyDown={(e) => { if (e.key === "Escape" && isOpen) close(); }}>
       <GMark className={s.eq} state="idle" label="" />
       {!isOpen && <span className={s.t} id="dt" tabIndex={joined ? -1 : undefined} aria-live={joined ? "polite" : undefined} dangerouslySetInnerHTML={{ __html: line }} />}
-      {!isOpen && <BetaTag locale={locale} />}
+      <BetaTag locale={locale} />
       {env.launch ? (
         <StoreBadges locale={locale} placement="dock" />
       ) : isOpen ? (

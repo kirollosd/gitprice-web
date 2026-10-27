@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PricingPage({ params }: Props) {
   const { locale } = await params;
   // Checkout starts in the apps: launched sends people to the stores, prelaunch to the waitlist.
-  const waitlist = `${pathFor(locale, "/")}#foot`;
+  const waitlist = `${pathFor(locale, "/")}#join`;
   const cta = (label: string, primary: boolean) => (
     <Link href={env.launch ? env.chromeStoreUrl! : waitlist} className={primary ? styles.btnPrimary : styles.btn}>{label}</Link>
   );

@@ -92,7 +92,6 @@ export default function WebMenu({ locale }: { locale: Locale }) {
           {/* Unlabelled on purpose: the header nav already owns "Main navigation" at 768-1023. */}
           <nav>
           <ul className={styles.list} role="list">
-            <li><Link href={`${home}#how`} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id="features" data-gp-placement="menu">{t(locale, `${N}${keys}.label.features`)}</Link></li>
             <li><Link href={`${home}#how`} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id="how_it_works" data-gp-placement="menu">{t(locale, `${N}${keys}.label.howItWorks`)}</Link></li>
             {env.sellersNav && <li><Link href={sellers.href} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id={sellers.ctaId} data-gp-placement="menu">{sellers.label}</Link></li>}
             <li><LanguageSwitch locale={locale} icon /></li>

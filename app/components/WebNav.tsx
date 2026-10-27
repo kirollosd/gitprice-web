@@ -8,6 +8,7 @@ import { JoinButton } from "../landing/Dock";
 import LangMenu from "../landing/LangMenu";
 import Wordmark from "../landing/Wordmark";
 import LanguageSwitch from "./LanguageSwitch";
+import BetaTag from "./BetaTag";
 import Logo from "./Logo";
 import { NavCta, NavSellers } from "./NavLinks";
 import ThemeToggle from "./ThemeToggle";
@@ -47,7 +48,6 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
         <div className={`${styles.bar} container`}>
           <Logo locale={locale} />
           <nav aria-label={t(locale, N + "a11y.label.primary")} className={site.links}>
-            <Link href={`${home}#how`} className={`${site.link} ${site.wide}`} data-gp-track="cta_click" data-gp-cta-id="features" data-gp-placement="nav">{t(locale, N + "1024.label.features")}</Link>
             <Link href={`${home}#how`} className={`${site.link} ${site.wide}`} data-gp-track="cta_click" data-gp-cta-id="how_it_works" data-gp-placement="nav">{t(locale, N + "1024.label.howItWorks")}</Link>
             <NavSellers locale={locale} keys="1024" className={`${site.link} ${site.sellers} ${site.l1024}`} />
             <NavSellers locale={locale} keys="1440" className={`${site.link} ${site.sellers} ${site.l1440}`} />
@@ -76,7 +76,13 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
         <div className={styles.actions}>
           <LangMenu locale={locale} />
           <ThemeToggle locale={locale} />
-          {rest === "/" ? <JoinButton locale={locale} placement="nav" className={styles.cta} /> : <NavCta locale={locale} keys="1440" className={styles.cta} />}
+          {rest === "/" ? (
+            <span className={styles.ctaWrap}>
+              <JoinButton locale={locale} placement="nav" className={styles.cta} />
+              {/* the hero CTA (and its tag) is hidden on phones, so the tag moves here, as a corner badge so the bar keeps its width; CSS shows exactly one */}
+              <BetaTag locale={locale} className={styles.navBeta} />
+            </span>
+          ) : <NavCta locale={locale} keys="1440" className={styles.cta} />}
         </div>
       </div>
     </header>
