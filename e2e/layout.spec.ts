@@ -36,3 +36,19 @@ for (const width of [1024, 768]) {
     }
   });
 }
+
+// the dock's phone rules key on the viewport, not the landing's html.lp-m, so site pages fit too (open form included)
+for (const w of [360, 390]) {
+  for (const path of ["/privacy", "/ar/pricing"]) {
+    test(`the dock fits the ${w}px viewport on ${path}, closed and open`, async ({ page }) => {
+      await page.setViewportSize({ width: w, height: 800 });
+      await page.goto(path);
+      const fits = () => page.locator("#dock").evaluate((d, vw) => { const r = d.getBoundingClientRect(); return r.left >= 0 && r.right <= vw; }, w);
+      await expect(page.locator("#dock")).toHaveClass(/\bin\b/);
+      expect(await fits()).toBe(true);
+      await page.locator("#dgo").click();
+      await expect(page.locator('#dock input[type="email"]')).toBeVisible();
+      expect(await fits()).toBe(true);
+    });
+  }
+}
