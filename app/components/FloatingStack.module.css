@@ -1,0 +1,20 @@
+.stack {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gp-sp-3);
+  padding: var(--gp-sp-4);
+  max-block-size: calc(100dvh - var(--gp-sp-16));
+  overflow-y: auto;
+  pointer-events: none;
+}
+.stack > * { pointer-events: auto; }
+/* Empty until a notice mounts: a padded empty box would grow upward when the notice appears, which counts as a layout shift. */
+.stack:empty { display: none; }
+/* The landing's dock stays put; while it shows, the stack rises above it (the dock's height is --gp-dock-h, its offset from the bottom 32px, less the stack's own padding). */
+.stack { transition: inset-block-end .25s ease; }
+:global(html:has(#dock.in)) .stack { inset-block-end: calc(var(--gp-dock-h, 0px) + 28px); }
+@media (prefers-reduced-motion: reduce) { .stack { transition: none; } }

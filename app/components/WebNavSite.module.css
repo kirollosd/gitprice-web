@@ -1,0 +1,12 @@
+/* The header of every page except the landing reuses the landing bar (WebNav.module.css .top/.page); this adds the phone menu sheet and the label-width sets. */
+/* Which label set shows where: <768 none, 768-1279 the short pill, 1280+ the bar's own links. */
+.wide, .l768 { display: none; }
+@media (max-width: 767px) { .hideSmall { display: none; } }
+@media (min-width: 768px) and (max-width: 1279px) { .l768 { display: inline-flex; } }
+@media (min-width: 1280px) { .wide { display: inline; } }
+/* While the menu sheet is open the bar shows only the logo and the close button (Menu/open boards). */
+.hdr:has(button[aria-controls="web-menu"][aria-expanded="true"]) > div > nav,
+.hdr:has(button[aria-controls="web-menu"][aria-expanded="true"]) .hideSmall { visibility: hidden; }
+/* The sheet starts under the bar (WebMenu --nav-h): with it open the bar is a fixed 14 + 44 + 14 = 72px at every width, whatever the scroll state. */
+.hdr { --nav-h: 72px; }
+.hdr:has(button[aria-controls="web-menu"][aria-expanded="true"]) > div { padding-block: 14px; }

@@ -1,0 +1,83 @@
+import { t, type Locale } from "../../lib/i18n";
+import styles from "./BoardArt.module.css";
+
+/*
+ * The product mockups the Home and Sellers boards draw (visual/* layers), rebuilt in HTML/CSS.
+ * Worded strings come only from web.*.visual.* keys; a board string without a key is left out.
+ * Every block is decorative (aria-hidden): the page text says the same thing.
+ */
+const V = "web.home.visual.";
+
+/** Check mark (Toast/success, Milestone, Exact match): a jade tick. */
+function Tick({ small }: { small?: boolean }) {
+  return (
+    <svg className={small ? styles.tickSmall : styles.tick} viewBox="0 0 12 8" width="12" height="8" fill="none">
+      <path d="M1 4l3 3 7-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/** Sellers hero: three rival cards (visual/rival/*). */
+export function RivalsArt({ locale }: { locale: Locale }) {
+  const S = "web.sellers.visual.rival.";
+  // The board's "Store A · Store C" line: the two keyed store names, joined.
+  const stores = `${t(locale, V + "pricerowcompact.store")} · ${t(locale, V + "pricerowcompact.store3")}`;
+  return (
+    <div className={styles.card} aria-hidden="true" data-art="rivals">
+      <ul className={styles.rivals} role="list">
+        {[1, 2, 3].map((n) => (
+          <li key={n} className={styles.rival}>
+            <span className={styles.between}>
+              <span className={styles.rivalName}>{t(locale, `${S}${n}.name`)}</span>
+              <span className={styles.caption}>{t(locale, S + "pinned")}</span>
+            </span>
+            <span className={styles.rivalStores}>{stores}</span>
+            <span className={styles.rivalCount}><span className={styles.mark} />{t(locale, `${S}${n}.count`)}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/** The GitPrice mark (logo_icon.svg's paths), drawn in ink as the ToolbarIcon and Badge symbols draw it. */
+function Mark() {
+  return (
+    <svg className={styles.mark16} viewBox="593 360 210 304" width="11" height="16">
+      <path fill="currentColor" d="M694.982 564.096C638.749 564.096 593 518.316 593 462.045C593 405.778 638.749 360 694.982 360C751.218 360 796.964 405.778 796.964 462.045C796.964 518.316 751.218 564.096 694.982 564.096ZM694.982 421.117C672.428 421.117 654.078 439.478 654.078 462.045C654.078 484.614 672.428 502.978 694.982 502.978C717.537 502.978 735.89 484.614 735.89 462.045C735.89 439.478 717.537 421.117 694.982 421.117Z" />
+      <path fill="currentColor" d="M694.983 360H802.541V421.116H694.983V360Z" />
+      <path fill="currentColor" d="M694.983 663.053C669.893 663.053 645.402 658.475 622.194 649.445L644.329 592.486C676.573 605.029 713.392 605.029 745.624 592.492L767.755 649.451C744.553 658.48 720.068 663.053 694.983 663.053Z" />
+    </svg>
+  );
+}
+
+/** Welcome step 1: Chrome's puzzle piece, the pin, and the toolbar icon with its check pill (WebIcon/puzzle, WebIcon/pin, ToolbarIcon/cheapest). */
+export function PinStepArt() {
+  return (
+    <div className={styles.welcomeIcons} aria-hidden="true" data-art="welcome-pin">
+      <svg className={styles.puzzle} viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinejoin="round">
+        <path d="M10 3.5a2 2 0 1 1 4 0V6h4v4h-1.5a2 2 0 1 0 0 4H18v4h-4v-1.5a2 2 0 1 0-4 0V18H6v-4h1.5a2 2 0 1 0 0-4H6V6h4z" />
+      </svg>
+      <svg className={styles.pin} viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 17v5M8 3h8l-1 6 3 3v2H6v-2l3-3z" />
+      </svg>
+      <span className={styles.toolbarIcon}>
+        <Mark />
+        <span className={styles.toolbarCheck}><Tick small /></span>
+      </span>
+    </div>
+  );
+}
+
+/** Welcome step 2: the on-page badge (Badge/ready). Its line is the receipt's "23,749 on Store B" clause plus the row's saving. */
+export function BadgeStepArt({ locale }: { locale: Locale }) {
+  // receipt.detail is "<price> on <store> · <price> here" in both locales; the badge shows its first clause.
+  // split() returns the whole string when the separator is missing, so a reworded key degrades to the full detail line.
+  const [offer] = t(locale, V + "receipt.detail").split(" · ");
+  return (
+    <span className={styles.readyBadge} aria-hidden="true" data-art="welcome-badge">
+      <Mark />
+      <span>{offer} · {t(locale, V + "pricerowcompact.saving")}</span>
+    </span>
+  );
+}

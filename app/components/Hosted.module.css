@@ -1,0 +1,53 @@
+/* Shared look of the hosted pages (reset password, checkout): a grey band with one white card, as on the boards. */
+.band { background: var(--gp-surface-raised); padding-block: calc(var(--gp-sp-16) + var(--gp-sp-8)); }
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gp-sp-6);
+  inline-size: 100%;
+  max-inline-size: 480px;
+  margin-inline: auto;
+  min-inline-size: 0;
+  padding: var(--gp-sp-10);
+  background: var(--gp-surface);
+  border: 1px solid var(--gp-hairline);
+  border-radius: var(--gp-r-lg);
+}
+.head { display: flex; flex-direction: column; gap: var(--gp-sp-3); }
+.icon { color: var(--gp-ink); line-height: 0; margin-block-end: var(--gp-sp-3); }
+.iconOk { color: var(--gp-accent); }
+.iconBad { color: var(--gp-danger); }
+.h1 { font-size: var(--web-fs-title); line-height: var(--gp-lh-tight); overflow-wrap: anywhere; }
+.muted { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-body); overflow-wrap: anywhere; }
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--gp-target);
+  padding-inline: var(--gp-sp-6);
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.button:hover { text-decoration: none; }
+.button:focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
+.button:disabled { opacity: 0.6; cursor: not-allowed; }
+.spinner {
+  inline-size: var(--gp-sp-8);
+  block-size: var(--gp-sp-8);
+  margin-block-end: var(--gp-sp-3);
+  border: 2px solid var(--gp-hairline);
+  border-block-start-color: var(--gp-accent);
+  border-radius: var(--gp-r-pill);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+@media (max-width: 767px) {
+  .band { padding-block: var(--gp-sp-12); }
+  .card { padding: var(--gp-sp-6); }
+}

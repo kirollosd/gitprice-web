@@ -1,0 +1,21 @@
+/* Always dark, in both themes (owner ruling), like the landing's "Pay the smaller price" band: the Coral web dark tokens.
+   The app tokens the content uses (ink, muted, hairline, focus, logo mask) are re-pointed here. */
+.footer {
+  --gp-ink: var(--gp-web-on-dark);
+  --gp-ink-muted: var(--gp-web-on-dark-mute);
+  --gp-hairline: var(--gp-web-dark-line);
+  --gp-focus: var(--gp-web-on-dark);
+  --gp-web-logo: var(--gp-web-on-dark);
+  background: var(--gp-web-dark); color: var(--gp-web-on-dark);
+  margin-block-start: calc(var(--gp-sp-16) + var(--gp-sp-8));
+  /* the fixed dock (its real height + 32px offset) and the notice stack sit over the page end: keep the last row, and focus on it, clear of them */
+  padding-block-end: calc(max(7rem, var(--gp-dock-h, 0px) + 3rem) + var(--gp-stack-h, 0px));
+}
+.inner { display: flex; flex-direction: column; align-items: flex-start; gap: var(--gp-sp-3); border-block-start: 1px solid var(--gp-hairline); padding-block: var(--gp-sp-8); }
+.brand { display: flex; flex-direction: column; align-items: flex-start; gap: var(--gp-sp-2); }
+.tagline, .copy { color: var(--gp-ink-muted); font-size: var(--gp-fs-body-compact); }
+.links { list-style: none; display: flex; flex-wrap: wrap; align-items: center; }
+.links li { display: flex; }
+.link { display: inline-flex; align-items: center; min-block-size: var(--gp-target); min-inline-size: 104px; color: var(--gp-ink); font-size: var(--gp-fs-body); background: none; border: 0; padding: 0; font-family: inherit; cursor: pointer; }
+.legal { display: flex; flex-wrap: wrap; align-items: center; gap: var(--gp-sp-6); }
+.cookie { background: none; border: 0; padding: 0; font-family: inherit; cursor: pointer; color: var(--gp-ink-muted); font-size: var(--gp-fs-body-compact); text-decoration: underline; }

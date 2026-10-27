@@ -1,0 +1,93 @@
+/* WebWaitlistForm (Web.sketch, light/dark × ltr/rtl): 400 wide, stacked so it fits 358.
+   Input 72 (label row 24 + field 48), 12, button 44, 12, note / failed line. Error puts its message 8 under the field.
+   Joined: 44 tile, 16, title, 4, body. Colours, radii and type are tokens, so dark mode and RTL follow the page. */
+.form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gp-sp-3);
+  inline-size: 100%;
+  max-inline-size: 25rem;
+  text-align: start;
+}
+
+.field { display: flex; flex-direction: column; }
+/* Caption on a 24 row: the field starts 24 below the label top in both scripts (en text 18, ar 21). */
+.label { min-block-size: var(--gp-sp-6); color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); }
+.input {
+  inline-size: 100%;
+  block-size: var(--gp-sp-12);
+  padding-inline: var(--gp-sp-4);
+  border: 1px solid var(--gp-hairline-strong);
+  border-radius: var(--gp-r-md);
+  background: var(--gp-surface);
+  color: var(--gp-ink);
+  font: var(--gp-fw-body) var(--gp-fs-body) / var(--web-lh-text) var(--gp-font);
+}
+.input::placeholder { color: var(--gp-ink-muted); opacity: 1; }
+/* The field stays LTR in Arabic; only its placeholder sits at the page's start edge, as on the rtl boards. */
+[dir="rtl"] .input:placeholder-shown { text-align: right; }
+.input:focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
+/* Input/email-error: a 2px danger edge; the text keeps its 16 inset. */
+.input[aria-invalid="true"] { border-width: 2px; border-color: var(--gp-danger); padding-inline: calc(var(--gp-sp-4) - 1px); }
+.error { margin-block-start: var(--gp-sp-2); color: var(--gp-danger); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); }
+
+/* Button/primary-block: a full-width ink pill. The busy state keeps the board's full ink fill. */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  min-block-size: var(--gp-target);
+  padding-inline: var(--gp-sp-3);
+  border: 0;
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+  font: var(--gp-fw-headline) var(--gp-fs-headline) / var(--web-lh-text) var(--gp-font);
+  cursor: pointer;
+}
+.button:focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
+.button:disabled { cursor: progress; }
+
+.note { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); }
+/* Failed line: a 20 alert icon, 8, then the callout in danger; the icon centres on the first line. */
+.failed { display: flex; align-items: flex-start; gap: var(--gp-sp-2); color: var(--gp-danger); font-size: var(--gp-fs-callout); line-height: var(--web-lh-caption); }
+.failed svg { flex: none; margin-block-start: calc((1lh - 20px) / 2); }
+
+/* Visually hidden honeypot, out of the tab order and the accessibility tree. */
+.trap { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.tile {
+  display: grid;
+  place-items: center;
+  inline-size: var(--gp-target);
+  block-size: var(--gp-target);
+  border-radius: var(--gp-r-md);
+  background: var(--gp-surface-raised);
+  color: var(--gp-ink);
+}
+.done { display: flex; flex-direction: column; gap: var(--gp-sp-1); margin-block-start: var(--gp-sp-1); }
+.title { color: var(--gp-ink); font-size: var(--web-fs-body); font-weight: 600; line-height: var(--web-lh-text); }
+.title:focus-visible { outline: none; }
+.body { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-text); }
+
+/* The landing dock's one-line form (placement "dock"): field and button in a row, the label for screen readers only,
+   the note or error under them. Colours come from the dock (--dock, --on-dock, --dock-err in Dock.module.css). */
+.dock { flex-direction: row; flex-wrap: wrap; align-items: flex-start; max-inline-size: none; flex: 1; gap: var(--gp-sp-2); }
+.dock .field { flex: 1; min-inline-size: 0; }
+.dock .label { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.dock .input {
+  block-size: 46px; padding-inline: 18px; border: 1.5px solid color-mix(in srgb, var(--on-dock) 55%, transparent);
+  border-radius: 999px; background: none; color: var(--on-dock); font: 400 16px / 1.2 inherit; font-family: inherit;
+}
+.dock .input::placeholder { color: color-mix(in srgb, var(--on-dock) 65%, transparent); }
+.dock .input[aria-invalid="true"] { border-color: var(--dock-err); padding-inline: 17.5px; border-width: 1.5px; }
+.dock .input:focus-visible, .dock .button:focus-visible { outline-color: var(--ring); }
+.dock .button { inline-size: auto; min-block-size: 46px; padding-inline: 20px; background: var(--on-dock); color: var(--dock); font: 600 16px / 1.2 inherit; font-family: inherit; }
+.dock .note, .dock .error, .dock .failed { flex-basis: 100%; padding-inline: 18px; font-size: 14px; line-height: 1.4; white-space: normal; }
+.dock .note { color: color-mix(in srgb, var(--on-dock) 75%, transparent); }
+.dock .error, .dock .failed { color: var(--dock-err); }
+.dock .error { padding-inline: 18px 0; margin-block-start: 6px; }
+.dock .tile { background: var(--fill-d); color: var(--on-fill-d); }
+.dock .title, .dock .body { color: var(--on-dock); white-space: normal; }

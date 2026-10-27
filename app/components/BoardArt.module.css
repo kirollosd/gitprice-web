@@ -1,0 +1,89 @@
+/* Board art (visual/* layers), rebuilt from the app tokens: the mockups show extension UI, so they use the app type scale (--gp-fs-*).
+   Widths follow the library parts: 320 rows and cards (--gp-panel-width-popup), 340 savings hero (--gp-panel-width). */
+
+/* Off-scale measures, named once. */
+.card { --art-mark-w: 2px; /* RivalCard alert mark stroke */ }
+
+.tick { flex: none; color: var(--gp-savings); margin-block-start: var(--gp-sp-2); }
+.tickSmall { flex: none; inline-size: var(--gp-sp-2); color: var(--gp-ink); }
+
+/* text helpers for the mockups */
+.caption { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); }
+.between { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gp-sp-3); }
+
+/* ---------- feature art card (visual/card): 560x400 on the boards, so 7:5 ---------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gp-sp-3);
+  aspect-ratio: 7 / 5;
+  padding: var(--gp-sp-6) var(--gp-sp-4);
+  background: var(--gp-surface-raised);
+  border-radius: var(--gp-r-lg);
+  min-inline-size: 0;
+}
+
+/* ---------- sellers: rival cards ---------- */
+.rivals { list-style: none; display: flex; flex-direction: column; gap: var(--gp-sp-4); inline-size: 100%; max-inline-size: var(--gp-panel-width-popup); }
+.rival {
+  display: flex;
+  flex-direction: column;
+  padding: var(--gp-sp-4);
+  background: var(--gp-surface);
+  border: 1px solid var(--gp-hairline);
+  border-radius: var(--gp-r-md);
+}
+.rivalName { font-size: var(--web-fs-body); font-weight: 600; }
+.rivalStores { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); }
+.rivalCount { display: flex; align-items: center; gap: var(--gp-sp-2); margin-block-start: var(--gp-sp-2); font-size: var(--gp-fs-body); }
+/* Alert mark: a short danger bar over a dot, as drawn on RivalCard. */
+.mark {
+  flex: none;
+  inline-size: var(--art-mark-w);
+  block-size: var(--gp-sp-3);
+  background: linear-gradient(var(--gp-danger) 0 66%, transparent 66% 83%, var(--gp-danger) 83%);
+}
+
+/* ---------- Welcome step art (screen/<theme>/Welcome/default boards) ---------- */
+.mark16 { flex: none; color: var(--gp-ink); }
+.welcomeIcons { display: flex; align-items: center; gap: var(--gp-sp-3); margin-block-start: var(--gp-sp-3); }
+.puzzle { color: var(--gp-ink-muted); }
+.pin { color: var(--gp-accent); }
+.toolbarIcon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: var(--gp-sp-12);
+  block-size: var(--gp-sp-10);
+  background: var(--gp-surface-raised);
+  border-radius: var(--gp-r-sm);
+}
+.toolbarCheck {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  display: grid;
+  place-items: center;
+  inline-size: var(--gp-sp-8);
+  block-size: var(--gp-sp-4);
+  border: 2px solid var(--gp-surface-raised);
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-accent);
+}
+.toolbarCheck .tickSmall { color: var(--gp-on-accent); }
+.readyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gp-sp-2);
+  min-block-size: var(--gp-sp-8);
+  margin-block-start: var(--gp-sp-3);
+  padding-inline: var(--gp-sp-4) var(--gp-sp-3);
+  background: var(--gp-surface);
+  border: 1px solid var(--gp-hairline);
+  border-radius: var(--gp-r-pill);
+  color: var(--gp-savings);
+  font-size: var(--gp-fs-body-compact);
+  font-weight: 600;
+}

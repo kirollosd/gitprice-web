@@ -1,0 +1,47 @@
+/* 3b · alerts: drag the line, see when it would have fired */
+.alerts { padding: 150px 48px 140px; }
+.alerts h2 { font-size: 100px; margin-top: 14px; }
+.aw { display: grid; grid-template-columns: 360px 1fr; gap: 48px; margin-top: 56px; align-items: start; }
+.rules { display: flex; flex-direction: column; gap: 10px; }
+.rules button { text-align: start; border: 1.5px solid var(--gp-web-ink); background: transparent; color: var(--gp-web-ink); border-radius: 18px; padding: 16px 18px; font: 600 17px var(--f-sans); cursor: pointer; transition: background .2s, color .2s, scale .3s var(--spring); }
+.rules button small { display: block; font-weight: 400; font-size: 14px; color: var(--gp-web-mute); margin-top: 4px; }
+.rules button:global(.on) { background: var(--gp-web-ink); color: var(--gp-web-ground); }
+.rules button:global(.on) small { color: var(--gp-web-dim); }
+.rules button:active { scale: .97; }
+.chart { position: relative; background: var(--gp-web-raised); border: 1px solid var(--gp-web-line); border-radius: 28px; padding: 26px 26px 18px; touch-action: none; }
+.csvg { width: 100%; height: 380px; display: block; overflow: visible; cursor: ns-resize; }
+.hint { font-size: 14px; color: var(--gp-web-mute); margin-top: 8px; }
+.tap { display: none; }
+.toast { position: absolute; inset-inline-end: 20px; top: -34px; display: flex; gap: 14px; align-items: center; background: #fff; color: var(--gp-web-ink); border-radius: 18px; padding: 14px 18px; box-shadow: 0 24px 50px -18px rgba(34, 27, 21, .45); transition: transform .5s var(--spring), opacity .3s; width: 400px; }
+.toast:global(.pop) { transform: translateY(-8px) scale(.94); opacity: .4; }
+.eq { flex: none; width: 42px; height: 42px; border-radius: 50%; background: var(--gp-web-fill); color: var(--gp-web-on-fill); display: grid; place-items: center; font-weight: 800; font-size: 22px; }
+.toast small { font-size: 13px; color: var(--gp-web-mute); }
+.toast div div { font-size: 16px; font-weight: 600; margin-top: 2px; }
+/* threshold label Task 5 appends to #chart */
+.chart :global(.th-label) { font: 500 15px var(--f-mono); }
+
+/* the toast is a light paper surface on dark looks too */
+:global(html[data-theme="dark"]) .toast { --gp-web-ink: #0A0A0B; --gp-web-body: #3A3A40; --gp-web-mute: #6B6B73; --gp-web-dim: #B5B5BC; --gp-web-line: #E4E4E7; --gp-web-save: var(--gp-web-savel); --gp-web-acc: var(--gp-web-accl); }
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme="light"])) .toast { --gp-web-ink: #0A0A0B; --gp-web-body: #3A3A40; --gp-web-mute: #6B6B73; --gp-web-dim: #B5B5BC; --gp-web-line: #E4E4E7; --gp-web-save: var(--gp-web-savel); --gp-web-acc: var(--gp-web-accl); }
+}
+/* the chart reads left to right in Arabic too; only its hint follows the page */
+:global(html[dir="rtl"]) .chart { direction: ltr; }
+:global(html[dir="rtl"]) .hint { direction: rtl; }
+
+/* phone canvas: the chart scrolls with the page, a tap moves the line */
+:global(html.lp-m) .alerts { padding: 90px 20px 80px; }
+:global(html.lp-m) .alerts h2 { font-size: 48px; }
+:global(html.lp-m) .aw { grid-template-columns: 1fr; gap: 20px; margin-top: 28px; }
+:global(html.lp-m) .rules { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+:global(html.lp-m) .rules button { position: relative; padding: 9px 13px; font-size: max(14px, var(--fl, 0px)); border-radius: 999px; }
+:global(html.lp-m) .rules button::after { content: ""; position: absolute; inset: -8px -3px; }
+:global(html.lp-m) .rules button small { display: none; }
+:global(html.lp-m) .chart { padding: 16px 14px 12px; border-radius: 22px; margin-top: 70px; touch-action: pan-y; }
+:global(html.lp-m) .csvg { height: 240px; }
+:global(html.lp-m) .drag { display: none; }
+:global(html.lp-m) .tap { display: inline; font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .toast { inset-inline-start: 10px; inset-inline-end: 10px; width: auto; top: -62px; padding: 10px 12px; gap: 10px; }
+:global(html.lp-m) .eq { width: 32px; height: 32px; font-size: 17px; }
+:global(html.lp-m) .toast div div { font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .kick, :global(html.lp-m) .alerts small { font-size: max(14px, var(--fl, 0px)); }

@@ -1,0 +1,5 @@
+/* store marks: equal optical weight, so the triangle is drawn a little wider than the circle and the square */
+.smk { display: inline-block; width: .62em; height: .62em; margin-inline-end: .32em; background: currentColor; vertical-align: -.02em; flex: none; }
+.a { border-radius: 50%; }
+.c { width: .56em; height: .56em; }
+.b { width: .72em; height: .64em; clip-path: polygon(50% 0, 100% 100%, 0 100%); }

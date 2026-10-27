@@ -1,0 +1,8 @@
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gp-sp-2);
+  color: var(--gp-ink);
+  white-space: nowrap;
+}
+.globe { flex: none; }

@@ -1,23 +1,15 @@
 .root {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
   text-decoration: none;
 }
-
-.root:hover {
-  text-decoration: none;
-}
-
-.icon {
-  flex-shrink: 0;
-}
-
+.root:hover { text-decoration: none; }
+/* The SVG is a mask so its colour follows the theme: --gp-web-logo, which the web token blocks switch for
+   an explicit dark theme and for OS dark with no stored choice. */
 .wordmark {
-  font-family: var(--font-heading);
-  font-size: var(--text-xl);
-  font-weight: 700;
-  color: var(--color-brand-dark);
-  letter-spacing: -0.3px;
-  line-height: 1;
+  flex-shrink: 0;
+  inline-size: 77px;
+  block-size: 22px;
+  background-color: var(--gp-web-logo);
+  mask: url("/logo_wordmark.svg") center / contain no-repeat;
 }

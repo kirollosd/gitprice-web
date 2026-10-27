@@ -1,0 +1,81 @@
+/* 2 · pinned browser with swapping text; the slab grows in behind it */
+.how { height: 200vh; }
+/* first state of the scroll scene (the mock sets these in JS at progress 0) */
+.slab { position: absolute; background: var(--gp-web-slab); left: 520px; right: 40px; top: 220px; bottom: 120px; border-radius: 44px; }
+.steps { position: absolute; inset-inline-start: 56px; top: 260px; width: 430px; height: 300px; }
+.steps > div { position: absolute; inset: 0; opacity: 0; transform: translateY(24px); transition: opacity .4s, transform .5s var(--spring); }
+.steps > div:global(.on) { opacity: 1; transform: none; }
+.steps .n { font-size: 15px; }
+.steps h3 { font-weight: 300; font-size: 62px; line-height: 1; letter-spacing: -.035em; margin-top: 12px; }
+.steps p { font-size: 19px; line-height: 1.45; color: var(--gp-web-body); margin-top: 16px; }
+.prog { position: absolute; inset-inline-start: 56px; top: 600px; display: flex; gap: 8px; }
+.prog i { width: 36px; height: 4px; border-radius: 2px; background: var(--gp-web-dim); overflow: hidden; position: relative; }
+.prog i b { position: absolute; inset: 0; background: var(--gp-web-ink); transform-origin: 0 50%; transform: scaleX(0); }
+.persp { position: absolute; inset: 0; perspective: 1500px; }
+.browser {
+  position: absolute; inset-inline-start: max(520px, calc(var(--cw, 1440px) * .389)); top: 150px;
+  width: min(calc(var(--cw, 1440px) * .556), calc(var(--cw, 1440px) * .611 - 50px)); height: min(560px, calc(100vh / var(--z, 1) - 220px));
+  background: #fff; border-radius: 20px; box-shadow: 0 50px 90px -30px rgba(42, 11, 22, .35); overflow: hidden; border: 1px solid #eadfe2;
+  transform-origin: 50% 100%; transform: rotateX(26deg) scale(.92);
+}
+.bar { height: 42px; background: #F3EEEF; display: flex; align-items: center; gap: 8px; padding: 0 14px; font-size: 13px; color: #6d6264; }
+.bar i { width: 10px; height: 10px; border-radius: 50%; background: #d9cfd1; }
+.bar .u { margin-inline-start: 14px; background: #fff; border-radius: 999px; padding: 5px 14px; }
+.pdp { display: grid; grid-template-columns: 280px 1fr; gap: 30px; padding: 32px; }
+.ph { height: 280px; border-radius: 16px; background: #2b2b2e; position: relative; overflow: hidden; }
+.ph::after { content: ""; position: absolute; inset-inline-start: 30%; top: 22%; width: 40%; height: 56%; border-radius: 18px; background: #3c3c40; }
+.pdp h4 { font-size: 24px; font-weight: 600; color: #161314; }
+.pdp .pr { font-size: 32px; margin-top: 14px; color: #161314; }
+.ln { height: 10px; border-radius: 5px; background: #efe9ea; margin-top: 12px; }
+/* the price sits on the white page: its code keeps the light-theme mute */
+.browser { --cur-c: #6B6B73; }
+
+.badge { position: absolute; inset-inline-start: 342px; top: 250px; display: flex; align-items: center; gap: 10px; background: var(--gp-web-dock); color: var(--gp-web-on-dock); border-radius: 999px; padding-block: 6px; padding-inline: 6px 16px; font-size: 15px; opacity: 0; transform: scale(.6); transition: opacity .3s, transform .55s var(--spring); --cur-c: currentColor; }
+.badge:global(.on) { opacity: 1; transform: none; }
+.badge::after { content: ''; position: absolute; inset: -7px; border: 1.5px dashed var(--gp-web-fill); border-radius: 999px; }
+.badge .eq { width: 32px; height: 32px; border-radius: 50%; background: var(--gp-web-fill); color: var(--gp-web-on-fill); display: grid; place-items: center; font-weight: 800; }
+.browser .bnote { position: absolute; inset-inline-start: 342px; top: 312px; font-size: 12px; color: var(--gp-web-accl); opacity: 0; transition: opacity .4s .25s; }
+.browser .bnote:global(.on) { opacity: 1; }
+
+/* slides in over the image placeholder, so the title, price and badge stay readable */
+.panel { position: absolute; inset-inline-start: 22px; top: 62px; width: 300px; background: var(--gp-web-dark); color: var(--gp-web-on-dark); border-radius: 20px; padding: 18px 20px; transform: translateX(-360px); transition: transform .7s var(--spring); --cur-c: var(--gp-web-on-dark-mute); }
+.panel:global(.on) { transform: none; }
+.panel small { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--gp-web-on-dark-mute); }
+.r { display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid var(--gp-web-dark-line); font-size: 16px; }
+.r:first-of-type { border-top: 0; }
+.r b { font-family: var(--f-mono); font-weight: 500; font-size: 19px; white-space: nowrap; }
+.r s { color: var(--gp-web-on-dark-mute); }
+.r.w b { background: var(--gp-web-fill); color: var(--gp-web-on-fill); padding: 2px 10px; border-radius: 999px; --cur-c: currentColor; }
+.r.lk { color: var(--gp-web-on-dark-mute); }
+.r.lk em { font-style: normal; font-size: 12px; border: 1px solid currentColor; border-radius: 999px; padding: 1px 8px; margin-inline-start: 6px; white-space: nowrap; }
+
+:global(html[dir="rtl"]) .pdp h4 { unicode-bidi: plaintext; text-align: right; }
+:global(html[dir="rtl"]) .bar .u { direction: ltr; }
+:global(html[dir="rtl"]) .r.lk em { unicode-bidi: isolate; }
+:global(html[dir="rtl"]) .panel { transform: translateX(360px); }
+:global(html[dir="rtl"]) .panel:global(.on) { transform: none; }
+
+/* phone canvas */
+:global(html.lp-m) .slab { left: 12px; right: 12px; top: 360px; bottom: 24px; }
+:global(html.lp-m) .steps { inset-inline-start: 20px; top: 90px; width: 390px; height: 200px; }
+:global(html.lp-m) .steps h3 { font-size: 36px; }
+:global(html.lp-m) .steps p { font-size: 16px; margin-top: 10px; }
+:global(html.lp-m) .prog { inset-inline-start: 20px; top: 316px; }
+:global(html.lp-m) .browser { inset-inline-start: 20px; top: 340px; width: 390px; height: 430px; }
+:global(html.lp-m) .bar { height: 36px; font-size: max(11px, var(--fl, 0px)); }
+:global(html.lp-m) .bar .u { margin-inline-start: 6px; padding: 4px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .pdp { grid-template-columns: 110px 1fr; gap: 14px; padding: 16px; }
+:global(html.lp-m) .ph { height: 110px; }
+:global(html.lp-m) .pdp h4 { font-size: 15px; }
+:global(html.lp-m) .pdp .pr { font-size: 19px; margin-top: 8px; }
+:global(html.lp-m) .ln { display: none; }
+:global(html.lp-m) .badge { inset-inline-start: 140px; top: 168px; font-size: max(14px, var(--fl, 0px)); padding-block: 4px; padding-inline: 4px 12px; }
+:global(html.lp-m) .badge .eq { width: 26px; height: 26px; }
+/* ship critique: the note sat under the panel (Arabic wraps to two lines); it now grows upward from just above the badge */
+:global(html.lp-m) .browser .bnote { inset-inline-start: 140px; inset-inline-end: 12px; top: auto; bottom: calc(100% - 160px); font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .panel { inset-inline-start: 12px; inset-inline-end: 12px; top: auto; bottom: 12px; width: auto; padding: 12px 16px; transform: translateY(240px); }
+:global(html.lp-m) .panel:global(.on) { transform: none; }
+:global(html.lp-m) .r { padding: 8px 0; font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .r b { font-size: 15px; }
+:global(html.lp-m) .panel small, :global(html.lp-m) .panel em { font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .r.lk em { font-size: max(14px, var(--fl, 0px)); }

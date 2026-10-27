@@ -1,0 +1,16 @@
+/* Hosted checkout cards: the shared look lives in Hosted.module.css. */
+.band { composes: band from "./Hosted.module.css"; }
+.card { composes: card from "./Hosted.module.css"; }
+.head { composes: head from "./Hosted.module.css"; }
+.h1 { composes: h1 from "./Hosted.module.css"; }
+.muted { composes: muted from "./Hosted.module.css"; }
+.button { composes: button from "./Hosted.module.css"; }
+.button.secondary { background: var(--gp-surface-raised); color: var(--gp-ink); }
+.spinner { composes: spinner from "./Hosted.module.css"; }
+.rows { display: flex; flex-direction: column; margin: 0; border-block: 1px solid var(--gp-hairline); }
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--gp-sp-4); padding-block: var(--gp-sp-2); font-size: var(--web-fs-body); }
+.row + .row { border-block-start: 1px solid var(--gp-hairline); }
+.row dt { color: var(--gp-ink-muted); }
+.row dd { margin: 0; font-weight: 600; text-align: end; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.group { display: flex; flex-direction: column; gap: var(--gp-sp-4); }
+.note { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); line-height: var(--gp-lh); }

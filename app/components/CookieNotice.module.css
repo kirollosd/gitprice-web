@@ -1,0 +1,35 @@
+/* Sits inside FloatingStack (fixed, hidden while empty), so revealing it after mount causes no layout shift. */
+.notice {
+  pointer-events: auto;
+  inline-size: 100%;
+  max-inline-size: 400px;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gp-sp-3);
+  padding: var(--gp-sp-5);
+  background: var(--gp-surface);
+  border: 1px solid var(--gp-hairline-strong);
+  border-radius: var(--gp-r-md);
+  box-shadow: var(--gp-shadow-toast);
+  color: var(--gp-ink);
+}
+.notice:focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
+.title { font-size: var(--gp-fs-headline); font-weight: var(--gp-fw-headline); line-height: var(--gp-lh-tight); }
+.body { color: var(--gp-ink-muted); font-size: var(--gp-fs-body-compact); }
+.link { display: inline-flex; align-items: center; min-block-size: var(--gp-target); color: var(--gp-ink); text-decoration: underline; font-size: var(--gp-fs-body-compact); }
+.actions { display: flex; gap: var(--gp-sp-3); }
+.button {
+  flex: 1;
+  min-block-size: var(--gp-target);
+  background: var(--gp-surface);
+  color: var(--gp-ink);
+  border: 1px solid var(--gp-hairline-strong);
+  border-radius: var(--gp-r-pill);
+  font: var(--gp-fw-headline) var(--gp-fs-body) var(--gp-font);
+  cursor: pointer;
+}
+.button:focus-visible, .link:focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
+@media (max-width: 768px) {
+  .notice { max-inline-size: none; }
+}

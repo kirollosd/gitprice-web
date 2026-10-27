@@ -1,0 +1,69 @@
+.button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--gp-ink);
+}
+.bars, .bars::before, .bars::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: transform 150ms ease;
+}
+.bars { position: relative; }
+@media (prefers-reduced-motion: reduce) { .bars, .bars::before, .bars::after { transition: none; } }
+.bars::before, .bars::after { content: ""; position: absolute; inset-inline-start: 0; }
+.bars::before { top: -6px; }
+.bars::after { top: 6px; }
+.bars[data-open="true"] { background: transparent; }
+.bars[data-open="true"]::before { transform: translateY(6px) rotate(45deg); }
+.bars[data-open="true"]::after { transform: translateY(-6px) rotate(-45deg); }
+
+.overlay {
+  position: fixed;
+  inset: var(--nav-h) 0 0; /* starts under the bar so logo and toggle stay clickable */
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0 var(--gp-sp-4) var(--gp-sp-6);
+  background: var(--gp-surface);
+  box-shadow: inset 0 1px 0 var(--gp-hairline); /* the header divider, drawn without moving the rows */
+  overflow-y: auto;
+}
+/* 56-tall rows with a hairline between, as on the board; each link fills its row so the whole row is the target. */
+.list { list-style: none; display: flex; flex-direction: column; }
+.list li { display: flex; min-block-size: calc(var(--gp-sp-12) + var(--gp-sp-2)); border-block-end: 1px solid var(--gp-hairline); }
+.list a {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--gp-sp-3);
+  min-block-size: var(--gp-target);
+  color: var(--gp-ink);
+  font-size: var(--web-fs-body);
+  font-weight: 500;
+}
+.list svg { inline-size: var(--gp-sp-6); block-size: var(--gp-sp-6); } /* the board's 24px globe */
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--gp-target);
+  margin-block-start: var(--gp-sp-6);
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+  border-radius: var(--gp-r-pill);
+  border: 0; font: inherit; font-weight: 600; cursor: pointer;
+}
+.cta:hover { text-decoration: none; }
+
+@media (max-width: 1279px) { .button { display: inline-flex; } }
+@media (min-width: 1280px) { .overlay { display: none; } }

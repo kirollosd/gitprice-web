@@ -1,0 +1,153 @@
+import { act, cleanup, fireEvent, render } from "@testing-library/react";
+import type { ReactNode } from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { stubMotion } from "./landing-stubs";
+
+const replace = vi.fn();
+let query = "";
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ replace, push: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(query),
+  usePathname: () => "/",
+}));
+vi.mock("next/link", () => ({
+  default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => <a href={href} {...rest}>{children}</a>,
+}));
+
+beforeEach(() => { replace.mockClear(); query = ""; stubMotion(true); });
+afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
+
+async function home() {
+  const { default: HomeContent } = await import("../app/components/HomeSections");
+  return render(<HomeContent locale="en" />);
+}
+const digits = () => document.querySelector("#digits") as HTMLElement;
+const chip = (id: string) => document.querySelector(`#pick button[data-id="${id}"]`) as HTMLButtonElement;
+
+describe("ProductPicker", () => {
+  it("choosing iphone writes ?p=iphone without scrolling and rolls the hero to the iphone prices", async () => {
+    const { products } = await import("../app/landing/products");
+    const { money } = await import("../app/landing/Price");
+    const iphone = products.find((p) => p.id === "iphone")!;
+    await home();
+    expect(digits().dataset.from).toBe("699");
+    act(() => { fireEvent.click(chip("iphone")); });
+    expect(replace).toHaveBeenCalledTimes(1);
+    expect(replace.mock.calls[0][0]).toMatch(/\?p=iphone$/);
+    expect(replace.mock.calls[0][1]).toEqual({ scroll: false });
+    expect(digits().dataset.from).toBe(money(iphone.from, 0));
+    expect(digits().dataset.to).toBe(money(iphone.best.price, 0));
+    expect(chip("iphone").getAttribute("aria-pressed")).toBe("true");
+    expect(chip("charger").getAttribute("aria-pressed")).toBe("false");
+    // the other sections follow: the receipt's first line and the footer price
+    expect(document.querySelector("#items > div")?.textContent).toContain(iphone.name);
+    expect(document.querySelector("#refname")?.textContent).toBe(iphone.name);
+  });
+
+  it("reads ?p= on load; an unknown id is a random pick (stubbed to the charger here)", async () => {
+    query = "p=pampers";
+    history.replaceState(null, "", "/?p=pampers");
+    await home();
+    history.replaceState(null, "", "/");
+    expect(chip("pampers").getAttribute("aria-pressed")).toBe("true");
+    cleanup();
+    query = "p=nope";
+    await home();
+    expect(chip("charger").getAttribute("aria-pressed")).toBe("true");
+    expect(digits().dataset.from).toBe("699");
+  });
+
+  it("tells the scenes the content changed (gp:product) once the new product is on the page", async () => {
+    await home();
+    const seen: string[] = [];
+    const on = () => seen.push(document.querySelector("#refname")?.textContent ?? "");
+    addEventListener("gp:product", on);
+    act(() => { fireEvent.click(chip("cerave")); });
+    removeEventListener("gp:product", on);
+    const { products } = await import("../app/landing/products");
+    expect(seen).toEqual([products.find((p) => p.id === "cerave")!.name]);
+  });
+
+  it("a pick whose URL never changes does not leave the guard stuck: a later ?p= change still applies", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      history.replaceState(null, "", "/?p=charger");
+      query = "p=charger";
+      const { rerender } = await home();
+      const { default: HomeContent } = await import("../app/components/HomeSections");
+      act(() => { fireEvent.click(chip("iphone")); });
+      act(() => { fireEvent.click(chip("charger")); });
+      act(() => { vi.advanceTimersByTime(1100); });
+      query = "p=pampers";
+      rerender(<HomeContent locale="en" />);
+      expect(chip("pampers").getAttribute("aria-pressed")).toBe("true");
+    } finally { history.replaceState(null, "", "/"); vi.useRealTimers(); }
+  });
+
+  it("a pick replaces the caption, board and tags: nothing of the previous product stays in the DOM", async () => {
+    const { products } = await import("../app/landing/products");
+    await home();
+    for (const id of ["iphone", "cerave", "airfryer"]) act(() => { fireEvent.click(chip(id)); });
+    const air = products.find((p) => p.id === "airfryer")!;
+    for (const sel of ["#cap", "#digits", "#tags"]) expect(document.querySelectorAll(sel), sel).toHaveLength(1);
+    expect(document.querySelector("#cap")?.textContent).toContain(air.name);
+    expect(document.querySelector("#cap")?.textContent).not.toContain("Anker");
+    expect(document.querySelector("#tags")?.textContent).toContain(air.tags[0]);
+    // every element id on the page is unique
+    const ids = [...document.querySelectorAll("[id]")].map((e) => e.id);
+    expect(ids.filter((id, i) => ids.indexOf(id) !== i)).toEqual([]);
+  });
+
+  it("shows a random product when ?p= is absent or unknown, and ?p= wins when it names one", async () => {
+    const { products } = await import("../app/landing/products");
+    const last = products[products.length - 1];
+    vi.mocked(Math.random).mockReturnValue(0.99);
+    await home();
+    expect(chip(last.id).getAttribute("aria-pressed")).toBe("true");
+    cleanup();
+    query = "p=nope";
+    await home();
+    expect(chip(last.id).getAttribute("aria-pressed")).toBe("true");
+    cleanup();
+    query = "p=iphone";
+    history.replaceState(null, "", "/?p=iphone");
+    await home();
+    history.replaceState(null, "", "/");
+    expect(chip("iphone").getAttribute("aria-pressed")).toBe("true");
+  });
+
+  it("clears the boot flag that holds the product parts back, once the product is chosen", async () => {
+    document.documentElement.dataset.gpPick = "1";
+    await home();
+    expect(document.documentElement.dataset.gpPick).toBeUndefined();
+  });
+
+  it("does nothing when the current product is picked again", async () => {
+    await home();
+    act(() => { fireEvent.click(chip("charger")); });
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it("keeps the hash on the written URL", async () => {
+    history.replaceState(null, "", "/#rail");
+    await home();
+    act(() => { fireEvent.click(chip("iphone")); });
+    history.replaceState(null, "", "/");
+    expect(replace.mock.calls[0][0]).toMatch(/\?p=iphone#rail$/);
+  });
+
+  it("ignores a late URL commit of an earlier pick, and follows the URL once the last pick lands", async () => {
+    const { default: HomeContent } = await import("../app/components/HomeSections");
+    const { rerender } = render(<HomeContent locale="en" />);
+    act(() => { fireEvent.click(chip("iphone")); });
+    act(() => { fireEvent.click(chip("cerave")); });
+    query = "p=iphone"; // the first replace commits after the second pick
+    rerender(<HomeContent locale="en" />);
+    expect(chip("cerave").getAttribute("aria-pressed")).toBe("true");
+    query = "p=cerave";
+    rerender(<HomeContent locale="en" />);
+    query = "p=pampers"; // later, an outside navigation
+    rerender(<HomeContent locale="en" />);
+    expect(chip("pampers").getAttribute("aria-pressed")).toBe("true");
+  });
+});

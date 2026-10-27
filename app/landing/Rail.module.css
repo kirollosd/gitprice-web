@@ -1,0 +1,30 @@
+/* 4 · drag rail of stores */
+.rail { padding: 40px 0 150px; }
+.hd { display: flex; justify-content: space-between; align-items: end; padding: 0 48px; }
+.hd h2 { font-size: 88px; }
+.hint { font-size: 15px; color: var(--gp-web-mute); }
+.track { display: flex; gap: 20px; padding: 50px 48px 10px; overflow-x: auto; scroll-snap-type: x mandatory; cursor: grab; scrollbar-width: none; }
+.track::-webkit-scrollbar { display: none; }
+.track:global(.drag) { cursor: grabbing; scroll-snap-type: none; }
+.st { flex: none; width: 520px; height: 420px; border-radius: 30px; scroll-snap-align: start; position: relative; overflow: hidden; background: var(--gp-web-slab); padding: 28px; user-select: none; }
+.st:nth-child(2) { background: var(--gp-web-dark); color: var(--gp-web-on-dark); --cur-c: var(--gp-web-on-dark-mute); }
+.st:nth-child(3) { background: var(--gp-web-raised); border: 1px solid var(--gp-web-line); }
+.st:nth-child(4) { background: var(--gp-web-fill); color: var(--gp-web-on-fill); }
+.tag { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 7px 14px; font-size: 15px; background: rgba(0, 0, 0, .08); }
+.st:nth-child(2) .tag, .st:nth-child(4) .tag { background: rgba(255, 255, 255, .14); }
+.tag > i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.st h3 { position: absolute; inset-inline-start: 28px; bottom: 90px; font-size: 64px; font-weight: 300; letter-spacing: -.04em; line-height: 1; }
+.pill { position: absolute; inset-inline-start: 28px; bottom: 28px; display: flex; gap: 10px; align-items: center; background: var(--gp-web-dock); color: var(--gp-web-on-dock); border-radius: 999px; padding-block: 6px; padding-inline: 6px 16px; font-size: 15px; --cur-c: currentColor; }
+.pill b { margin-inline-start: .25em; }
+.eq { flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--gp-web-fill); color: var(--gp-web-on-fill); display: grid; place-items: center; font-weight: 800; }
+.st:nth-child(4) .eq { background: var(--gp-web-on-fill); color: var(--gp-web-fill); }
+:global(html[lang="ar"]) .st h3 { line-height: 1.25; }
+
+/* phone canvas */
+:global(html.lp-m) .rail { padding: 20px 0 90px; }
+:global(html.lp-m) .hd { flex-direction: column; align-items: start; gap: 8px; padding: 0 20px; }
+:global(html.lp-m) .hd h2 { font-size: 48px; }
+:global(html.lp-m) .track { padding: 28px 20px 10px; gap: 12px; }
+:global(html.lp-m) .st { width: 300px; height: 320px; padding: 20px; border-radius: 24px; }
+:global(html.lp-m) .st h3 { inset-inline-start: 20px; bottom: 76px; font-size: 40px; }
+:global(html.lp-m) .pill { inset-inline-start: 20px; bottom: 20px; font-size: max(14px, var(--fl, 0px)); }

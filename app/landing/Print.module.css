@@ -1,0 +1,90 @@
+/* 3 · the receipt: one long pinned scene, copy on the left, a receipt printing out of a slot on the right */
+.rcpt { --paper: #FFFEFA; }
+.print { position: relative; height: 200vh; }
+.stage { position: sticky; top: 0; height: calc(100vh / var(--z, 1)); display: grid; grid-template-columns: 1fr 560px; gap: 80px; padding-inline: 48px 120px; overflow: hidden; clip-path: inset(80px 0 0 0); }
+.eq { flex: none; display: inline-grid; place-items: center; border-radius: 50%; background: var(--gp-web-fill); color: var(--gp-web-on-fill); font-weight: 800; line-height: 1; }
+
+/* the copy stacks: every point stays on screen, upcoming ones dimmed, each lights up as the receipt reaches it */
+.copy { align-self: start; position: relative; display: flex; flex-direction: column; gap: 18px; margin-top: 244px; }
+.c { opacity: .75; transition: opacity .5s; }
+.c:global(.on) { opacity: 1; }
+.c + .c { position: relative; padding-inline-start: 20px; }
+.c + .c::before { content: ""; position: absolute; inset-inline-start: 0; top: 0; bottom: 0; width: 3px; border-radius: 2px; background: linear-gradient(var(--gp-web-fill) calc(var(--f, 0) * 100%), var(--gp-web-line) 0); }
+.copy h2 { font-weight: 300; font-size: 52px; line-height: .98; letter-spacing: -.04em; }
+.copy p { font-size: 17px; line-height: 1.45; color: var(--gp-web-body); margin-top: 10px; max-width: 560px; }
+.c + .c h2 { font-size: 24px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; }
+.c + .c p { font-size: 15px; margin-top: 4px; }
+.copy p b { color: var(--gp-web-ink); font-weight: 600; }
+.tog { display: inline-flex; margin-top: 34px; background: var(--gp-web-slab); border-radius: 999px; padding: 4px; }
+.tog button { border: 0; background: transparent; border-radius: 999px; padding: 12px 20px; font: 600 16px var(--f-sans); color: var(--gp-web-body); cursor: pointer; transition: background .25s, color .25s; }
+.tog button:global(.on) { background: var(--gp-web-ink); color: var(--gp-web-ground); }
+
+.slotwrap { position: relative; padding-top: 96px; }
+.slot { position: relative; z-index: 3; height: 30px; border-radius: 15px; background: var(--gp-web-ink); box-shadow: 0 14px 24px -12px rgba(34, 27, 21, .6); }
+.slot::after { content: ""; position: absolute; inset-inline-start: 30px; inset-inline-end: 30px; top: 13px; height: 4px; border-radius: 2px; background: #000; }
+/* the one monospace surface; first state: nothing fed yet */
+.paper { --f-mono: var(--f-rcpt); position: relative; z-index: 2; margin: -12px 26px 0; background: var(--paper); padding: 34px 34px 0; font-family: var(--f-mono); font-size: 15px; color: var(--gp-web-ink); box-shadow: 0 30px 50px -30px rgba(34, 27, 21, .45); clip-path: inset(0 0 calc(100% - var(--fed, 0px)) 0); will-change: clip-path; }
+.paper::after { content: ""; position: absolute; inset-inline-start: 0; inset-inline-end: 0; bottom: -12px; height: 12px; background: radial-gradient(circle at 8px 0, transparent 8px, var(--paper) 8.5px) 0 0 / 16px 12px repeat-x; }
+.hd { text-align: center; padding-bottom: 18px; border-bottom: 2px dashed var(--gp-web-dim); }
+.logo { display: block; height: 30px; width: 104px; margin: 0 auto; background-color: currentColor; mask: url("/logo_wordmark.svg") center / contain no-repeat; }
+.hd > span:last-child { font-size: 13px; color: var(--gp-web-mute); }
+.it { padding: 16px 0; border-bottom: 1px dashed var(--gp-web-dim); }
+.n { font-weight: 700; font-size: 15px; }
+.it .ln { display: flex; justify-content: space-between; align-items: center; margin-top: 7px; font-size: 14px; color: var(--gp-web-body); }
+.it .ln s { color: var(--gp-web-mute); }
+.ok { display: inline-flex; align-items: center; gap: 6px; color: var(--gp-web-save); }
+.ok .eq { width: 18px; height: 18px; font-size: 11px; background: var(--gp-web-save); color: #fff; }
+.no { display: inline-flex; align-items: center; gap: 6px; color: var(--gp-web-mute); }
+.no .eq { width: 18px; height: 18px; font-size: 11px; background: var(--gp-web-mute); color: #fff; }
+.it .ln b { font-weight: 700; color: var(--gp-web-ink); font-size: 15px; }
+.tot { padding: 20px 0 30px; }
+.tot .ln { display: flex; justify-content: space-between; font-size: 15px; margin-top: 6px; color: var(--gp-web-body); }
+.tot .big { font-size: 24px; font-weight: 700; letter-spacing: -.045em; line-height: .94; color: var(--gp-web-ink); margin-top: 12px; } /* the mock's global .big */
+.tot .big span:last-child { color: var(--gp-web-save); }
+.tot small { display: block; text-align: center; margin-top: 20px; color: var(--gp-web-mute); font-size: 12px; }
+.paper:global(.raw) .alt { visibility: hidden; }
+.paper:global(.raw) s { text-decoration: none; color: var(--gp-web-ink); font-weight: 700; --strike-h: 0px; }
+.paper:global(.raw) .tot .big span:last-child { color: var(--gp-web-mute); }
+
+/* running tally, pinned top-left of the stage */
+.tally { position: absolute; inset-inline-start: 48px; top: 120px; display: flex; align-items: baseline; gap: 14px; }
+.tally small { font-size: 16px; color: var(--gp-web-mute); }
+.tally b { font-family: var(--f-mono); font-weight: 700; font-size: 56px; letter-spacing: -.03em; color: var(--gp-web-save); font-variant-numeric: tabular-nums; transition: color .3s; }
+.tally:global(.raw) b { color: var(--gp-web-mute); }
+
+/* paper stays light on the dark look, so its text uses light-theme ink */
+:global(html[data-theme="dark"]) .paper { --gp-web-ink: #0A0A0B; --gp-web-body: #3A3A40; --gp-web-mute: #6B6B73; --gp-web-dim: #B5B5BC; --gp-web-line: #E4E4E7; --gp-web-save: var(--gp-web-savel); --gp-web-acc: var(--gp-web-accl); }
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme="light"])) .paper { --gp-web-ink: #0A0A0B; --gp-web-body: #3A3A40; --gp-web-mute: #6B6B73; --gp-web-dim: #B5B5BC; --gp-web-line: #E4E4E7; --gp-web-save: var(--gp-web-savel); --gp-web-acc: var(--gp-web-accl); }
+}
+/* mono has no Arabic glyphs, so pull in the wide space; Latin item names stay left-to-right on the right edge */
+:global(html[lang="ar"]) .paper { word-spacing: -.3em; }
+:global(html[dir="rtl"]) .n { unicode-bidi: plaintext; text-align: right; }
+:global(html.lp-short) .copy { margin-top: 210px; }
+:global(html.lp-short) .copy h2 { font-size: 46px; }
+:global(html.lp-short) .c + .c p { display: none; }
+
+/* phone canvas: copy and tally pinned on top, the receipt prints under them */
+:global(html.lp-m) .stage { display: block; padding: 0 20px; }
+:global(html.lp-m) .stage::before { content: ""; position: absolute; inset-inline-start: 0; inset-inline-end: 0; top: 0; height: 92px; background: var(--gp-web-ground); z-index: 4; }
+:global(html.lp-m) .copy { position: absolute; inset-inline-start: 20px; inset-inline-end: 20px; top: 92px; height: 200px; z-index: 4; background: var(--gp-web-ground); gap: 8px; margin-top: 0; }
+:global(html.lp-m) .copy h2 { font-size: 26px; }
+:global(html.lp-m) .copy p { font-size: max(14px, var(--fl, 0px)); margin-top: 6px; display: none; }
+:global(html.lp-m) .c + .c p { font-size: 15px; margin-top: 4px; }
+:global(html.lp-m) .c + .c { padding-inline-start: 12px; }
+:global(html.lp-m) .c + .c h2 { font-size: 15px; }
+:global(html.lp-m) .tog { margin-top: 12px; }
+:global(html.lp-m) .tog button { position: relative; padding: 9px 14px; font-size: max(14px, var(--fl, 0px)); min-height: calc(44px / var(--z, 1)); }
+:global(html.lp-m) .tog button::before { content: ""; position: absolute; inset: -7px -4px; min-height: 44px; }
+:global(html.lp-m) .tally { inset-inline-start: 0; inset-inline-end: 0; top: 292px; padding: 0 20px 8px; z-index: 5; gap: 8px; background: var(--gp-web-ground); }
+:global(html.lp-m) .tally small { font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .tally b { font-size: 28px; }
+:global(html.lp-m) .slotwrap { padding-top: 350px; }
+:global(html.lp-m) .slot { height: 22px; }
+:global(html.lp-m) .paper { margin: -10px 10px 0; padding: 20px 18px 0; font-size: max(12px, var(--fl, 0px)); }
+:global(html.lp-m) .logo { height: 24px; width: 83px; }
+:global(html.lp-m) .n { font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .it .ln { font-size: max(12px, var(--fl, 0px)); }
+:global(html.lp-m) .ln span, :global(html.lp-m) .ln s, :global(html.lp-m) .ln b, :global(html.lp-m) .hd > span:last-child, :global(html.lp-m) .tot small { font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .tot .ln { font-size: max(13px, var(--fl, 0px)); }
+:global(html.lp-m) .tot .big { font-size: 18px; }

@@ -1,173 +1,361 @@
-/* ============================================================
-   GitPrice Design System — Global Tokens & Base Styles
-   ============================================================ */
-
-/* Fonts loaded via next/font/local in layout.tsx — CSS variables --font-sora and --font-karla */
+@import "../styles/tokens.css";
 
 /* ============================================================
-   Design Tokens
+   Fonts: self-hosted woff2 (no CDN). Weights match the token scale.
+   Each Latin face is declared twice: the full file for the whole range, then a "core" file (ASCII plus the few non-ASCII
+   characters the copy uses, scripts/subset-fonts.sh) for just those characters. Later rules win per character, so first paint
+   downloads the small file and the full one only loads for a character the copy does not use yet.
    ============================================================ */
-:root {
-  /* Color — Brand */
-  --color-brand:        #34d399;   /* emerald accent */
-  --color-brand-dark:   #059669;   /* emerald dark (links/hover) */
-  --color-brand-text:   #047857;   /* emerald-700, 5.24:1 on Slate 50 — WCAG AA */
-  --color-brand-light:  #6ee7b7;   /* emerald light */
+@font-face {
+  font-family: "GP Fustat";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/fustat-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "GP Fustat";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/fustat-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "GP Fustat";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/fustat-latin-700-normal.woff2") format("woff2");
+}
 
-  /* Color — Logo navy */
-  --color-navy:         #2d415e;
+@font-face {
+  font-family: "Noto Sans Arabic";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/noto-sans-arabic-arabic-400-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Noto Sans Arabic";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/noto-sans-arabic-arabic-600-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Noto Sans Arabic";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/noto-sans-arabic-arabic-700-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Noto Sans Arabic";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/noto-sans-arabic-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Noto Sans Arabic";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/noto-sans-arabic-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Noto Sans Arabic";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/noto-sans-arabic-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
-  /* Color — Surfaces */
-  --color-bg:           #f8fafc;   /* primary light background (Slate 50) */
-  --color-surface:      #ffffff;   /* elevated surface / nav */
-  --color-surface-2:    #f1f5f9;   /* cards, inputs (Slate 100) */
-  --color-border:       rgba(0, 0, 0, 0.08);
-
-  /* Color — Text */
-  --color-text-primary:   #0f172a;   /* Slate 900 */
-  --color-text-secondary: #334155;   /* Slate 700 */
-  --color-text-muted:     #64748b;   /* Slate 500 */
-  --color-text-faint:     #64748b;   /* Slate 500 — WCAG AA on white: 5.74:1 ✓ */
-
-  /* Typography */
-  --font-heading: var(--font-sora), system-ui, sans-serif;
-  --font-body:    var(--font-karla), system-ui, sans-serif;
-
-  --text-xs:   0.75rem;    /* 12px */
-  --text-sm:   0.875rem;   /* 14px */
-  --text-base: 1rem;       /* 16px */
-  --text-lg:   1.125rem;   /* 18px */
-  --text-xl:   1.25rem;    /* 20px */
-  --text-2xl:  1.5rem;     /* 24px */
-  --text-3xl:  1.875rem;   /* 30px */
-  --text-4xl:  2.25rem;    /* 36px */
-  --text-5xl:  3rem;       /* 48px */
-
-  --leading-tight:  1.25;
-  --leading-snug:   1.375;
-  --leading-normal: 1.5;
-  --leading-relaxed: 1.7;
-
-  /* Spacing scale */
-  --space-1:  0.25rem;
-  --space-2:  0.5rem;
-  --space-3:  0.75rem;
-  --space-4:  1rem;
-  --space-5:  1.25rem;
-  --space-6:  1.5rem;
-  --space-8:  2rem;
-  --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-20: 5rem;
-  --space-24: 6rem;
-
-  /* Layout */
-  --max-width-content: 720px;
-  --max-width-wide:    1024px;
-  --nav-height: 64px;
-
-  /* Radii */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-full: 9999px;
-
-  /* Shadows */
-  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.12);
-  --shadow-glow: 0 0 24px rgba(5, 150, 105, 0.18);
-
-  /* Transitions */
-  --transition-fast: 120ms ease;
-  --transition-base: 200ms ease;
+@font-face {
+  font-family: "Outfit";
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/outfit-latin-300-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Outfit";
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/outfit-latin-core-300-normal.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B7, U+00BB, U+200E-200F, U+2011, U+2013-2014, U+2019, U+201C-201D, U+2022, U+2026, U+203A, U+2193;
+}
+@font-face {
+  font-family: "Outfit";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/outfit-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Outfit";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/outfit-latin-core-400-normal.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B7, U+00BB, U+200E-200F, U+2011, U+2013-2014, U+2019, U+201C-201D, U+2022, U+2026, U+203A, U+2193;
+}
+@font-face {
+  font-family: "Outfit";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/outfit-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Outfit";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/outfit-latin-core-600-normal.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B7, U+00BB, U+200E-200F, U+2011, U+2013-2014, U+2019, U+201C-201D, U+2022, U+2026, U+203A, U+2193;
+}
+@font-face {
+  font-family: "Outfit";
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/outfit-latin-800-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Outfit";
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/outfit-latin-core-800-normal.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B7, U+00BB, U+200E-200F, U+2011, U+2013-2014, U+2019, U+201C-201D, U+2022, U+2026, U+203A, U+2193;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/alexandria-arabic-300-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/alexandria-arabic-core-300-normal.woff2") format("woff2");
+  unicode-range: U+0600-061F, U+0621-063A, U+0640-0652, U+0660-066D, U+200C-200F, U+2010-2011;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/alexandria-arabic-400-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/alexandria-arabic-core-400-normal.woff2") format("woff2");
+  unicode-range: U+0600-061F, U+0621-063A, U+0640-0652, U+0660-066D, U+200C-200F, U+2010-2011;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/alexandria-arabic-600-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/alexandria-arabic-core-600-normal.woff2") format("woff2");
+  unicode-range: U+0600-061F, U+0621-063A, U+0640-0652, U+0660-066D, U+200C-200F, U+2010-2011;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/alexandria-arabic-700-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/alexandria-arabic-core-700-normal.woff2") format("woff2");
+  unicode-range: U+0600-061F, U+0621-063A, U+0640-0652, U+0660-066D, U+200C-200F, U+2010-2011;
+}
+/* 300: the footer's big price word in Arabic keeps Alexandria's own digit widths (the preview's fit), not Outfit's */
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/alexandria-latin-300-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/alexandria-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/alexandria-latin-core-400-normal.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B7, U+00BB, U+200E-200F, U+2011, U+2013-2014, U+2019, U+201C-201D, U+2022, U+2026, U+203A, U+2193;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/alexandria-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Alexandria";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/alexandria-latin-core-600-normal.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B7, U+00BB, U+200E-200F, U+2011, U+2013-2014, U+2019, U+201C-201D, U+2022, U+2026, U+203A, U+2193;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-latin-core-400-normal.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B7, U+00BB, U+200E-200F, U+2011, U+2013-2014, U+2019, U+201C-201D, U+2022, U+2026, U+203A, U+2193;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-latin-core-700-normal.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B7, U+00BB, U+200E-200F, U+2011, U+2013-2014, U+2019, U+201C-201D, U+2022, U+2026, U+203A, U+2193;
 }
 
 /* ============================================================
-   Base Reset & Globals
+   Base
    ============================================================ */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h, 72px) + 8px); /* the sticky or fixed header must not cover a focused or anchored element */
+  scroll-padding-bottom: calc(7rem + var(--gp-stack-h, 0px)); /* the fixed waitlist dock, and the notice it sits above, must not cover a focused or anchored element */
 }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  line-height: var(--leading-relaxed);
-  background-color: var(--color-bg);
-  color: var(--color-text-primary);
+  font-family: var(--gp-font);
+  font-size: var(--gp-fs-body);
+  font-weight: var(--gp-fw-body);
+  line-height: var(--gp-lh);
+  background-color: var(--gp-surface);
+  color: var(--gp-ink);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   min-height: 100dvh;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
+main { flex: 1; }
 
-/* Typography */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  line-height: var(--leading-tight);
-  font-weight: 700;
-  color: var(--color-text-primary);
+  font-family: var(--gp-font);
+  line-height: var(--gp-lh-tight);
+  font-weight: 600;
+  color: var(--gp-ink);
 }
+h1 { font-weight: 300; letter-spacing: -.03em; }
+:lang(ar) h1 { letter-spacing: normal; }
 
-p {
-  color: var(--color-text-secondary);
-  line-height: var(--leading-relaxed);
-}
+p { color: var(--gp-ink); line-height: var(--gp-lh); }
 
-a {
-  color: var(--color-brand);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
+a { color: var(--gp-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
 
-a:hover {
-  color: var(--color-brand-light);
-  text-decoration: underline;
-}
+img, svg { display: block; max-width: 100%; }
 
-img, svg {
-  display: block;
-  max-width: 100%;
-}
-
-/* Focus visible — accessibility */
 :focus-visible {
-  outline: 2px solid var(--color-brand);
+  outline: 2px solid var(--gp-focus);
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--gp-r-xs);
 }
 
-/* Utility: visually hidden (accessibility) */
-.sr-only {
+main:focus-visible,
+h1[tabindex="-1"]:focus-visible { outline: none; }
+
+/* A 44px hit area around a small control without changing its box: an invisible layer centred on it. */
+.hit-target { position: relative; }
+.hit-target::after {
+  content: "";
   position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  inset-block: min(0px, calc(50% - var(--gp-target) / 2));
+  inset-inline: min(0px, calc(50% - var(--gp-target) / 2));
 }
 
-/* Container utility */
+/* Off-screen until focused, then pinned above the sticky header (z 50) and the floating stack (z 60). */
+.skip-link {
+  position: absolute; inset-block-start: var(--gp-sp-2); inset-inline-start: var(--gp-sp-2); z-index: 70;
+  padding: var(--gp-sp-2) var(--gp-sp-4); background: var(--gp-surface); color: var(--gp-accent);
+  border-radius: var(--gp-r-xs); transform: translateY(-200%);
+}
+.skip-link:focus-visible { transform: none; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* Board gutters: 16 at 390, 32 at 768, 48 from 1024; content is 1200 wide at 1440 (gutter 120). */
 .container {
   width: 100%;
-  max-width: var(--max-width-wide);
+  max-width: calc(1200px + 2 * var(--gp-sp-12));
   margin-inline: auto;
-  padding-inline: var(--space-6);
+  padding-inline: var(--gp-sp-4);
+}
+@media (min-width: 768px) { .container { padding-inline: var(--gp-sp-8); } }
+@media (min-width: 1024px) { .container { padding-inline: var(--gp-sp-12); } }
+
+/* Web type scale: the boards use the phone scale (design-map.md typeMobile) plus the web hero role.
+   tokens.css only carries the desktop scale (--gp-fs-*), so these are local to the site.
+   Line heights follow the boards' text styles: en body/title/headline 1.6, caption 1.4, display 1.33; ar 1.8, 1.6, 1.6. */
+:root {
+  --web-fs-hero: var(--web-fs-display);   /* web/hero from 1024 (Home and Sellers from 768), mobile display (32) below */
+  --web-lh-hero: 40px;
+  --web-fs-display: 32px;
+  --web-fs-h2: var(--web-fs-title);       /* section heading: title on phones, display from 1024 (Home and Sellers from 768) */
+  --web-fs-feature: var(--web-fs-title);  /* large feature row title: 28 from 1024 */
+  --web-fs-title: 22px;
+  --web-fs-body: 17px;
+  --web-lh-body: 1.6;
+  /* Home and Sellers set Arabic at the boards' ar styles; other pages keep --web-lh-body. */
+  --web-lh-text: 1.6;
+  --web-lh-caption: 1.4;
+  --web-lh-display: 1.33;
+  /* The web/hero text style (en 56/64, ar 56/84): every page from 1024, Home and Sellers from 768. */
+  --web-fs-hero-web: 56px;
+  --web-lh-hero-web: 64px;
+}
+[dir="rtl"] { --web-lh-text: 1.8; --web-lh-caption: 1.6; --web-lh-display: 1.6; --web-lh-hero-web: 84px; }
+@media (min-width: 1024px) {
+  :root, [dir="rtl"] { --web-fs-hero: var(--web-fs-hero-web); --web-lh-hero: var(--web-lh-hero-web); }
+  :root { --web-fs-h2: var(--web-fs-display); --web-fs-feature: 28px; }
 }
 
-.container--narrow {
-  max-width: var(--max-width-content);
-}
+/* A closing band that ends the page sits flush on the footer. */
+main:has(> [data-gp-section="bottom_cta"]:last-child) ~ footer { margin-block-start: 0; }
