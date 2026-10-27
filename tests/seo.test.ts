@@ -113,10 +113,10 @@ describe("per-page share metadata", () => {
   it("Home titles itself with the hero headline and shares the hero sub", async () => {
     for (const locale of ["en", "ar"] as const) {
       const m = await meta(import("../app/[locale]/page"), locale);
-      const full = `${t(locale, "web.home.hero.headline")} | GitPrice`;
+      const full = `${t(locale, "web.landing.hero.headline")} | GitPrice`;
       expect(m.title).toEqual({ absolute: full });
-      expect(m.openGraph).toMatchObject({ title: full, description: t(locale, "web.home.hero.sub"), locale: locale === "en" ? "en_US" : "ar_AR" });
-      expect(m.twitter).toMatchObject({ title: full, description: t(locale, "web.home.hero.sub") });
+      expect(m.openGraph).toMatchObject({ title: full, description: t(locale, "web.landing.hero.lede"), locale: locale === "en" ? "en_US" : "ar_AR" });
+      expect(m.twitter).toMatchObject({ title: full, description: t(locale, "web.landing.hero.lede") });
     }
   });
 

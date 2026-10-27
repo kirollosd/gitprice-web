@@ -249,24 +249,10 @@ describe("launch switch", () => {
     return fetchMock.mock.calls.map((c) => JSON.parse(String((c[1] as RequestInit).body)).audience);
   };
 
-  it("launch=1 renders Add to Chrome and no waitlist form", async () => {
-    mockEnv(true);
-    const { default: HomeContent } = await import("../app/components/HomeSections");
-    render(<HomeContent locale="en" />);
-    const chrome = screen.getAllByRole("link", { name: "Add GitPrice to Chrome" });
-    expect(chrome.length).toBeGreaterThan(0);
-    chrome.forEach((a) => expect(a.getAttribute("href")).toBe("https://chromewebstore.test/gitprice"));
-    expect(document.querySelector("form")).toBeNull();
-  });
-
-  it("launch=0 renders two shopper waitlist forms and no store links", async () => {
-    mockEnv(false);
-    const { default: HomeContent } = await import("../app/components/HomeSections");
-    render(<HomeContent locale="en" />);
-    expect(document.querySelectorAll("form")).toHaveLength(2);
-    expect(screen.queryByRole("link", { name: "Add GitPrice to Chrome" })).toBeNull();
-    expect(await audiences()).toEqual(["shopper", "shopper"]);
-  });
+  // Home's waitlist moved to the dock form (constraints call 1) and launch mode swaps every [data-join]
+  // for the Add to Chrome link (call 2); both land with the dock in Task 5.
+  it.todo("launch=1 home shows Add to Chrome in place of every [data-join] button and no form");
+  it.todo("launch=0 home renders one shopper waitlist form, in the dock");
 
   it("launch=0 sellers page sends audience=seller from both forms", async () => {
     mockEnv(false);

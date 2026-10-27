@@ -1,6 +1,6 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 
@@ -20,80 +20,118 @@ afterEach(() => {
   vi.resetModules();
 });
 
-const F = en.web.home.features;
-const item = (key: string) => document.querySelector(`[data-feature="${key}"]`) as HTMLElement;
+const L = { en: en.web.landing, ar: ar.web.landing };
+const IDS = ["num", "how", "film", "spot", "rcpt", "rail", "foot"];
+const BANNED = ["Amazon", "Noon", "Jumia", "Egypt", "مصر", "ج.م", "Nov"];
 
-describe("Home GP-372 sections", () => {
-  for (const launch of [true, false]) {
-    it(`renders baseline, feature rows and grouped rows (launch=${launch})`, async () => {
-      mockEnv(launch);
-      const { default: HomeContent } = await import("../app/components/HomeSections");
-      render(<HomeContent locale="en" />);
-      for (const b of Object.values(en.web.home.baseline)) {
-        expect(screen.getByText(b.title)).toBeTruthy();
-        expect(screen.getByText(b.body)).toBeTruthy();
+async function renderHome(locale: "en" | "ar") {
+  mockEnv(false);
+  const { default: HomeContent } = await import("../app/components/HomeSections");
+  return render(<HomeContent locale={locale} />);
+}
+
+const textNodes = (root: Node) => {
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const out: string[] = [];
+  while (w.nextNode()) out.push(w.currentNode.textContent ?? "");
+  return out;
+};
+
+describe("Coral landing sections", () => {
+  // The receipt header names the current month; pin it so the "Nov" brand guard is deterministic.
+  beforeEach(() => vi.useFakeTimers({ toFake: ["Date"], now: new Date("2026-10-27T12:00:00Z") }));
+  afterEach(() => vi.useRealTimers());
+
+  for (const locale of ["en", "ar"] as const) {
+    it(`renders each nav anchor section once, tagged for analytics (${locale})`, async () => {
+      await renderHome(locale);
+      for (const id of IDS) {
+        const els = document.querySelectorAll(`#${id}`);
+        expect(els, id).toHaveLength(1);
+        expect(els[0].getAttribute("data-gp-section")).toBe(id);
       }
-      expect(screen.getByRole("heading", { name: F.heading })).toBeTruthy();
-      for (const k of ["rows", "alerts", "history"] as const) expect(screen.getByRole("heading", { name: F[k].title })).toBeTruthy();
-      for (const g of Object.values(F.groups)) expect(screen.getByRole("heading", { name: g })).toBeTruthy();
+      expect(document.querySelector("#alerts")?.getAttribute("data-gp-section")).toBe("alerts");
+    });
+
+    it(`uses the landing headline as the only h1 (${locale})`, async () => {
+      await renderHome(locale);
+      const h1 = screen.getAllByRole("heading", { level: 1 });
+      expect(h1).toHaveLength(1);
+      expect(h1[0].textContent).toBe(L[locale].hero.headline);
+    });
+
+    it(`names no store, country or launch month in any text node (${locale})`, async () => {
+      const { container } = await renderHome(locale);
+      const hits = textNodes(container).filter((s) => BANNED.some((b) => s.includes(b)));
+      expect(hits).toEqual([]);
+    });
+
+    it(`shows the free line from the ship critique (${locale})`, async () => {
+      await renderHome(locale);
+      expect(screen.getByText(L[locale].hero.free)).toBeTruthy();
     });
   }
 
-  it("tags the coming-soon items (Pro included) and gives priceHistory a note, not a tag", async () => {
-    mockEnv(true);
-    const { default: HomeContent, GROUPS } = await import("../app/components/HomeSections");
-    render(<HomeContent locale="en" />);
-    const soon = ["emailAlerts", "phoneAlerts", "proLimits", "sync", "suggestStore"];
-    const all = GROUPS.flat().flatMap((g) => g.items.map((i) => i.key));
-    expect(all).toHaveLength(13);
-    for (const key of all) {
-      const el = item(key);
-      expect(within(el).getByRole("heading", { level: 4 }).textContent).toBe((F as unknown as Record<string, { title: string }>)[key].title);
-      const tag = el.querySelector("span")?.textContent ?? null;
-      expect(tag).toBe(soon.includes(key) ? F.tag.soon : null);
-    }
-    expect(within(item("priceHistory")).getByText(F.priceHistory.pro)).toBeTruthy();
-    expect(screen.queryByText(F.tag.pro)).toBeNull();
-    expect(document.querySelectorAll("[data-feature] p").length).toBe(all.length + 1);
+  it("rolls the charger hero from 699 to 412, whole numbers only", async () => {
+    await renderHome("en");
+    const digits = document.querySelector("#digits") as HTMLElement;
+    expect(digits.dataset.from).toBe("699");
+    expect(digits.dataset.to).toBe("412");
+    const sr = document.querySelector("#numsr")?.textContent ?? "";
+    expect(sr).toContain("699");
+    expect(sr).toContain("412");
+    expect(sr).not.toMatch(/699\.00|412\.00/);
   });
 
-  it("hides every art block from assistive tech", async () => {
-    mockEnv(true);
-    const { default: HomeContent } = await import("../app/components/HomeSections");
-    render(<HomeContent locale="ar" />);
-    const art = [...document.querySelectorAll("[data-art]")];
-    expect(art.map((a) => a.getAttribute("data-art"))).toEqual(["hero", "rows", "alerts", "history"]);
-    art.forEach((a) => expect(a.getAttribute("aria-hidden")).toBe("true"));
-    expect(screen.getByText(ar.web.home.baseline.languages.title)).toBeTruthy();
+  it("marks every example price with its ISO code", async () => {
+    await renderHome("en");
+    const prices = [...document.querySelectorAll("[data-egp]")];
+    expect(prices.length).toBeGreaterThan(10);
+    for (const p of prices) expect(p.nextElementSibling?.textContent).toBe("EGP");
+  });
+
+  it("draws store marks as labelled images, never names", async () => {
+    await renderHome("ar");
+    const marks = [...document.querySelectorAll('i[role="img"]')];
+    expect(marks.length).toBeGreaterThan(0);
+    for (const m of marks) expect([L.ar.store.circle, L.ar.store.triangle, L.ar.store.square]).toContain(m.getAttribute("aria-label"));
+  });
+
+  it("gives every join button a data-join hook", async () => {
+    await renderHome("en");
+    const join = [...document.querySelectorAll("button[data-join]")];
+    expect(join.length).toBe(2);
+    join.forEach((b) => expect(b.getAttribute("type")).toBe("button"));
   });
 });
 
-describe("Board art copy", () => {
-  const V = en.web.home.visual;
-  const art = (name: string) => document.querySelector(`[data-art="${name}"]`) as HTMLElement;
-  const has = (el: HTMLElement, text: string) => expect(within(el).getAllByText(text).length).toBeGreaterThan(0);
-
-  it("renders every board art string from its key, with decorative buttons only", async () => {
-    mockEnv(true);
-    const { default: HomeContent } = await import("../app/components/HomeSections");
-    render(<HomeContent locale="en" />);
-    Object.values(V.receipt).forEach((s) => has(art("hero"), s));
-    Object.values(V.row).forEach((s) => has(art("rows"), s));
-    Object.values(V.alertcard).forEach((s) => has(art("alerts"), s));
-    [...Object.values(V.savingscounter), ...Object.values(V.milestone)].forEach((s) => has(art("history"), s));
-    document.querySelectorAll("[data-art]").forEach((a) => expect(a.querySelector("a, button, [tabindex]")).toBeNull());
+describe("products", () => {
+  it("falls back to the first product for an unknown id", async () => {
+    const { getProduct, products } = await import("../app/landing/products");
+    expect(getProduct("nope").id).toBe("charger");
+    expect(getProduct().id).toBe("charger");
+    expect(getProduct("iphone").id).toBe("iphone");
+    expect(products.map((p) => p.id)).toEqual(["charger", "iphone", "cerave", "airfryer", "pampers"]);
   });
 
-  it("uses the receipt's own saving in Arabic and keeps figures left-to-right", async () => {
-    mockEnv(true);
-    const { default: HomeContent } = await import("../app/components/HomeSections");
-    render(<HomeContent locale="ar" />);
-    has(art("hero"), ar.web.home.visual.receipt.saving);
-    has(art("rows"), ar.web.home.visual.pricerowcompact.saving);
-    for (const fig of ["24,999", "22,900", "4,210", "+340"]) {
-      const el = [...document.querySelectorAll("[data-art] bdi")].find((b) => b.textContent === fig);
-      expect(el?.getAttribute("dir")).toBe("ltr");
-    }
+  it("carries Arabic for every demo string", async () => {
+    const { products, localize } = await import("../app/landing/products");
+    const cer = localize(products.find((p) => p.id === "cerave")!, "ar");
+    expect(cer.chip).toBe("عناية بالبشرة");
+    expect(cer.tags).toEqual(["= نفس التركيبة", "= نفس الحجم 454g"]);
+    expect(cer.lineup[3][5]).toBe("عبوة من 2");
+    expect(localize(products[4], "ar").lookalike.label).toBe("■ Store · 44 حفاضة");
+    expect(localize(products[0], "en").chip).toBe("Phone charger");
+  });
+});
+
+describe("html()", () => {
+  it("escapes variables and passes trusted fragments through", async () => {
+    const { html } = await import("../app/landing/html");
+    const out = html("en", "web.landing.hero.captionStart", { product: '<img src=x onerror="1">' }).__html;
+    expect(out).toContain("&lt;img src=x onerror=&quot;1&quot;&gt;");
+    expect(out).toContain("<b>");
+    expect(html("en", "web.landing.spot.note", {}, { marks: "<i></i>" }).__html).toContain("<i></i> are made-up");
   });
 });
 
