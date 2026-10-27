@@ -14,3 +14,12 @@ describe("landing base resets", () => {
     expect(css).toMatch(/:where\(\.canvas\) :is\(h1[^{]*\{[^}]*font-weight: bold/);
   });
 });
+
+describe("film frame", () => {
+  // the poster vars are set late by DemoVideo; an unset var inside the `background` shorthand drops the whole declaration, slab included
+  it("keeps the slab backdrop when no poster var is set yet", () => {
+    const film = readFileSync("app/landing/Film.module.css", "utf8");
+    expect(film).not.toMatch(/background:[^;]*var\(--p[lmd]+\)/);
+    expect(film).not.toMatch(/background-image: var\(--p[lmd]+\);/);
+  });
+});
