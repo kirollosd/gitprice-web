@@ -16,6 +16,6 @@
 :global(html.lp-m) .cta h2 { font-size: 56px; }
 :global(html.lp-m) .cta > div:first-child { font-size: 14px; }
 :global(html.lp-m) .btns { flex-wrap: wrap; }
-:global(html.lp-m) .btns > * { position: relative; padding: 12px 18px; font-size: 15px; }
+:global(html.lp-m) .btns > * { position: relative; display: inline-flex; align-items: center; padding: 12px 18px; font-size: 15px; min-height: calc(44px / var(--z, 1)); }
 :global(html.lp-m) .btns > *::after { content: ""; position: absolute; inset: -4px 0; }
 :global(html.lp-m) .meta { inset-inline-start: 20px; inset-inline-end: 20px; top: 400px; width: auto; font-size: 14px; }

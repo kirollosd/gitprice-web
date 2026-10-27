@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { t, type Locale } from "../../lib/i18n";
+import { subscribeMoney } from "./money";
 import { createScenes } from "./scenes";
 import s from "./ScrollScenes.module.css";
 
@@ -59,6 +60,11 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
     fonts?.ready.then(refit);
     fonts?.addEventListener("loadingdone", refit);
     const kick = setTimeout(() => { sc.kickHero(); wake(); }, HERO_KICK_MS);
+    // ProductPicker swapped the content (gp:product), or Rates the currency: re-measure and refit after React commits
+    const onProduct = () => { sc.reset(); refit(); wake(); };
+    addEventListener("gp:product", onProduct);
+    let refitRaf = 0;
+    const unMoney = subscribeMoney(() => { cancelAnimationFrame(refitRaf); refitRaf = requestAnimationFrame(() => { refit(); wake(); }); });
 
     // scroll cue: on at the top until the first scroll; after that, back on when the visitor stops for 1.5s inside a
     // pinned scene that is only part-way through. It never covers a control or the hero's match chips.
@@ -101,6 +107,9 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
 
     return () => {
       cancelAnimationFrame(raf);
+      cancelAnimationFrame(refitRaf);
+      unMoney();
+      removeEventListener("gp:product", onProduct);
       sc.stop();
       [kick, cueT, cueFirst].forEach((x) => clearTimeout(x));
       WAKE_ON.forEach((e) => removeEventListener(e, wake));

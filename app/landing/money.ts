@@ -3,7 +3,11 @@
  * Rates (Task 5b) swaps in a converting formatter with setMoneyFormat, and every client writer (ScrollScenes)
  * formats through formatMoney and repaints on subscribeMoney. Contract: a formatter returns "<value> <CODE>".
  */
-import { CUR, money } from "./Price";
+import { useSyncExternalStore } from "react";
+
+/** Example prices are written in EGP. */
+export const CUR = "EGP";
+export const money = (n: number, d = 2) => n.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
 
 export type MoneyFormat = (egp: number, digits: 0 | 2) => string;
 
@@ -19,6 +23,17 @@ export function setMoneyFormat(fn: MoneyFormat | null) {
   subs.forEach((cb) => cb());
 }
 
+export const getMoneyFormat = () => fmt;
+
+/** The current formatter, re-rendering on a swap; the server and hydration pass use the base (EGP). */
+export const useMoney = () => useSyncExternalStore(subscribeMoney, getMoneyFormat, () => base);
+
+/** "699.00 EGP" → ["699.00", "EGP"]. */
+export function splitMoney(out: string): [string, string] {
+  const i = out.lastIndexOf(" ");
+  return i < 0 ? [out, ""] : [out.slice(0, i), out.slice(i + 1)];
+}
+
 export function subscribeMoney(cb: () => void): () => void {
   subs.add(cb);
   return () => { subs.delete(cb); };
@@ -26,9 +41,7 @@ export function subscribeMoney(cb: () => void): () => void {
 
 /** Repaint one Price (<bdi data-egp data-d> + its [data-cur] sibling) through the current formatter. */
 export function paintPrice(el: HTMLElement) {
-  const out = formatMoney(+(el.dataset.egp ?? 0), el.dataset.d === "0" ? 0 : 2);
-  const i = out.lastIndexOf(" ");
-  const value = i < 0 ? out : out.slice(0, i), code = i < 0 ? "" : out.slice(i + 1);
+  const [value, code] = splitMoney(formatMoney(+(el.dataset.egp ?? 0), el.dataset.d === "0" ? 0 : 2));
   if (el.textContent !== value) el.textContent = value;
   const cur = el.nextElementSibling;
   if (cur instanceof HTMLElement && cur.hasAttribute("data-cur") && cur.textContent !== code) cur.textContent = code;

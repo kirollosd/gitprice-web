@@ -108,10 +108,39 @@ describe("ScrollScenes", () => {
     expect(formatMoney(699, 0)).toBe("699 EGP");
     const { container } = await mount("en", ["Print"]);
     const tally = () => container.querySelector("#tallyN")?.textContent;
-    expect(tally()).toBe("518.00EGP");
+    expect(tally()).toBe("518.00 EGP");
     act(() => setMoneyFormat((egp, d) => `${(egp * 0.02).toFixed(d)} USD`));
     await act(() => new Promise((r) => setTimeout(r, 50)));
-    expect(tally()).toBe("10.36USD");
+    expect(tally()).toBe("10.36 USD");
     act(() => setMoneyFormat(null));
+  });
+
+  it("re-measures the receipt after a content change (gp:product), so the tally counts the new rows", async () => {
+    stubMotion(true);
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout", "requestAnimationFrame", "cancelAnimationFrame", "performance"] });
+    const { container } = await mount("en", ["Print"]);
+    const tally = () => container.querySelector("#tallyN")?.textContent;
+    act(() => { vi.advanceTimersByTime(100); });
+    expect(tally()).toBe("518.00 EGP");
+    // a product swap re-renders the receipt: the first line now saves 1000 more
+    const first = container.querySelector("#items > div") as HTMLElement;
+    first.dataset.save = String(+first.dataset.save! + 1000);
+    act(() => { window.dispatchEvent(new Event("scroll")); vi.advanceTimersByTime(100); });
+    expect(tally()).toBe("518.00 EGP"); // cached metrics: no re-read without a content signal
+    act(() => { window.dispatchEvent(new Event("gp:product")); vi.advanceTimersByTime(100); });
+    expect(tally()).toBe("1,518.00 EGP");
+  });
+
+  it("a product swap replays the hero board from the struck price", async () => {
+    stubMotion(false);
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout", "requestAnimationFrame", "cancelAnimationFrame", "performance"] });
+    const { container } = await mount("en", ["Hero"]);
+    act(() => { vi.advanceTimersByTime(6000); });
+    const cap = container.querySelector("#cap") as HTMLElement;
+    expect(cap.innerHTML).toBe(cap.dataset.done);
+    act(() => { window.dispatchEvent(new Event("gp:product")); vi.advanceTimersByTime(50); });
+    expect(cap.innerHTML).not.toBe(cap.dataset.done);
+    act(() => { vi.advanceTimersByTime(6000); });
+    expect(cap.innerHTML).toBe(cap.dataset.done);
   });
 });

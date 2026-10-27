@@ -5,6 +5,11 @@ import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 import WaitlistForm, { isValidEmail } from "../app/components/WaitlistForm";
 
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ replace: vi.fn(), push: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+  usePathname: () => "/",
+}));
 vi.mock("next/link", () => ({
   default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => <a href={href} {...rest}>{children}</a>,
 }));
@@ -249,10 +254,34 @@ describe("launch switch", () => {
     return fetchMock.mock.calls.map((c) => JSON.parse(String((c[1] as RequestInit).body)).audience);
   };
 
-  // Home's waitlist moved to the dock form (constraints call 1) and launch mode swaps every [data-join]
-  // for the Add to Chrome link (call 2); both land with the dock in Task 5.
-  it.todo("launch=1 home shows Add to Chrome in place of every [data-join] button and no form");
-  it.todo("launch=0 home renders one shopper waitlist form, in the dock");
+  // Home's waitlist is the dock form (constraints call 1); launch mode swaps every [data-join] for Add to Chrome (call 2).
+  const home = async () => {
+    const { default: HomeContent } = await import("../app/components/HomeSections");
+    const { default: Dock, JoinProvider } = await import("../app/landing/Dock");
+    render(<JoinProvider><main><HomeContent locale="en" /></main><Dock locale="en" /></JoinProvider>);
+  };
+
+  it("launch=1 home shows Add to Chrome in place of every [data-join] button and no form", async () => {
+    mockEnv(true);
+    await home();
+    expect(document.querySelector("form")).toBeNull();
+    expect(document.querySelector("[data-join]")).toBeNull();
+    const chrome = [...document.querySelectorAll('a[href="https://chromewebstore.test/gitprice"]')];
+    expect(chrome.map((a) => a.getAttribute("data-gp-placement"))).toEqual(["hero", "bottom", "dock"]);
+  });
+
+  it("launch=0 home renders one shopper waitlist form, in the dock", async () => {
+    mockEnv(false);
+    await home();
+    expect(document.querySelector("form")).toBeNull();
+    for (const b of document.querySelectorAll<HTMLElement>("[data-join]")) {
+      act(() => { b.click(); });
+      expect(document.querySelectorAll("form")).toHaveLength(1);
+      expect(document.querySelector("#dock form")).toBeTruthy();
+    }
+    expect(await audiences()).toEqual(["shopper"]);
+    expect(dl()).toEqual([expect.objectContaining({ audience: "shopper", placement: "dock" })]);
+  });
 
   it("launch=0 sellers page sends audience=seller from both forms", async () => {
     mockEnv(false);

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
 import GMark from "./GMark";
@@ -26,10 +29,11 @@ export const receiptLines = (P: Product) => [line(P), ...BASE.filter((x) => x[0]
 
 /**
  * 3 · the receipt: one long pinned scene; the copy stacks on the left, a receipt prints out of a slot on the right.
- * First state: point one lit, nothing fed (--fed: 0px on #paper). #rmonth holds the render-time month; Task 5 sets it client-side. Task 5 feeds #paper, lights .copy > div with `on`
- * (and --f for its bar), counts #tallyN, and flips #tWith / #tWithout (`raw` on #paper and #tally).
+ * First state: point one lit, nothing fed (--fed: 0px on #paper). ScrollScenes feeds #paper, lights .copy > div with
+ * `on` (and --f for its bar) and counts #tallyN (0 while `raw`). #tWith / #tWithout flip `raw` on #paper and #tally.
  */
 export default function Print({ locale, product: P }: { locale: Locale; product: Product }) {
+  const [raw, setRaw] = useState(false);
   const items = receiptLines(P);
   const paid = items.reduce((n, x) => n + x[2], 0);
   const alt = items.reduce((n, x) => n + (x[3] ?? x[2]), 0);
@@ -51,8 +55,8 @@ export default function Print({ locale, product: P }: { locale: Locale; product:
                 <p dangerouslySetInnerHTML={html(locale, K + p)} />
                 {i === 3 && (
                   <div className={s.tog} role="group" aria-label={t(locale, K + "viewLabel")}>
-                    <button type="button" id="tWith" className="on" aria-pressed="true">{t(locale, K + "with")}</button>
-                    <button type="button" id="tWithout" aria-pressed="false">{t(locale, K + "without")}</button>
+                    <button type="button" id="tWith" className={raw ? undefined : "on"} aria-pressed={!raw} onClick={() => setRaw(false)}>{t(locale, K + "with")}</button>
+                    <button type="button" id="tWithout" className={raw ? "on" : undefined} aria-pressed={raw} onClick={() => setRaw(true)}>{t(locale, K + "without")}</button>
                   </div>
                 )}
               </div>
@@ -60,7 +64,7 @@ export default function Print({ locale, product: P }: { locale: Locale; product:
           </div>
           <div className={s.slotwrap}>
             <div className={s.slot} />
-            <div className={s.paper} id="paper">
+            <div className={`${s.paper} ${raw ? "raw" : ""}`} id="paper">
               <div className={s.hd}>
                 <span className={s.logo} role="img" aria-label="GitPrice" />
                 <span dangerouslySetInnerHTML={html(locale, K + "header", {}, { month: `<span id="rmonth">${esc(month)}</span>` })} />
@@ -90,12 +94,12 @@ export default function Print({ locale, product: P }: { locale: Locale; product:
               <div className={s.tot}>
                 <div className={s.ln}><span>{t(locale, K + "paid")}</span><span id="tPaid"><Price v={paid} /></span></div>
                 <div className={`${s.ln} ${s.alt}`}><span>{t(locale, K + "elsewhere")}</span><span id="tAlt"><Price v={alt} /></span></div>
-                <div className={`${s.ln} ${s.big}`}><span>{t(locale, K + "youSaved")}</span><span id="tSave"><Price v={paid - alt} /></span></div>
+                <div className={`${s.ln} ${s.big}`}><span>{t(locale, K + "youSaved")}</span><span id="tSave"><Price v={raw ? 0 : paid - alt} /></span></div>
                 <small dangerouslySetInnerHTML={html(locale, K + "footnote", {}, { marks: marksHtml(locale) })} />
               </div>
             </div>
           </div>
-          <div className={s.tally} id="tally">
+          <div className={`${s.tally} ${raw ? "raw" : ""}`} id="tally">
             <small>{t(locale, K + "tally")}</small>
             <b id="tallyN" className={b.mono}><Price v={0} /></b>
           </div>

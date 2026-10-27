@@ -19,6 +19,8 @@
 .chap button:hover { scale: 1.06; }
 .chap button:global(.on) { opacity: 1; }
 .chap .pp { display: grid; place-items: center; padding-inline: 16px; }
+/* tap targets: >= 44 rendered px after the canvas zoom */
+.chap button { min-height: calc(44px / var(--z, 1)); }
 .chap button i { position: absolute; inset-inline-start: 0; bottom: 0; height: 3px; width: 0; background: var(--gp-web-fill); }
 
 /* phone canvas: a 4:5 cut */
@@ -30,4 +32,4 @@
 @media (prefers-color-scheme: dark) { :global(html.lp-m:not([data-theme="light"])) .fframe { background-image: var(--pmd); } }
 :global(html.lp-m) .chap { bottom: 84px; gap: 6px; }
 :global(html.lp-m) .chap button { padding: 15px 13px; font-size: 14px; }
-:global(html.lp-m) .chap .pp { min-width: 46px; }
+:global(html.lp-m) .chap .pp { min-width: max(46px, calc(44px / var(--z, 1))); }

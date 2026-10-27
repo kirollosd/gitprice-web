@@ -53,7 +53,7 @@
 :global(html.lp-m) .pick > * { flex-shrink: 0; white-space: nowrap; }
 :global(html.lp-m) .pick small { font-size: 14px; }
 /* compact chips keep their look; an invisible pad brings the tap area to 44px */
-:global(html.lp-m) .pick button { position: relative; padding: 7px 12px; font-size: 14px; }
+:global(html.lp-m) .pick button { position: relative; padding: 7px 12px; font-size: 14px; min-height: calc(44px / var(--z, 1)); }
 :global(html.lp-m) .pick button::before { content: ""; position: absolute; inset: -7px -4px; min-height: 44px; }
 :global(html.lp-m) .kick { top: 122px; inset-inline-start: 20px; font-size: 14px; }
 :global(html.lp-m) .h1 { top: 166px; inset-inline-start: 20px; width: 390px; font-size: 34px; white-space: normal; }

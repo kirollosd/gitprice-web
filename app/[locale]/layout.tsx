@@ -9,6 +9,7 @@ import LocaleSuggestion from "../components/LocaleSuggestion";
 import WebFooter from "../components/WebFooter";
 import SkipLink from "../components/SkipLink";
 import WebNav from "../components/WebNav";
+import Dock, { JoinProvider } from "../landing/Dock";
 import { env } from "../../lib/env";
 import { consentDefaultScript, gtmScript } from "../../lib/gtm";
 import { dir, t, type Locale } from "../../lib/i18n";
@@ -86,13 +87,18 @@ export default async function LocaleLayout({
       </head>
       <body>
         <SkipLink locale={l} />
-        <WebNav locale={l} />
-        {/* Fixed at the bottom, but first after the header in DOM and tab order so keyboard users meet the notice early. */}
-        <FloatingStack>
-          <LocaleSuggestion />
-          <CookieNotice locale={l} />
-        </FloatingStack>
-        <main id="main" tabIndex={-1}>{children}</main>
+        {/* one waitlist form, in the dock: the header CTA and every Join button on the page open it */}
+        <JoinProvider>
+          <WebNav locale={l} />
+          {/* Fixed at the bottom, but first after the header in DOM and tab order so keyboard users meet the notice early. */}
+          <FloatingStack>
+            <LocaleSuggestion />
+            <CookieNotice locale={l} />
+          </FloatingStack>
+          <main id="main" tabIndex={-1}>{children}</main>
+          {/* after <main> in tab order (ship critique); renders on home only */}
+          <Dock locale={l} />
+        </JoinProvider>
         <WebFooter locale={l} />
         <Analytics />
         <TrackListeners />

@@ -71,3 +71,23 @@
 .title { color: var(--gp-ink); font-size: var(--web-fs-body); font-weight: 600; line-height: var(--web-lh-text); }
 .title:focus-visible { outline: none; }
 .body { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-text); }
+
+/* The landing dock's one-line form (placement "dock"): field and button in a row, the label for screen readers only,
+   the note or error under them. Colours come from the dock (--dock, --on-dock, --dock-err in Dock.module.css). */
+.dock { flex-direction: row; flex-wrap: wrap; align-items: flex-start; max-inline-size: none; flex: 1; gap: var(--gp-sp-2); }
+.dock .field { flex: 1; min-inline-size: 0; }
+.dock .label { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.dock .input {
+  block-size: 46px; padding-inline: 18px; border: 1.5px solid color-mix(in srgb, var(--on-dock) 35%, transparent);
+  border-radius: 999px; background: none; color: var(--on-dock); font: 400 16px / 1.2 inherit; font-family: inherit;
+}
+.dock .input::placeholder { color: color-mix(in srgb, var(--on-dock) 65%, transparent); }
+.dock .input[aria-invalid="true"] { border-color: var(--dock-err); padding-inline: 17.5px; border-width: 1.5px; }
+.dock .input:focus-visible, .dock .button:focus-visible { outline-color: var(--ring); }
+.dock .button { inline-size: auto; min-block-size: 46px; padding-inline: 20px; background: var(--on-dock); color: var(--dock); font: 600 16px / 1.2 inherit; font-family: inherit; }
+.dock .note, .dock .error, .dock .failed { flex-basis: 100%; padding-inline: 18px; font-size: 14px; line-height: 1.4; white-space: normal; }
+.dock .note { color: color-mix(in srgb, var(--on-dock) 75%, transparent); }
+.dock .error, .dock .failed { color: var(--dock-err); }
+.dock .error { padding-inline: 18px 0; margin-block-start: 6px; }
+.dock .tile { background: var(--fill-d); color: var(--on-fill-d); }
+.dock .title, .dock .body { color: var(--on-dock); white-space: normal; }

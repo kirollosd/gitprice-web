@@ -1,9 +1,12 @@
 import type { CSSProperties } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
+import { JoinButton } from "./Dock";
 import { html } from "./html";
-import { CUR, money, priceHtml } from "./Price";
-import { products, type Product } from "./products";
+import { splitMoney, useMoney } from "./money";
+import { priceHtml } from "./Price";
+import ProductPicker from "./ProductPicker";
+import type { Product } from "./products";
 import { StoreText } from "./StoreMark";
 import s from "./Hero.module.css";
 
@@ -12,29 +15,25 @@ const isFixed = (c: string) => c === "." || c === ",";
 
 /**
  * 1 · the number. First paint is the scene's first state: the price you are looking at, whole, on a departures board.
- * Task 5 rolls each #digits column (translateY in em) to data-to, draws #strike and lights #tags spans with `on`.
+ * ScrollScenes rolls each #digits column (translateY in em) to data-to, draws #strike and lights #tags spans with `on`.
+ * The board is in the visitor's currency (useMoney); #digits and #cap are rebuilt per product and currency.
+ * #num's data-from / data-best (EGP) feed the dock's "elsewhere" line.
  */
 export default function Hero({ locale, product: P }: { locale: Locale; product: Product }) {
-  const from = money(P.from, 0);
-  const to = money(P.best.price, 0);
+  const f = useMoney();
+  const [from, code] = splitMoney(f(P.from, 0));
+  const [to] = splitMoney(f(P.best.price, 0));
   const less = P.from - P.best.price;
   // the caption once the board has landed; ScrollScenes swaps #cap to it
   const done = html(locale, K + "captionDone", { product: P.short }, { less: priceHtml(less, Number.isInteger(less) ? 0 : 2), from: priceHtml(P.from) }).__html;
   return (
-    <section className={`${b.sec} ${s.num}`} id="num" data-gp-section="num">
+    <section className={`${b.sec} ${s.num}`} id="num" data-gp-section="num" data-from={P.from} data-best={P.best.price}>
       <div className={b.stage} style={{ "--len": from.length } as CSSProperties}>
-        <div className={s.pick} id="pick" role="group" aria-labelledby="pickl">
-          <small id="pickl">{t(locale, K + "pick")}</small>
-          {products.map((x) => (
-            <button key={x.id} type="button" data-id={x.id} aria-pressed={x.id === P.id} className={x.id === P.id ? "on" : undefined}>
-              {locale === "ar" ? x.ar.chip : x.chip}
-            </button>
-          ))}
-        </div>
+        <ProductPicker locale={locale} />
         <div className={`${b.kick} ${s.kick}`}>{t(locale, K + "eyebrow")}</div>
         <h1 className={s.h1}>{t(locale, K + "headline")}</h1>
-        <p className={s.cap} id="cap" data-done={done} dangerouslySetInnerHTML={html(locale, K + "captionStart", { product: P.name })} />
-        <div className={`${s.digits} ${b.mono}`} id="digits" aria-hidden="true" data-keep-ls="" data-from={from} data-to={to}>
+        <p key={P.id} className={s.cap} id="cap" data-done={done} dangerouslySetInnerHTML={html(locale, K + "captionStart", { product: P.name })} />
+        <div key={`${P.id}:${from}:${to}`} className={`${s.digits} ${b.mono}`} id="digits" aria-hidden="true" data-keep-ls="" data-from={from} data-to={to}>
           {[...from].map((c, i) =>
             isFixed(c) ? (
               <span key={i} className={`${s.dg} ${s.dot}`}>{c}</span>
@@ -47,17 +46,17 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
             ),
           )}
         </div>
-        <span className={s.unit} data-cur="" aria-hidden="true">{CUR}</span>
+        <span className={s.unit} data-cur="" aria-hidden="true">{code}</span>
         <div className={s.strike} id="strike" aria-hidden="true" />
-        <p className={b.sr} id="numsr">{t(locale, K + "srPrices", { from: `${from} ${CUR}`, to: `${to} ${CUR}` })}</p>
-        <div className={s.tags} id="tags">
+        <p className={b.sr} id="numsr">{t(locale, K + "srPrices", { from: `${from} ${code}`, to: `${to} ${code}` })}</p>
+        <div key={P.id} className={s.tags} id="tags">
           {P.tags.map((x) => <span key={x}>{x}</span>)}
           <span className={s.w}><StoreText label={P.best.store} locale={locale} /></span>
         </div>
         <div className={s.lede}>
           <p id="lede">{t(locale, K + "lede")}</p>
           <div className={s.hcta}>
-            <button type="button" className={s.p} data-join="" data-gp-track="cta_click" data-gp-cta-id="join" data-gp-placement="hero">{t(locale, K + "join")}</button>
+            <JoinButton locale={locale} placement="hero" className={s.p} />
             <a href="#how">{t(locale, K + "seeHow")}</a>
           </div>
           <small>{t(locale, K + "free")}</small>

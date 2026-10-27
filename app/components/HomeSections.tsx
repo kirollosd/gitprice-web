@@ -1,18 +1,10 @@
 import type { ReactNode } from "react";
 import { t, type Locale } from "../../lib/i18n";
-import Alerts from "../landing/Alerts";
 import b from "../landing/base.module.css";
 import { CANVAS_BOOT } from "../landing/canvas";
 import CanvasFit from "../landing/CanvasFit";
-import Film from "../landing/Film";
-import Foot from "../landing/Foot";
-import Hero from "../landing/Hero";
-import How from "../landing/How";
-import Print from "../landing/Print";
-import { getProduct, localize } from "../landing/products";
-import Rail from "../landing/Rail";
+import LandingBody from "../landing/LandingBody";
 import ScrollScenes from "../landing/ScrollScenes";
-import Spot from "../landing/Spot";
 import WaitlistForm from "./WaitlistForm";
 import styles from "./HomeSections.module.css";
 
@@ -56,22 +48,17 @@ export function CtaBand({ title, line, children }: { title: string; line?: strin
   );
 }
 
-/** Home body: the Coral landing sections in mock order on the zoomed canvas (see app/landing/canvas.ts). */
-export default function HomeContent({ locale, product }: { locale: Locale; product?: string }) {
-  const P = localize(getProduct(product), locale);
+/**
+ * Home body: the Coral landing sections in mock order on the zoomed canvas (see app/landing/canvas.ts).
+ * The sections render client-side around the picked product (?p=, LandingBody); the dock lives in the layout.
+ */
+export default function HomeContent({ locale }: { locale: Locale }) {
   return (
     <div className={b.shell}>
       <div className={b.canvas}>
         <script dangerouslySetInnerHTML={{ __html: CANVAS_BOOT }} />
         <CanvasFit />
-        <Hero locale={locale} product={P} />
-        <How locale={locale} product={P} />
-        <Film locale={locale} product={P} />
-        <Spot locale={locale} product={P} />
-        <Print locale={locale} product={P} />
-        <Alerts locale={locale} product={P} />
-        <Rail locale={locale} product={P} />
-        <Foot locale={locale} product={P} />
+        <LandingBody locale={locale} />
         <ScrollScenes locale={locale} />
       </div>
     </div>

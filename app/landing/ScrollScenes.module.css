@@ -9,6 +9,8 @@
   opacity: 0; pointer-events: none; transition: opacity .4s, transform .5s var(--spring);
 }
 .cue:global(.on) { opacity: 1; transform: translate(-50%, 0); }
+/* the dock's waitlist form is open (JoinProvider sets html[data-gp-join]): the cue steps aside */
+:global(html[data-gp-join]) .cue:global(.on) { opacity: 0; visibility: hidden; }
 .cue:global(.on) svg { animation: cue 1.6s var(--spring) infinite; }
 @keyframes cue { 0% { transform: translateY(-3px); opacity: .4; } 60% { transform: translateY(3px); opacity: 1; } 100% { transform: translateY(3px); opacity: 0; } }
 :global(html.lp-m) .cue { bottom: 96px; }

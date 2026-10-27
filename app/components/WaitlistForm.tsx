@@ -44,13 +44,16 @@ export default function WaitlistForm({
   audience,
   placement,
   label,
+  onJoined,
 }: {
   locale: Locale;
   audience: "shopper" | "seller";
-  /** Where on the page this form sits, for the waitlist_submit event. */
-  placement: "hero" | "bottom";
+  /** Where on the page this form sits, for the waitlist_submit event. "dock" is the landing's compact one-line form. */
+  placement: "hero" | "bottom" | "dock";
   /** Submit label; defaults to the board's "Join the waitlist". */
   label?: string;
+  /** Called once the visitor is on the list (joined or already joined). */
+  onJoined?: () => void;
 }) {
   const [status, setStatus] = useState<Status>("empty");
   // Bumped on every submit, so a repeated invalid submit refocuses the field after the message renders.
@@ -90,16 +93,19 @@ export default function WaitlistForm({
       // Network error or timeout: the failed state, never logged (the request carries the email).
     }
     busy.current = false;
-    if (next === "joined" || next === "alreadyJoined") track("waitlist_submit", { audience, placement });
+    const ok = next === "joined" || next === "alreadyJoined";
+    if (ok) track("waitlist_submit", { audience, placement });
     setStatus(next);
+    if (ok) onJoined?.();
   }
 
   const seller = audience === "seller";
+  const form = placement === "dock" ? `${styles.form} ${styles.dock}` : styles.form;
   if (done) {
     const body = seller && status === "joined" ? SELLER_JOINED_BODY : `${W}${status}.body`;
     const Title = placement === "hero" ? "h2" : "h3";
     return (
-      <div className={styles.form} data-waitlist={status}>
+      <div className={form} data-waitlist={status}>
         <span className={styles.tile} aria-hidden="true">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
             <path d="M20 6 9 17l-5-5" />
@@ -118,7 +124,7 @@ export default function WaitlistForm({
     : status === "failed" ? t(locale, W + "failed.button.submit.label")
     : label ?? t(locale, W + "empty.button.submit.label");
   return (
-    <form className={styles.form} onSubmit={onSubmit} noValidate aria-busy={status === "submitting"} data-waitlist={status}>
+    <form className={form} onSubmit={onSubmit} noValidate aria-busy={status === "submitting"} data-waitlist={status}>
       <div className={styles.field}>
         <label htmlFor={`${id}-email`} className={styles.label}>{t(locale, W + "empty.input.email.label")}</label>
         <input
@@ -151,7 +157,7 @@ export default function WaitlistForm({
           </svg>
           {t(locale, W + "failed.message")}
         </p>
-      ) : status !== "error" && <p className={styles.note}>{t(locale, seller ? SELLER_NOTE[placement] : W + "empty.note")}</p>}
+      ) : status !== "error" && <p className={styles.note}>{t(locale, seller ? SELLER_NOTE[placement === "bottom" ? "bottom" : "hero"] : W + "empty.note")}</p>}
     </form>
   );
 }

@@ -5,6 +5,11 @@ import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 
 vi.mock("next/script", () => ({ default: () => null }));
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ replace: vi.fn(), push: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+  usePathname: () => "/",
+}));
 vi.mock("next/link", () => ({
   default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => <a href={href} {...rest}>{children}</a>,
 }));

@@ -8,7 +8,7 @@ const B = "web.component.webStoreBadges.default.";
  * Launch CTA: Add to Chrome at every width, App Store and Google Play below 768.
  * The design stand-ins are plain token-styled links; no official artwork is bundled.
  */
-export default function StoreBadges({ locale, placement }: { locale: Locale; placement: "hero" | "bottom" }) {
+export default function StoreBadges({ locale, placement }: { locale: Locale; placement: "hero" | "bottom" | "dock" }) {
   return (
     <div className={styles.root}>
       <a className={styles.chrome} href={env.chromeStoreUrl} data-gp-track="store_click" data-gp-store="chrome" data-gp-placement={placement}>{t(locale, B + "button.addToChrome.label")}</a>

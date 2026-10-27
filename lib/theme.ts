@@ -74,4 +74,4 @@ export function toneCss(c: ToneConfig): string {
 
 /** Inline, before first paint: a remembered "light"/"dark" choice sets data-theme; otherwise the OS media query applies. */
 export const THEME_BOOT =
-  'try{var t=localStorage.getItem("gp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}';
+  'document.documentElement.classList.add("js");try{var t=localStorage.getItem("gp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}';

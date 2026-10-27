@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
+import DemoVideo from "./DemoVideo";
 import { html } from "./html";
 import type { Product } from "./products";
 import s from "./Film.module.css";
@@ -11,8 +12,8 @@ export const CHAPTERS = [["shop", 0], ["match", 3.4], ["compare", 5.8], ["alert"
 
 /**
  * 2b · the film: a tilted inset card that grows to full-bleed, then plays. First state: the small tilted card,
- * chapters hidden. The poster is a CSS background per theme and canvas (one request); Task 5's DemoVideo sets
- * #vid src/poster, plays in view and toggles `on` on #chap and its buttons.
+ * chapters hidden. The poster is a CSS background per theme and canvas (one request); DemoVideo sets #vid
+ * src/poster, plays in view and drives the chapter buttons.
  */
 export default function Film({ locale, product: P }: { locale: Locale; product: Product }) {
   const poster = (cut: string, look: string) => `url(/media/demo-${P.id}${cut}-${look}-poster.jpg)`;
@@ -37,6 +38,7 @@ export default function Film({ locale, product: P }: { locale: Locale; product: 
           ))}
         </div>
       </div>
+      <DemoVideo id={P.id} locale={locale} />
     </section>
   );
 }

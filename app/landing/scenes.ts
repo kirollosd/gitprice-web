@@ -61,9 +61,10 @@ export function createScenes(reduce: boolean, wake: () => void) {
   let c = canvas();
   let M: Metrics | null = null;
   let tallyS = NaN;
-  const html0: Record<string, string> = {};
+  // each swapped element's first (server-rendered) copy; a re-rendered element starts over
+  const html0 = new WeakMap<Element, string>();
   const shown = new Map<Element, string>();
-  const keep = (id: string) => { const el = $(id); if (el && html0[id] == null) html0[id] = el.innerHTML; return el; };
+  const keep = (id: string) => { const el = $(id); if (el && !html0.has(el)) html0.set(el, el.innerHTML); return el; };
   /** Swap a pre-rendered state in only when the state changes (keeps aria-live quiet), then format its prices. */
   const show = (el: HTMLElement | null, key: string, h: string) => {
     if (!el || shown.get(el) === key) return;
@@ -123,7 +124,7 @@ export function createScenes(reduce: boolean, wake: () => void) {
     });
     kids($("tags")).forEach((t, i) => t.classList.toggle("on", p > 0.62 + i * 0.06));
     const cap = keep("cap");
-    if (cap?.dataset.done) show(cap, p > 0.8 ? "done" : "start", p > 0.8 ? cap.dataset.done : html0.cap);
+    if (cap?.dataset.done) show(cap, p > 0.8 ? "done" : "start", p > 0.8 ? cap.dataset.done : html0.get(cap)!);
   }
 
   /** 2 · how it works: the slab grows in, the browser untilts, three steps swap with story bars. */
@@ -178,9 +179,10 @@ export function createScenes(reduce: boolean, wake: () => void) {
     const fin = p >= STAMP;
     v?.classList.toggle("on", fin);
     show(v, fin ? "done" : "none", fin ? v?.dataset.done ?? "" : "");
-    if (fin) show(h, "found", h.dataset.found ?? html0.roomh);
-    else if (p > 0.22) show(h, "checking", h.dataset.checking ?? html0.roomh);
-    else show(h, "start", html0.roomh);
+    const h0 = html0.get(h)!;
+    if (fin) show(h, "found", h.dataset.found ?? h0);
+    else if (p > 0.22) show(h, "checking", h.dataset.checking ?? h0);
+    else show(h, "start", h0);
   }
 
   /** 3 · the receipt prints across the scene; the copy points light in turn; the tally counts what has printed. */
@@ -229,6 +231,7 @@ export function createScenes(reduce: boolean, wake: () => void) {
   const unsub = subscribeMoney(() => {
     for (const id of ["cap", "roomh", "verdict"]) { const el = $(id); if (el) applyMoney(el); }
     tallyS = NaN;
+    M = null; // converted prices change the receipt's widths and the board's cells
     wake();
   });
 
@@ -256,6 +259,13 @@ export function createScenes(reduce: boolean, wake: () => void) {
     kickHero() { const s = PLAY.num; if (s && s.tgt < 1) s.tgt = 1; },
     /** Fonts, canvas or content changed: re-measure the board cells and the receipt on the next frame. */
     measure() { M = null; },
+    /** A new product is on the page: re-measure, recount the tally and replay the hero from the struck price. */
+    reset() {
+      M = null;
+      tallyS = NaN;
+      const s = PLAY.num;
+      if (s && !reduce) { s.d = 0; s.tgt = 1; }
+    },
     stop() { Object.values(idleT).forEach((t) => clearTimeout(t)); unsub(); },
   };
 }
