@@ -12,7 +12,7 @@ const LANGS: Locale[] = ["en", "ar"];
 /**
  * The header's language menu, ported from combo.html: a globe button with the current language (EN / ع) and a
  * listbox anchored to the button's end edge, so it opens inward in both directions. Esc and an outside press
- * close it; picking the other language goes to the same page in it (switchPath keeps the hash). Items carry
+ * close it; picking the other language goes to the same page in it (the hash and query, so ?p=, are kept) and is remembered. Items carry
  * lang, never dir: the page direction is the document's.
  */
 export default function LangMenu({ locale }: { locale: Locale }) {
@@ -40,7 +40,10 @@ export default function LangMenu({ locale }: { locale: Locale }) {
   const pick = (to: Locale) => {
     if (to === locale) { show(false); return; }
     setOpen(false);
-    router.push(switchPath(pathname, location.hash, to));
+    // the choice is remembered (the mock's gp-lang), and ?p= rides along so the product stays
+    try { localStorage.setItem("gp-lang", to); } catch { /* storage blocked */ }
+    const dest = switchPath(pathname, location.hash, to), at = dest.indexOf("#");
+    router.push(at < 0 ? dest + location.search : dest.slice(0, at) + location.search + dest.slice(at));
   };
   const onList = (e: KeyboardEvent<HTMLUListElement>) => {
     const o = items(), i = o.indexOf((e.target as HTMLElement).closest<HTMLElement>('[role="option"]')!);
