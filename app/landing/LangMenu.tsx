@@ -20,7 +20,7 @@ export default function LangMenu({ locale }: { locale: Locale }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const wrap = useRef<HTMLDivElement>(null), btn = useRef<HTMLButtonElement>(null), list = useRef<HTMLUListElement>(null);
-  const items = () => [...(list.current?.querySelectorAll<HTMLElement>('[role="option"]') ?? [])];
+  const items = () => [...(list.current?.querySelectorAll<HTMLElement>("a[lang]") ?? [])];
 
   const show = (v: boolean) => {
     setOpen(v);
@@ -44,10 +44,10 @@ export default function LangMenu({ locale }: { locale: Locale }) {
     const dest = switchPath(pathname, location.hash, to), at = dest.indexOf("#");
     router.push(at < 0 ? dest + location.search : dest.slice(0, at) + location.search + dest.slice(at));
   };
+  // Enter on a link clicks it (pick below); arrows move between the links
   const onList = (e: KeyboardEvent<HTMLUListElement>) => {
-    const o = items(), i = o.indexOf((e.target as HTMLElement).closest<HTMLElement>('[role="option"]')!);
+    const o = items(), i = o.indexOf(e.target as HTMLElement);
     if (e.key === "Escape") { e.preventDefault(); show(false); }
-    else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (i >= 0) pick(o[i].lang as Locale); }
     else if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); o[(i + (e.key === "ArrowDown" ? 1 : o.length - 1)) % o.length]?.focus(); }
     else if (e.key === "Tab") setOpen(false);
   };
@@ -59,7 +59,6 @@ export default function LangMenu({ locale }: { locale: Locale }) {
         type="button"
         className={s.lng}
         id="lng"
-        aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls="lmenu"
         aria-label={t(locale, K + "label")}
@@ -73,21 +72,21 @@ export default function LangMenu({ locale }: { locale: Locale }) {
           <circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" />
         </svg>
       </button>
-      <ul ref={list} className={s.lmenu} id="lmenu" role="listbox" aria-label={t(locale, K + "label")} hidden={!open} onKeyDown={onList}>
+      <ul ref={list} className={s.lmenu} id="lmenu" aria-label={t(locale, K + "label")} hidden={!open} onKeyDown={onList}>
         {LANGS.map((l) => (
-          <li
-            key={l}
-            role="option"
-            tabIndex={0}
-            lang={l}
-            aria-selected={l === locale}
-            data-gp-track="locale_switch"
-            data-gp-from={locale}
-            data-gp-to={l}
-            onClick={() => pick(l)}
-          >
-            {/* a real href so crawlers and no-JS readers find the other language; the click is the menu's pick() */}
-            <a href={switchPath(pathname, "", l)} tabIndex={-1} onClick={(e) => e.preventDefault()}>{t(locale, K + l)}</a>
+          <li key={l}>
+            {/* real links (a disclosure, not a listbox): crawlers and no-JS readers find the other language; the click is pick() */}
+            <a
+              href={switchPath(pathname, "", l)}
+              lang={l}
+              aria-current={l === locale ? "true" : undefined}
+              data-gp-track="locale_switch"
+              data-gp-from={locale}
+              data-gp-to={l}
+              onClick={(e) => { e.preventDefault(); pick(l); }}
+            >
+              {t(locale, K + l)}
+            </a>
           </li>
         ))}
       </ul>

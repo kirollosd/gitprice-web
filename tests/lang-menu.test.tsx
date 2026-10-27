@@ -19,7 +19,7 @@ describe("LangMenu", () => {
     const { btn, list } = await menu();
     expect(list.hidden).toBe(true);
     expect(btn.getAttribute("aria-expanded")).toBe("false");
-    expect(btn.getAttribute("aria-haspopup")).toBe("listbox");
+    expect(btn.hasAttribute("aria-haspopup")).toBe(false);
     // icon only: no language letters, the accessible name stays
     expect(btn.textContent).toBe("");
     expect(btn.getAttribute("aria-label")).toBe("Language");
@@ -31,9 +31,10 @@ describe("LangMenu", () => {
     act(() => { fireEvent.keyDown(btn, { key: "Enter" }); });
     expect(list.hidden).toBe(false);
     expect(btn.getAttribute("aria-expanded")).toBe("true");
-    const en = list.querySelector('[lang="en"]');
+    const en = list.querySelector('a[lang="en"]');
     expect(document.activeElement).toBe(en);
-    expect(en?.getAttribute("aria-selected")).toBe("true");
+    expect(en?.getAttribute("aria-current")).toBe("true");
+    expect(list.querySelector("[role]")).toBeNull(); // plain links, no listbox semantics
     act(() => { fireEvent.keyDown(document.activeElement!, { key: "Escape" }); });
     expect(list.hidden).toBe(true);
     expect(document.activeElement).toBe(btn);
@@ -42,7 +43,7 @@ describe("LangMenu", () => {
   it("the Arabic item carries lang=ar and no dir; arrows move between items", async () => {
     const { btn, list } = await menu();
     act(() => { fireEvent.click(btn); });
-    const ar = list.querySelector('[role="option"][lang="ar"]')!;
+    const ar = list.querySelector('a[lang="ar"]')!;
     expect(ar.hasAttribute("dir")).toBe(false);
     expect([...list.querySelectorAll("[dir]")]).toHaveLength(0);
     act(() => { fireEvent.keyDown(document.activeElement!, { key: "ArrowDown" }); });
@@ -58,7 +59,7 @@ describe("LangMenu", () => {
     expect(push).not.toHaveBeenCalled();
     expect(list.hidden).toBe(true);
     act(() => { fireEvent.click(btn); });
-    act(() => { fireEvent.keyDown(list.querySelector('[lang="ar"]')!, { key: "Enter" }); });
+    act(() => { fireEvent.click(list.querySelector('[lang="ar"]')!); });
     expect(push).toHaveBeenCalledWith("/ar/sellers");
   });
 

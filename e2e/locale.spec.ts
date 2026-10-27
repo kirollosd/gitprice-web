@@ -20,11 +20,11 @@ test("the landing language menu switches to Arabic and back", async ({ page }) =
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
   await page.locator("#lng").click();
-  await page.locator('#lmenu [role="option"][lang="ar"]').click();
+  await page.locator('#lmenu [lang="ar"]').click();
   await expect(page).toHaveURL(/\/ar$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await page.locator("#lng").click();
-  await page.locator('#lmenu [role="option"][lang="en"]').click();
+  await page.locator('#lmenu [lang="en"]').click();
   await expect(page).toHaveURL(/localhost:\d+\/$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
 });

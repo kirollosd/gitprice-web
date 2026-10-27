@@ -33,10 +33,10 @@ test("language switch keeps the page and flips locale", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/privacy");
   await page.locator("header #lng").click();
-  await page.locator("header").getByRole("option", { name: "العربية" }).click();
+  await page.locator("header").getByRole("link", { name: "العربية" }).click();
   await expect(page).toHaveURL(/\/ar\/privacy$/);
   await page.locator("header #lng").click();
-  await page.locator("header").getByRole("option", { name: "English" }).click();
+  await page.locator("header").getByRole("link", { name: "English" }).click();
   await expect(page).toHaveURL(/\/privacy$/);
 });
 
