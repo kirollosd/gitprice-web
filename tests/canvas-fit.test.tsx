@@ -1,6 +1,7 @@
 import { act, cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import CanvasFit from "../app/landing/CanvasFit";
+import { fitCanvas } from "../app/landing/canvas";
 
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); document.body.innerHTML = ""; });
 
@@ -28,5 +29,16 @@ describe("CanvasFit", () => {
     vi.stubGlobal("innerWidth", innerWidth + 200);
     act(() => { window.dispatchEvent(new Event("resize")); });
     expect(to).toHaveBeenCalledTimes(1);
+  });
+  it("a zoomed-down desktop canvas keeps a 12 rendered px text floor; at z >= 1 there is none", () => {
+    const d = document.documentElement;
+    vi.stubGlobal("innerHeight", 700);
+    vi.spyOn(d, "clientWidth", "get").mockReturnValue(1000);
+    fitCanvas();
+    expect(parseFloat(d.style.getPropertyValue("--fl"))).toBeCloseTo(15.36, 1); // 12 / (1000 / 1280)
+    vi.stubGlobal("innerHeight", 900);
+    vi.spyOn(d, "clientWidth", "get").mockReturnValue(1440);
+    fitCanvas();
+    expect(d.style.getPropertyValue("--fl")).toBe("0px");
   });
 });

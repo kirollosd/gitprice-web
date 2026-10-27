@@ -2,7 +2,7 @@
  * The landing is drawn on a fixed canvas and zoomed to the window, as in the mock (GP_CANVAS).
  * Phones and portrait tablets get the 430px+ phone canvas (html.lp-m); everything else the 1280-1440 desktop one.
  * Zoom is capped (1.25 phone, 1.2 desktop) and the desktop canvas is kept at least 780px tall, so pinned scenes fit.
- * html.lp-short marks wide-but-short windows. Self-contained: it is also inlined as a string before first paint.
+ * html.lp-short marks wide-but-short windows; --fl is the small-text floor (in canvas px) once the desktop canvas is zoomed below 1. Self-contained: it is also inlined as a string before first paint.
  */
 export function fitCanvas() {
   const d = document.documentElement, w = d.clientWidth, h = window.innerHeight || d.clientHeight;
@@ -12,6 +12,8 @@ export function fitCanvas() {
   d.classList.toggle("lp-short", !m && (h * cw) / w < 860);
   d.style.setProperty("--cw", cw + "px");
   d.style.setProperty("--z", String(w / cw));
+  // desktop canvas text floor: below z = 1 (windows under 1280px, browser zoom) small text keeps 12 rendered px (SC 1.4.4); 0 at z >= 1. The phone canvas sets its own on .canvas (base.module.css)
+  d.style.setProperty("--fl", !m && w < cw ? (12 * cw) / w + "px" : "0px");
 }
 
 export const CANVAS_BOOT = `(${fitCanvas.toString()})()`;
