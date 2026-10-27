@@ -31,6 +31,8 @@ export default function Foot({ locale, product: P }: { locale: Locale; product: 
           <a className={s.s} href="#how">{t(locale, K + "howItWorks")}</a>
         </div>
       </div>
+      {/* facts and the legal row share one column, so the legal row follows the facts however long they run */}
+      <div className={s.aside}>
       <p className={s.meta} dangerouslySetInnerHTML={html(locale, K + "facts")} />
       <div className={s.legal}>
         <p>{t(locale, K + "copyright", { year: 2026 })}</p>
@@ -40,6 +42,7 @@ export default function Foot({ locale, product: P }: { locale: Locale; product: 
           <CookieSettingsButton locale={locale} />
           <BetaTag locale={locale} />
         </nav>
+      </div>
       </div>
       <div className={`${s.word} ${b.mono}`} id="word" aria-hidden="true" data-keep-ls="">{word}</div>
     </footer>
