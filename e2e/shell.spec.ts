@@ -2,7 +2,18 @@ import { expect, test } from "./fixtures";
 
 test.use({ viewport: { width: 390, height: 800 } });
 
+// The landing header has no hamburger (the mock's); the other pages keep the phone menu sheet.
 for (const path of ["/", "/ar"]) {
+  test(`${path}: no hamburger, and no overflow with the language menu open`, async ({ page }) => {
+    await page.goto(path);
+    await expect(page.locator("header button[aria-expanded]:not(#lng)")).toHaveCount(0);
+    await page.locator("#lng").click();
+    await expect(page.locator("#lmenu")).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+  });
+}
+
+for (const path of ["/sellers", "/ar/sellers", "/privacy"]) {
   test(`no horizontal overflow at 390 on ${path}, menu closed and open`, async ({ page }) => {
     await page.goto(path);
     const width = () => page.evaluate(() => document.documentElement.scrollWidth);
@@ -34,7 +45,7 @@ test("unknown path renders localized not-found with 404", async ({ page }) => {
 });
 
 test("the same button opens and closes the menu by click", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/sellers");
   const btn = page.locator("header button[aria-expanded]");
   await btn.click();
   await expect(page.locator("#web-menu")).toBeVisible();
@@ -48,7 +59,7 @@ test("the same button opens and closes the menu by click", async ({ page }) => {
 });
 
 test("growing the viewport to 1024 closes the open menu", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/sellers");
   const btn = page.locator("header button[aria-expanded]");
   await btn.click();
   await expect(btn).toHaveAttribute("aria-expanded", "true");

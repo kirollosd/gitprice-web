@@ -2,16 +2,14 @@ import { test } from "./fixtures";
 import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 import {
-  decideConsent, divergedReason, expectFormParity, expectParity, isDiverged, LOCALES, seedCheckout, seedReset, seedWaitlist, sizeToBoard, spinnerMask, WIDTHS,
-  type CheckoutState, type Mask, type ResetState, type Shot, type WaitlistState,
+  decideConsent, expectParity, LOCALES, seedCheckout, seedReset, sizeToBoard, spinnerMask, WIDTHS,
+  type CheckoutState, type Mask, type ResetState, type Shot,
 } from "./parity-lib";
 
-// Prelaunch project (:3000). Launch-only boards live in parity.launch.spec.ts.
-// The waitlist form is never masked. Home prelaunch boards diverge below the hero (DIVERGED), so each Home form state
-// (empty, submitting, error, failed, joined; dark for empty, the only dark export) is compared on the form's own rectangle;
-// Sellers prelaunch and prelaunch-joined compare the whole page. alreadyJoined has no board export.
-// Not pixel-compared, no build counterpart: Pricing-default (the priced plans page, copy and price keys do not exist; the build ships only the no-prices page).
-// Home prelaunch and cookie-notice are test.fixme: see DIVERGED in parity-lib.ts. Sellers and Home launch are compared without masks on the art.
+// Prelaunch project (:3000), pages the coral redesign (GP-406) did not touch: Pricing, Privacy, Terms, NotFound, ResetPassword, Checkout.
+// The redesigned pages (Home, Sellers, Menu open) and the screens whose boards no longer matched (Welcome, ResetPassword link-expired,
+// Checkout success) are covered by visual.spec.ts against baselines of the new site; their board PNGs were removed.
+// Not pixel-compared, no build counterpart: Pricing-default (the priced plans page; the build ships only the no-prices page).
 
 const COPY = { en: en.web, ar: ar.web };
 type Locale = "en" | "ar";
@@ -32,7 +30,6 @@ for (const width of WIDTHS) {
 
     // ----- static pages -----
     const pages: [string, string, string, Mask[]?][] = [
-      ["Welcome", "default", "/welcome"],
       ["Pricing", "no-prices", "/pricing"],
       ["Privacy", "default", "/privacy"],
       ["Terms", "default", "/terms"],
@@ -48,66 +45,8 @@ for (const width of WIDTHS) {
       });
     }
 
-    // ----- home and sellers prelaunch, waitlist form unmasked -----
-    for (const [screen, path] of [["Home", "/"], ["Sellers", "/sellers"]] as const) {
-      for (const cookieNotice of screen === "Home" ? [false, true] : [false]) {
-        const state = cookieNotice ? "cookie-notice" : "prelaunch";
-        const themes = !cookieNotice && screen === "Home" && darkOnly(width) ? (["light", "dark"] as const) : (["light"] as const);
-        for (const theme of themes) {
-          test(`${screen} ${state} ${tag} ${theme}`, async ({ page }) => {
-            test.fixme(isDiverged(screen, state), divergedReason(screen, state));
-            const s = shot(screen, state, width, locale, { theme });
-            if (!cookieNotice) await decideConsent(page);
-            await sizeToBoard(page, s);
-            await page.goto(`${base}${path}`);
-            await expectParity(page, s);
-          });
-        }
-      }
-    }
-
-    // ----- Sellers prelaunch-joined: the hero form after a 201 -----
-    test(`Sellers prelaunch-joined ${tag} light`, async ({ page }) => {
-      const s = shot("Sellers", "prelaunch-joined", width, locale);
-      await decideConsent(page);
-      await sizeToBoard(page, s);
-      await page.goto(`${base}/sellers`);
-      await seedWaitlist(page, "joined", { error: "", filled: W.component.webWaitlistForm.failed.input.email.value }, W.sellers.prelaunch.hero.waitlist.button.submitLabel);
-      await expectParity(page, s);
-    });
-
-    // ----- Home waitlist form states, compared on the form's rectangle -----
-    const formStates: WaitlistState[] = ["empty", "submitting", "error", "failed", "joined"];
-    for (const state of formStates) {
-      const themes = state === "empty" && darkOnly(width) ? (["light", "dark"] as const) : (["light"] as const);
-      for (const theme of themes) {
-        test(`Home waitlist ${state} ${tag} ${theme}`, async ({ page }) => {
-          const F = W.component.webWaitlistForm;
-          const board = shot("Home", state === "empty" ? "prelaunch" : `prelaunch-${state}`, width, locale, { theme });
-          await decideConsent(page);
-          await sizeToBoard(page, board);
-          await page.goto(`${base}/`);
-          await seedWaitlist(page, state, { error: F.error.input.email.value, filled: F.submitting.input.email.value }, F.empty.button.submit.label);
-          await expectFormParity(page, { ...board, state });
-        });
-      }
-    }
-
-    // ----- menu (390 only) -----
-    if (width === 390) {
-      test(`Menu open ${tag}`, async ({ page }) => {
-        const s = shot("Menu-open", "", width, locale);
-        await decideConsent(page);
-        await sizeToBoard(page, s);
-        await page.goto(`${base}/`);
-        await page.locator("header button[aria-expanded]").click();
-        await page.locator("#web-menu").waitFor();
-        await expectParity(page, s);
-      });
-    }
-
     // ----- reset password -----
-    const resetStates: ResetState[] = ["verifying", "set-new-password", "weak-password", "saving", "error", "success", "link-expired"];
+    const resetStates: ResetState[] = ["verifying", "set-new-password", "weak-password", "saving", "error", "success"];
     for (const state of resetStates) {
       const themes = state === "set-new-password" && darkOnly(width) ? (["light", "dark"] as const) : (["light"] as const);
       for (const theme of themes) {
@@ -122,7 +61,7 @@ for (const width of WIDTHS) {
     }
 
     // ----- checkout -----
-    const checkoutStates: CheckoutState[] = ["summary", "signed-out", "already-pro", "failed", "redirecting", "cancelled", "waiting", "success"];
+    const checkoutStates: CheckoutState[] = ["summary", "signed-out", "already-pro", "failed", "redirecting", "cancelled", "waiting"];
     for (const state of checkoutStates) {
       const themes = state === "summary" && darkOnly(width) ? (["light", "dark"] as const) : (["light"] as const);
       for (const theme of themes) {

@@ -24,16 +24,11 @@ describe("readEnv", () => {
     expect(readEnv({ ...base, NEXT_PUBLIC_CHECKOUT: "1" }).checkout).toBe(true);
   });
 
-  test("readEnv accepts launch with all store URLs", () => {
-    const e = readEnv({
-      ...base,
-      NEXT_PUBLIC_LAUNCH: "1",
-      NEXT_PUBLIC_CHROME_STORE_URL: "https://c",
-      NEXT_PUBLIC_APP_STORE_URL: "https://a",
-      NEXT_PUBLIC_PLAY_STORE_URL: "https://p",
-    });
+  test("readEnv accepts launch with only the Chrome store URL (phase 1 is extension only)", () => {
+    const e = readEnv({ ...base, NEXT_PUBLIC_LAUNCH: "1", NEXT_PUBLIC_CHROME_STORE_URL: "https://c" });
     expect(e.launch).toBe(true);
     expect(e.chromeStoreUrl).toBe("https://c");
+    expect(e.appStoreUrl).toBeUndefined();
   });
 
   test("readEnv throws one error naming every missing required var", () => {

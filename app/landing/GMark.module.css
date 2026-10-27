@@ -1,0 +1,19 @@
+/* The g is the GitPrice mark: an orbit while it checks, then it unwinds into the result (= same, ≠ look-alike, dim g = no match).
+   The chip (size, fill, colour) comes from the section's .eq class; this only draws the strokes. */
+.gx svg { width: 62%; height: auto; aspect-ratio: 300 / 320; overflow: visible; }
+.gx path { fill: none; stroke: currentColor; stroke-width: 46; transition: stroke-dasharray .55s cubic-bezier(.16, 1, .3, 1), opacity .35s; }
+.gx .ring { stroke-dasharray: 449 0; }
+.gx .slash { stroke-dasharray: 0 260; opacity: 0; }
+.gx:is([data-g="same"], [data-g="ne"]) .ring { stroke-dasharray: 0 449; opacity: 0; }
+.gx[data-g="ne"] .slash { stroke-dasharray: 260 0; opacity: 1; }
+.gx[data-g="none"] svg { opacity: .4; }
+.gx[data-g="chk"] .ring { stroke-dasharray: 337 112; animation: g-orbit 1s linear infinite; }
+.gx[data-g="idle"] .ring { animation: g-idle 6s linear infinite; }
+@keyframes g-orbit { to { stroke-dashoffset: -449; } }
+@keyframes g-idle {
+  0%, 80% { stroke-dasharray: 449 0; stroke-dashoffset: 0; }
+  84% { stroke-dasharray: 337 112; stroke-dashoffset: -40; }
+  96% { stroke-dasharray: 337 112; stroke-dashoffset: -400; }
+  100% { stroke-dasharray: 449 0; stroke-dashoffset: -449; }
+}
+@media (prefers-reduced-motion: reduce) { .gx * { animation: none !important; transition: none !important; } }

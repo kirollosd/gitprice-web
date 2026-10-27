@@ -16,63 +16,114 @@ async function stubWaitlist(page: Page, replies: Parameters<typeof waitlistReply
   return bodies;
 }
 
-test.describe("no horizontal overflow at 390", () => {
-  test.use({ viewport: { width: 390, height: 800 } });
-  for (const path of ["/", "/sellers", "/ar", "/ar/sellers"]) {
-    test(path, async ({ page }) => {
-      await page.goto(path);
-      await expect(page.locator("h1")).toBeVisible();
-      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
-      expect(await page.evaluate(() => document.body.scrollWidth)).toBeLessThanOrEqual(390);
-    });
-  }
-});
+const L = en.web.landing;
+const PHONE = { width: 390, height: 800 };
+
+for (const colorScheme of ["light", "dark"] as const) {
+  test.describe(`no horizontal overflow at 390, ${colorScheme}`, () => {
+    test.use({ viewport: PHONE, colorScheme });
+    for (const path of ["/", "/sellers", "/ar", "/ar/sellers"]) {
+      test(path, async ({ page }) => {
+        await page.goto(path);
+        await expect(page.locator("h1")).toBeVisible();
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+        expect(await page.evaluate(() => document.body.scrollWidth)).toBeLessThanOrEqual(390);
+      });
+    }
+    for (const path of ["/", "/ar"]) {
+      test(`${path}: the language menu opens inside the viewport`, async ({ page }) => {
+        await page.goto(path);
+        await page.locator("#lng").click();
+        const box = await page.locator("#lmenu").boundingBox();
+        expect(box).not.toBeNull();
+        expect(box!.x).toBeGreaterThanOrEqual(0);
+        expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+      });
+    }
+  });
+}
+
+/** Opens the dock's waitlist form from the hero Join button (desktop) and returns the form. */
+async function openDock(page: Page) {
+  await page.locator('[data-join][data-gp-placement="hero"]').click();
+  const form = page.locator("#dock form[data-waitlist]");
+  await expect(form).toBeVisible();
+  return form;
+}
+const submit = (page: Page) => page.locator("#dock").getByRole("button", { name: en.web.landing.dock.submit, exact: true });
 
 test.describe("Home prelaunch", () => {
-  test("has the nav anchors and two native waitlist forms, no Tally", async ({ page }) => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test("the Beta tag sits by the hero CTA, the dock CTA and in the footer; no pricing or app-store links", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("#num [data-beta]")).toHaveCount(1);
+    await expect(page.locator("#dock [data-beta]")).toHaveCount(1);
+    await expect(page.locator("footer [data-beta]")).toHaveCount(1);
+    await expect(page.locator('a[href*="pricing"], a[data-gp-store="app_store"], a[data-gp-store="play"]')).toHaveCount(0);
+  });
+
+  test("has the nav anchors and one dock waitlist form, no Tally", async ({ page }) => {
     const tally: string[] = [];
     page.on("request", (r) => { if (r.url().includes("tally.so")) tally.push(r.url()); });
     await page.goto("/");
-    for (const id of ["features", "how-it-works", "waitlist"]) await expect(page.locator(`#${id}`)).toHaveCount(1);
-    await expect(page.locator("form[data-waitlist]")).toHaveCount(2);
-    const email = page.locator("#waitlist").getByLabel(W.empty.input.email.label);
+    for (const id of ["how", "film", "spot", "rcpt", "rail"]) await expect(page.locator(`#${id}`)).toHaveCount(1);
+    await expect(page.locator("form[data-waitlist]")).toHaveCount(0); // the one form lives in the dock and mounts when it opens
+    const form = await openDock(page);
+    await expect(page.locator("form[data-waitlist]")).toHaveCount(1);
+    const email = form.getByLabel(W.empty.input.email.label);
     await expect(email).toHaveAttribute("type", "email");
-    await expect(email).toHaveAttribute("placeholder", W.empty.input.email.placeholder);
+    await expect(email).toBeFocused();
     await expect(page.locator("iframe")).toHaveCount(0);
     await expect(page.getByRole("link", { name: "Add GitPrice to Chrome" })).toHaveCount(0);
     expect(tally).toEqual([]);
   });
 
-  test("hero joins (201) and the bottom form then answers already joined (200)", async ({ page }) => {
-    const bodies = await stubWaitlist(page, [201, 200]);
+  test("hero Join opens the dock form, 201 joins, and every Join button reads joined", async ({ page }) => {
+    const bodies = await stubWaitlist(page, [201]);
     await page.goto("/");
-    const hero = page.locator("#waitlist");
-    await hero.getByLabel(W.empty.input.email.label).fill("sara@example.com");
-    await hero.getByRole("button", { name: W.empty.button.submit.label }).click();
-    await expect(hero.getByRole("heading", { name: W.joined.title })).toBeFocused();
-    await expect(hero.getByText(W.joined.body)).toBeVisible();
-    const bottom = page.locator('[data-gp-section="bottom_cta"]');
-    await bottom.getByLabel(W.empty.input.email.label).fill("Sara@Example.com");
-    await bottom.getByRole("button", { name: W.empty.button.submit.label }).click();
-    await expect(bottom.getByRole("heading", { name: W.alreadyJoined.title })).toBeVisible();
-    await expect(bottom.getByText(W.alreadyJoined.body)).toBeVisible();
-    expect(bodies).toEqual([
-      { email: "sara@example.com", audience: "shopper", locale: "en", website: "" },
-      { email: "Sara@Example.com", audience: "shopper", locale: "en", website: "" },
-    ]);
+    const form = await openDock(page);
+    await form.getByLabel(W.empty.input.email.label).fill("sara@example.com");
+    await submit(page).click();
+    await expect(page.locator("#dt")).toHaveText(L.dock.done);
+    await expect(page.locator("#dt")).toBeFocused();
+    await expect(page.locator("form[data-waitlist]")).toHaveCount(0);
+    await expect(page.locator('[data-join][data-gp-placement="hero"]')).toHaveText(L.dock.joined);
+    await expect(page.locator('[data-join][data-gp-placement="nav"]')).toHaveText(L.dock.joined);
+    expect(bodies).toEqual([{ email: "sara@example.com", audience: "shopper", locale: "en", website: "" }]);
     const events = await page.evaluate(() => ((window as unknown as { dataLayer: { event?: string; placement?: string }[] }).dataLayer)
       .filter((e) => e.event === "waitlist_submit").map((e) => e.placement));
-    expect(events).toEqual(["hero", "bottom"]);
+    expect(events).toEqual(["dock"]);
+  });
+
+  test("an address already on the list (200) also ends joined", async ({ page }) => {
+    const bodies = await stubWaitlist(page, [200]);
+    await page.goto("/");
+    const form = await openDock(page);
+    await form.getByLabel(W.empty.input.email.label).fill("Sara@Example.com");
+    await submit(page).click();
+    await expect(page.locator("#dt")).toHaveText(L.dock.done);
+    expect(bodies).toEqual([{ email: "Sara@Example.com", audience: "shopper", locale: "en", website: "" }]);
+  });
+
+  test("Esc closes the dock form and returns focus to the Join button", async ({ page }) => {
+    await page.goto("/");
+    const hero = page.locator('[data-join][data-gp-placement="hero"]');
+    await openDock(page);
+    await page.keyboard.press("Escape");
+    await expect(page.locator("form[data-waitlist]")).toHaveCount(0);
+    await expect(hero).toBeFocused();
   });
 
   test("an invalid address shows the error under the field and sends nothing", async ({ page }) => {
     const bodies = await stubWaitlist(page);
     await page.goto("/");
-    const hero = page.locator("#waitlist");
-    const email = hero.getByLabel(W.empty.input.email.label);
+    const form = await openDock(page);
+    const email = form.getByLabel(W.empty.input.email.label);
     await email.fill(W.error.input.email.value);
-    await hero.getByRole("button", { name: W.empty.button.submit.label }).click();
-    await expect(hero.getByText(W.error.input.email.message)).toBeVisible();
+    await submit(page).click();
+    await expect(form.getByText(W.error.input.email.message)).toBeVisible();
     await expect(email).toHaveAttribute("aria-invalid", "true");
     await expect(email).toBeFocused();
     expect(bodies).toHaveLength(0);
@@ -84,14 +135,14 @@ test.describe("Home prelaunch", () => {
     let requests = 0;
     await page.route("**/api/v1/waitlist", async (route) => { requests++; await gate; await route.fulfill(waitlistReply(201)); });
     await page.goto("/");
-    const hero = page.locator("#waitlist");
-    await hero.getByLabel(W.empty.input.email.label).fill("sara@example.com");
-    await hero.getByRole("button", { name: W.empty.button.submit.label }).dblclick();
-    const busy = hero.getByRole("button", { name: W.submitting.button.submit.label });
+    const form = await openDock(page);
+    await form.getByLabel(W.empty.input.email.label).fill("sara@example.com");
+    await submit(page).dblclick();
+    const busy = form.getByRole("button", { name: W.submitting.button.submit.label });
     await expect(busy).toBeDisabled();
-    await expect(hero.locator("form")).toHaveAttribute("aria-busy", "true");
+    await expect(form).toHaveAttribute("aria-busy", "true");
     release();
-    await expect(hero.getByRole("heading", { name: W.joined.title })).toBeVisible();
+    await expect(page.locator("#dt")).toHaveText(L.dock.done);
     expect(requests).toBe(1);
   });
 
@@ -99,14 +150,14 @@ test.describe("Home prelaunch", () => {
     let calls = 0;
     await page.route("**/api/v1/waitlist", (route) => (++calls === 1 ? route.abort("connectionrefused") : route.fulfill(waitlistReply(201))));
     await page.goto("/");
-    const hero = page.locator("#waitlist");
-    const email = hero.getByLabel(W.empty.input.email.label);
+    const form = await openDock(page);
+    const email = form.getByLabel(W.empty.input.email.label);
     await email.fill("sara@example.com");
-    await hero.getByRole("button", { name: W.empty.button.submit.label }).click();
-    await expect(hero.getByRole("alert")).toHaveText(W.failed.message);
+    await submit(page).click();
+    await expect(form.getByRole("alert")).toHaveText(W.failed.message);
     await expect(email).toHaveValue("sara@example.com");
-    await hero.getByRole("button", { name: W.failed.button.submit.label }).click();
-    await expect(hero.getByRole("heading", { name: W.joined.title })).toBeVisible();
+    await form.getByRole("button", { name: W.failed.button.submit.label }).click();
+    await expect(page.locator("#dt")).toHaveText(L.dock.done);
     expect(calls).toBe(2);
   });
 
@@ -115,26 +166,116 @@ test.describe("Home prelaunch", () => {
     const bodies = await stubWaitlist(page, [503]);
     await page.goto("/ar");
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-    const hero = page.locator("#waitlist");
-    const email = hero.getByLabel(A.empty.input.email.label);
+    const form = await openDock(page);
+    const email = form.locator('input[type="email"]');
     await expect(email).toHaveAttribute("dir", "ltr");
     expect(await email.evaluate((e) => getComputedStyle(e).direction)).toBe("ltr");
     await email.fill("sara@example");
-    await hero.getByRole("button", { name: A.empty.button.submit.label }).click();
-    const message = hero.getByText(A.error.input.email.message);
+    await form.locator('button[type="submit"]').click();
+    const message = form.getByText(A.error.input.email.message);
     expect(await message.evaluate((e) => getComputedStyle(e).direction)).toBe("rtl");
     await email.fill("sara@example.com");
-    await hero.getByRole("button", { name: A.error.button.submit.label }).click();
-    await expect(hero.getByRole("alert")).toHaveText(A.failed.message);
+    await form.locator('button[type="submit"]').click();
+    await expect(form.getByRole("alert")).toHaveText(A.failed.message);
     expect(bodies).toEqual([{ email: "sara@example.com", audience: "shopper", locale: "ar", website: "" }]);
   });
 
-  test("nav CTA targets the waitlist and the sellers link opens Sellers", async ({ page }) => {
-    await page.setViewportSize({ width: 1440, height: 900 });
+  test("the header Join opens the dock form and the sellers link opens Sellers", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("header").getByRole("link", { name: "Join the waitlist" })).toHaveAttribute("href", "/#waitlist");
+    await page.locator('header [data-join]').click();
+    await expect(page.locator("#dock form[data-waitlist] input[type=email]")).toBeFocused();
     await page.locator("header").getByRole("link", { name: "GitPrice for marketplace sellers" }).click();
     await expect(page).toHaveURL(/\/sellers$/);
+  });
+
+  test("the five header links point at the landing sections", async ({ page }) => {
+    await page.goto("/");
+    const nav = page.locator("header nav");
+    for (const [id, label] of [["how", L.nav.howItWorks], ["film", L.nav.watchLive], ["spot", L.nav.matchChallenge], ["rcpt", L.nav.savings], ["rail", L.nav.stores]]) {
+      await expect(nav.getByRole("link", { name: label })).toHaveAttribute("href", `/#${id}`);
+    }
+  });
+
+  test("the dock stays hidden while #foot is in view and shows at the film", async ({ page }) => {
+    await page.goto("/");
+    const dock = page.locator("#dock");
+    const shown = /(^|\s)in(\s|$)/;
+    await page.evaluate(() => document.getElementById("film")!.scrollIntoView());
+    await expect(dock).toHaveClass(shown);
+    await page.evaluate(() => document.getElementById("foot")!.scrollIntoView());
+    await expect(dock).not.toHaveClass(shown);
+  });
+});
+
+test.describe("phone tap targets (44 px)", () => {
+  test.use({ viewport: PHONE });
+  const TARGETS: [string, string][] = [
+    ["language button", "#lng"],
+    ["header CTA", "header [data-join]"],
+    ["dock CTA", "#dgo"],
+    ["product chips", "#pick button"],
+    ["with / without toggle", "#tWith, #tWithout"],
+    ["footer CTAs", "#foot [data-join], #foot a"],
+    ["video play", "#vpp"],
+    ["chapters", "#chap button"],
+    ["logo link", "header a:first-of-type"],
+  ];
+  for (const path of ["/", "/ar"]) {
+    test(`${path}: every listed control is at least 44 px square`, async ({ page }) => {
+      await page.goto(path);
+      for (const [name, sel] of TARGETS) {
+        const sizes = await page.locator(sel).evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return [Math.round(r.width * 10) / 10, Math.round(r.height * 10) / 10]; }));
+        expect(sizes.length, `${name} (${sel}) exists`).toBeGreaterThan(0);
+        for (const [w, h] of sizes) {
+          if (w === 0 && h === 0) continue; // a control the phone layout hides (the mock hides the hero CTA)
+          expect(w, `${name} width`).toBeGreaterThanOrEqual(43.9);
+          expect(h, `${name} height`).toBeGreaterThanOrEqual(43.9);
+        }
+      }
+    });
+  }
+});
+
+// Review Focus 1 and 5. The grounds are the web token values for the two looks (styles/tokens.css).
+const GROUND = { light: "rgb(244, 244, 245)", dark: "rgb(10, 10, 11)" };
+
+test.describe("theme", () => {
+  test.use({ colorScheme: "light" });
+
+  test("a stored dark choice on a light OS paints dark before load", async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem("gp-theme", "dark");
+      document.addEventListener("DOMContentLoaded", () => {
+        (window as unknown as { __early: unknown }).__early = {
+          theme: document.documentElement.dataset.theme,
+          bg: getComputedStyle(document.body).backgroundColor,
+        };
+      });
+    });
+    await page.goto("/");
+    const early = await page.evaluate(() => (window as unknown as { __early: { theme?: string; bg: string } }).__early);
+    expect(early.theme).toBe("dark");
+    expect(early.bg).toBe(GROUND.dark);
+    expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe(GROUND.dark);
+  });
+
+  test("with no stored choice the OS scheme drives the theme at runtime; after a toggle it no longer does", async ({ page }) => {
+    const bg = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    const toggle = page.getByRole("button", { name: /Switch to (dark|light)/ });
+    await page.goto("/");
+    await expect(page.locator("html")).not.toHaveAttribute("data-theme", /.+/);
+    expect(await bg()).toBe(GROUND.light);
+    await page.emulateMedia({ colorScheme: "dark" });
+    await expect.poll(bg).toBe(GROUND.dark);
+    await expect(toggle).toHaveAttribute("aria-label", L.theme.toLight);
+    await toggle.click(); // OS is dark, so this chooses light
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    expect(await bg()).toBe(GROUND.light);
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.emulateMedia({ colorScheme: "dark" });
+    expect(await bg()).toBe(GROUND.light);
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    expect(await page.evaluate(() => localStorage.getItem("gp-theme"))).toBe("light");
   });
 });
 
@@ -158,5 +299,37 @@ test.describe("Sellers prelaunch", () => {
     await page.setViewportSize({ width: 1024, height: 800 });
     await page.goto("/ar/sellers");
     await expect(page.locator("header").getByRole("link", { name: "للمتسوقين", exact: true })).toBeVisible();
+  });
+});
+
+test.describe("coral polish (GP-406 F1, F2, F4)", () => {
+  test("desktop: hero h1 is weight 400 and the dock sits 32px up, not lifted over the cookie notice", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/");
+    expect(await page.locator("h1").first().evaluate((e) => getComputedStyle(e).fontWeight)).toBe("400");
+    expect(await page.locator("#dock").evaluate((e) => getComputedStyle(e).bottom)).toBe("32px");
+  });
+
+  test("phone: the shown dock sits above the cookie notice, never over it", async ({ page }) => {
+    await page.setViewportSize(PHONE);
+    await page.goto("/");
+    const notice = page.getByRole("region", { name: en.web.component.webCookieNotice.default.title });
+    await expect(notice).toBeVisible();
+    await page.evaluate(() => document.getElementById("film")!.scrollIntoView());
+    const dock = page.locator("#dock");
+    await expect(dock).toHaveClass(/(^|\s)in(\s|$)/);
+    await expect.poll(async () => {
+      const [d, n] = await Promise.all([dock.boundingBox(), notice.boundingBox()]);
+      return d!.y + d!.height <= n!.y + 0.5;
+    }).toBe(true);
+  });
+
+  test("phone: the footer Cookie settings button has a 44px hit area", async ({ page }) => {
+    await page.setViewportSize(PHONE);
+    await page.goto("/");
+    const btn = page.locator("footer button", { hasText: /cookie/i }).first();
+    await btn.scrollIntoViewIfNeeded();
+    // the .hit-target layer (not the 18px box) carries the 44px; the cookie notice may cover the button on a first visit
+    expect(await btn.evaluate((b) => getComputedStyle(b, "::after").height)).toBe("44px");
   });
 });

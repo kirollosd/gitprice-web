@@ -1,7 +1,7 @@
 import type { Locale } from "./i18n";
 
 export type TrackEvent =
-  | { name: "waitlist_submit"; params: { audience: "shopper" | "seller"; placement: "hero" | "bottom" } }
+  | { name: "waitlist_submit"; params: { audience: "shopper" | "seller"; placement: "hero" | "bottom" | "dock" } }
   | { name: "cta_click"; params: { cta_id: string; placement: "nav" | "hero" | "bottom" | "menu" | "footer" } }
   | { name: "store_click"; params: { store: "chrome" | "app_store" | "play"; placement: string } }
   | { name: "section_view"; params: { section_id: string } }

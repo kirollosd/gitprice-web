@@ -27,6 +27,8 @@ const STORES = {
   appStoreUrl: "NEXT_PUBLIC_APP_STORE_URL",
   playStoreUrl: "NEXT_PUBLIC_PLAY_STORE_URL",
 } as const;
+// Phase 1 is extension only (MOBILE_APPS_ENABLED=false in StoreBadges): only Chrome is required at launch. Add the others in phase 2.
+const LAUNCH_REQUIRED = { chromeStoreUrl: STORES.chromeStoreUrl } as const;
 
 export function readEnv(src: Record<string, string | undefined>): SiteEnv {
   const get = (name: string) => src[name]?.trim() || undefined;
@@ -34,7 +36,7 @@ export function readEnv(src: Record<string, string | undefined>): SiteEnv {
   const checkout = get("NEXT_PUBLIC_CHECKOUT") === "1";
   const sellersNav = get("NEXT_PUBLIC_SELLERS_NAV") === "1";
 
-  const needed: Record<string, string> = { ...REQUIRED, ...(launch ? STORES : {}) };
+  const needed: Record<string, string> = { ...REQUIRED, ...(launch ? LAUNCH_REQUIRED : {}) };
   const missing = Object.values(needed).filter((name) => !get(name));
   if (missing.length) {
     throw new Error(`Missing required env vars: ${missing.join(", ")}`);

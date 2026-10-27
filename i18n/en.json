@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@bca5fae6",
+  "_source": "gitprice@5539d527",
   "web": {
     "component": {
       "webNav": {
@@ -935,6 +935,179 @@
       "signin": {
         "text": "Want your alerts backed up? An account is optional.",
         "link": "Sign in to back up your alerts"
+      }
+    },
+    "landing": {
+      "nav": {
+        "home": "GitPrice home",
+        "howItWorks": "How it works",
+        "watchLive": "Watch it live",
+        "matchChallenge": "Match challenge",
+        "savings": "Savings",
+        "stores": "Stores",
+        "join": "Join the waitlist"
+      },
+      "dock": {
+        "join": "Join the waitlist",
+        "elsewhere": "<b>{price}</b> elsewhere · <span class=\"save\">↓ {less} less</span>",
+        "film": "It takes 10 seconds to know",
+        "spot": "Your turn: spot the same one",
+        "print": "Exact matches only. Priced now.",
+        "alerts": "Alert set · we keep watching",
+        "rail": "Works on 70+ stores",
+        "foot": "One email when we launch",
+        "emailLabel": "Email",
+        "emailPlaceholder": "Your email",
+        "submit": "Join",
+        "close": "Close",
+        "note": "One email when we launch.",
+        "errorEmpty": "Type your email to join.",
+        "errorInvalid": "That doesn't look like an email. Check it and try again.",
+        "joining": "Joining…",
+        "done": "You're on the list. One email when we launch.",
+        "joined": "You're on the list"
+      },
+      "beta": "Beta",
+      "hero": {
+        "eyebrow": "Chrome extension · compares prices while you shop",
+        "headline": "See where it costs less, before you buy.",
+        "lede": "Open a product on any of 70+ supported stores. GitPrice checks the others for the exact same item, live, and shows you both prices on the page.",
+        "pick": "Show it with",
+        "captionStart": "You're on an online store, looking at {product}. <b>This is what you'd pay.</b>",
+        "captionDone": "Same {product}, another store. <b>{less} less than the <s>{from}</s> you're looking at.</b>",
+        "srPrices": "{from} where you are. {to} at another store.",
+        "join": "Join the waitlist",
+        "seeHow": "See how it works ↓",
+        "free": "Free. One email once we launch.",
+        "scrollCue": "Scroll down"
+      },
+      "how": {
+        "title": "How it works",
+        "step1Title": "Shop like you always do.",
+        "step1Body": "Open a product on any supported store. Nothing to search, nothing to paste.",
+        "step2Title": "The = shows up.",
+        "step2Body": "When the same product costs less at another store, a small badge appears next to the price.",
+        "step3Title": "Every store, side by side.",
+        "step3Body": "Exact matches first. Lookalikes stay labeled and never count toward the lower price.",
+        "badgeOn": "{price} on {store}",
+        "badgeNote": "The badge you see on the page",
+        "panelSame": "= Same product",
+        "youreHere": "you're here"
+      },
+      "film": {
+        "title": "Fifteen seconds.<br>The whole idea.",
+        "lede": "You shop, it matches, you compare, you set an alert: the extension on a product page, start to finish.",
+        "shop": "Shop",
+        "match": "Match",
+        "compare": "Compare",
+        "alert": "Alert",
+        "pause": "Pause",
+        "play": "Play"
+      },
+      "spot": {
+        "note": "Pick one, or keep scrolling and watch GitPrice check them. {marks} are made-up stores; listings and prices are examples."
+      },
+      "room": {
+        "title": "One of these is the exact product you're looking at. <em>Which?</em>",
+        "youreOn": "You're on {store}, looking at",
+        "show": "Show me",
+        "next": "Next lineup",
+        "startOver": "Start over",
+        "stamp": "Same product",
+        "checking": "Checking {checks}…",
+        "found": "Only one is the same product. <em>GitPrice finds it for you.</em>",
+        "right": "Sharp eye. Now do that for every product, every time.",
+        "wrong": "Easy to get wrong. <em>We check the details so you don't.</em>",
+        "verdictRight": "<b>Right.</b>",
+        "verdictWrong": "<b>Not quite: {reason}.</b>",
+        "verdictCheaper": "The exact one is <b>{price} on {store}</b>, less than the {ref} you're looking at. That's the only price GitPrice would show you.",
+        "verdictPricier": "The exact one costs <b>more</b> on {store}. GitPrice would tell you you're already on the cheapest exact match."
+      },
+      "trap": {
+        "title": "The cheapest look-alike shouldn't win.",
+        "body": "Sort these by price and <b>{item}</b> tops the list. It isn't what you were buying, so GitPrice doesn't count it.",
+        "byPrice": "Sorted by price",
+        "byGitPrice": "Sorted by GitPrice"
+      },
+      "print": {
+        "title": "A month of shopping, checked line by line.",
+        "lede": "An example month across supported stores. Watch the receipt print with what GitPrice found for each item.",
+        "sameTitle": "Same product, other store, less money.",
+        "sameBody": "Each line checks the other two stores for the <b>exact</b> item: same model, same size, same color. Only then does the lower price count.",
+        "noMatchTitle": "And when there's no match, it says so.",
+        "noMatchBody": "No exact match for the backpack, so the price stays as it was. A look-alike doesn't get to pad the savings.",
+        "endingsTitle": "One receipt, two endings.",
+        "endingsBody": "Flip it. Same cart, same month, with and without GitPrice.",
+        "viewLabel": "Receipt view",
+        "with": "With GitPrice",
+        "without": "Without",
+        "header": "Your month · {month} · example cart",
+        "paid": "Paid where you shopped",
+        "elsewhere": "Exact matches elsewhere",
+        "youSaved": "You saved",
+        "footnote": "Example prices at made-up stores {marks}. Thank you for shopping honestly.",
+        "tally": "Saved so far",
+        "lineSame": "Same product · {store}",
+        "lineSaved": "saved",
+        "lineNoMatch": "No exact match · price kept"
+      },
+      "alerts": {
+        "eyebrow": "Price alerts",
+        "title": "Name your price.",
+        "ruleTo": "Drops to a price",
+        "ruleToHint": "Ping me at or below my price",
+        "ruleAny": "Any drop",
+        "ruleAnyHint": "Ping me whenever it gets cheaper",
+        "ruleUp": "Rises to a price",
+        "ruleUpHint": "Ping me before it gets pricier",
+        "toast": "GitPrice · example",
+        "sliderLabel": "Alert price",
+        "hintDrag": "Drag the line. Example prices, last 12 weeks.",
+        "hintTap": "Tap the chart to move the line. Example prices, last 12 weeks.",
+        "none": "Nothing yet. We keep watching.",
+        "anyDrops": "{count} drops. First on week {week}: {price}",
+        "wouldDrop": "Would ping you on week {week}: dropped to {price}",
+        "wouldRise": "Would ping you on week {week}: rose to {price}"
+      },
+      "rail": {
+        "title": "Start anywhere.",
+        "note": "{marks} are made-up stores. Drag, or scroll sideways →",
+        "youreOn": "You're on",
+        "cheapestHere": "Cheapest exact match is here",
+        "hasIt": "{store} has it for {price}",
+        "anyPage": "Any product page",
+        "notToday": "Not today?<br>Set an alert.",
+        "alertSet": "Alert set · drops to {price}",
+        "dragCue": "Drag"
+      },
+      "foot": {
+        "eyebrow": "Free Chrome extension",
+        "title": "Pay the<br>smaller price.",
+        "join": "Join the waitlist",
+        "howItWorks": "How it works",
+        "facts": "Works on 70+ stores.<br>English and عربي.<br>One email when we launch.",
+        "copyright": "© {year} GitPrice. All rights reserved."
+      },
+      "store": {
+        "name": "Store",
+        "circle": "circle",
+        "triangle": "triangle",
+        "square": "square"
+      },
+      "gmark": {
+        "same": "=",
+        "ne": "≠",
+        "none": "?"
+      },
+      "lang": {
+        "label": "Language",
+        "current": "EN",
+        "en": "English",
+        "ar": "العربية"
+      },
+      "theme": {
+        "toDark": "Switch to dark",
+        "toLight": "Switch to light"
       }
     }
   }

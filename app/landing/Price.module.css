@@ -1,0 +1,11 @@
+/* value and code are one left-to-right unit that never breaks between them */
+.p { white-space: nowrap; }
+/* ISO code after every price (owner, 2026-10-27): small mono, muted. Dark bands set --cur-c to their own muted ink
+   so the code keeps AA contrast there; on a filled pill it follows the pill's text. */
+.cur {
+  font-family: "JetBrains Mono", monospace;
+  font-size: max(.62em, 10px);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--cur-c, var(--gp-web-mute));
+}

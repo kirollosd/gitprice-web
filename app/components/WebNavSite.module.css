@@ -1,0 +1,40 @@
+/* The pre-Coral header, kept for every page except the landing: phone menu sheet, three label widths. */
+.links { display: flex; flex: 1; align-items: center; gap: var(--gp-sp-12); margin-inline-start: var(--gp-sp-12); }
+.link { color: var(--gp-ink); font-weight: 600; font-size: var(--gp-fs-body); white-space: nowrap; }
+.sellers {
+  margin-inline-start: auto;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--gp-target);
+  padding-inline: var(--gp-sp-6);
+  border: 1px solid var(--gp-hairline-strong);
+  border-radius: var(--gp-r-pill);
+}
+.sellers:hover { text-decoration: none; }
+.actions { display: flex; align-items: center; gap: var(--gp-sp-6); }
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 232px;
+  min-block-size: var(--gp-target);
+  background: var(--gp-ink);
+  color: var(--gp-surface);
+  padding: var(--gp-sp-2) var(--gp-sp-5);
+  border-radius: var(--gp-r-pill);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.cta:hover { text-decoration: none; }
+
+/* Which label set shows where: <768 none, 768 / 1024 / 1440 sets by width. */
+.wide, .l1024, .l1440, .l768 { display: none; }
+@media (max-width: 767px) { .links, .hideSmall { display: none; } }
+@media (min-width: 768px) and (max-width: 1023px) { .l768 { display: inline-flex; } }
+@media (min-width: 1024px) and (max-width: 1279px) { .l1024 { display: inline-flex; } }
+@media (min-width: 1280px) { .l1440 { display: inline-flex; } }
+@media (min-width: 1024px) { .wide { display: inline; } }
+@media (min-width: 768px) { .header { --nav-h: calc(var(--gp-sp-16) + var(--gp-sp-2)); } }
+/* While the menu sheet is open the bar shows only the logo and the close button (Menu/open boards). */
+.hdr:has([aria-expanded="true"]) .links,
+.hdr:has([aria-expanded="true"]) .hideSmall { visibility: hidden; }

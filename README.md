@@ -21,8 +21,8 @@ Names only. Real values live in Vercel (Production and Preview); `.env.example` 
 | `NEXT_PUBLIC_CHECKOUT` | `0` (default) `/checkout` and `/checkout/return` return 404 until Pro opens; `1` serves them. The e2e prelaunch build sets `1`, the launch build leaves it off. |
 | `NEXT_PUBLIC_SELLERS_NAV` | `0` (default) hides the header "For sellers" / "For shoppers" toggle in the desktop nav and the menu sheet; `1` shows it. `/sellers` stays reachable either way. The e2e builds set `1` (the boards draw it). |
 | `NEXT_PUBLIC_CHROME_STORE_URL` | Chrome Web Store listing (required when launched) |
-| `NEXT_PUBLIC_APP_STORE_URL` | App Store listing (required when launched) |
-| `NEXT_PUBLIC_PLAY_STORE_URL` | Google Play listing (required when launched) |
+| `NEXT_PUBLIC_APP_STORE_URL` | App Store listing (optional until the mobile apps ship) |
+| `NEXT_PUBLIC_PLAY_STORE_URL` | Google Play listing (optional until the mobile apps ship) |
 | `NEXT_PUBLIC_API_BASE_URL` | GitPrice API, used by checkout and the waitlist form (`POST /api/v1/waitlist`) |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project, used by reset password |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase publishable key only |
@@ -54,7 +54,7 @@ Free ports 3000 and 3001 first. `PLAYWRIGHT_BASE_URL=<url>` runs the suite again
 
 ### Visual parity
 
-`e2e/parity*.spec.ts` compare each screen with the design board PNGs in `e2e/refs/`, named `<Screen>-<state>-<width>-<locale>-<theme>.png`. Each test has a diff tolerance with a written reason; Home and Sellers are `test.fixme` with the measured divergence in `e2e/parity-lib.ts`.
+`e2e/parity*.spec.ts` compare each screen with the design board PNGs in `e2e/refs/`, named `<Screen>-<state>-<width>-<locale>-<theme>.png`. Each test has a diff tolerance with a written reason; Home and Sellers are `test.fixme` with the measured divergence in `e2e/parity-lib.ts`. Only pages the coral redesign (GP-406) left alone keep Sketch refs; Home, Sellers and the menu are covered by `e2e/visual*.spec.ts` against Linux baselines in `e2e/visual-snapshots/` (masks: video, live-rate prices, receipt month; reduced motion). Regenerate them with `npm run visual:update` (docker, Playwright image of the installed version) after any visual change or design sync, never from macOS; `npm run visual` compares. Sketch refs for the new site come after branding.
 
 - `PARITY_MEASURE=1 npx playwright test parity` records ratios to `test-results/parity-ratios.jsonl` instead of asserting.
 - To update baselines, export the boards again from the Sketch library and replace the PNGs in `e2e/refs/`, keeping the names. Do not use `--update-snapshots`: the assertions read masked copies in `e2e/.parity/` (gitignored), so it never touches `refs/`. Then re-measure and adjust tolerances.
