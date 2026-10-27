@@ -6,6 +6,7 @@ import SkipLink from "./components/SkipLink";
 import WebNav from "./components/WebNav";
 import { dir, t, type Locale } from "../lib/i18n";
 import { fullTitle } from "../lib/seo";
+import { readToneConfig, THEME_BOOT, toneCss } from "../lib/theme";
 import "./globals.css";
 
 // With one root layout per locale (no app/layout), Next cannot server-render [locale]/not-found for an unmatched
@@ -20,8 +21,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function GlobalNotFound() {
   const l = await locale();
+  const tone = toneCss(readToneConfig());
   return (
-    <html lang={l} dir={dir(l)} data-gp="app">
+    <html lang={l} dir={dir(l)} data-gp="web" suppressHydrationWarning>
+      <head>
+        {/* Same theme boot and tone as [locale]/layout; a plain script since this document is not the root layout. */}
+        <script id="gp-theme" dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
+        {tone ? <style id="gp-tone">{tone}</style> : null}
+      </head>
       <body>
         <SkipLink locale={l} />
         <WebNav locale={l} />

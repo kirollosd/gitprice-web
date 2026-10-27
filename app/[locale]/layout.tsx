@@ -13,6 +13,7 @@ import { env } from "../../lib/env";
 import { consentDefaultScript, gtmScript } from "../../lib/gtm";
 import { dir, t, type Locale } from "../../lib/i18n";
 import { fullTitle, OG_LOCALE, SITE_NAME } from "../../lib/seo";
+import { readToneConfig, THEME_BOOT, toneCss } from "../../lib/theme";
 import { tokenColor } from "../../lib/tokens";
 import "../globals.css";
 
@@ -63,9 +64,13 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (locale !== "en" && locale !== "ar") notFound();
   const l: Locale = locale;
+  // Build time: theme.config.json + GP_THEME, validated (a bad value fails the build instead of reaching the <style>).
+  const tone = toneCss(readToneConfig());
   return (
-    <html lang={l} dir={dir(l)} data-gp="app">
+    // THEME_BOOT sets data-theme before hydration, so the server and client attributes can differ.
+    <html lang={l} dir={dir(l)} data-gp="web" suppressHydrationWarning>
       <head>
+        <Script id="gp-theme" strategy="beforeInteractive">{THEME_BOOT}</Script>
         {/* Consent Mode v2: denied by default, ahead of the GTM loader. beforeInteractive only works from the root layout, not a client component. */}
         {env.gtmId && process.env.NODE_ENV === "production" ? (
           <>
@@ -77,6 +82,7 @@ export default async function LocaleLayout({
         {PRELOAD[l].map((f) => (
           <link key={f} rel="preload" href={`/fonts/${f}.woff2`} as="font" type="font/woff2" crossOrigin="anonymous" />
         ))}
+        {tone ? <style id="gp-tone">{tone}</style> : null}
       </head>
       <body>
         <SkipLink locale={l} />

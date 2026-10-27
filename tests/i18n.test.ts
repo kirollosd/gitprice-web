@@ -19,6 +19,17 @@ describe("i18n", () => {
     expect(out).not.toContain("{email}");
   });
 
+  test("web.landing is synced, with the theme toggle labels in both locales", () => {
+    expect(t("en", "web.landing.theme.toDark")).toBe("Switch to dark");
+    expect(t("en", "web.landing.theme.toLight")).toBe("Switch to light");
+    expect(t("ar", "web.landing.theme.toDark")).toBe(ar.web.landing.theme.toDark);
+  });
+
+  test("t interpolates numbers into landing placeholders", () => {
+    expect(t("en", "web.landing.foot.copyright", { year: 2026 })).toContain("2026");
+    expect(t("en", "web.landing.alerts.anyDrops", { count: 3, week: "W1", price: "EGP 10" })).not.toMatch(/\{\w+\}/);
+  });
+
   test("t returns the key instead of throwing in production", () => {
     vi.stubEnv("NODE_ENV", "production");
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});

@@ -11,7 +11,7 @@ export const dir = (l: Locale) => (l === "ar" ? "rtl" : "ltr");
  * Key is a dotted path such as 'web.home.hero.headline'.
  * A missing key throws in dev/test so gaps surface early; in production it warns and returns the key.
  */
-export function t(locale: Locale, key: string, vars: Record<string, string> = {}): string {
+export function t(locale: Locale, key: string, vars: Record<string, string | number> = {}): string {
   const value = key
     .split(".")
     .reduce<unknown>((o, k) => (o && typeof o === "object" ? (o as Record<string, unknown>)[k] : undefined), messages[locale]);
@@ -23,5 +23,5 @@ export function t(locale: Locale, key: string, vars: Record<string, string> = {}
     }
     throw new Error(msg);
   }
-  return value.replace(/\{(\w+)\}/g, (m, name: string) => vars[name] ?? m);
+  return value.replace(/\{(\w+)\}/g, (m, name: string) => String(vars[name] ?? m));
 }
