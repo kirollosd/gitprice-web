@@ -12,6 +12,8 @@ const K = "web.landing.alerts.";
 const RULES = [["to", "ruleTo"], ["any", "ruleAny"], ["rise", "ruleUp"]] as const;
 type Rule = (typeof RULES)[number][0];
 const KEYS: Record<string, number> = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1, PageUp: 5, PageDown: -5 };
+/** Home and End jump to the ends of the range. */
+const ENDS = ["Home", "End"];
 /** The first-view sweep: how long, and how long after the chart is half in view. */
 const DEMO_MS = 3000, DEMO_WAIT = 400;
 const ease = (x: number) => 1 - Math.pow(1 - x, 3);
@@ -32,7 +34,7 @@ export default function AlertSlider({ locale, product: P }: { locale: Locale; pr
   const [th, setTh] = useState(P.alert);
   const [size, setSize] = useState({ w: 800, h: 380 });
   const fmt = useMoney();
-  const svg = useRef<SVGSVGElement>(null), toast = useRef<HTMLDivElement>(null), demo = useRef(0), drag = useRef(false);
+  const svg = useRef<SVGSVGElement>(null), toast = useRef<HTMLDivElement>(null), demo = useRef(0), wait = useRef<ReturnType<typeof setTimeout>>(undefined), drag = useRef(false);
 
   const { w: CW, h: CH } = size;
   const cy = (v: number) => CH - ((v - ylo) / (yhi - ylo)) * CH, cx = (i: number) => (i / (WK.length - 1)) * CW;
@@ -45,7 +47,7 @@ export default function AlertSlider({ locale, product: P }: { locale: Locale; pr
   // the same line as plain text, for the slider's valuetext and the toast's pop
   const ttText = t(locale, K + ttKey, { ...ttVars, price: amount });
 
-  const stopDemo = () => { cancelAnimationFrame(demo.current); demo.current = 0; };
+  const stopDemo = () => { clearTimeout(wait.current); cancelAnimationFrame(demo.current); demo.current = 0; };
   const fromPointer = (e: PointerEvent<SVGSVGElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
     if (r.height) setTh(clamp(ylo + ((CH - ((e.clientY - r.top) / r.height) * CH) / CH) * (yhi - ylo)));
@@ -76,7 +78,6 @@ export default function AlertSlider({ locale, product: P }: { locale: Locale; pr
   useEffect(() => {
     const chart = svg.current?.parentElement;
     if (!chart || reduced() || typeof IntersectionObserver !== "function") return;
-    let wait: ReturnType<typeof setTimeout> | undefined;
     const sweep = () => {
       const keys = [P.alert, hi - (hi - lo) * 0.05, lo + (hi - lo) * 0.12, P.alert], t0 = performance.now();
       const step = (now: number) => {
@@ -89,10 +90,10 @@ export default function AlertSlider({ locale, product: P }: { locale: Locale; pr
     const io = new IntersectionObserver((es) => {
       if (!es.some((e) => e.isIntersecting)) return;
       io.disconnect();
-      wait = setTimeout(sweep, DEMO_WAIT);
+      wait.current = setTimeout(sweep, DEMO_WAIT);
     }, { threshold: 0.5 });
     io.observe(chart);
-    return () => { io.disconnect(); clearTimeout(wait); cancelAnimationFrame(demo.current); };
+    return () => { io.disconnect(); stopDemo(); };
   }, [P.alert, hi, lo]);
 
   const pick = (r: Rule) => {
@@ -134,10 +135,11 @@ export default function AlertSlider({ locale, product: P }: { locale: Locale; pr
           aria-valuetext={line ? fmt(th, 2) : ttText}
           aria-disabled={line ? undefined : true}
           onKeyDown={(e) => {
-            const k = KEYS[e.key];
-            if (!k || !line) return;
+            const k = KEYS[e.key], end = ENDS.indexOf(e.key);
+            if ((!k && end < 0) || !line) return;
             e.preventDefault();
             stopDemo();
+            if (end >= 0) return setTh(end ? Math.round(max) : Math.round(min));
             setTh((v) => clamp(v + k * Math.max(1, (yhi - ylo) / 50)));
           }}
           onPointerDown={(e) => {

@@ -49,6 +49,8 @@ describe("Rates", () => {
     expect(fetch).toHaveBeenCalledTimes(2);
     const { RATE_URLS } = await import("../app/landing/Rates");
     expect(fetch.mock.calls.map((c) => c[0])).toEqual(RATE_URLS);
+    // a hung CDN must not leave the refresh pending forever
+    expect(fetch.mock.calls.every((c) => c[1].signal instanceof AbortSignal)).toBe(true);
     expect(document.querySelector("#num [data-cur]")?.textContent).toBe("USD");
     // 699 EGP at the built-in 0.0182: the board shows whole numbers
     expect((document.querySelector("#digits") as HTMLElement).dataset.from).toBe("13");

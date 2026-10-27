@@ -2,13 +2,13 @@ import { test } from "./fixtures";
 import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 import {
-  decideConsent, divergedReason, expectFormParity, expectParity, isDiverged, LOCALES, seedCheckout, seedReset, seedWaitlist, sizeToBoard, spinnerMask, WIDTHS,
-  type CheckoutState, type Mask, type ResetState, type Shot, type WaitlistState,
+  decideConsent, divergedReason, expectParity, isDiverged, LOCALES, seedCheckout, seedReset, seedWaitlist, sizeToBoard, spinnerMask, WIDTHS,
+  type CheckoutState, type Mask, type ResetState, type Shot,
 } from "./parity-lib";
 
 // Prelaunch project (:3000). Launch-only boards live in parity.launch.spec.ts.
-// The waitlist form is never masked. Home prelaunch boards diverge below the hero (DIVERGED), so each Home form state
-// (empty, submitting, error, failed, joined; dark for empty, the only dark export) is compared on the form's own rectangle;
+// The waitlist form is never masked. Home prelaunch boards diverge below the hero (DIVERGED); the Home hero no longer has a
+// waitlist form (GP-406), so the Home form-state and Menu-open boards have no counterpart and are not compared.
 // Sellers prelaunch and prelaunch-joined compare the whole page. alreadyJoined has no board export.
 // Not pixel-compared, no build counterpart: Pricing-default (the priced plans page, copy and price keys do not exist; the build ships only the no-prices page).
 // Home prelaunch and cookie-notice are test.fixme: see DIVERGED in parity-lib.ts. Sellers and Home launch are compared without masks on the art.
@@ -75,36 +75,6 @@ for (const width of WIDTHS) {
       await seedWaitlist(page, "joined", { error: "", filled: W.component.webWaitlistForm.failed.input.email.value }, W.sellers.prelaunch.hero.waitlist.button.submitLabel);
       await expectParity(page, s);
     });
-
-    // ----- Home waitlist form states, compared on the form's rectangle -----
-    const formStates: WaitlistState[] = ["empty", "submitting", "error", "failed", "joined"];
-    for (const state of formStates) {
-      const themes = state === "empty" && darkOnly(width) ? (["light", "dark"] as const) : (["light"] as const);
-      for (const theme of themes) {
-        test(`Home waitlist ${state} ${tag} ${theme}`, async ({ page }) => {
-          const F = W.component.webWaitlistForm;
-          const board = shot("Home", state === "empty" ? "prelaunch" : `prelaunch-${state}`, width, locale, { theme });
-          await decideConsent(page);
-          await sizeToBoard(page, board);
-          await page.goto(`${base}/`);
-          await seedWaitlist(page, state, { error: F.error.input.email.value, filled: F.submitting.input.email.value }, F.empty.button.submit.label);
-          await expectFormParity(page, { ...board, state });
-        });
-      }
-    }
-
-    // ----- menu (390 only) -----
-    if (width === 390) {
-      test(`Menu open ${tag}`, async ({ page }) => {
-        const s = shot("Menu-open", "", width, locale);
-        await decideConsent(page);
-        await sizeToBoard(page, s);
-        await page.goto(`${base}/`);
-        await page.locator("header button[aria-expanded]").click();
-        await page.locator("#web-menu").waitFor();
-        await expectParity(page, s);
-      });
-    }
 
     // ----- reset password -----
     const resetStates: ResetState[] = ["verifying", "set-new-password", "weak-password", "saving", "error", "success", "link-expired"];

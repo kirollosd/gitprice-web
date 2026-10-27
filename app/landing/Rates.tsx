@@ -15,6 +15,8 @@ export const RATE_URLS = [
 ];
 const RATE_KEY = "gp-rates";
 const DAY = 864e5;
+/** A hung rate request gives up after this long; the built-in rates stay. */
+const RATE_TIMEOUT_MS = 5000;
 /** A fetched or cached rate counts only within this factor of the built-in one. */
 const SANE = 2;
 /** EGP → currency, built in 2026-10-26. */
@@ -69,7 +71,7 @@ export function readCache(raw: string | null, now: number): Record<string, numbe
 async function refresh() {
   for (const url of RATE_URLS) {
     try {
-      const res = await fetch(url, { credentials: "omit", referrerPolicy: "no-referrer" });
+      const res = await fetch(url, { credentials: "omit", referrerPolicy: "no-referrer", signal: AbortSignal.timeout(RATE_TIMEOUT_MS) });
       if (!res.ok) continue;
       const r = parseRates(await res.json());
       if (!Object.keys(r).length) continue;

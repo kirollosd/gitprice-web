@@ -47,6 +47,30 @@ describe("AlertSlider", () => {
     expect(document.getElementById("tt")!.textContent).toBe(en.web.landing.alerts.none);
   });
 
+  it("Home and End jump to the ends of the range", async () => {
+    await section("Alerts");
+    const slider = screen.getByRole("slider");
+    act(() => { fireEvent.keyDown(slider, { key: "End" }); });
+    expect(slider.getAttribute("aria-valuenow")).toBe(slider.getAttribute("aria-valuemax"));
+    act(() => { fireEvent.keyDown(slider, { key: "Home" }); });
+    expect(slider.getAttribute("aria-valuenow")).toBe(slider.getAttribute("aria-valuemin"));
+  });
+
+  it("a key press inside the 400 ms before the first-view sweep cancels the sweep", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout", "requestAnimationFrame", "cancelAnimationFrame", "performance"] });
+    try {
+      await section("Alerts");
+      const slider = screen.getByRole("slider");
+      act(() => { intersect(slider.parentElement!); });
+      act(() => { fireEvent.keyDown(slider, { key: "End" }); });
+      const picked = slider.getAttribute("aria-valuenow");
+      act(() => { vi.advanceTimersByTime(4000); });
+      expect(slider.getAttribute("aria-valuenow")).toBe(picked);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("Any drop counts the drops and drops the line", async () => {
     const P = await section("Alerts");
     act(() => { fireEvent.click(document.querySelector('#rules [data-r="any"]')!); });
