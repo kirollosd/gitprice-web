@@ -14,9 +14,14 @@ for (const width of [1024, 768]) {
           await page.goto(`${base}${route}`);
           await expect(page.locator("h1").first()).toBeVisible();
           expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
-          const menu = page.locator("header button[aria-expanded]");
+          const menu = page.locator("header button[aria-expanded]:not(#lng)"); // #lng is the landing's language menu
           const links = page.locator("header nav");
-          if (HOSTED.test(route)) {
+          if (route === "/") {
+            // the landing header has no menu sheet: five anchors from 1024, the dock carries the CTA below
+            await expect(menu).toHaveCount(0);
+            if (width >= 1024) await expect(links).toBeVisible();
+            else await expect(links).toBeHidden();
+          } else if (HOSTED.test(route)) {
             await expect(menu).toHaveCount(0);
             await expect(links).toHaveCount(0);
           } else if (width >= 1024) {

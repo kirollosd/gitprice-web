@@ -71,7 +71,8 @@ export default async function LocaleLayout({
     // THEME_BOOT sets data-theme before hydration, so the server and client attributes can differ.
     <html lang={l} dir={dir(l)} data-gp="web" suppressHydrationWarning>
       <head>
-        <Script id="gp-theme" strategy="beforeInteractive">{THEME_BOOT}</Script>
+        {/* A plain inline script: next/script beforeInteractive is queued behind the Next runtime, so a stored choice flashed the other theme. */}
+        <script id="gp-theme" dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
         {/* Consent Mode v2: denied by default, ahead of the GTM loader. beforeInteractive only works from the root layout, not a client component. */}
         {env.gtmId && process.env.NODE_ENV === "production" ? (
           <>

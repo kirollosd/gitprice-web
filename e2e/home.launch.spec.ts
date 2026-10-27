@@ -4,18 +4,27 @@ import { expect, test } from "./fixtures";
 const CHROME = "https://chromewebstore.example/gitprice";
 
 test.describe("launch mode", () => {
-  test("Home offers Add to Chrome and no waitlist form", async ({ page }) => {
+  test("Home offers Add to Chrome in the hero, the dock and the foot, and no waitlist form", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/");
     await expect(page.locator("iframe")).toHaveCount(0);
-    const links = page.getByRole("link", { name: "Add GitPrice to Chrome" });
-    expect(await links.count()).toBeGreaterThanOrEqual(3); // nav, hero, closing band
+    await expect(page.locator("form[data-waitlist]")).toHaveCount(0);
+    await expect(page.locator("[data-join]")).toHaveCount(0);
+    for (const where of ["#num", "#dock", "#foot"]) {
+      const link = page.locator(`${where} a[data-gp-store="chrome"]`); // the dock is visibility:hidden until it shows, so no role query
+      await expect(link, where).toHaveCount(1);
+      await expect(link, where).toHaveAttribute("href", CHROME);
+    }
+    const links = page.locator('a[data-gp-store="chrome"]');
+    expect(await links.count()).toBeGreaterThanOrEqual(4); // header, hero, dock, foot
     for (const href of await links.evaluateAll((els) => els.map((e) => e.getAttribute("href")))) expect(href).toBe(CHROME);
   });
 
-  test("App Store and Google Play badges show at 390 only", async ({ page }) => {
+  test("the landing dock offers Chrome only; the App Store and Google Play badges show at 390 on /pricing only", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 800 });
     await page.goto("/");
+    await expect(page.locator("#dock").getByRole("link", { name: /App Store|Google Play/ })).toBeHidden();
+    await page.goto("/pricing");
     const store = page.getByRole("link", { name: /App Store/ }).first();
     await expect(store).toBeVisible();
     await expect(store).toHaveAttribute("href", "https://apps.example/gitprice");

@@ -45,11 +45,11 @@ test("Allow pushes the granted update and loads Heap", async ({ page }) => {
   await expect.poll(() => heapRequests.length).toBeGreaterThan(0);
 });
 
-test("scrolling to features pushes section_view", async ({ page }) => {
+test("scrolling to How it works pushes section_view", async ({ page }) => {
   await page.goto("/");
-  await page.locator("#features").scrollIntoViewIfNeeded();
+  await page.locator("#how").scrollIntoViewIfNeeded();
   await expect.poll(async () => (await layer(page)).some((e) =>
-    (e as { event?: string; section_id?: string }).event === "section_view" && (e as { section_id?: string }).section_id === "features")).toBe(true);
+    (e as { event?: string; section_id?: string }).event === "section_view" && (e as { section_id?: string }).section_id === "how")).toBe(true);
 });
 
 test("nav For sellers click pushes cta_click", async ({ page }) => {
@@ -61,7 +61,7 @@ test("nav For sellers click pushes cta_click", async ({ page }) => {
 
 test("events carry locale ar under /ar", async ({ page }) => {
   await page.goto("/ar");
-  await page.locator("#features").scrollIntoViewIfNeeded();
+  await page.locator("#how").scrollIntoViewIfNeeded();
   await expect.poll(hasEvent(page, "section_view")).toBe(true);
   const events = (await layer(page)).filter((e) => !Array.isArray(e) && !String((e as { event?: string }).event ?? "").startsWith("gtm.")) as { locale?: string }[];
   expect(events.length).toBeGreaterThan(0);
