@@ -194,19 +194,12 @@ test.describe("dock and the cookie notice never overlap", () => {
     }
   }
 
-  test("1440: with the notice showing the dock sits beside it, still 32px up (not lifted)", async ({ page }) => {
+  test("1440: the dock stays centred and 32px up while the notice shows (the notice rises above it)", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
-    await expect(page.locator("html")).toHaveAttribute("data-gp-stack", "side");
-    expect(await page.locator("#dock").evaluate((e) => getComputedStyle(e).bottom)).toBe("32px");
-  });
-
-  test("1440: after consent the dock is centred again", async ({ page }) => {
-    await page.setViewportSize(DESKTOP);
-    await page.goto("/");
-    await page.getByRole("region", { name: en.web.component.webCookieNotice.default.title }).getByRole("button").first().click();
     await page.evaluate(() => document.getElementById("film")!.scrollIntoView());
     await expect(page.locator("#dock")).toHaveClass(/(^|\s)in(\s|$)/);
+    expect(await page.locator("#dock").evaluate((e) => getComputedStyle(e).bottom)).toBe("32px");
     await expect.poll(async () => { const d = await page.locator("#dock").boundingBox(); return Math.round(d!.x + d!.width / 2); }).toBe(720);
   });
 });

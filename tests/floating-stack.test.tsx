@@ -16,45 +16,23 @@ describe("FloatingStack", () => {
     expect(document.documentElement.style.getPropertyValue("--gp-stack-h")).toBe("");
   });
 
-  it("the dock lifts by that height with a transform (a late notice is no layout shift)", async () => {
+  it("the dock never moves for the notice: no lift, no side offset; the stack rises above it instead", async () => {
     const fs = await vi.importActual<typeof import("node:fs")>("node:fs");
-    const css = fs.readFileSync("app/landing/Dock.module.css", "utf8");
-    expect(css).toMatch(/\.in\) \{ transform: translateY\(calc\(var\(--gp-stack-h, 0px\) \* -1\)\)/);
-    expect(css).not.toMatch(/bottom: calc\([^)]*--gp-stack-h/);
+    const dock = fs.readFileSync("app/landing/Dock.module.css", "utf8");
+    expect(dock).not.toMatch(/--gp-stack/);
+    expect(dock).not.toMatch(/data-gp-stack/);
+    const stack = fs.readFileSync("app/components/FloatingStack.module.css", "utf8");
+    expect(stack).toMatch(/html:has\(#dock\.in\)\) \.stack \{ inset-block-end: calc\(var\(--gp-dock-h, 0px\) \+ 28px\)/);
   });
 
-  const reach = async (right: number, rtl = false) => {
+  it("flags html[data-gp-stack] while a notice shows, and clears it when empty or unmounted", async () => {
     let fire: () => void = () => {};
     vi.stubGlobal("ResizeObserver", class { constructor(cb: () => void) { fire = cb; } observe() {} disconnect() {} });
     const { default: FloatingStack } = await import("../app/components/FloatingStack");
-    document.documentElement.dir = rtl ? "rtl" : "ltr";
-    const { container } = render(<FloatingStack><p>notice</p></FloatingStack>);
-    const stack = container.firstElementChild as HTMLElement;
-    const card = stack.firstElementChild as HTMLElement;
-    vi.spyOn(stack, "clientWidth", "get").mockReturnValue(1440);
-    vi.spyOn(card, "getBoundingClientRect").mockReturnValue(rtl ? ({ left: 1440 - right, right: 1440 } as DOMRect) : ({ left: 0, right } as DOMRect));
+    const { unmount } = render(<FloatingStack><p>notice</p></FloatingStack>);
     act(() => fire());
-    return document.documentElement;
-  };
-
-  it("a card at the inline start (cookie notice) is 'side': it publishes how far it reaches in, LTR and RTL", async () => {
-    const root = await reach(416);
-    expect(root.style.getPropertyValue("--gp-stack-w")).toBe("416px");
-    expect(root.dataset.gpStack).toBe("side");
-    cleanup();
-    const rtl = await reach(416, true);
-    expect(rtl.style.getPropertyValue("--gp-stack-w")).toBe("416px");
-    expect(rtl.dataset.gpStack).toBe("side");
-  });
-
-  it("a wide banner (locale suggestion) is 'full', so the dock lifts instead", async () => {
-    expect((await reach(1200)).dataset.gpStack).toBe("full");
-  });
-
-  it("desktop dock offsets inline-start of the card (logical, centred in the free space); narrower widths lift", async () => {
-    const fs = await vi.importActual<typeof import("node:fs")>("node:fs");
-    const css = fs.readFileSync("app/landing/Dock.module.css", "utf8");
-    expect(css).toMatch(/@media \(min-width: 1280px\) \{[^}]*html\[data-gp-stack="side"\]\) \.dock \{ inset-inline: calc\(var\(--gp-stack-w, 0px\) \+ 16px\) 24px; margin-inline: auto/);
-    expect(css).toMatch(/html\[data-gp-stack\]\) \.dock:global\(\.in\) \{ transform: translateX\(-50%\) translateY\(calc\(var\(--gp-stack-h/);
+    expect(document.documentElement.dataset.gpStack).toBe("");
+    unmount();
+    expect(document.documentElement.dataset.gpStack).toBeUndefined();
   });
 });

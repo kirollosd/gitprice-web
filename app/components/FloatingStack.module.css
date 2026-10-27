@@ -14,3 +14,7 @@
 .stack > * { pointer-events: auto; }
 /* Empty until a notice mounts: a padded empty box would grow upward when the notice appears, which counts as a layout shift. */
 .stack:empty { display: none; }
+/* The landing's dock stays put; while it shows, the stack rises above it (the dock's height is --gp-dock-h, its offset from the bottom 32px, less the stack's own padding). */
+.stack { transition: inset-block-end .25s ease; }
+:global(html:has(#dock.in)) .stack { inset-block-end: calc(var(--gp-dock-h, 0px) + 28px); }
+@media (prefers-reduced-motion: reduce) { .stack { transition: none; } }

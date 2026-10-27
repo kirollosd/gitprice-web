@@ -32,6 +32,8 @@
 .eq { flex: none; width: 46px; height: 46px; border-radius: 50%; background: var(--fill-d); color: var(--on-fill-d); display: grid; place-items: center; }
 .t { padding: 0 16px; font-size: 1.0625rem; }
 .dock > [data-beta] { margin-inline-end: 12px; align-self: center; }
+/* the tag is dir=ltr (an English run), so its logical margin points the wrong way on an RTL page: put the gap on the button side */
+:global(html[dir="rtl"]) .dock > [data-beta] { margin-inline: 12px 0; }
 .t:focus { outline: none; }
 .t b { font-family: "JetBrains Mono", monospace; font-weight: 500; }
 .t :global(.save) { color: var(--dock-save); }
@@ -45,19 +47,10 @@
 .dock [data-gp-store]:not([data-gp-store="chrome"]) { display: none; }
 .dock [data-gp-store="chrome"] { background: var(--on-dock); color: var(--dock); min-height: 44px; }
 
-/* A notice (FloatingStack) is showing. Default: lift the dock over it, by a transform so a late notice is no layout shift. */
-:global(html[data-gp-stack]) .dock:global(.in) { transform: translateX(-50%) translateY(calc(var(--gp-stack-h, 0px) * -1)); }
-/* Desktop with only a card at the inline start (the cookie notice): sit beside it, centred in the free space, RTL aware. */
-@media (min-width: 1280px) {
-  :global(html[data-gp-stack="side"]) .dock { inset-inline: calc(var(--gp-stack-w, 0px) + 16px) 24px; margin-inline: auto; width: max-content; transform: translateY(140px); }
-  :global(html[data-gp-stack="side"]) .dock:global(.in) { transform: none; }
-}
-
 /* phones: the landing sets html.lp-m (also portrait tablets); every other page, and any narrow or zoomed window, takes the same rules from the viewport width,
    so the dock never runs wider than the screen (WCAG 1.4.10) */
 :global(html.lp-m) .dock { left: 12px; right: 12px; bottom: 16px; transform: translateY(140px); }
-/* the notice spans the width, so the dock lifts above it (FloatingStack); a transform, not `bottom`, so a late notice is no layout shift */
-:global(html.lp-m) .dock:global(.in) { transform: translateY(calc(var(--gp-stack-h, 0px) * -1)); }
+:global(html.lp-m) .dock:global(.in) { transform: none; }
 :global(html.lp-m) .dock:global(.join) { min-width: 0; align-items: center; }
 /* the Beta tag shares the first row with the mark; the form takes the full row below so the email field keeps its width */
 :global(html.lp-m) .dock:global(.join) .wl { flex-basis: 100%; padding-inline-start: 0; margin-top: 6px; }
@@ -68,8 +61,7 @@
 :global(html.lp-m) .go { padding: 10px 14px; font-size: .875rem; white-space: nowrap; }
 @media (max-width: 759px) {
   :global(html[lang]) .dock { left: 12px; right: 12px; bottom: 16px; transform: translateY(140px); }
-  /* the notice spans the width, so the dock lifts above it (FloatingStack); a transform, not `bottom`, so a late notice is no layout shift */
-  :global(html[lang]) .dock:global(.in) { transform: translateY(calc(var(--gp-stack-h, 0px) * -1)); }
+    :global(html[lang]) .dock:global(.in) { transform: none; }
   :global(html[lang]) .dock:global(.join) { min-width: 0; align-items: center; }
   /* the Beta tag shares the first row with the mark; the form takes the full row below so the email field keeps its width */
   :global(html[lang]) .dock:global(.join) .wl { flex-basis: 100%; padding-inline-start: 0; margin-top: 6px; }
