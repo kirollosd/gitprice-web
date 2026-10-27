@@ -79,7 +79,7 @@ describe("WebMenu", () => {
   it("Escape closes and returns focus to the button even when focus moved elsewhere", async () => {
     const btn = await setup();
     fireEvent.click(btn);
-    (screen.getAllByRole("link")[2] as HTMLElement).focus();
+    (document.querySelector("#web-menu [data-join]") as HTMLElement).focus();
     fireEvent.keyDown(document, { key: "Escape" });
     const closed = screen.getByRole("button", { name: "Open menu" });
     expect(closed.getAttribute("aria-expanded")).toBe("false");
@@ -106,13 +106,14 @@ describe("WebMenu", () => {
   it("wraps Tab between the button and the overlay links", async () => {
     const btn = await setup();
     fireEvent.click(btn);
-    const links = screen.getAllByRole("link");
+    // the sheet's last control is the waitlist button (prelaunch)
+    const items = [...document.querySelectorAll<HTMLElement>("#web-menu a, #web-menu button")];
     const toggle = screen.getByRole("button", { name: "Close menu" });
-    links[links.length - 1].focus();
+    items[items.length - 1].focus();
     fireEvent.keyDown(document, { key: "Tab" });
     expect(document.activeElement).toBe(toggle);
     fireEvent.keyDown(document, { key: "Tab" });
-    expect(document.activeElement).toBe(links[0]);
+    expect(document.activeElement).toBe(items[0]);
     fireEvent.keyDown(document, { key: "Tab", shiftKey: true });
     expect(document.activeElement).toBe(toggle);
   });

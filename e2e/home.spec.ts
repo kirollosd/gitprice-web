@@ -292,7 +292,9 @@ test.describe("Sellers prelaunch", () => {
     expect(bodies[0]).toMatchObject({ audience: "seller", locale: "en" });
     const header = page.locator("header");
     await expect(header.getByRole("link", { name: "GitPrice for shoppers" })).toHaveAttribute("href", "/");
-    await expect(header.getByRole("link", { name: "Join the waitlist" })).toHaveAttribute("href", "#waitlist");
+    // the header CTA opens the dock's waitlist, as on every page (the seller form stays in the page)
+    await header.getByRole("button", { name: "Join the waitlist" }).click();
+    await expect(page.locator('#dock input[type="email"]')).toBeFocused();
   });
 
   test("uses the short back label at 1024", async ({ page }) => {

@@ -61,7 +61,7 @@
   min-block-size: var(--gp-target);
   padding-inline: var(--gp-sp-6);
   border-radius: var(--gp-r-pill);
-  font-weight: 600;
+  border: 0; font: inherit; font-weight: 600; cursor: pointer;
   text-align: center;
 }
 .btn { background: var(--gp-surface-raised); color: var(--gp-ink); }

@@ -2,7 +2,7 @@ import { act, cleanup, fireEvent, render } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import en from "../i18n/en.json";
-import { intersect, stubMotion } from "./landing-stubs";
+import { stubMotion } from "./landing-stubs";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace: vi.fn(), push: vi.fn() }),
@@ -64,25 +64,9 @@ describe("Dock", () => {
     expect(dock().querySelectorAll("[data-beta]")).toHaveLength(1);
   });
 
-  it("a #join hash opens the form with the email field focused, then clears the hash", async () => {
+  it("a #join URL no longer opens anything: every Join button opens the form in place instead", async () => {
     location.hash = "#join";
     await page();
-    const input = dock().querySelector('input[type="email"]');
-    expect(input).toBeTruthy();
-    expect(document.activeElement).toBe(input);
-    expect(location.hash).toBe("");
-  });
-
-  it("a #join hashchange on the landing opens the form too", async () => {
-    await page();
-    expect(dock().querySelector('input[type="email"]')).toBeNull();
-    act(() => { location.hash = "#join"; dispatchEvent(new HashChangeEvent("hashchange")); });
-    expect(document.activeElement).toBe(dock().querySelector('input[type="email"]'));
-  });
-
-  it("launch: #join opens nothing", async () => {
-    location.hash = "#join";
-    await page(true);
     expect(dock().querySelector('input[type="email"]')).toBeNull();
     history.replaceState(null, "", "/");
   });
@@ -96,18 +80,14 @@ describe("Dock", () => {
     expect(document.documentElement.dataset.gpJoin).toBeUndefined();
   });
 
-  it("is hidden while the hero CTA is in view and while #foot is in view", async () => {
+  it("comes in once the hero board has landed and then stays, wherever the visitor is (the mock's dockIn)", async () => {
     await page();
-    const cta = heroJoin(), foot = document.getElementById("foot")!;
-    expect(dock().classList.contains("in")).toBe(false);
-    act(() => intersect(cta, false));
     expect(dock().classList.contains("in")).toBe(true);
-    act(() => intersect(foot, true));
-    expect(dock().classList.contains("in")).toBe(false);
-    act(() => intersect(foot, false));
+    // over the rail and the footer it is still there
+    document.getElementById("foot")!.getBoundingClientRect = () => ({ top: 10, bottom: 900 } as DOMRect);
+    act(() => { dispatchEvent(new Event("scroll")); vi.advanceTimersToNextFrame(); });
     expect(dock().classList.contains("in")).toBe(true);
-    act(() => intersect(cta, true));
-    expect(dock().classList.contains("in")).toBe(false);
+    expect(document.getElementById("dt")!.textContent).toBe(en.web.landing.dock.foot);
   });
 
   it("comes after <main> in document and tab order", async () => {
@@ -152,16 +132,21 @@ describe("Dock", () => {
     expect(frame(20)).toBe(one);
   });
 
-  it("still hides at #foot after a product pick remounts it", async () => {
+  it("the scenes mark the board as landed once the hero has played (reduced motion: at once)", async () => {
     await page();
-    const old = document.getElementById("foot")!;
-    const cta = heroJoin();
-    act(() => intersect(cta, false));
+    expect(document.getElementById("num")!.hasAttribute("data-landed")).toBe(true);
     expect(dock().classList.contains("in")).toBe(true);
-    const fresh = Object.assign(document.createElement("section"), { id: "foot" });
-    old.replaceWith(fresh);
-    act(() => { dispatchEvent(new Event("gp:product")); });
-    act(() => intersect(fresh, true));
-    expect(dock().classList.contains("in")).toBe(false);
+  });
+
+  it("on a site page the dock is simply there, with the waitlist and no landing data", async () => {
+    vi.doMock("next/navigation", () => ({ useRouter: () => ({ replace: vi.fn(), push: vi.fn() }), useSearchParams: () => new URLSearchParams(), usePathname: () => "/sellers" }));
+    mockEnv(false);
+    const { default: Dock, JoinProvider } = await import("../app/landing/Dock");
+    render(<JoinProvider><main id="main" /><Dock locale="en" /></JoinProvider>);
+    expect(dock().classList.contains("in")).toBe(true);
+    expect(document.getElementById("dt")!.textContent).toBe(en.web.landing.dock.foot);
+    act(() => { fireEvent.click(document.getElementById("dgo")!); });
+    expect(document.activeElement).toBe(dock().querySelector('input[type="email"]'));
+    vi.doUnmock("next/navigation");
   });
 });

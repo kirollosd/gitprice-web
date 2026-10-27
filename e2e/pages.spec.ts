@@ -40,11 +40,14 @@ test("indexable pages are not noindex and nothing links to pricing", async ({ pa
   expect(await page.locator('a[href*="pricing"]').count()).toBe(0);
 });
 
-test("prelaunch pricing CTAs go to the waitlist", async ({ page }) => {
+test("prelaunch pricing CTAs open the waitlist in the dock", async ({ page }) => {
   await page.goto("/ar/pricing");
-  // The plan CTAs; the sellers row links to the sellers page (Pricing/no-prices board).
-  const hrefs = await page.locator("main article a").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
-  expect(hrefs).toEqual(["/ar#join", "/ar#join"]);
+  // The plan CTAs are buttons that open the dock form in place; the sellers row links to the sellers page (Pricing/no-prices board).
+  await expect(page.locator("main article a")).toHaveCount(0);
+  await expect(page.locator("main article button[data-join]")).toHaveCount(2);
+  await page.locator("main article button[data-join]").first().click();
+  await expect(page.locator('#dock input[type="email"]')).toBeFocused();
+  await expect(page).toHaveURL(/\/ar\/pricing$/);
   await expect(page.locator("main aside a")).toHaveAttribute("href", "/ar/sellers");
 });
 

@@ -24,8 +24,8 @@ const homeAnchors = (hrefs: (string | null)[], locale: string) =>
   hrefs.filter((h): h is string => !!h && h.startsWith(locale === "ar" ? "/ar#" : "/#")).map((h) => h.split("#")[1]);
 
 const bySet = (ids: string[]) => [...ids].sort();
-// header + menu sheet (How it works each) and, when not launched, their CTAs (2) plus the pricing page's two plan CTAs (#join)
-const EXPECTED = (launch: boolean) => bySet(launch ? ["how", "how"] : ["how", "how", "join", "join", "join", "join"]);
+// header + menu sheet: How it works each. The waitlist CTAs are not links: they open the dock in place (owner, 2026-10-27)
+const EXPECTED = ["how", "how"];
 
 describe("links into the landing", () => {
   for (const locale of ["en", "ar"] as const) {
@@ -41,18 +41,22 @@ describe("links into the landing", () => {
         render(await PricingPage({ params: Promise.resolve({ locale }) }));
         const hrefs = [...document.querySelectorAll("a")].map((a) => a.getAttribute("href"));
         const ids = homeAnchors(hrefs, locale);
-        expect(bySet(ids)).toEqual(EXPECTED(isLaunch));
+        expect(bySet(ids)).toEqual(EXPECTED);
         for (const id of ids) expect(landingIds, `#${id}`).toContain(id);
         // there is no separate Features item: nothing else points at #how twice per surface
         const how = hrefs.filter((h) => h?.endsWith("#how"));
         expect(how).toHaveLength(2); // one header link, one menu link
         if (isLaunch) expect(hrefs).toContain("https://c.test");
-        else expect(hrefs).toContain(locale === "ar" ? "/ar#join" : "/#join");
+        else {
+          expect(hrefs.some((h) => h?.includes("#join"))).toBe(false);
+          // header, menu sheet and the pricing page's two plan CTAs
+          expect(document.querySelectorAll("button[data-join]")).toHaveLength(4);
+        }
       });
     }
   }
 
   it("the landing has the ids the links rely on", () => {
-    for (const id of ["how", "join", "foot"]) expect(landingIds).toContain(id);
+    for (const id of ["how", "foot"]) expect(landingIds).toContain(id);
   });
 });

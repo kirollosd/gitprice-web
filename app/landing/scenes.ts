@@ -17,6 +17,8 @@ const css = (el: HTMLElement, prop: string, v: string) => el.style.setProperty(p
 
 /** Seconds the hero takes 0 → 1 once started (it plays on its own clock; every other scene follows the scroll). */
 const HERO_SECS = 3.5;
+/** Hero progress at which the dock comes in (the mock's dockIn). */
+const DOCK_AT = 0.82;
 /** Phones (ship critique): a scrubbed scene left at 0 in view this long plays to its first step. */
 export const IDLE_MS = 1200;
 const FIRST: Record<string, number> = { spotpin: 0.2, print: 0.22 };
@@ -63,7 +65,7 @@ export function createScenes(reduce: boolean, wake: () => void) {
   let tallyS = NaN;
   // each swapped element's first (server-rendered) copy; a re-rendered element starts over
   const html0 = new WeakMap<Element, string>();
-  const shown = new Map<Element, string>();
+  const shown = new WeakMap<Element, string>();
   const keep = (id: string) => { const el = $(id); if (el && !html0.has(el)) html0.set(el, el.innerHTML); return el; };
   /** Swap a pre-rendered state in only when the state changes (keeps aria-live quiet), then format its prices. */
   const show = (el: HTMLElement | null, key: string, h: string) => {
@@ -123,6 +125,9 @@ export function createScenes(reduce: boolean, wake: () => void) {
       css(el, "width", (1 - t) * 0.36 + "em");
     });
     kids($("tags")).forEach((t, i) => t.classList.toggle("on", p > 0.62 + i * 0.06));
+    // the dock comes in once the board has landed (Dock reads data-landed on gp:hero)
+    const num = $("num"), landed = p > DOCK_AT;
+    if (num && num.hasAttribute("data-landed") !== landed) { num.toggleAttribute("data-landed", landed); dispatchEvent(new Event("gp:hero")); }
     const cap = keep("cap");
     if (cap?.dataset.done) show(cap, p > 0.8 ? "done" : "start", p > 0.8 ? cap.dataset.done : html0.get(cap)!);
   }

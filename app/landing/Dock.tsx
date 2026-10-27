@@ -47,6 +47,23 @@ export function JoinProvider({ children }: { children: ReactNode }) {
 /** Opens the dock's waitlist form (a no-op outside JoinProvider). */
 export const useJoin = (): { open: (opener?: HTMLElement | null) => void } => ({ open: useContext(JoinCtx).open });
 
+/**
+ * A "Join the waitlist" button for pages that supply their own label (site header, menu sheet, pricing): it opens the
+ * dock's form in place, like every other join button. Not for launch, where callers link to the Chrome store.
+ * `opener` is who gets focus back when the form closes (default: the button itself).
+ */
+export function JoinCta({ label, className, placement, ctaId = "join_waitlist", opener, onOpen }: {
+  label: string; className?: string; placement: string; ctaId?: string; opener?: () => HTMLElement | null; onOpen?: () => void;
+}) {
+  const { open } = useContext(JoinCtx);
+  return (
+    <button type="button" className={className} data-join="" data-gp-track="cta_click" data-gp-cta-id={ctaId} data-gp-placement={placement}
+      onClick={(e) => { onOpen?.(); open(opener ? opener() : e.currentTarget); }}>
+      {label}
+    </button>
+  );
+}
+
 const LABEL = { hero: "web.landing.hero.join", bottom: "web.landing.foot.join", nav: "web.landing.nav.join" } as const;
 
 /** Every [data-join]: opens the dock form; after launch it is the Add to Chrome link (constraints call 2). */
@@ -86,15 +103,14 @@ function read(): { msg: Msg; from: number; best: number } {
 
 /**
  * The fixed dock (#dock), after <main>: the line for where you are, plus the waitlist (or, launched, Add to Chrome).
- * Hidden while the hero CTA or #foot is on screen (ship critique), shown while its form is open. Over a dark band
- * it flips light (`dk`), and it flips the header too.
+ * On the landing it comes in once the hero board has landed and stays (the mock's dockIn), and is always shown while
+ * its form is open; on every other page it is simply there. Over a dark band it flips light (`dk`), and flips the header too.
  */
 export default function Dock({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const home = localeFromPath(pathname ?? "/").rest === "/";
   const { isOpen, joined, open, close, join } = useContext(JoinCtx);
-  const [seen, setSeen] = useState({ cta: true, foot: false });
-  const [view, setView] = useState<{ msg: Msg; from: number; best: number; dk: boolean; aside: boolean }>({ msg: null, from: 0, best: 0, dk: false, aside: false });
+  const [view, setView] = useState<{ msg: Msg; from: number; best: number; dk: boolean; aside: boolean; landed: boolean }>({ msg: null, from: 0, best: 0, dk: false, aside: false, landed: false });
   const ref = useRef<HTMLDivElement>(null);
   const fmt = useMoney();
 
@@ -108,51 +124,24 @@ export default function Dock({ locale }: { locale: Locale }) {
       const room = rect(document.getElementById("room")), bar = rect(document.getElementById("verdict")?.parentElement ?? null);
       const aside = document.documentElement.classList.contains("lp-m") && !!room && !!bar
         && room.top <= 1 && room.bottom >= innerHeight - 1 && bar.bottom > innerHeight - 100;
-      const next = { ...read(), dk: !!d && darkAt(d.top + d.height / 2), aside };
+      // the mock's dockIn: the dock comes in once the hero board has landed, and stays (scenes.ts sets data-landed)
+      const landed = !!document.getElementById("num")?.hasAttribute("data-landed");
+      const next = { ...read(), dk: !!d && darkAt(d.top + d.height / 2), aside, landed };
       setView((v) => (Object.keys(next) as (keyof typeof next)[]).every((k) => v[k] === next[k]) ? v : next);
     };
     update();
-    const watch = (el: Element | null, key: "cta" | "foot") => {
-      if (!el || typeof IntersectionObserver !== "function") return undefined;
-      const io = new IntersectionObserver((es) => es.forEach((e) => setSeen((v) => ({ ...v, [key]: e.isIntersecting }))));
-      io.observe(el);
-      return io;
-    };
-    const cta = watch(document.querySelector('#num [data-gp-placement="hero"]'), "cta");
-    // #foot is rebuilt with the product (keyed sections), so follow the new node
-    let foot = watch(document.getElementById("foot"), "foot");
     // one layout pass per frame, however many scroll events arrive
     let raf = 0;
     const onFrame = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); };
-    const onProduct = () => {
-      foot?.disconnect();
-      foot = watch(document.getElementById("foot"), "foot");
-      onFrame();
-    };
-    ["scroll", "resize"].forEach((e) => addEventListener(e, onFrame, { passive: true }));
-    addEventListener("gp:product", onProduct);
+    // gp:hero: the board landed (or replays for a new product); gp:product: the sections were rebuilt
+    const EVENTS = ["scroll", "resize", "gp:hero", "gp:product"];
+    EVENTS.forEach((e) => addEventListener(e, onFrame, { passive: true }));
     return () => {
       cancelAnimationFrame(raf);
-      cta?.disconnect();
-      foot?.disconnect();
-      ["scroll", "resize"].forEach((e) => removeEventListener(e, onFrame));
-      removeEventListener("gp:product", onProduct);
+      EVENTS.forEach((e) => removeEventListener(e, onFrame));
       document.querySelector("header")?.removeAttribute("data-dk");
     };
   }, [home]);
-
-  // /#join (the header CTA on other pages) opens the form; without JS the link still lands on #foot's anchor (Foot)
-  useEffect(() => {
-    if (!home || env.launch) return;
-    const go = () => {
-      if (location.hash !== "#join") return;
-      history.replaceState(null, "", location.pathname + location.search);
-      open(null);
-    };
-    go();
-    addEventListener("hashchange", go);
-    return () => removeEventListener("hashchange", go);
-  }, [home, open, pathname]);
 
   // the form takes focus as it opens
   useEffect(() => {
@@ -162,10 +151,11 @@ export default function Dock({ locale }: { locale: Locale }) {
     if (joined) document.getElementById("dt")?.focus({ preventScroll: true });
   }, [joined]);
 
-  if (!home) return null;
-  const shown = isOpen || (!seen.cta && !seen.foot && !view.aside);
+  // site pages have no hero to wait for: the dock is simply there
+  const shown = !home || isOpen || (view.landed && !view.aside);
   const less = fmt(view.from - view.best, 2).replace(".00 ", " ");
   const line = joined ? esc(t(locale, K + "done"))
+    : !home ? esc(t(locale, K + "foot"))
     : view.msg ? esc(t(locale, MSG[view.msg]))
     : html(locale, K + "elsewhere", {}, { price: `<bdi dir="ltr">${esc(formatMoney(view.best))}</bdi>`, less: `<bdi dir="ltr">${esc(less)}</bdi>` }).__html;
   const cls = [s.dock, shown && "in", view.dk && "dk", isOpen && "join", joined && "done"].filter(Boolean).join(" ");

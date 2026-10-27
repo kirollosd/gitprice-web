@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { env } from "../../lib/env";
 import { t, type Locale } from "../../lib/i18n";
 import { localeFromPath, pathFor } from "../../lib/locale";
+import { JoinCta } from "../landing/Dock";
 
 const N = "web.component.webNav.";
 
@@ -15,7 +16,7 @@ export function useOnSellers(): boolean {
 }
 
 /** `keys` is the webNav label set for the current width, e.g. "1440" or "menuOpen". */
-export function ctaFor(locale: Locale, keys: string, onSellers: boolean): { href: string; label: string; ctaId: string } {
+export function ctaFor(locale: Locale, keys: string, onSellers: boolean): { href?: string; label: string; ctaId: string } {
   if (env.launch) {
     return {
       ctaId: "install_extension",
@@ -23,11 +24,8 @@ export function ctaFor(locale: Locale, keys: string, onSellers: boolean): { href
       label: t(locale, onSellers ? "web.sellers.launch.nav.label" : "web.home.launch.nav.label"),
     };
   }
-  return {
-    ctaId: "join_waitlist",
-    href: onSellers ? "#waitlist" : `${pathFor(locale, "/")}#join`,
-    label: t(locale, `${N}${keys}.cta.label`),
-  };
+  // no href: prelaunch the CTA is a JoinCta, which opens the dock's waitlist form in place on every page
+  return { ctaId: "join_waitlist", label: t(locale, `${N}${keys}.cta.label`) };
 }
 
 export function sellersLinkFor(locale: Locale, keys: string, onSellers: boolean): { href: string; label: string; ctaId: string } {
@@ -46,5 +44,6 @@ export function NavSellers({ locale, keys, className }: { locale: Locale; keys: 
 
 export function NavCta({ locale, keys, className, onNavigate }: { locale: Locale; keys: string; className?: string; onNavigate?: () => void }) {
   const { href, label, ctaId } = ctaFor(locale, keys, useOnSellers());
+  if (!href) return <JoinCta label={label} className={className} placement="nav" ctaId={ctaId} onOpen={onNavigate} />;
   return <Link href={href} className={className} onClick={onNavigate} data-gp-track="cta_click" data-gp-cta-id={ctaId} data-gp-placement="nav">{label}</Link>;
 }

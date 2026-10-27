@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { env } from "../../lib/env";
 import { t, type Locale } from "../../lib/i18n";
 import { pathFor } from "../../lib/locale";
+import { JoinCta } from "../landing/Dock";
 import { track } from "../../lib/track";
 import LanguageSwitch from "./LanguageSwitch";
 import { ctaFor, sellersLinkFor, useOnSellers } from "./NavLinks";
@@ -97,7 +98,12 @@ export default function WebMenu({ locale }: { locale: Locale }) {
             <li><LanguageSwitch locale={locale} icon /></li>
           </ul>
           </nav>
-          <Link href={cta.href} className={styles.cta} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id={cta.ctaId} data-gp-placement="menu">{cta.label}</Link>
+          {cta.href ? (
+            <Link href={cta.href} className={styles.cta} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id={cta.ctaId} data-gp-placement="menu">{cta.label}</Link>
+          ) : (
+            // the sheet unmounts as the form opens, so focus returns to the menu button
+            <JoinCta label={cta.label} className={styles.cta} placement="menu" ctaId={cta.ctaId} opener={() => button.current} onOpen={() => setOpen(false)} />
+          )}
         </div>
       )}
     </>

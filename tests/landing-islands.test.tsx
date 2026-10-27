@@ -128,12 +128,13 @@ describe("WebNav (landing)", () => {
 });
 
 describe("WebNav (site, non-home pages)", () => {
-  it("keeps the phone menu button and no landing wordmark/dock CTA", async () => {
+  it("keeps the phone menu button, and its CTA opens the dock's waitlist (a button, not a link home)", async () => {
     window.matchMedia = ((q: string) => ({ matches: false, media: q, addEventListener() {}, removeEventListener() {} })) as unknown as typeof window.matchMedia;
     const { default: WebNav } = await import("../app/components/WebNav");
     render(<WebNav locale="en" variant="site" />);
     expect(screen.getByRole("button", { name: "Open menu" })).toBeTruthy();
-    expect(document.querySelector("[data-join]")).toBeNull();
+    expect(document.querySelector("a[href$='#join']")).toBeNull();
+    expect(document.querySelector("button[data-join]")?.textContent).toBe(en.web.component.webNav["1440"].cta.label);
   });
 
   it("is picked by default off the home route", async () => {
