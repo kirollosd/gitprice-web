@@ -71,3 +71,8 @@
 :global(html.lp-m) .lede { inset-inline-start: 20px; inset-inline-end: 20px; top: calc(42vh / var(--z) + 150px); bottom: auto; width: auto; font-size: 16px; text-align: start; }
 :global(html.lp-m) .tags { inset-inline-start: 20px; inset-inline-end: 20px; bottom: 110px; flex-wrap: wrap; gap: 6px; }
 :global(html.lp-m) .tags span { padding: 7px 12px; font-size: 14px; }
+
+/* html[data-gp-pick] (HomeSections boot script): the static HTML shows the charger, but this load will show another
+   product; hold the product parts back until ProductProvider swaps it in, so no charger flashes. Failsafe: shown after 3s. */
+:global(html[data-gp-pick]) :is(.pick, .cap, .digits, .unit, .tags, .strike) { visibility: hidden; animation: gp-pick-failsafe .01s 3s forwards; }
+@keyframes gp-pick-failsafe { from { visibility: hidden; } to { visibility: visible; } }

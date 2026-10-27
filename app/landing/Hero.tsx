@@ -33,8 +33,8 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
         <ProductPicker locale={locale} />
         <div className={`${b.kick} ${s.kick}`}>{t(locale, K + "eyebrow")}</div>
         <h1 className={s.h1}>{t(locale, K + "headline")}</h1>
-        <p key={P.id} className={s.cap} id="cap" data-done={done} dangerouslySetInnerHTML={html(locale, K + "captionStart", { product: P.name })} />
-        <div key={`${P.id}:${from}:${to}`} className={`${s.digits} ${b.mono}`} id="digits" aria-hidden="true" data-keep-ls="" data-from={from} data-to={to}>
+        <p key={`cap:${P.id}`} className={s.cap} id="cap" data-done={done} dangerouslySetInnerHTML={html(locale, K + "captionStart", { product: P.name })} />
+        <div key={`digits:${P.id}:${from}:${to}`} className={`${s.digits} ${b.mono}`} id="digits" aria-hidden="true" data-keep-ls="" data-from={from} data-to={to}>
           {[...from].map((c, i) =>
             isFixed(c) ? (
               <span key={i} className={`${s.dg} ${s.dot}`}>{c}</span>
@@ -50,7 +50,7 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
         <span className={s.unit} data-cur="" aria-hidden="true">{code}</span>
         <div className={s.strike} id="strike" aria-hidden="true" />
         <p className={b.sr} id="numsr">{t(locale, K + "srPrices", { from: `${from} ${code}`, to: `${to} ${code}` })}</p>
-        <div key={P.id} className={s.tags} id="tags">
+        <div key={`tags:${P.id}`} className={s.tags} id="tags">
           {P.tags.map((x) => <span key={x}>{x}</span>)}
           <span className={s.w}><StoreText label={P.best.store} locale={locale} /></span>
         </div>

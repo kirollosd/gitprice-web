@@ -15,3 +15,9 @@ export function fitCanvas() {
 }
 
 export const CANVAS_BOOT = `(${fitCanvas.toString()})()`;
+
+/**
+ * Before first paint, flags a page whose product will change at hydration (no ?p=, or one other than the static HTML's
+ * charger) so the product parts stay hidden instead of flashing the charger (Hero.module.css, ProductProvider clears it).
+ */
+export const PICK_BOOT = '(function(){try{if(new URLSearchParams(location.search).get("p")!=="charger")document.documentElement.dataset.gpPick="1"}catch(e){}})()';

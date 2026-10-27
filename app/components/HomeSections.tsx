@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "../landing/base.module.css";
-import { CANVAS_BOOT } from "../landing/canvas";
+import { CANVAS_BOOT, PICK_BOOT } from "../landing/canvas";
 import CanvasFit from "../landing/CanvasFit";
 import LandingBody from "../landing/LandingBody";
 import ScrollScenes from "../landing/ScrollScenes";
@@ -56,7 +56,7 @@ export default function HomeContent({ locale }: { locale: Locale }) {
   return (
     <div className={b.shell}>
       <div className={b.canvas}>
-        <script dangerouslySetInnerHTML={{ __html: CANVAS_BOOT }} />
+        <script dangerouslySetInnerHTML={{ __html: CANVAS_BOOT + ";" + PICK_BOOT }} />
         <CanvasFit />
         <LandingBody locale={locale} />
         <ScrollScenes locale={locale} />

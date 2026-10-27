@@ -1,6 +1,6 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 
@@ -19,7 +19,10 @@ const mockEnv = (launch: boolean) =>
     env: { launch, chromeStoreUrl: "https://c.test", appStoreUrl: "https://a.test", playStoreUrl: "https://p.test" },
   }));
 
+// the landing picks a random product on load; 0 is the charger these tests read
+beforeEach(() => { vi.spyOn(Math, "random").mockReturnValue(0); });
 afterEach(() => {
+  vi.restoreAllMocks();
   cleanup();
   vi.doUnmock("../lib/env");
   vi.resetModules();

@@ -10,6 +10,8 @@ export const test = base.extend({
     await context.route("https://www.googletagmanager.com/**", (r) => r.fulfill({ contentType: "text/javascript", body: "" }));
     // Vercel Speed Insights script is served by Vercel only; locally it 404s and trips the no-console-error specs.
     await context.route("**/_vercel/**", (r) => r.fulfill({ contentType: "text/javascript", body: "" }));
+    // The landing shows a random product on load; specs assume the charger (the static HTML). A spec that tests the randomness overrides this.
+    await context.addInitScript(() => { Math.random = () => 0; });
     await provide(context);
   },
 });

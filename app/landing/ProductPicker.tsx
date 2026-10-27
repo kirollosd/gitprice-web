@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { createContext, Suspense, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, Suspense, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { t, type Locale } from "../../lib/i18n";
-import { getProduct, products } from "./products";
+import { products } from "./products";
 import s from "./Hero.module.css";
 
 type Ctx = { id: string; pick: (id: string) => void };
@@ -12,10 +12,16 @@ const ProductCtx = createContext<Ctx>({ id: products[0].id, pick: () => {} });
 /** The hero product's id (an unknown or missing ?p= is the charger). */
 export const useProductId = () => useContext(ProductCtx).id;
 
-/** ?p= after hydration. It renders nothing, so the static HTML (the charger) never waits on the URL. */
+/** The set of ids a ?p= may name; anything else (or nothing) means a random product, as in the mock. */
+const known = (p: string | null | undefined) => products.find((x) => x.id === p)?.id;
+
+/**
+ * ?p= changes after mount (back/forward). It renders nothing, so the static HTML (the charger) never waits on the URL.
+ * No ?p= leaves the product alone: the random pick made on load must not snap back to the charger.
+ */
 function FromUrl({ onId }: { onId: (id: string) => void }) {
-  const p = useSearchParams().get("p");
-  useEffect(() => { onId(getProduct(p ?? undefined).id); }, [p, onId]);
+  const id = known(useSearchParams().get("p"));
+  useEffect(() => { if (id) onId(id); }, [id, onId]);
   return null;
 }
 
@@ -34,6 +40,12 @@ export function ProductProvider({ children }: { children: ReactNode }) {
       pending.current = null;
     }
     setId(next);
+  }, []);
+  // The static HTML is the charger. Before the first paint of a hydrated page: ?p= wins, else a random product
+  // (the mock's behaviour). HomeSections' boot script hides the product parts (html[data-gp-pick]) until this runs.
+  useLayoutEffect(() => {
+    setId(known(new URLSearchParams(location.search).get("p")) ?? products[Math.floor(Math.random() * products.length)].id);
+    delete document.documentElement.dataset.gpPick;
   }, []);
   const pick = useCallback((next: string) => {
     if (next === id) return;

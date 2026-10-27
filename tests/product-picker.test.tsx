@@ -44,9 +44,11 @@ describe("ProductPicker", () => {
     expect(document.querySelector("#refname")?.textContent).toBe(iphone.name);
   });
 
-  it("reads ?p= on load and falls back to the charger for an unknown id", async () => {
+  it("reads ?p= on load; an unknown id is a random pick (stubbed to the charger here)", async () => {
     query = "p=pampers";
+    history.replaceState(null, "", "/?p=pampers");
     await home();
+    history.replaceState(null, "", "/");
     expect(chip("pampers").getAttribute("aria-pressed")).toBe("true");
     cleanup();
     query = "p=nope";
@@ -64,6 +66,44 @@ describe("ProductPicker", () => {
     removeEventListener("gp:product", on);
     const { products } = await import("../app/landing/products");
     expect(seen).toEqual([products.find((p) => p.id === "cerave")!.name]);
+  });
+
+  it("a pick replaces the caption, board and tags: nothing of the previous product stays in the DOM", async () => {
+    const { products } = await import("../app/landing/products");
+    await home();
+    for (const id of ["iphone", "cerave", "airfryer"]) act(() => { fireEvent.click(chip(id)); });
+    const air = products.find((p) => p.id === "airfryer")!;
+    for (const sel of ["#cap", "#digits", "#tags"]) expect(document.querySelectorAll(sel), sel).toHaveLength(1);
+    expect(document.querySelector("#cap")?.textContent).toContain(air.name);
+    expect(document.querySelector("#cap")?.textContent).not.toContain("Anker");
+    expect(document.querySelector("#tags")?.textContent).toContain(air.tags[0]);
+    // every element id on the page is unique
+    const ids = [...document.querySelectorAll("[id]")].map((e) => e.id);
+    expect(ids.filter((id, i) => ids.indexOf(id) !== i)).toEqual([]);
+  });
+
+  it("shows a random product when ?p= is absent or unknown, and ?p= wins when it names one", async () => {
+    const { products } = await import("../app/landing/products");
+    const last = products[products.length - 1];
+    vi.mocked(Math.random).mockReturnValue(0.99);
+    await home();
+    expect(chip(last.id).getAttribute("aria-pressed")).toBe("true");
+    cleanup();
+    query = "p=nope";
+    await home();
+    expect(chip(last.id).getAttribute("aria-pressed")).toBe("true");
+    cleanup();
+    query = "p=iphone";
+    history.replaceState(null, "", "/?p=iphone");
+    await home();
+    history.replaceState(null, "", "/");
+    expect(chip("iphone").getAttribute("aria-pressed")).toBe("true");
+  });
+
+  it("clears the boot flag that holds the product parts back, once the product is chosen", async () => {
+    document.documentElement.dataset.gpPick = "1";
+    await home();
+    expect(document.documentElement.dataset.gpPick).toBeUndefined();
   });
 
   it("does nothing when the current product is picked again", async () => {
