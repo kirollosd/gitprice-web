@@ -41,14 +41,14 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
   }
   const home = pathFor(locale, "/");
   if (kind === "site") {
-    // sellers, legal and the rest have no landing anchors: they keep the phone menu sheet
+    // sellers, legal and the rest link into the landing (#how): they keep the phone menu sheet
     return (
       <header className={`${styles.header} ${site.hdr}`}>
         <div className={`${styles.bar} container`}>
           <Logo locale={locale} />
           <nav aria-label={t(locale, N + "a11y.label.primary")} className={site.links}>
-            <Link href={`${home}#features`} className={`${site.link} ${site.wide}`} data-gp-track="cta_click" data-gp-cta-id="features" data-gp-placement="nav">{t(locale, N + "1024.label.features")}</Link>
-            <Link href={`${home}#how-it-works`} className={`${site.link} ${site.wide}`} data-gp-track="cta_click" data-gp-cta-id="how_it_works" data-gp-placement="nav">{t(locale, N + "1024.label.howItWorks")}</Link>
+            <Link href={`${home}#how`} className={`${site.link} ${site.wide}`} data-gp-track="cta_click" data-gp-cta-id="features" data-gp-placement="nav">{t(locale, N + "1024.label.features")}</Link>
+            <Link href={`${home}#how`} className={`${site.link} ${site.wide}`} data-gp-track="cta_click" data-gp-cta-id="how_it_works" data-gp-placement="nav">{t(locale, N + "1024.label.howItWorks")}</Link>
             <NavSellers locale={locale} keys="1024" className={`${site.link} ${site.sellers} ${site.l1024}`} />
             <NavSellers locale={locale} keys="1440" className={`${site.link} ${site.sellers} ${site.l1440}`} />
             <NavSellers locale={locale} keys="768" className={`${site.link} ${site.sellers} ${site.l768}`} />
