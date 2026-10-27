@@ -68,6 +68,16 @@ export default function DemoVideo({ id, locale }: { id: string; locale: Locale }
     });
 
     if (reduce) vid.controls = true;
+    // posters load only once the film is near, not with the first screen (LCP bandwidth)
+    let near: IntersectionObserver | null = null;
+    near = typeof IntersectionObserver === "function" ? new IntersectionObserver((es) => {
+      if (!es.some((e) => e.isIntersecting)) return;
+      near?.disconnect();
+      const p = (cut: string, look: string) => `url(/media/demo-${id}${cut}-${look}-poster.jpg)`;
+      frame?.style.setProperty("--pl", p("", "coral-light")); frame?.style.setProperty("--pd", p("", "coral"));
+      frame?.style.setProperty("--pml", p("-m", "coral-light")); frame?.style.setProperty("--pmd", p("-m", "coral"));
+    }, { rootMargin: "100% 0px" }) : null;
+    near?.observe(film);
     const io = typeof IntersectionObserver === "function" ? new IntersectionObserver((es) => es.forEach((e) => {
       inView = e.isIntersecting;
       if (inView) src();
@@ -89,7 +99,7 @@ export default function DemoVideo({ id, locale }: { id: string; locale: Locale }
     pp?.addEventListener("click", onPp);
     sync();
     return () => {
-      io?.disconnect(); mo.disconnect(); mq?.removeEventListener?.("change", swap);
+      io?.disconnect(); near?.disconnect(); mo.disconnect(); mq?.removeEventListener?.("change", swap);
       vid.removeEventListener("error", onError); vid.removeEventListener("play", sync); vid.removeEventListener("pause", sync);
       pp?.removeEventListener("click", onPp); seeks.forEach((off) => off());
       cancelAnimationFrame(raf);

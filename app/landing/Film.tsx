@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
 import DemoVideo from "./DemoVideo";
@@ -12,21 +11,16 @@ export const CHAPTERS = [["shop", 0], ["match", 3.4], ["compare", 5.8], ["alert"
 
 /**
  * 2b · the film: a tilted inset card that grows to full-bleed, then plays. First state: the small tilted card,
- * chapters hidden. The poster is a CSS background per theme and canvas (one request); DemoVideo sets #vid
+ * chapters hidden. The poster is a CSS background per theme and canvas, set by DemoVideo (--pl/--pd/--pml/--pmd) once the film nears the viewport so it stays off the first-screen bandwidth; DemoVideo also sets #vid
  * src/poster, plays in view and drives the chapter buttons.
  */
 export default function Film({ locale, product: P }: { locale: Locale; product: Product }) {
-  const poster = (cut: string, look: string) => `url(/media/demo-${P.id}${cut}-${look}-poster.jpg)`;
-  const vars = {
-    "--pl": poster("", "coral-light"), "--pd": poster("", "coral"),
-    "--pml": poster("-m", "coral-light"), "--pmd": poster("-m", "coral"),
-  } as CSSProperties;
   return (
     <section className={`${b.sec} ${s.film}`} id="film" data-gp-section="film">
       <div className={b.stage}>
         <h2 className={`${b.big} ${s.h2}`} id="fh" dangerouslySetInnerHTML={html(locale, K + "title")} />
         <p className={s.lede2} id="fl">{t(locale, K + "lede")}</p>
-        <div className={s.fframe} id="fframe" style={vars}>
+        <div className={s.fframe} id="fframe">
           <video id="vid" muted loop playsInline preload="none" />
         </div>
         <div className={s.chap} id="chap">

@@ -51,8 +51,8 @@ export const viewport: Viewport = {
 };
 
 const PRELOAD: Record<Locale, string[]> = {
-  en: ["outfit-latin-400-normal", "outfit-latin-800-normal", "jetbrains-mono-latin-400-normal"],
-  ar: ["alexandria-arabic-400-normal", "alexandria-arabic-700-normal", "jetbrains-mono-latin-400-normal"],
+  en: ["outfit-latin-400-normal", "outfit-latin-800-normal", "outfit-latin-300-normal"],
+  ar: ["alexandria-arabic-400-normal", "alexandria-arabic-700-normal", "alexandria-latin-400-normal"],
 };
 
 export const dynamicParams = false;
