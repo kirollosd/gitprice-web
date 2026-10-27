@@ -293,3 +293,21 @@ test.describe("Sellers prelaunch", () => {
     await expect(page.locator("header").getByRole("link", { name: "للمتسوقين", exact: true })).toBeVisible();
   });
 });
+
+test.describe("coral polish (GP-406 F1, F2, F4)", () => {
+  test("desktop: hero h1 is weight 400 and the dock sits 32px up, not lifted over the cookie notice", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/");
+    expect(await page.locator("h1").first().evaluate((e) => getComputedStyle(e).fontWeight)).toBe("400");
+    expect(await page.locator("#dock").evaluate((e) => getComputedStyle(e).bottom)).toBe("32px");
+  });
+
+  test("phone: the footer Cookie settings button has a 44px hit area", async ({ page }) => {
+    await page.setViewportSize(PHONE);
+    await page.goto("/");
+    const btn = page.locator("footer button", { hasText: /cookie/i }).first();
+    await btn.scrollIntoViewIfNeeded();
+    // the .hit-target layer (not the 18px box) carries the 44px; the cookie notice may cover the button on a first visit
+    expect(await btn.evaluate((b) => getComputedStyle(b, "::after").height)).toBe("44px");
+  });
+});

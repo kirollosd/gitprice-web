@@ -4,7 +4,7 @@
   --fill-d: var(--gp-web-fd); --on-fill-d: var(--gp-web-onfd); --ring: var(--gp-web-on-dock);
   /* error text: amber on the dark dock, the light-mode accent on a light one (ship critique, >= 4.5:1 both) */
   --dock-err: #E8B45E;
-  position: fixed; z-index: 30; left: 50%; bottom: calc(32px + var(--gp-stack-h, 0px)); /* above the cookie notice / locale suggestion (FloatingStack) */
+  position: fixed; z-index: 30; left: 50%; bottom: 32px;
   transform: translateX(-50%) translateY(140px);
   display: flex; align-items: center;
   background: var(--dock); color: var(--on-dock);
@@ -14,6 +14,8 @@
   font-family: "Outfit", "Alexandria", system-ui, sans-serif;
   transition: transform .7s cubic-bezier(.16, 1, .3, 1), visibility 0s .7s;
 }
+/* phone: the notice spans the width, so the dock lifts above it (FloatingStack); desktop never overlaps */
+:global(html.lp-m) .dock { bottom: calc(32px + var(--gp-stack-h, 0px)); }
 .dock:global(.in) { transform: translateX(-50%); visibility: visible; transition-delay: 0s; }
 /* over a dark band the dock flips light so it keeps its edge */
 .dock:global(.dk) { --dock: var(--gp-web-on-dark); --on-dock: var(--gp-web-ink); --dock-save: var(--gp-web-save); --ring: var(--gp-web-ink); --fill-d: var(--gp-web-fill); --on-fill-d: var(--gp-web-on-fill); }

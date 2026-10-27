@@ -7,7 +7,7 @@
 .r { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-top: 1px solid var(--gp-web-dark-line); font-size: 17px; transition: transform .7s var(--spring), opacity .4s; }
 .r:global(.first) { border-top-color: transparent; }
 .r span { flex: 1; min-width: 0; margin-inline-end: 16px; line-height: 1.4; }
-.r b { flex: none; font-family: var(--f-mono); font-weight: 500; font-size: 19px; padding: 2px 10px; border-radius: 999px; }
+.r b { flex: none; font-family: var(--f-mono); font-weight: 500; font-size: 19px; padding: 5px 10px; border-radius: 999px; }
 .r:global(.w) b { background: var(--gp-web-fill); color: var(--gp-web-on-fill); --cur-c: currentColor; }
 .r:global(.x) { color: var(--gp-web-on-dark-mute); }
 .r em { font-style: normal; font-size: 12px; border: 1px solid currentColor; border-radius: 999px; padding: 1px 8px; margin-inline-start: 8px; white-space: nowrap; }
