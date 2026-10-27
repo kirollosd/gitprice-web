@@ -78,10 +78,12 @@ for (const width of WIDTHS) {
       });
       test("reset-password link expired", async ({ page }) => {
         await seedReset(page, "link-expired", base, C.resetPassword.field.label, C.resetPassword.button.label);
+        await expect(page.getByRole("heading", { name: C.resetPassword.linkExpired.title })).toBeVisible(); // the verify call settles after hydration
         await shoot(page, `prelaunch-reset-link-expired-${width}-${locale}`);
       });
       test("checkout success", async ({ page }) => {
         await seedCheckout(page, "success", base, C.checkout.summary.button.label);
+        await expect(page.getByRole("heading", { name: C.checkout.success.title })).toBeVisible(); // the return poll settles after hydration
         await shoot(page, `prelaunch-checkout-success-${width}-${locale}`);
       });
     });
