@@ -115,14 +115,13 @@ test.describe("landing behaviours (parity with the preview)", () => {
     }
   });
 
-  test("the language menu keeps ?p= and remembers the choice", async ({ page }) => {
+  test("the language menu keeps ?p=", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/?p=iphone");
     await page.locator("#lng").click();
     await page.locator("#lmenu [lang=ar]").click();
     await expect(page).toHaveURL(/\/ar\?p=iphone$/);
     await expect(pressed(page)).toHaveText("آيفون");
-    expect(await page.evaluate(() => localStorage.getItem("gp-lang"))).toBe("ar");
   });
 
   test("resizing keeps the visitor at the same place in the same scene", async ({ page }) => {

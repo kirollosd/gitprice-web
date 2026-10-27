@@ -26,8 +26,9 @@ describe.each([[false], [true]])("Beta tag (launch=%s)", (launch) => {
   for (const locale of ["en", "ar"] as const) {
     it(`${locale}: sits by the hero CTA and the dock CTA, and in the footer`, async () => {
       await home(launch, locale);
-      expect(label(locale)).toBe(locale === "en" ? "Beta" : "بيتا");
-      expect(tags().map((b) => b.textContent)).toEqual([label(locale), label(locale), label(locale)]);
+      expect(label("en")).toBe("Beta");
+      // the owner's ruling: "Beta" in every locale, never translated
+      expect(tags().map((b) => b.textContent)).toEqual(["Beta", "Beta", "Beta"]);
       const [hero, foot, dock] = tags();
       expect(near(hero, '[data-gp-placement="hero"]')).toBe(true);
       expect(hero.closest("#num")).toBeTruthy();
@@ -60,7 +61,7 @@ describe("Beta tag in the landing header (phones)", () => {
       const join = document.querySelector<HTMLElement>('header [data-join][data-gp-placement="nav"]')!;
       const tag = join.nextElementSibling as HTMLElement;
       expect(tag.hasAttribute("data-beta")).toBe(true);
-      expect(tag.textContent).toBe(label(locale));
+      expect(tag.textContent).toBe("Beta");
       const fs = await vi.importActual<typeof import("node:fs")>("node:fs");
       const css = fs.readFileSync("app/components/WebNav.module.css", "utf8");
       expect(css).toMatch(/\.navBeta \{ display: none/);

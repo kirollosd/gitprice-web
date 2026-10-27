@@ -80,6 +80,31 @@ describe("Dock", () => {
     expect(document.documentElement.dataset.gpJoin).toBeUndefined();
   });
 
+  it("Escape closes the open form from anywhere on the page, and the open dock is a named group", async () => {
+    await page();
+    expect(dock().getAttribute("role")).toBeNull();
+    act(() => { fireEvent.click(heroJoin()); });
+    expect(dock().getAttribute("role")).toBe("group");
+    expect(dock().getAttribute("aria-label")).toBe(en.web.landing.dock.join);
+    act(() => { fireEvent.keyDown(document.body, { key: "Escape" }); });
+    expect(dock().querySelector('input[type="email"]')).toBeNull();
+    expect(dock().getAttribute("role")).toBeNull();
+  });
+
+  it("after joining, pressing a Join button moves focus to the announced confirmation instead of doing nothing", async () => {
+    await page();
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ data: { status: "created" } }), { status: 201, headers: { "content-type": "application/json" } })));
+    vi.useRealTimers();
+    act(() => { fireEvent.click(heroJoin()); });
+    const input = dock().querySelector('input[type="email"]') as HTMLInputElement;
+    act(() => { fireEvent.change(input, { target: { value: "a@b.co" } }); });
+    await act(async () => { fireEvent.submit(input.closest("form")!); });
+    await vi.waitFor(() => expect(document.getElementById("dt")?.getAttribute("aria-live")).toBe("polite"));
+    (document.activeElement as HTMLElement)?.blur();
+    act(() => { fireEvent.click(heroJoin()); });
+    expect(document.activeElement).toBe(document.getElementById("dt"));
+  });
+
   it("comes in once the hero board has landed and then stays, wherever the visitor is (the mock's dockIn)", async () => {
     await page();
     expect(dock().classList.contains("in")).toBe(true);

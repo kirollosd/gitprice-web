@@ -68,6 +68,22 @@ describe("ProductPicker", () => {
     expect(seen).toEqual([products.find((p) => p.id === "cerave")!.name]);
   });
 
+  it("a pick whose URL never changes does not leave the guard stuck: a later ?p= change still applies", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      history.replaceState(null, "", "/?p=charger");
+      query = "p=charger";
+      const { rerender } = await home();
+      const { default: HomeContent } = await import("../app/components/HomeSections");
+      act(() => { fireEvent.click(chip("iphone")); });
+      act(() => { fireEvent.click(chip("charger")); });
+      act(() => { vi.advanceTimersByTime(1100); });
+      query = "p=pampers";
+      rerender(<HomeContent locale="en" />);
+      expect(chip("pampers").getAttribute("aria-pressed")).toBe("true");
+    } finally { history.replaceState(null, "", "/"); vi.useRealTimers(); }
+  });
+
   it("a pick replaces the caption, board and tags: nothing of the previous product stays in the DOM", async () => {
     const { products } = await import("../app/landing/products");
     await home();

@@ -30,12 +30,12 @@
 :global(html[lang="ar"]) .dock button { line-height: 1.25; }
 
 .eq { flex: none; width: 46px; height: 46px; border-radius: 50%; background: var(--fill-d); color: var(--on-fill-d); display: grid; place-items: center; }
-.t { padding: 0 16px; font-size: 17px; }
+.t { padding: 0 16px; font-size: 1.0625rem; }
 .dock > [data-beta] { margin-inline-end: 12px; align-self: center; }
 .t:focus { outline: none; }
 .t b { font-family: "JetBrains Mono", monospace; font-weight: 500; }
 .t :global(.save) { color: var(--dock-save); }
-.go { border: 0; font-family: inherit; cursor: pointer; background: var(--on-dock); color: var(--dock); border-radius: 999px; padding: 13px 20px; min-height: 44px; font-weight: 600; font-size: 16px; }
+.go { border: 0; font-family: inherit; cursor: pointer; background: var(--on-dock); color: var(--dock); border-radius: 999px; padding: 13px 20px; min-height: 44px; font-weight: 600; font-size: 1rem; }
 
 /* the waitlist: the dock opens into an email field, then confirms */
 .dock:global(.join) { flex-wrap: wrap; min-width: 560px; border-radius: 30px; align-items: flex-start; }
@@ -61,8 +61,8 @@
 /* the Beta tag shares the first row with the mark; the form takes the full row below so the email field keeps its width */
 :global(html.lp-m) .dock:global(.join) .wl { flex-basis: 100%; padding-inline-start: 0; margin-top: 6px; }
 :global(html.lp-m) .eq { width: 38px; height: 38px; }
-:global(html.lp-m) .t { flex: 1; min-width: 0; padding: 0 10px; font-size: 14px; line-height: 1.3; white-space: normal; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; /* two lines still fit the 58px dock; longer is clipped with an ellipsis */ }
+:global(html.lp-m) .t { flex: 1; min-width: 0; padding: 0 10px; font-size: .875rem; line-height: 1.3; white-space: normal; /* no clamp: longer copy, larger text or text spacing grow the dock instead of clipping (WCAG 1.4.4, 1.4.12) */ }
 /* phones: the Beta tag lives in the header only, so the dock line keeps one row */
 :global(html.lp-m) .dock:not(:global(.join)) > [data-beta] { display: none; }
-:global(html.lp-m) .go { padding: 10px 14px; font-size: 14px; white-space: nowrap; }
+:global(html.lp-m) .go { padding: 10px 14px; font-size: .875rem; white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { .dock { transition: visibility 0s; } }

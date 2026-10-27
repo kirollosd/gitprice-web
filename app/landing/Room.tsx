@@ -14,7 +14,6 @@ import s from "./Room.module.css";
 const K = "web.landing.room.";
 const LETTERS = "ABCD";
 // the mock's "Suspect A: <name>" name for a lineup card; ponytail: no i18n key yet (web.landing.spot.suspect), the monorepo owns copy
-const SUSPECT = { en: "Suspect", ar: "المنتج" } as const;
 const ROUNDS = 3;
 const reduced = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -119,7 +118,7 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
         </div>
         <div className={s.sus} id="sus">
           {R.lineup.map(([store, name, price, art, exact, why], k) => (
-            <button key={`${R.id}-${k}`} type="button" className={s.s} data-k={k} data-exact={exact === 1 ? "" : undefined} aria-label={`${SUSPECT[locale]} ${LETTERS[k]}: ${name}`} onClick={() => reveal(k)}>
+            <button key={`${R.id}-${k}`} type="button" className={s.s} data-k={k} data-exact={exact === 1 ? "" : undefined} onClick={() => reveal(k)}>
               <div className={s.img}><Art c={art} /></div>
               {exact === 1 ? (
                 <span className={s.stamp}><GMark className={s.eq} state="same" settleOnView label="" />{t(locale, K + "stamp")}</span>

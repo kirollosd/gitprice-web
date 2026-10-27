@@ -336,3 +336,31 @@ test.describe("coral polish (GP-406 F1, F2, F4)", () => {
     expect(await btn.evaluate((b) => parseFloat(getComputedStyle(b, "::after").height))).toBeGreaterThanOrEqual(43.9);
   });
 });
+
+test.describe("hero strike and landmarks", () => {
+  test("the caption price is struck by the board's Coral bar, not a text-decoration; the home page has one contentinfo", async ({ page }) => {
+    await page.goto("/?p=charger");
+    const cap = await page.locator("#cap s").evaluate((el) => {
+      const p = el.firstElementChild!, after = getComputedStyle(p, "::after");
+      return { deco: getComputedStyle(p).textDecorationLine, display: getComputedStyle(p).display, content: after.content, h: after.height, bg: after.backgroundColor };
+    });
+    // the <s> itself still carries line-through, but its inline-block price stops it propagating: only the bar strikes
+    expect(cap.display).toBe("inline-block");
+    expect(cap.deco).not.toContain("line-through");
+    expect(cap.content).toBe('""');
+    expect(parseFloat(cap.h)).toBeCloseTo(3, 0); // the canvas zoom scales it a hair
+    expect(cap.bg).not.toBe("rgba(0, 0, 0, 0)");
+    await expect(page.getByRole("contentinfo")).toHaveCount(1);
+  });
+});
+
+for (const width of [390, 1024]) {
+  test(`the dock never covers the last footer row on a site page (${width})`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("/privacy");
+    await page.locator("#dock").waitFor({ state: "visible" });
+    await page.evaluate(() => scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+    const [dock, cookie] = await Promise.all([page.locator("#dock").boundingBox(), page.locator("footer button", { hasText: /cookie/i }).first().boundingBox()]);
+    expect(cookie!.y + cookie!.height).toBeLessThanOrEqual(dock!.y);
+  });
+}

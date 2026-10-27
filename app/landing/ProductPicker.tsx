@@ -13,6 +13,7 @@ const ProductCtx = createContext<Ctx>({ id: products[0].id, pick: () => {} });
 export const useProductId = () => useContext(ProductCtx).id;
 
 /** The set of ids a ?p= may name; anything else (or nothing) means a random product, as in the mock. */
+const PENDING_MS = 1000;
 const known = (p: string | null | undefined) => products.find((x) => x.id === p)?.id;
 
 /**
@@ -34,10 +35,12 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   // the last pick whose URL has not landed yet: earlier picks' late commits must not undo it
   const pending = useRef<string | null>(null);
+  const settle = useRef<ReturnType<typeof setTimeout>>(undefined);
   const fromUrl = useCallback((next: string) => {
     if (pending.current !== null) {
       if (next !== pending.current) return;
       pending.current = null;
+      clearTimeout(settle.current);
     }
     setId(next);
   }, []);
@@ -50,6 +53,9 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   const pick = useCallback((next: string) => {
     if (next === id) return;
     pending.current = next;
+    // a URL that never changes (A, B, A while ?p=A) would never clear the guard: drop it once the replaces have had time to land
+    clearTimeout(settle.current);
+    settle.current = setTimeout(() => { pending.current = null; }, PENDING_MS);
     setId(next);
     const q = new URLSearchParams(location.search);
     q.set("p", next);

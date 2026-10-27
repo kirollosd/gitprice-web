@@ -26,7 +26,8 @@ export function JoinProvider({ children }: { children: ReactNode }) {
   const [joined, setJoined] = useState(false);
   const opener = useRef<HTMLElement | null>(null);
   const open = useCallback((el?: HTMLElement | null) => {
-    if (joined) return;
+    // joined: the buttons stay, but a press lands on the confirmation (#dt, announced) instead of doing nothing
+    if (joined) { document.getElementById("dt")?.focus({ preventScroll: true }); return; }
     opener.current = el ?? null;
     setOpen(true);
   }, [joined]);
@@ -93,7 +94,7 @@ const MSG: Record<NonNullable<Msg>, string> = {
 const rect = (el: Element | null) => el?.getBoundingClientRect();
 const under = (el: Element | null, y: number) => { const r = rect(el); return !!r && r.top <= y && r.bottom > y; };
 /** Dark bands: the trap and the footer. */
-const darkAt = (y: number) => under(document.getElementById("foot"), y) || under(document.querySelector("[data-dark]"), y);
+const darkAt = (y: number) => under(document.querySelector("footer"), y) || under(document.querySelector("[data-dark]"), y);
 
 function read(): { msg: Msg; from: number; best: number } {
   const h = innerHeight * 0.5, num = document.getElementById("num");
@@ -115,9 +116,10 @@ export default function Dock({ locale }: { locale: Locale }) {
   const fmt = useMoney();
 
   useEffect(() => {
-    if (!home) return;
     const update = () => {
       const d = ref.current?.getBoundingClientRect();
+      // site pages: only the dock itself flips over their always-dark footer
+      if (!home) { const dk = !!d && darkAt(d.top + d.height / 2); setView((v) => v.dk === dk ? v : { ...v, dk }); return; }
       const header = document.querySelector("header");
       header?.toggleAttribute("data-dk", darkAt(60));
       header?.toggleAttribute("data-solid", scrollY > 40);
@@ -149,6 +151,13 @@ export default function Dock({ locale }: { locale: Locale }) {
   useEffect(() => {
     if (isOpen) ref.current?.querySelector<HTMLInputElement>('input[type="email"]')?.focus({ preventScroll: true });
   }, [isOpen]);
+  // Esc closes the open form wherever focus is, and hands focus back to the opener
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [isOpen, close]);
   useEffect(() => {
     if (joined) document.getElementById("dt")?.focus({ preventScroll: true });
   }, [joined]);
@@ -162,7 +171,7 @@ export default function Dock({ locale }: { locale: Locale }) {
     : html(locale, K + "elsewhere", {}, { price: `<bdi dir="ltr">${esc(formatMoney(view.best))}</bdi>`, less: `<bdi dir="ltr">${esc(less)}</bdi>` }).__html;
   const cls = [s.dock, shown && "in", view.dk && "dk", isOpen && "join", joined && "done"].filter(Boolean).join(" ");
   return (
-    <div ref={ref} className={cls} id="dock" onKeyDown={(e) => { if (e.key === "Escape" && isOpen) close(); }}>
+    <div ref={ref} className={cls} id="dock" {...(isOpen && { role: "group", "aria-label": t(locale, K + "join") })}>
       <GMark className={s.eq} state="idle" label="" />
       {!isOpen && <span className={s.t} id="dt" tabIndex={joined ? -1 : undefined} aria-live={joined ? "polite" : undefined} dangerouslySetInnerHTML={{ __html: line }} />}
       <BetaTag locale={locale} />

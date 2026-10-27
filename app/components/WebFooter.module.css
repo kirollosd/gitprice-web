@@ -8,6 +8,8 @@
   --gp-web-logo: var(--gp-web-on-dark);
   background: var(--gp-web-dark); color: var(--gp-web-on-dark);
   margin-block-start: calc(var(--gp-sp-16) + var(--gp-sp-8));
+  /* the fixed dock (58px + 32px offset) sits over the page end: keep the last row, and focus on it, clear of it */
+  padding-block-end: 7rem;
 }
 .inner { display: flex; flex-direction: column; align-items: flex-start; gap: var(--gp-sp-3); border-block-start: 1px solid var(--gp-hairline); padding-block: var(--gp-sp-8); }
 .brand { display: flex; flex-direction: column; align-items: flex-start; gap: var(--gp-sp-2); }

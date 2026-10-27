@@ -22,7 +22,7 @@ const W = "web.component.webFooter.default.";
 export default function Foot({ locale, product: P }: { locale: Locale; product: Product }) {
   const [word] = splitMoney(useMoney()(P.best.price, 2));
   return (
-    <footer id="foot" className={s.foot} data-gp-section="foot">
+    <footer id="foot" role="contentinfo" className={s.foot} data-gp-section="foot">
       <div className={s.cta}>
         <div className={b.kick}>{t(locale, K + "eyebrow")}</div>
         <h2 className={b.big} dangerouslySetInnerHTML={html(locale, K + "title")} />

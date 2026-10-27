@@ -75,6 +75,6 @@
 :global(html.lp-m) .tags span { padding: 7px 12px; font-size: 14px; }
 
 /* html[data-gp-pick] (HomeSections boot script): the static HTML shows the charger, but this load will show another
-   product; hold the product parts back until ProductProvider swaps it in, so no charger flashes. Failsafe: shown after 3s. */
-:global(html[data-gp-pick]) :is(.pick, .cap, .digits, .unit, .tags, .strike) { visibility: hidden; animation: gp-pick-failsafe .01s 3s forwards; }
+   product; hold the product parts back until ProductProvider swaps it in, so no charger flashes. Failsafe: shown after 1s. */
+:global(html[data-gp-pick]) :is(.pick, .cap, .digits, .unit, .tags, .strike) { visibility: hidden; animation: gp-pick-failsafe .01s 1s forwards; }
 @keyframes gp-pick-failsafe { from { visibility: hidden; } to { visibility: visible; } }

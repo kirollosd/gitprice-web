@@ -33,3 +33,13 @@ describe("WebFooter tagline", () => {
     });
   }
 });
+
+describe("landing footer landmark", () => {
+  it("#foot is the page's contentinfo even though it sits inside <main>", async () => {
+    vi.doMock("../app/components/CookieNotice", () => ({ CookieSettingsButton: () => null }));
+    const { default: Foot } = await import("../app/landing/Foot");
+    const { products } = await import("../app/landing/products");
+    render(<main><Foot locale="en" product={products[0]} /></main>);
+    expect(document.querySelector("footer#foot")?.getAttribute("role")).toBe("contentinfo");
+  });
+});
