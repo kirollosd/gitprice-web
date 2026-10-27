@@ -39,7 +39,7 @@ for (const width of WIDTHS) {
             await page.locator("#dock form[data-waitlist]").getByLabel(W.empty.input.email.label).fill(email);
             await page.locator("#dock").getByRole("button", { name: L.dock.submit, exact: true }).click();
             if (state === "joined") await expect(page.locator("#dt")).toHaveText(L.dock.done); // the dock hides again on desktop; the hero buttons read joined
-            else await page.locator("#dock [data-waitlist]").waitFor();
+            else await page.locator(`#dock [data-waitlist="${state}"]`).waitFor();
           }
           await shoot(page, `prelaunch-dock-${state}-${width}-${colorScheme}`);
         });

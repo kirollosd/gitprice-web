@@ -27,6 +27,8 @@ export async function shoot(page: Page, name: string, { fullPage = false }: Opti
   if (fullPage) await settleLazy(page);
   await expect(page).toHaveScreenshot(`${name}.png`, {
     fullPage,
+    // Viewport shots (dock, menu) guard small details, so they get a tight budget; full pages keep the config's looser one.
+    ...(fullPage ? {} : { maxDiffPixelRatio: 0.002 }),
     animations: "disabled",
     caret: "hide",
     mask: volatile(page),

@@ -15,7 +15,7 @@ const tags = () => [...document.querySelectorAll<HTMLElement>("[data-beta]")];
 const near = (el: Element | null, sel: string) => !!el && !!el.parentElement?.querySelector(sel);
 
 async function home(launch: boolean, locale: "en" | "ar") {
-  vi.doMock("../lib/env", () => ({ env: { launch, apiBaseUrl: "http://x", chromeStoreUrl: "https://c.test", appStoreUrl: "https://a.test", playStoreUrl: "https://p.test" } }));
+  vi.doMock("../lib/env", () => ({ env: { launch, apiBaseUrl: "http://x", chromeStoreUrl: "https://c.test" } }));
   const { default: HomeContent } = await import("../app/components/HomeSections");
   const { default: Dock, JoinProvider } = await import("../app/landing/Dock");
   const { default: WebFooter } = await import("../app/components/WebFooter");
@@ -39,7 +39,7 @@ describe.each([[false], [true]])("Beta tag (launch=%s)", (launch) => {
 
 describe("StoreBadges (phase 1: extension only)", () => {
   it("renders Add to Chrome and no App Store / Google Play link", async () => {
-    vi.doMock("../lib/env", () => ({ env: { launch: true, chromeStoreUrl: "https://c.test", appStoreUrl: "https://a.test", playStoreUrl: "https://p.test" } }));
+    vi.doMock("../lib/env", () => ({ env: { launch: true, chromeStoreUrl: "https://c.test" } }));
     const { default: StoreBadges } = await import("../app/components/StoreBadges");
     render(<StoreBadges locale="en" placement="hero" />);
     expect([...document.querySelectorAll("a")].map((a) => a.getAttribute("href"))).toEqual(["https://c.test"]);

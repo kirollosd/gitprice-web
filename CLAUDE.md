@@ -60,8 +60,8 @@ Names only. Real values live in Vercel (Production and Preview); `.env.example` 
 | `NEXT_PUBLIC_CHECKOUT` | `0` (default) `/checkout` and `/checkout/return` return 404 until Pro opens; `1` serves them. The e2e prelaunch build sets `1`, the launch build leaves it off. |
 | `NEXT_PUBLIC_SELLERS_NAV` | `0` (default) hides the header "For sellers" / "For shoppers" toggle in the desktop nav and the menu sheet; `1` shows it. `/sellers` stays reachable either way. The e2e builds set `1` (the boards draw it). |
 | `NEXT_PUBLIC_CHROME_STORE_URL` | Chrome Web Store listing (required when launched) |
-| `NEXT_PUBLIC_APP_STORE_URL` | App Store listing (required when launched) |
-| `NEXT_PUBLIC_PLAY_STORE_URL` | Google Play listing (required when launched) |
+| `NEXT_PUBLIC_APP_STORE_URL` | App Store listing (optional until the mobile apps ship) |
+| `NEXT_PUBLIC_PLAY_STORE_URL` | Google Play listing (optional until the mobile apps ship) |
 | `NEXT_PUBLIC_API_BASE_URL` | GitPrice API, used by checkout and the waitlist form (`POST /api/v1/waitlist`) |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project, used by reset password |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase publishable key only |

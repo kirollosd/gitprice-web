@@ -14,8 +14,6 @@ const launchEnv = {
   ...supabaseEnv,
   NEXT_PUBLIC_LAUNCH: "1",
   NEXT_PUBLIC_CHROME_STORE_URL: "https://chromewebstore.example/gitprice",
-  NEXT_PUBLIC_APP_STORE_URL: "https://apps.example/gitprice",
-  NEXT_PUBLIC_PLAY_STORE_URL: "https://play.example/gitprice",
   NEXT_DIST_DIR: ".next-launch",
 };
 
@@ -37,7 +35,7 @@ export default defineConfig({
   // Parity baselines are the board exports in e2e/refs, copied (and masked) into e2e/.parity by each test.
   snapshotPathTemplate: "{testDir}/.parity/{arg}{ext}",
   globalSetup: "./e2e/global-setup.ts",
-  // threshold 0.1 (default 0.2) so small colour and token shifts show up; the ratio budget is per test.
+  // threshold 0.1 (default 0.2) so small colour and token shifts show up; the ratio budget is the default; shoot() tightens it for viewport shots.
   expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.02, threshold: 0.1 } },
   projects: [
     { name: "prelaunch", testIgnore: [/\.launch\.spec\.ts$/, /visual/, ...noParity], use: { baseURL: baseFor(PRELAUNCH), storageState } },
