@@ -6,10 +6,11 @@ const f = (n: string) => readFileSync(`public/${n}`);
 const png = (n: string) => ({ w: f(n).readUInt32BE(16), h: f(n).readUInt32BE(20) });
 
 describe("favicon set is Coral", () => {
-  it("the SVG mark has no legacy navy and uses the Coral tile", () => {
+  it("the SVG mark has no legacy navy and follows prefers-color-scheme like the header mark (web-ink / web-on-dark)", () => {
     const svg = f("logo_icon.svg").toString("utf8");
     expect(svg).not.toMatch(/2D415E/i);
-    expect(svg).toContain("#FF5A4E");
+    expect(svg).toMatch(/path\{fill:#0A0A0B\}/i);
+    expect(svg).toMatch(/prefers-color-scheme:\s*dark\)\{path\{fill:#F4F4F5\}/i);
   });
   it("PNG icons exist at their declared sizes", () => {
     expect(png("icon-32.png")).toEqual({ w: 32, h: 32 });
