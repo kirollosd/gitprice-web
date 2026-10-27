@@ -13,7 +13,7 @@ const fonts = [...preload.matchAll(/"([a-z0-9-]+-normal)"/g)].map((m) => m[1]);
 
 describe("self-hosted assets", () => {
   it("preloads Outfit/Alexandria only", () => {
-    expect(fonts.length).toBe(4);
+    expect(fonts.length).toBe(7);
     expect(fonts.filter((f) => /fustat|noto/.test(f))).toEqual([]);
   });
   it("every PRELOAD font exists in public/fonts", () => {

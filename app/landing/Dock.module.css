@@ -14,8 +14,6 @@
   font-family: "Outfit", "Alexandria", system-ui, sans-serif;
   transition: transform .7s cubic-bezier(.16, 1, .3, 1), visibility 0s .7s;
 }
-/* phone: the notice spans the width, so the dock lifts above it (FloatingStack); desktop never overlaps */
-:global(html.lp-m) .dock { bottom: calc(32px + var(--gp-stack-h, 0px)); }
 .dock:global(.in) { transform: translateX(-50%); visibility: visible; transition-delay: 0s; }
 /* over a dark band the dock flips light so it keeps its edge */
 .dock:global(.dk) { --dock: var(--gp-web-on-dark); --on-dock: var(--gp-web-ink); --dock-save: var(--gp-web-save); --ring: var(--gp-web-ink); --fill-d: var(--gp-web-fill); --on-fill-d: var(--gp-web-on-fill); }
@@ -44,8 +42,9 @@
 .dock [data-gp-store="chrome"] { background: var(--on-dock); color: var(--dock); min-height: 44px; }
 
 /* phones */
-:global(html.lp-m) .dock { left: 12px; right: 12px; bottom: calc(16px + var(--gp-stack-h, 0px)); transform: translateY(140px); }
-:global(html.lp-m) .dock:global(.in) { transform: none; }
+:global(html.lp-m) .dock { left: 12px; right: 12px; bottom: 16px; transform: translateY(140px); }
+/* the notice spans the width, so the dock lifts above it (FloatingStack); a transform, not `bottom`, so a late notice is no layout shift */
+:global(html.lp-m) .dock:global(.in) { transform: translateY(calc(var(--gp-stack-h, 0px) * -1)); }
 :global(html.lp-m) .dock:global(.join) { min-width: 0; }
 :global(html.lp-m) .eq { width: 38px; height: 38px; }
 :global(html.lp-m) .t { flex: 1; min-width: 0; padding: 0 10px; font-size: 13px; white-space: normal; line-height: 1.3; }
