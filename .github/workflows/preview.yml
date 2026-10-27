@@ -53,11 +53,22 @@ jobs:
       - name: Visual parity and layout
         # Non-blocking until the baselines are recalibrated on Linux: the refs are macOS/Sketch renders, so font
         # rasterisation alone moves the ratios. Re-derive tolerances with PARITY_MEASURE=1 on this runner, then drop this.
+        # Only the pages the coral redesign left alone still have Sketch refs; the new site is in the next step.
         continue-on-error: true
         env:
           PLAYWRIGHT_BASE_URL: ${{ github.event.deployment_status.target_url }}
           VERCEL_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-        run: npx playwright test --project="$SITE_MODE" e2e/parity.spec.ts e2e/parity.launch.spec.ts e2e/layout.spec.ts
+        run: npx playwright test --project="$SITE_MODE" e2e/parity.spec.ts e2e/layout.spec.ts
+
+      - name: Visual baselines (new site)
+        # Linux Chromium baselines from `npm run visual:update` (Playwright docker image, same version as package.json).
+        # Non-blocking: the preview's env (sellers nav flag, Beta key, live rates) can differ from the local builds the baselines
+        # come from; promote to blocking once a few previews match. Mismatch images land in the preview-reports artifact.
+        continue-on-error: true
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          VERCEL_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: npx playwright test --project="visual-$SITE_MODE"
 
       - uses: actions/upload-artifact@v4.6.2
         if: always()

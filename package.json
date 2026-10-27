@@ -9,6 +9,8 @@
     "lint": "eslint",
     "lighthouse": "lhci autorun --config=lighthouserc.json --collect.startServerCommand=\"npm run start\"",
     "test": "vitest run",
+    "visual": "playwright test --project=visual-prelaunch --project=visual-launch",
+    "visual:update": "sh scripts/visual-update.sh",
     "sync": "node scripts/sync-design.mjs",
     "gen:products": "node scripts/gen-products.mjs"
   },
