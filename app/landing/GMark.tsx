@@ -53,7 +53,7 @@ export default function GMark({ state, settleOnView, label, className }: { state
     };
     const settle = (instant: boolean) => {
       setG(state);
-      if (state !== "none") morph(barsOf(state), instant);
+      morph(barsOf(state), instant);
     };
     const instant = reduced();
     if (!settleOnView || state === "chk" || state === "idle" || instant) {

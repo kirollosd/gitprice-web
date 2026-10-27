@@ -27,6 +27,17 @@ beforeEach(() => { ios.length = 0; });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 
 describe("GMark", () => {
+  it("none morphs a settled = back to the g", async () => {
+    // settleOnView keeps the rendered d fixed, so only the JS tween can move the paths
+    stubMotion(true);
+    const { default: GMark } = await import("../app/landing/GMark");
+    const { container, rerender } = render(<GMark state="same" settleOnView label="" />);
+    expect(container.querySelector("path[data-p=flag]")?.getAttribute("d")).toBe("M-80 18L80 18");
+    rerender(<GMark state="none" settleOnView label="" />);
+    expect(container.querySelector("[data-g]")?.getAttribute("data-g")).toBe("none");
+    expect(container.querySelector("path[data-p=flag]")?.getAttribute("d")).toBe("M0 -71.5L107.6 -71.5");
+  });
+
   it('state="ne" renders the slash, settled', async () => {
     stubMotion(false);
     const { default: GMark } = await import("../app/landing/GMark");
@@ -89,24 +100,39 @@ describe("Wordmark", () => {
     const groups = svg.querySelectorAll(":scope > g");
     expect(groups).toHaveLength(8);
     expect([...groups].map((g) => g.querySelectorAll("path").length)).toEqual([3, 2, 3, 3, 3, 2, 1, 4]);
-    act(() => { vi.advanceTimersToNextFrame(); });
+    // armed and playing before the first paint (layout effect), no frame needed
     expect(svg.dataset.board).toBe("go");
     expect(screen.getByRole("link").getAttribute("aria-label")).toBeTruthy();
   });
 
-  it("replays when #foot comes into view", async () => {
+  it("replays when #foot comes into view, restarting with its own reflow", async () => {
     stubMotion(false);
-    vi.useFakeTimers({ toFake: ["requestAnimationFrame"] });
     const foot = document.body.appendChild(Object.assign(document.createElement("section"), { id: "foot" }));
     const { default: Wordmark } = await import("../app/landing/Wordmark");
     const { container } = render(<Wordmark locale="en" />);
     const svg = container.querySelector("svg")!;
-    act(() => { vi.advanceTimersToNextFrame(); });
-    act(() => intersect(foot));
-    expect(svg.dataset.board).toBe("");
-    act(() => { vi.advanceTimersToNextFrame(); });
     expect(svg.dataset.board).toBe("go");
+    const seen: (string | undefined)[] = [];
+    const spy = vi.spyOn(svg, "getBoundingClientRect").mockImplementation(() => { seen.push(svg.dataset.board); return new DOMRect(); });
+    act(() => intersect(foot));
+    act(() => intersect(foot, false));
+    act(() => intersect(foot));
+    // each replay: armed ("") at the forced reflow, then "go", all synchronously
+    expect(seen).toEqual(["", ""]);
+    expect(svg.dataset.board).toBe("go");
+    spy.mockRestore();
     foot.remove();
+  });
+
+  it("playBoard applies '' then 'go' synchronously with a reflow between", async () => {
+    const { playBoard } = await import("../app/landing/Wordmark");
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const at: (string | undefined)[] = [];
+    vi.spyOn(svg, "getBoundingClientRect").mockImplementation(() => { at.push(svg.dataset.board); return new DOMRect(); });
+    playBoard(svg);
+    playBoard(svg);
+    expect(at).toEqual(["", ""]);
+    expect(svg.dataset.board).toBe("go");
   });
 
   it("applies no animation under reduced motion", async () => {

@@ -7,7 +7,8 @@ function stubMotion(reduce: boolean) {
   vi.stubGlobal("IntersectionObserver", class { observe() {} unobserve() {} disconnect() {} });
 }
 
-async function mount(locale: Locale, sections: ("Hero" | "Print" | "Spot")[]) {
+type Section = "Hero" | "How" | "Film" | "Print" | "Spot" | "Foot";
+async function mount(locale: Locale, sections: Section[], scenes = true) {
   const { getProduct, localize } = await import("../app/landing/products");
   const { default: ScrollScenes } = await import("../app/landing/ScrollScenes");
   const P = localize(getProduct(), locale);
@@ -15,7 +16,7 @@ async function mount(locale: Locale, sections: ("Hero" | "Print" | "Spot")[]) {
   return render(
     <div>
       {parts.map((C, i) => <C key={i} locale={locale} product={P} />)}
-      <ScrollScenes locale={locale} />
+      {scenes && <ScrollScenes locale={locale} />}
     </div>,
   );
 }
@@ -74,5 +75,43 @@ describe("ScrollScenes", () => {
     act(() => { window.dispatchEvent(new Event("scroll")); });
     act(() => { vi.advanceTimersByTime(3000); });
     expect(container.querySelectorAll("[data-copy] > div.on")).toHaveLength(1);
+  });
+
+  it("frame() does every layout read before its first write", async () => {
+    stubMotion(false);
+    await mount("en", ["Hero", "How", "Film", "Spot", "Print", "Foot"], false);
+    const { createScenes } = await import("../app/landing/scenes");
+    const sc = createScenes(false, () => {});
+    sc.frame(); // first frame builds the cached metrics
+    const log: string[] = [];
+    const rect = vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(() => { log.push("r"); return new DOMRect(0, 200, 100, 900); });
+    const oh = vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockImplementation(() => { log.push("r"); return 1800; });
+    const ot = vi.spyOn(HTMLElement.prototype, "offsetTop", "get").mockImplementation(() => { log.push("r"); return 0; });
+    const sp = CSSStyleDeclaration.prototype.setProperty;
+    const set = vi.spyOn(CSSStyleDeclaration.prototype, "setProperty").mockImplementation(function (this: CSSStyleDeclaration, ...a) { log.push("w"); return sp.apply(this, a); });
+    const tg = DOMTokenList.prototype.toggle;
+    const tog = vi.spyOn(DOMTokenList.prototype, "toggle").mockImplementation(function (this: DOMTokenList, ...a) { log.push("w"); return tg.apply(this, a as [string, boolean?]); });
+    sc.frame();
+    sc.measure();
+    sc.frame(); // a re-measured frame reads its metrics in the read phase too
+    [rect, oh, ot, set, tog].forEach((x) => x.mockRestore());
+    sc.stop();
+    const frames = log.join("").split(/(?<=w)(?=r)/);
+    expect(frames).toHaveLength(2);
+    frames.forEach((f) => expect(f).toMatch(/^r+w+$/));
+  });
+
+  it("formats the tally through money.ts and repaints when Rates swaps the formatter", async () => {
+    stubMotion(true);
+    const { setMoneyFormat, formatMoney } = await import("../app/landing/money");
+    expect(formatMoney(699)).toBe("699.00 EGP");
+    expect(formatMoney(699, 0)).toBe("699 EGP");
+    const { container } = await mount("en", ["Print"]);
+    const tally = () => container.querySelector("#tallyN")?.textContent;
+    expect(tally()).toBe("518.00EGP");
+    act(() => setMoneyFormat((egp, d) => `${(egp * 0.02).toFixed(d)} USD`));
+    await act(() => new Promise((r) => setTimeout(r, 50)));
+    expect(tally()).toBe("10.36USD");
+    act(() => setMoneyFormat(null));
   });
 });

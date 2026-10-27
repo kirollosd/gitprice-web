@@ -97,6 +97,7 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
     tr?.addEventListener("pointermove", move);
     tr?.addEventListener("pointerdown", press);
     addEventListener("pointerup", release);
+    addEventListener("pointercancel", release);
 
     return () => {
       cancelAnimationFrame(raf);
@@ -111,6 +112,7 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
       tr?.removeEventListener("pointermove", move);
       tr?.removeEventListener("pointerdown", press);
       removeEventListener("pointerup", release);
+      removeEventListener("pointercancel", release);
     };
   }, [locale]);
 

@@ -1,13 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useLayoutEffect, useRef, type CSSProperties } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import { LOGO_PATHS, LOGO_VIEWBOX } from "./logo-paths";
 import s from "./Wordmark.module.css";
 
 /** The logo's 21 paths as the letters g·i·t·p·r·i·c·e, for the price-board entry. */
 const GROUPS = [[0, 3], [3, 5], [5, 8], [8, 11], [11, 14], [14, 16], [16, 17], [17, 21]] as const;
+// arm before first paint on the client (no flash of the resting logo); plain effect on the server
+const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+/** Restart the entry: drop to the armed state, force a style flush so the animation restarts, then play. */
+export function playBoard(svg: SVGSVGElement) {
+  svg.dataset.board = "";
+  void svg.getBoundingClientRect();
+  svg.dataset.board = "go";
+}
 
 /**
  * Header wordmark: the existing logo, inline so its letters can flip up like the hero price board.
@@ -17,24 +26,19 @@ const GROUPS = [[0, 3], [3, 5], [5, 8], [8, 11], [11, 14], [14, 16], [16, 17], [
 export default function Wordmark({ locale, href, className }: { locale: Locale; href?: string; className?: string }) {
   const ref = useRef<SVGSVGElement>(null);
 
-  useEffect(() => {
+  useIsoLayoutEffect(() => {
     const svg = ref.current;
     if (!svg || typeof matchMedia !== "function" || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let raf = 0;
-    const play = () => {
-      svg.dataset.board = "";
-      raf = requestAnimationFrame(() => { svg.dataset.board = "go"; });
-    };
-    play();
+    playBoard(svg);
     const foot = document.getElementById("foot");
-    if (!foot || typeof IntersectionObserver !== "function") return () => cancelAnimationFrame(raf);
+    if (!foot || typeof IntersectionObserver !== "function") return;
     let seen = false;
     const io = new IntersectionObserver((es) => es.forEach((e) => {
-      if (e.isIntersecting && !seen) play();
+      if (e.isIntersecting && !seen) playBoard(svg);
       seen = e.isIntersecting;
     }), { threshold: 0.3 });
     io.observe(foot);
-    return () => { io.disconnect(); cancelAnimationFrame(raf); };
+    return () => io.disconnect();
   }, []);
 
   return (
