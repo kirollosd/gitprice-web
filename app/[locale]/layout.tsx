@@ -52,7 +52,7 @@ export const viewport: Viewport = {
 
 const PRELOAD: Record<Locale, string[]> = {
   en: ["outfit-latin-400-normal", "outfit-latin-800-normal", "outfit-latin-300-normal"],
-  ar: ["alexandria-arabic-400-normal", "alexandria-arabic-700-normal", "alexandria-latin-400-normal"],
+  ar: ["alexandria-arabic-400-normal"],
 };
 
 export const dynamicParams = false;
@@ -80,7 +80,7 @@ export default async function LocaleLayout({
             <Script id="gtm" strategy="afterInteractive">{gtmScript(env.gtmId)}</Script>
           </>
         ) : null}
-        {/* Every weight the first screen uses, so the cookie notice and headings do not reflow on a font swap (CLS). */}
+        {/* The h1 face only: more preloads compete with the CSS and the hero for the simulated mobile link (/ar LCP). */}
         {PRELOAD[l].map((f) => (
           <link key={f} rel="preload" href={`/fonts/${f}.woff2`} as="font" type="font/woff2" crossOrigin="anonymous" />
         ))}
