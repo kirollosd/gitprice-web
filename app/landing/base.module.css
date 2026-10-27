@@ -22,9 +22,9 @@
   font-weight: 400;
   line-height: normal;
 }
-/* undo the site's element defaults so the mock's inherited type applies */
-.canvas :where(h1, h2, h3, h4, h5, h6) { font-family: inherit; line-height: normal; color: inherit; }
-.canvas :where(p) { color: inherit; line-height: inherit; }
+/* undo the site's element defaults so the mock's inherited type applies. Wrapped in :where() (specificity 0,0,1) so every component rule wins the cascade */
+:where(.canvas) :is(h1, h2, h3, h4, h5, h6) { font-family: inherit; font-weight: bold; line-height: normal; color: inherit; }
+:where(.canvas) p { color: inherit; line-height: inherit; }
 .canvas :where(a:hover) { text-decoration: none; }
 .canvas :where(button) { color: inherit; }
 .canvas ::selection { background: var(--gp-web-fill); color: var(--gp-web-on-fill); }
