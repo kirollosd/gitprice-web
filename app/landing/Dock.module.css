@@ -41,6 +41,8 @@
 
 /* the waitlist: the dock opens into an email field, then confirms */
 .dock:global(.join) { flex-wrap: wrap; min-width: 560px; border-radius: 30px; align-items: flex-start; }
+/* open form (desktop): the row is the 46px mark/field/button, the note wraps below it, so the tag centres on that row, not the whole dock (its height is 1.4em + 4px) */
+:global(html:not(.lp-m)) .dock:global(.join) > [data-beta] { align-self: flex-start; margin-block-start: calc(21px - 0.7em); }
 .wl { display: flex; flex: 1; align-items: flex-start; gap: 8px; padding-inline-start: 8px; }
 .x { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: none; color: var(--on-dock); cursor: pointer; }
 /* launched: only the Chrome link fits the dock */
