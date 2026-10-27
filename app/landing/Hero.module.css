@@ -9,10 +9,8 @@
 .h1 { position: absolute; inset-inline-start: 48px; top: 176px; margin: 0; font-size: 54px; font-weight: 400; letter-spacing: -.03em; line-height: 1.05; white-space: nowrap; }
 .cap { position: absolute; inset-inline-start: 48px; top: 246px; font-size: 20px; line-height: 1.35; width: 900px; font-weight: 300; }
 .cap b { font-weight: 600; }
-/* one bar through the whole price, like the board's #strike: native line-through sits at a different height on the
-   smaller mono code than on the digits, so the two halves of the price read as two strikes */
-.cap s { text-decoration: none; position: relative; }
-.cap s::after { content: ""; position: absolute; inset-inline: 0; top: .56em; height: 3px; margin-top: -1.5px; border-radius: 2px; background: var(--gp-web-fill); }
+/* the caption's struck price is the board's Coral bar (Price.module.css draws it) */
+.cap s { --strike-c: var(--gp-web-fill); --strike-h: 3px; }
 
 .hcta { display: flex; gap: 18px; align-items: center; justify-content: flex-end; margin-top: 18px; }
 .hcta .p { border: 0; font-family: inherit; cursor: pointer; background: var(--gp-web-fill); color: var(--gp-web-on-fill); border-radius: 999px; padding: 13px 22px; font-weight: 600; font-size: 16px; }
@@ -27,8 +25,9 @@
 .dg i span { display: block; height: 1em; }
 .dg.dot { font-variant-numeric: normal; text-align: center; overflow: visible; }
 .strike { position: absolute; left: 30px; top: calc(var(--dtop) + var(--fs) * .686); height: 14px; width: 1380px; background: var(--gp-web-fill); transform-origin: 0 50%; transform: scaleX(0); border-radius: 7px; }
-/* the board's currency code (owner, 2026-10-27): mono, muted */
-.unit { position: absolute; inset-inline-end: 56px; top: 220px; font-size: 30px; font-family: "JetBrains Mono", monospace; color: var(--gp-web-mute); }
+/* the board's currency code (owner, 2026-10-27): mono, muted, on the digits' cap line (Outfit cap top is .17em) right after
+   the last digit, so it reads as part of the number. The strike stops at the digits: a bar as thick as the code is tall would blank it out. */
+.unit { position: absolute; inset-inline-start: 100%; top: calc(var(--fs) * .17); margin-inline-start: 18px; font-size: 30px; line-height: 1; letter-spacing: 0; font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--gp-web-mute); }
 
 .pick { position: absolute; inset-inline-end: 56px; top: 124px; z-index: 2; display: flex; gap: 8px; align-items: center; }
 .pick small { font-size: 15px; color: var(--gp-web-mute); margin-inline-end: 4px; }
@@ -45,6 +44,9 @@
 :global(html.lp-short) .lede p { display: none; }
 :global(html[lang="ar"]) .cap { top: 262px; }
 :global(html[dir="rtl"]) .digits { direction: ltr; left: auto; right: 30px; }
+/* the digits are laid out left-to-right in Arabic too, so the code goes on their left (the number first, as Price reads) */
+:global(html[dir="rtl"]) .unit { inset-inline-start: auto; right: 100%; margin-inline-start: 0; margin-right: 18px; }
+:global(html.lp-m[dir="rtl"]) .unit { margin-right: 10px; }
 :global(html[dir="rtl"]) .strike { left: auto; right: 30px; transform-origin: 100% 50%; }
 
 /* phone canvas */
@@ -64,7 +66,7 @@
 :global(html.lp-m[lang="ar"]) .cap { top: 268px; }
 :global(html.lp-m) .hcta, :global(html.lp-m) .lede small { display: none; }
 :global(html.lp-m) .digits { left: 16px; }
-:global(html.lp-m) .unit { inset-inline-end: 20px; top: calc(42vh / var(--z) - 30px); font-size: 18px; }
+:global(html.lp-m) .unit { margin-inline-start: 10px; font-size: 18px; }
 :global(html.lp-m) .strike { left: 16px; height: 8px; }
 :global(html.lp-m[dir="rtl"]) .strike { left: auto; right: 16px; }
 :global(html.lp-m[dir="rtl"]) .digits { left: auto; right: 16px; }

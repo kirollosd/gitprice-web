@@ -10,7 +10,7 @@ const K = "web.landing.lang.";
 const LANGS: Locale[] = ["en", "ar"];
 
 /**
- * The header's language menu, ported from combo.html: a globe button with the current language (EN / ع) and a
+ * The header's language menu, ported from combo.html: a globe-only button (the accessible name carries the language label) and a
  * listbox anchored to the button's end edge, so it opens inward in both directions. Esc and an outside press
  * close it; picking the other language goes to the same page in it (the hash and query, so ?p=, are kept) and is remembered. Items carry
  * lang, never dir: the page direction is the document's.
@@ -73,7 +73,6 @@ export default function LangMenu({ locale }: { locale: Locale }) {
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
           <circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" />
         </svg>
-        <span id="lcur">{t(locale, K + "current")}</span>
       </button>
       <ul ref={list} className={s.lmenu} id="lmenu" role="listbox" aria-label={t(locale, K + "label")} hidden={!open} onKeyDown={onList}>
         {LANGS.map((l) => (
@@ -88,7 +87,8 @@ export default function LangMenu({ locale }: { locale: Locale }) {
             data-gp-to={l}
             onClick={() => pick(l)}
           >
-            {t(locale, K + l)}
+            {/* a real href so crawlers and no-JS readers find the other language; the click is the menu's pick() */}
+            <a href={switchPath(pathname, "", l)} tabIndex={-1} onClick={(e) => e.preventDefault()}>{t(locale, K + l)}</a>
           </li>
         ))}
       </ul>

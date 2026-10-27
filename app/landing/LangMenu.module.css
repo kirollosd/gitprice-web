@@ -1,12 +1,13 @@
 /* The header's language menu, from combo.html. Anchored to the button's end edge, so it opens inward both ways. */
 .lsel { position: relative; display: flex; align-items: center; }
 .lng {
-  position: relative; display: flex; align-items: center; gap: 6px; min-height: 36px;
-  background: none; border: 1px solid var(--gp-web-line); border-radius: 999px; padding: 5px 12px 5px 10px;
-  font: inherit; font-size: 15px; color: inherit; cursor: pointer;
+  position: relative; display: flex; align-items: center; justify-content: center; inline-size: 36px; block-size: 36px;
+  background: none; border: 1px solid var(--gp-web-line); border-radius: 50%; padding: 0;
+  font: inherit; font-size: 15px; color: var(--gp-web-mute); cursor: pointer;
 }
-/* below the desktop nav the pill itself is a 44px target */
-@media (max-width: 1023px) { .lng { min-height: 44px; } }
+/* a transparent pad brings the 36px icon button to a 44px target */
+.lng::after { content: ""; position: absolute; inset: 50% auto auto 50%; inline-size: max(100%, calc(44px / var(--z, 1))); block-size: max(100%, calc(44px / var(--z, 1))); translate: -50% -50%; }
+:global(header[data-dk]) .lng { color: var(--gp-web-on-dark-mute); }
 .lmenu {
   position: absolute; top: calc(100% + 10px); inset-inline-end: 0; z-index: 60; min-width: 176px; margin: 0; padding: 6px;
   list-style: none; background: var(--gp-web-raised); color: var(--gp-web-ink);
@@ -19,8 +20,11 @@
 }
 .lmenu li[lang="en"] { font-family: "Outfit", system-ui, sans-serif; }
 .lmenu li[lang="ar"] { font-family: "Alexandria", system-ui, sans-serif; }
+.lmenu li a { display: contents; color: inherit; text-decoration: none; }
 .lmenu li:is(:hover, :focus-visible) { background: color-mix(in srgb, var(--gp-web-ink) 7%, transparent); }
 .lmenu li[aria-selected="true"]::after { content: "✓"; font-family: "Outfit", system-ui, sans-serif; font-weight: 600; }
 :global(header[data-dk]) .lng { border-color: color-mix(in srgb, var(--gp-web-on-dark) 24%, transparent); }
 :global(header[data-dk]) .lmenu { background: var(--gp-web-dark-2); color: var(--gp-web-on-dark); border-color: color-mix(in srgb, var(--gp-web-on-dark) 16%, transparent); }
 :global(header[data-dk]) .lmenu li:is(:hover, :focus-visible) { background: color-mix(in srgb, var(--gp-web-on-dark) 10%, transparent); }
+@media (max-width: 767px) { .lng { inline-size: 34px; block-size: 34px; } }
+:global(html[lang="ar"]) .lmenu { line-height: 1.25; }

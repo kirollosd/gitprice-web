@@ -20,7 +20,9 @@ describe("LangMenu", () => {
     expect(list.hidden).toBe(true);
     expect(btn.getAttribute("aria-expanded")).toBe("false");
     expect(btn.getAttribute("aria-haspopup")).toBe("listbox");
-    expect(document.getElementById("lcur")!.textContent).toBe("EN");
+    // icon only: no language letters, the accessible name stays
+    expect(btn.textContent).toBe("");
+    expect(btn.getAttribute("aria-label")).toBe("Language");
   });
 
   it("Enter opens it on the current language; Esc closes it and returns focus to the button", async () => {
@@ -60,10 +62,11 @@ describe("LangMenu", () => {
     expect(push).toHaveBeenCalledWith("/ar/sellers");
   });
 
-  it("an outside pointerdown closes it; in Arabic the button reads ع", async () => {
+  it("an outside pointerdown closes it; in Arabic the button is still icon only", async () => {
     path = "/ar";
     const { btn, list } = await menu("ar");
-    expect(document.getElementById("lcur")!.textContent).toBe("ع");
+    expect(btn.textContent).toBe("");
+    expect(btn.getAttribute("aria-label")).toBeTruthy();
     act(() => { fireEvent.click(btn); });
     act(() => { fireEvent.pointerDown(screen.getByText("elsewhere")); });
     expect(list.hidden).toBe(true);

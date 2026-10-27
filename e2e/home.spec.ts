@@ -224,7 +224,7 @@ test.describe("phone tap targets (44 px)", () => {
     test(`${path}: every listed control is at least 44 px square`, async ({ page }) => {
       await page.goto(path);
       for (const [name, sel] of TARGETS) {
-        const sizes = await page.locator(sel).evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return [Math.round(r.width * 10) / 10, Math.round(r.height * 10) / 10]; }));
+        const sizes = await page.locator(sel).evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); const a = getComputedStyle(e, "::after"); /* a ::after pad is the hit area */ const pad = a.position === "absolute" ? [parseFloat(a.width) || 0, parseFloat(a.height) || 0] : [0, 0]; return [Math.round(Math.max(r.width, pad[0]) * 10) / 10, Math.round(Math.max(r.height, pad[1]) * 10) / 10]; }));
         expect(sizes.length, `${name} (${sel}) exists`).toBeGreaterThan(0);
         for (const [w, h] of sizes) {
           if (w === 0 && h === 0) continue; // a control the phone layout hides (the mock hides the hero CTA)
@@ -332,6 +332,7 @@ test.describe("coral polish (GP-406 F1, F2, F4)", () => {
     const btn = page.locator("footer button", { hasText: /cookie/i }).first();
     await btn.scrollIntoViewIfNeeded();
     // the .hit-target layer (not the 18px box) carries the 44px; the cookie notice may cover the button on a first visit
-    expect(await btn.evaluate((b) => getComputedStyle(b, "::after").height)).toBe("44px");
+    // inside the zoomed canvas the computed height carries float noise (43.9992)
+    expect(await btn.evaluate((b) => parseFloat(getComputedStyle(b, "::after").height))).toBeGreaterThanOrEqual(43.9);
   });
 });

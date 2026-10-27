@@ -46,8 +46,9 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
               </span>
             ),
           )}
+          {/* the code sits on the digits' cap line, just past the last digit; the strike covers the digits only */}
+          <span className={s.unit} data-cur="">{code}</span>
         </div>
-        <span className={s.unit} data-cur="" aria-hidden="true">{code}</span>
         <div className={s.strike} id="strike" aria-hidden="true" />
         <p className={b.sr} id="numsr">{t(locale, K + "srPrices", { from: `${from} ${code}`, to: `${to} ${code}` })}</p>
         <div key={`tags:${P.id}`} className={s.tags} id="tags">

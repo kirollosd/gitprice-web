@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
 import GMark from "./GMark";
-import { html, nb } from "./html";
+import { html } from "./html";
 import { applyMoney } from "./money";
 import { Price, priceHtml } from "./Price";
 import { localize, products, type Product } from "./products";
@@ -127,7 +127,7 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
                 <span className={s.why}><GMark className={s.eq} state="ne" settleOnView label="" />{why}</span>
               )}
               <div className={s.store}><StoreText label={store} locale={locale} /></div>
-              <h3>{nb(name)}</h3>
+              <h3>{name}</h3>
               <div className={`${s.pr} ${b.mono}`}><Price v={price} /></div>
               <span className={s.plac} aria-hidden="true">{LETTERS[k]}</span>
             </button>

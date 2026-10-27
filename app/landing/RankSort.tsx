@@ -2,7 +2,6 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t, type Locale } from "../../lib/i18n";
-import { nb } from "./html";
 import { Price } from "./Price";
 import { StoreText } from "./StoreMark";
 import type { RankRow } from "./Trap";
@@ -78,7 +77,7 @@ export default function RankSort({ rows, locale }: { rows: RankRow[]; locale: Lo
       <div id="rank" ref={rank}>
         {rows.map((r, i) => (
           <div key={r.label + r.price} className={`${s.r} ${i === 0 ? "first w" : ""}`} data-exact={r.exact ? "" : undefined}>
-            <span><bdi><StoreText label={nb(r.label)} locale={locale} /></bdi>{r.why && <em><span aria-hidden="true">≠ </span>{r.why}</em>}</span>
+            <span><bdi><StoreText label={r.label} locale={locale} /></bdi>{r.why && <em><span aria-hidden="true">≠ </span>{r.why}</em>}</span>
             <b><Price v={r.price} /></b>
           </div>
         ))}

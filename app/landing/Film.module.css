@@ -11,7 +11,9 @@
 }
 :global(html[data-theme="dark"]) .fframe { background-image: var(--pd); }
 @media (prefers-color-scheme: dark) { :global(html:not([data-theme="light"])) .fframe { background-image: var(--pd); } }
-.fframe video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fframe video { position: absolute; inset: -1px; width: calc(100% + 2px); height: calc(100% + 2px); object-fit: cover; display: block; }
+/* the 1px overdraw (clipped by the frame) keeps the poster and the slab behind the video from showing as a light hairline
+   at the video's edges, which a rotated or sub-pixel-sized phone frame antialiases into a light border */
 
 .chap { position: absolute; left: 50%; bottom: 112px; transform: translateX(-50%) translateY(30px); display: flex; gap: 8px; z-index: 3; opacity: 0; pointer-events: none; visibility: hidden; transition: opacity .4s, transform .6s var(--spring), visibility 0s .4s; --ring: var(--gp-web-on-dark); }
 .chap:global(.on) { opacity: 1; transform: translateX(-50%); pointer-events: auto; visibility: visible; transition-delay: 0s; }

@@ -1,5 +1,5 @@
 import { t, type Locale } from "../../lib/i18n";
-import { html, nb } from "./html";
+import { html } from "./html";
 import type { Product } from "./products";
 import RankSort from "./RankSort";
 import { storeTextHtml } from "./StoreMark";
@@ -33,7 +33,7 @@ export default function Trap({ locale, product: P }: { locale: Locale; product: 
     <section className={s.trap} data-dark="">
       <div>
         <h2>{t(locale, K + "title")}</h2>
-        <p id="trapP" dangerouslySetInnerHTML={html(locale, K + "body", {}, { item: storeTextHtml(locale, nb(cheap.label), locale === "ar") })} />
+        <p id="trapP" dangerouslySetInnerHTML={html(locale, K + "body", {}, { item: storeTextHtml(locale, cheap.label, locale === "ar") })} />
       </div>
       <RankSort rows={rows} locale={locale} />
     </section>

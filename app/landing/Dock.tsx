@@ -120,6 +120,7 @@ export default function Dock({ locale }: { locale: Locale }) {
       const d = ref.current?.getBoundingClientRect();
       const header = document.querySelector("header");
       header?.toggleAttribute("data-dk", darkAt(60));
+      header?.toggleAttribute("data-solid", scrollY > 40);
       // short phones: the pinned lineup's own buttons sit where the dock would, so the dock steps aside
       const room = rect(document.getElementById("room")), bar = rect(document.getElementById("verdict")?.parentElement ?? null);
       const aside = document.documentElement.classList.contains("lp-m") && !!room && !!bar
@@ -140,6 +141,7 @@ export default function Dock({ locale }: { locale: Locale }) {
       cancelAnimationFrame(raf);
       EVENTS.forEach((e) => removeEventListener(e, onFrame));
       document.querySelector("header")?.removeAttribute("data-dk");
+      document.querySelector("header")?.removeAttribute("data-solid");
     };
   }, [home]);
 

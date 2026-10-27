@@ -1,9 +1,7 @@
 /* Shared landing base, ported from combo.html. Mock vars map to --gp-web-*; layout vars (--cw, --z) come from canvas.ts.
    Classes toggled by the scroll scenes and islands (on, in, rev, out, picked, w, x, first, raw) stay global on purpose. */
 
-/* The site nav is sticky and in flow; the mock's header overlays the first screen, so the page slides up under it. */
-.shell { --lp-nav: 65px; margin-block-start: calc(-1 * var(--lp-nav)); }
-@media (min-width: 768px) { .shell { --lp-nav: 73px; } }
+/* The landing header is fixed over the first screen (WebNav .site), as in the mock, so the page needs no offset. */
 
 .canvas {
   --spring: cubic-bezier(.16, 1, .3, 1);

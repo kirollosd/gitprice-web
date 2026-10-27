@@ -16,6 +16,3 @@ export function html(
   const safe = Object.fromEntries(Object.entries(vars).map(([k, v]) => [k, esc(v)]));
   return { __html: t(locale, key, { ...safe, ...trusted }) };
 }
-
-/** A hyphenated spec ("2-pack") never breaks at its hyphen: U+2011 is the non-breaking hyphen. */
-export const nb = (s: string) => s.replace(/(\w)-(\w)/g, "$1\u2011$2");

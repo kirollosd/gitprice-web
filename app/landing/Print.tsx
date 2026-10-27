@@ -80,7 +80,7 @@ export default function Print({ locale, product: P }: { locale: Locale; product:
                           <span className={s.ok}><GMark className={s.eq} state="same" settleOnView label="" /><span dangerouslySetInnerHTML={html(locale, K + "lineSame", {}, { store: storeTextHtml(locale, best) })} /></span>
                           <b><Price v={a} /></b>
                         </div>
-                        <div className={`${s.ln} ${s.sv} ${s.alt}`}><span>{t(locale, K + "lineSaved")}</span><span><Price v={p - a} /></span></div>
+                        <div className={`${s.ln} ${s.alt}`}><span>{t(locale, K + "lineSaved")}</span><span><Price v={p - a} /></span></div>
                       </>
                     ) : (
                       <div className={`${s.ln} ${s.alt}`}>

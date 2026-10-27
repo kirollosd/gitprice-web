@@ -8,6 +8,14 @@
 .p { border: 0; font-family: inherit; cursor: pointer; background: var(--gp-web-fd); color: var(--gp-web-onfd) !important; }
 .s { border: 1.5px solid var(--gp-web-on-dark); }
 .meta { position: absolute; inset-inline-end: 48px; top: 160px; width: 300px; font-size: 16px; line-height: 1.6; color: var(--gp-web-on-dark-mute); }
+.legal { position: absolute; inset-inline-end: 48px; top: 270px; width: 300px; font-size: 14px; color: var(--gp-web-on-dark-mute); }
+.legal p { margin: 0; }
+.legal nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; margin-top: 8px; }
+.legal a, .legal button { position: relative; color: inherit; font: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.legal a:hover, .legal button:hover { color: var(--gp-web-on-dark); }
+/* 44px hit areas without a taller look */
+.legal a::after, .legal button::after { content: ""; position: absolute; inset-block-start: 50%; block-size: 44px; translate: 0 -50%; inset-inline: -4px; }
+.legal [data-beta] { text-decoration: none; }
 .word { position: absolute; inset-inline-start: 10px; bottom: -150px; font-weight: 300; font-size: 520px; letter-spacing: -.07em; line-height: .8; color: var(--gp-web-accd); white-space: nowrap; will-change: transform; }
 :global(html[dir="rtl"]) .word { direction: ltr; }
 
@@ -18,4 +26,5 @@
 :global(html.lp-m) .btns { flex-wrap: wrap; }
 :global(html.lp-m) .btns > * { position: relative; display: inline-flex; align-items: center; padding: 12px 18px; font-size: 15px; min-height: calc(44px / var(--z, 1)); }
 :global(html.lp-m) .btns > *::after { content: ""; position: absolute; inset: -4px 0; }
+:global(html.lp-m) .legal { inset-inline-start: 20px; inset-inline-end: 20px; top: 490px; width: auto; }
 :global(html.lp-m) .meta { inset-inline-start: 20px; inset-inline-end: 20px; top: 400px; width: auto; font-size: 14px; }
