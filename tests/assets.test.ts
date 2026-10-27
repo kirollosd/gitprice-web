@@ -28,4 +28,13 @@ describe("self-hosted assets", () => {
           expect(existsSync(join(root, "public/media", `${base}-poster.jpg`)), `${base} poster`).toBe(true);
         }
   });
+
+  it("every @font-face src in globals.css exists in public/ and the new families match the tokens", () => {
+    const css = readFileSync(join(root, "app/globals.css"), "utf8");
+    for (const m of css.matchAll(/url\("(\/[^"]+)"\)/g)) expect(existsSync(join(root, "public", m[1])), m[1]).toBe(true);
+    const families = new Set([...css.matchAll(/@font-face\s*\{[^}]*?font-family:\s*"([^"]+)"/g)].map((m) => m[1]));
+    for (const f of ["Outfit", "Alexandria", "JetBrains Mono"]) expect(families, f).toContain(f);
+    // ponytail: the legacy GP Fustat / Noto faces stay until Task 3 drops them.
+    expect([...families].filter((f) => f.startsWith("GP ") && f !== "GP Fustat")).toEqual([]);
+  });
 });
