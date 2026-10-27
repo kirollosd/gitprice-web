@@ -83,3 +83,6 @@
   .actions { gap: 2px; }
   .cta { padding: 8px 10px; }
 }
+
+/* the header sits outside the canvas, so the canvas's own reduced-motion rule does not reach it */
+@media (prefers-reduced-motion: reduce) { .site, .site .bar { transition: none; } }
