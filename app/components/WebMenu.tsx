@@ -14,7 +14,7 @@ import styles from "./WebMenu.module.css";
 
 const N = "web.component.webNav.";
 const TABLET = "(min-width: 768px)";
-const DESKTOP = "(min-width: 1024px)";
+const DESKTOP = "(min-width: 1280px)";
 
 function useTablet(): boolean {
   return useSyncExternalStore(
@@ -28,7 +28,7 @@ function useTablet(): boolean {
   );
 }
 
-/** Menu button plus full-screen in-flow overlay (fixed, inset 0) shown below 1024px. */
+/** Menu button plus full-screen in-flow overlay (fixed, inset 0) shown below 1280px. */
 export default function WebMenu({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
   const button = useRef<HTMLButtonElement>(null);
@@ -90,7 +90,7 @@ export default function WebMenu({ locale }: { locale: Locale }) {
       </button>
       {open && (
         <div id="web-menu" ref={overlay} className={styles.overlay}>
-          {/* Unlabelled on purpose: the header nav already owns "Main navigation" at 768-1023. */}
+          {/* Unlabelled on purpose: the header nav already owns "Main navigation" at 768-1279. */}
           <nav>
           <ul className={styles.list} role="list">
             <li><Link href={`${home}#how`} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id="how_it_works" data-gp-placement="menu">{t(locale, `${N}${keys}.label.howItWorks`)}</Link></li>

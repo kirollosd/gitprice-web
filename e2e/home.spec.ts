@@ -297,8 +297,8 @@ test.describe("Sellers prelaunch", () => {
     await expect(page.locator('#dock input[type="email"]')).toBeFocused();
   });
 
-  test("uses the short back label at 1024", async ({ page }) => {
-    await page.setViewportSize({ width: 1024, height: 800 });
+  test("uses the short back label at 1280", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/ar/sellers");
     await expect(page.locator("header").getByRole("link", { name: "للمتسوقين", exact: true })).toBeVisible();
   });

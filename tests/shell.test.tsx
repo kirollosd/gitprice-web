@@ -118,10 +118,10 @@ describe("WebMenu", () => {
     expect(document.activeElement).toBe(toggle);
   });
 
-  it("closes when the viewport grows to 1024 or more", async () => {
+  it("closes when the viewport grows to 1280 or more", async () => {
     const btn = await setup();
     fireEvent.click(btn);
-    resizeTo(1024);
+    resizeTo(1280);
     expect(screen.getByRole("button", { name: "Open menu" }).getAttribute("aria-expanded")).toBe("false");
     expect(document.getElementById("web-menu")).toBeNull();
     expect(document.body.style.overflow).toBe("");

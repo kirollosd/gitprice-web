@@ -65,5 +65,5 @@
 }
 .cta:hover { text-decoration: none; }
 
-@media (max-width: 1023px) { .button { display: inline-flex; } }
-@media (min-width: 1024px) { .overlay { display: none; } }
+@media (max-width: 1279px) { .button { display: inline-flex; } }
+@media (min-width: 1280px) { .overlay { display: none; } }

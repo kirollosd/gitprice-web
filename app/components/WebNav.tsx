@@ -51,7 +51,6 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
             {LINKS.map(([id, k]) => (
               <Link key={id} href={`${home}#${id}`} className={styles.link} data-gp-track="cta_click" data-gp-cta-id={`nav_${id}`} data-gp-placement="nav">{t(locale, L + k)}</Link>
             ))}
-            <NavSellers locale={locale} keys="1024" className={`${styles.link} ${styles.sellers} ${site.l1024}`} />
             <NavSellers locale={locale} keys="1024" className={`${styles.link} ${styles.sellers} ${styles.sellersShort}`} />
             <NavSellers locale={locale} keys="1440" className={`${styles.link} ${styles.sellers} ${styles.sellersLong}`} />
           </nav>

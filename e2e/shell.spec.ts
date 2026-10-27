@@ -60,12 +60,12 @@ test("the same button opens and closes the menu by click", async ({ page }) => {
   expect(await page.evaluate(() => document.body.style.overflow)).toBe("");
 });
 
-test("growing the viewport to 1024 closes the open menu", async ({ page }) => {
+test("growing the viewport to 1280 closes the open menu", async ({ page }) => {
   await page.goto("/sellers");
   const btn = page.locator("header button[aria-expanded]:not(#lng)");
   await btn.click();
   await expect(btn).toHaveAttribute("aria-expanded", "true");
-  await page.setViewportSize({ width: 1024, height: 800 });
+  await page.setViewportSize({ width: 1280, height: 800 });
   await expect(btn).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator("#web-menu")).toHaveCount(0);
 });

@@ -29,9 +29,9 @@ describe("NEXT_PUBLIC_SELLERS_NAV", () => {
     expect(document.querySelector("#web-menu")).not.toBeNull();
   });
 
-  it("on: the toggle shows in the header (all four width sets) and the menu sheet", async () => {
+  it("on: the toggle shows in the header (both header width sets) and the menu sheet", async () => {
     mockEnv(true);
     const hrefs = await renderNavWithMenuOpen();
-    expect(hrefs.filter((h) => h === "/sellers")).toHaveLength(5);
+    expect(hrefs.filter((h) => h === "/sellers")).toHaveLength(4);
   });
 });

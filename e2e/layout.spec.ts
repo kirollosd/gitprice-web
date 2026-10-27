@@ -1,10 +1,10 @@
 import { expect, test } from "./fixtures";
 
-// 1024 and 768 are layout-only checks (no pixel parity): no horizontal scroll, and the right nav variant.
+// 1280, 1024 and 768 are layout-only checks (no pixel parity): no horizontal scroll, and the right nav variant.
 const ROUTES = ["/", "/sellers", "/pricing", "/welcome", "/privacy", "/terms", "/reset-password", "/checkout", "/checkout/return", "/nope"];
 const HOSTED = /^\/(reset-password|checkout|welcome)/; // logo and language switch only
 
-for (const width of [1024, 768]) {
+for (const width of [1280, 1024, 768]) {
   test.describe(`${width} wide`, () => {
     test.use({ viewport: { width, height: 800 } });
     for (const base of ["", "/ar"]) {
@@ -24,11 +24,11 @@ for (const width of [1024, 768]) {
           } else if (HOSTED.test(route)) {
             await expect(menu).toHaveCount(0);
             await expect(links).toHaveCount(0);
-          } else if (width >= 1024) {
+          } else if (width >= 1280) {
             await expect(menu).toBeHidden();
             await expect(links).toBeVisible();
           } else {
-            // 768 keeps the sellers link inline next to the menu button.
+            // below 1280 the menu sheet carries the links (768 also keeps the sellers pill inline next to the button).
             await expect(menu).toBeVisible();
           }
         });
