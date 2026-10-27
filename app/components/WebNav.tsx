@@ -42,20 +42,24 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
   }
   const home = pathFor(locale, "/");
   if (kind === "site") {
-    // sellers, legal and the rest link into the landing (#how): they keep the phone menu sheet
+    // the landing's bar in flow: its five section links reach the landing; the phone keeps the menu sheet
     return (
-      <header className={`${styles.header} ${styles.site} ${site.hdr}`}>
-        <div className={`${styles.bar} container`}>
-          <Logo locale={locale} />
-          <nav aria-label={t(locale, N + "a11y.label.primary")} className={site.links}>
-            <Link href={`${home}#how`} className={`${site.link} ${site.wide}`} data-gp-track="cta_click" data-gp-cta-id="how_it_works" data-gp-placement="nav">{t(locale, N + "1024.label.howItWorks")}</Link>
-            <NavSellers locale={locale} keys="1024" className={`${site.link} ${site.sellers} ${site.l1024}`} />
-            <NavSellers locale={locale} keys="1440" className={`${site.link} ${site.sellers} ${site.l1440}`} />
-            <NavSellers locale={locale} keys="768" className={`${site.link} ${site.sellers} ${site.l768}`} />
+      <header className={`${styles.header} ${styles.site} ${styles.top} ${styles.page} ${site.hdr}`}>
+        <div className={styles.bar}>
+          <Wordmark locale={locale} className={styles.brand} />
+          <nav aria-label={t(locale, N + "a11y.label.primary")} className={styles.links}>
+            {LINKS.map(([id, k]) => (
+              <Link key={id} href={`${home}#${id}`} className={styles.link} data-gp-track="cta_click" data-gp-cta-id={`nav_${id}`} data-gp-placement="nav">{t(locale, L + k)}</Link>
+            ))}
+            <NavSellers locale={locale} keys="1024" className={`${styles.link} ${styles.sellers} ${site.l1024}`} />
+            <NavSellers locale={locale} keys="1024" className={`${styles.link} ${styles.sellers} ${styles.sellersShort}`} />
+            <NavSellers locale={locale} keys="1440" className={`${styles.link} ${styles.sellers} ${styles.sellersLong}`} />
           </nav>
-          <div className={site.actions}>
+          <div className={styles.actions}>
+            <NavSellers locale={locale} keys="768" className={`${styles.link} ${styles.sellers} ${site.l768}`} />
             <span className={site.wide}><LangMenu locale={locale} /></span>
-            <NavCta locale={locale} keys="1440" className={`${site.cta} ${site.hideSmall}`} />
+            <span className={site.wide}><ThemeToggle locale={locale} /></span>
+            <NavCta locale={locale} keys="1440" className={`${styles.cta} ${site.hideSmall}`} />
             <WebMenu locale={locale} />
           </div>
         </div>
@@ -63,7 +67,7 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
     );
   }
   return (
-    <header className={`${styles.header} ${styles.site} ${styles.landing}`}>
+    <header className={`${styles.header} ${styles.site} ${styles.top} ${styles.landing}`}>
       <div className={styles.bar}>
         <Wordmark locale={locale} className={styles.brand} />
         <nav aria-label={t(locale, N + "a11y.label.primary")} className={styles.links}>

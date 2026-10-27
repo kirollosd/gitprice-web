@@ -312,7 +312,7 @@ test.describe("coral polish (GP-406 F1, F2, F4)", () => {
     expect(await page.locator("#dock").evaluate((e) => getComputedStyle(e).bottom)).toBe("32px");
   });
 
-  test("phone: the shown dock sits above the cookie notice, never over it", async ({ page }) => {
+  test("phone: the shown dock stays put and the cookie notice sits above it, never over it", async ({ page }) => {
     await page.setViewportSize(PHONE);
     await page.goto("/");
     const notice = page.getByRole("region", { name: en.web.component.webCookieNotice.default.title });
@@ -322,7 +322,7 @@ test.describe("coral polish (GP-406 F1, F2, F4)", () => {
     await expect(dock).toHaveClass(/(^|\s)in(\s|$)/);
     await expect.poll(async () => {
       const [d, n] = await Promise.all([dock.boundingBox(), notice.boundingBox()]);
-      return d!.y + d!.height <= n!.y + 0.5;
+      return n!.y + n!.height <= d!.y + 0.5;
     }).toBe(true);
   });
 

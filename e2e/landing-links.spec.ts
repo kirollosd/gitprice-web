@@ -17,8 +17,8 @@ for (const [locale, base, L] of [["en", "", en], ["ar", "/ar", ar]] as const) {
       const nav = page.locator("header nav");
       await expect(nav.getByRole("link", { name: NAV(L)["1024"].label.features })).toHaveCount(0);
       await expect(nav.locator('a[data-gp-cta-id="features"]')).toHaveCount(0);
-      await expect(nav.getByRole("link", { name: NAV(L)["1024"].label.howItWorks })).toHaveAttribute("href", `${base || "/"}#how`);
-      await nav.getByRole("link", { name: NAV(L)["1024"].label.howItWorks }).click();
+      await expect(nav.getByRole("link", { name: L.web.landing.nav.howItWorks })).toHaveAttribute("href", `${base || "/"}#how`);
+      await nav.getByRole("link", { name: L.web.landing.nav.howItWorks }).click();
       await expect(page).toHaveURL(new RegExp(`${base}/?#how$`));
       await expect(page.locator("#how")).toBeInViewport();
 

@@ -24,8 +24,8 @@ const homeAnchors = (hrefs: (string | null)[], locale: string) =>
   hrefs.filter((h): h is string => !!h && h.startsWith(locale === "ar" ? "/ar#" : "/#")).map((h) => h.split("#")[1]);
 
 const bySet = (ids: string[]) => [...ids].sort();
-// header + menu sheet: How it works each. The waitlist CTAs are not links: they open the dock in place (owner, 2026-10-27)
-const EXPECTED = ["how", "how"];
+// header: the landing's five section links; menu sheet: How it works. The waitlist CTAs are not links: they open the dock in place (owner, 2026-10-27)
+const EXPECTED = ["film", "how", "how", "rail", "rcpt", "spot"];
 
 describe("links into the landing", () => {
   for (const locale of ["en", "ar"] as const) {

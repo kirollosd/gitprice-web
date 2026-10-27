@@ -1,41 +1,14 @@
-/* The header of every page except the landing: the landing's Coral bar (WebNav .site colours, type and pill CTA) with the
-   phone menu sheet and three label widths. */
-.links { display: flex; flex: 1; align-items: center; gap: 28px; margin-inline-start: var(--gp-sp-12); }
-.link { color: var(--gp-web-mute); font-weight: 400; font-size: 17px; white-space: nowrap; }
-.link:hover { color: var(--gp-web-ink); text-decoration: none; }
-.sellers {
-  margin-inline-start: auto;
-  align-items: center;
-  justify-content: center;
-  min-block-size: var(--gp-target);
-  padding-inline: var(--gp-sp-6);
-  border: 1px solid var(--gp-web-line);
-  border-radius: var(--gp-r-pill);
-}
-.sellers:hover { text-decoration: none; }
-.actions { display: flex; align-items: center; gap: var(--gp-sp-6); }
-.cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-block-size: var(--gp-target);
-  background: var(--gp-web-ink);
-  color: var(--gp-web-ground);
-  padding: 10px 18px;
-  border-radius: var(--gp-r-pill);
-  border: 0; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
-  white-space: nowrap;
-}
-.cta:hover { text-decoration: none; }
-
+/* The header of every page except the landing reuses the landing bar (WebNav.module.css .top/.page); this adds the phone menu sheet and the label-width sets. */
 /* Which label set shows where: <768 none, 768 / 1024 / 1440 sets by width. */
 .wide, .l1024, .l1440, .l768 { display: none; }
-@media (max-width: 767px) { .links, .hideSmall { display: none; } }
+@media (max-width: 767px) { .hideSmall { display: none; } }
 @media (min-width: 768px) and (max-width: 1023px) { .l768 { display: inline-flex; } }
 @media (min-width: 1024px) and (max-width: 1279px) { .l1024 { display: inline-flex; } }
 @media (min-width: 1280px) { .l1440 { display: inline-flex; } }
 @media (min-width: 1024px) { .wide { display: inline; } }
-@media (min-width: 768px) { .header { --nav-h: calc(var(--gp-sp-16) + var(--gp-sp-2)); } }
 /* While the menu sheet is open the bar shows only the logo and the close button (Menu/open boards). */
-.hdr:has(button[aria-controls="web-menu"][aria-expanded="true"]) .links,
+.hdr:has(button[aria-controls="web-menu"][aria-expanded="true"]) > div > nav,
 .hdr:has(button[aria-controls="web-menu"][aria-expanded="true"]) .hideSmall { visibility: hidden; }
+/* The sheet starts under the bar (WebMenu --nav-h): with it open the bar is a fixed 14 + 44 + 14 = 72px at every width, whatever the scroll state. */
+.hdr { --nav-h: 72px; }
+.hdr:has(button[aria-controls="web-menu"][aria-expanded="true"]) > div { padding-block: 14px; }
