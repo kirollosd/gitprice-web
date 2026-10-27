@@ -38,7 +38,7 @@ export default function ThemeToggle({ locale }: { locale: Locale }) {
   };
 
   return (
-    <button type="button" className={styles.toggle} aria-pressed={dark} aria-label={t(locale, `web.landing.theme.${dark ? "toLight" : "toDark"}`)} onClick={flip}>
+    <button type="button" className={styles.toggle} aria-label={t(locale, `web.landing.theme.${dark ? "toLight" : "toDark"}`)} onClick={flip}>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
         <circle cx="12" cy="12" r="8.5" />
         <path d="M12 3.5a8.5 8.5 0 0 1 0 17Z" fill="currentColor" />

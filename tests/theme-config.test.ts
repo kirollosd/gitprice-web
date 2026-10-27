@@ -1,14 +1,12 @@
-import { mkdtempSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { readToneConfig, THEME_BOOT, TONE_KEYS, toneCss } from "../lib/theme";
 
-const file = (content: unknown) => {
-  const p = join(mkdtempSync(join(tmpdir(), "gp-theme-")), "theme.config.json");
-  writeFileSync(p, typeof content === "string" ? content : JSON.stringify(content));
-  return p;
-};
+// lib/theme must not read files at runtime (global-not-found renders per request, and the config is not traced):
+// any fs read from it fails this suite. Tests read through vi.importActual.
+vi.mock("node:fs", () => ({ readFileSync: () => { throw new Error("lib/theme touched fs"); } }));
+
+// The file source is the parsed JSON object (bundled import in production).
+const file = (content: unknown) => (typeof content === "string" ? JSON.parse(content) : content);
 
 describe("readToneConfig", () => {
   it("merges the file, then GP_THEME on top", () => {
@@ -19,8 +17,9 @@ describe("readToneConfig", () => {
   it("reads the file alone and ignores $comment", () => {
     expect(readToneConfig({}, file({ $comment: "x", light: {}, dark: { save: "rgba(1, 2, 3, .5)" } }))).toEqual({ light: {}, dark: { save: "rgba(1, 2, 3, .5)" } });
   });
-  it("the shipped theme.config.json is empty and valid", () => {
+  it("the shipped theme.config.json is bundled, empty and valid (no fs)", () => {
     expect(toneCss(readToneConfig({}))).toBe("");
+    expect(toneCss(readToneConfig({ GP_THEME: '{"dark":{"acc":"#00AA88"}}' }))).toContain("#00AA88");
   });
   it("rejects an unknown key", () => {
     expect(() => readToneConfig({ GP_THEME: '{"dark":{"nope":"#fff"}}' }, file({}))).toThrow(/theme: unknown key nope in dark/);
@@ -33,7 +32,7 @@ describe("readToneConfig", () => {
   });
   it("rejects non-color values", () => {
     expect(() => readToneConfig({ GP_THEME: '{"dark":{"acc":"red;}body{display:none"}}' }, file({}))).toThrow(/theme: dark.acc is not a color/);
-    for (const v of ["red", "#12", "#123456789", "rgb(1,2,3);}", "url(x)", "var(--x)", "#fff</style>", 3])
+    for (const v of ["red", "#12", "#12345", "#1234567", "#123456789", "rgb(1,2,3);}", "url(x)", "var(--x)", "#fff</style>", 3])
       expect(() => readToneConfig({}, file({ light: { acc: v } })), String(v)).toThrow(/not a color/);
   });
   it("rejects malformed GP_THEME JSON with a theme: error", () => {
@@ -64,8 +63,8 @@ describe("TONE_KEYS and THEME_BOOT", () => {
     expect(TONE_KEYS).toContain("dock-save");
   });
   it("every tone key is a --gp-web-* token in the synced tokens", async () => {
-    const { readFileSync } = await import("node:fs");
-    const css = readFileSync("styles/tokens.css", "utf8");
+    const fs = await vi.importActual<typeof import("node:fs")>("node:fs");
+    const css = fs.readFileSync("styles/tokens.css", "utf8");
     for (const k of TONE_KEYS) expect(css, k).toContain(`--gp-web-${k}:`);
   });
   it("applies a stored theme and ignores junk or a throwing localStorage", () => {

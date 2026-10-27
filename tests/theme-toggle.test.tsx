@@ -17,17 +17,17 @@ describe("ThemeToggle", () => {
   it("light effective: offers dark, stores it and sets data-theme=dark", () => {
     render(<ThemeToggle locale="en" />);
     const b = screen.getByRole("button", { name: "Switch to dark" });
-    expect(b.getAttribute("aria-pressed")).toBe("false");
+    // The label names the action and flips, so no aria-pressed (a pressed state on a flipping name contradicts itself).
+    expect(b.hasAttribute("aria-pressed")).toBe(false);
     fireEvent.click(b);
     expect(root.dataset.theme).toBe("dark");
     expect(localStorage.getItem("gp-theme")).toBe("dark");
-    expect(screen.getByRole("button", { name: "Switch to light" }).getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByRole("button", { name: "Switch to light" }).hasAttribute("aria-pressed")).toBe(false);
   });
   it("OS dark with no stored choice: offers light and sets data-theme=light", () => {
     osDark = true;
     render(<ThemeToggle locale="en" />);
     const b = screen.getByRole("button", { name: "Switch to light" });
-    expect(b.getAttribute("aria-pressed")).toBe("true");
     fireEvent.click(b);
     expect(root.dataset.theme).toBe("light");
     expect(localStorage.getItem("gp-theme")).toBe("light");
@@ -36,7 +36,7 @@ describe("ThemeToggle", () => {
     osDark = true;
     root.dataset.theme = "light";
     render(<ThemeToggle locale="ar" />);
-    expect(screen.getByRole("button", { name: "الوضع الداكن" }).getAttribute("aria-pressed")).toBe("false");
+    expect(screen.getByRole("button", { name: "الوضع الداكن" })).toBeTruthy();
   });
   it("survives localStorage throwing", () => {
     vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => { throw new Error("blocked"); });

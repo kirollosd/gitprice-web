@@ -4,16 +4,12 @@
   text-decoration: none;
 }
 .root:hover { text-decoration: none; }
-/* The SVG is a mask so its colour follows the theme: navy on light, white on dark. */
+/* The SVG is a mask so its colour follows the theme: --gp-web-logo, which the web token blocks switch for
+   an explicit dark theme and for OS dark with no stored choice. */
 .wordmark {
-  --logo-ink: var(--gp-brand-navy);
   flex-shrink: 0;
   inline-size: 77px;
   block-size: 22px;
-  background-color: var(--logo-ink);
+  background-color: var(--gp-web-logo);
   mask: url("/logo_wordmark.svg") center / contain no-repeat;
-}
-:root[data-theme="dark"] .wordmark { --logo-ink: var(--gp-brand-on-navy); }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .wordmark { --logo-ink: var(--gp-brand-on-navy); }
 }

@@ -1,7 +1,7 @@
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import themeConfig from "../theme.config.json";
 
-// Server-only (reads the file at build time). GP_THEME is not NEXT_PUBLIC_, so it never reaches the client bundle.
+// Server-only. theme.config.json is a bundled JSON import, not an fs read, so it also works on the per-request
+// global-not-found page. GP_THEME is not NEXT_PUBLIC_, so it never reaches the client bundle.
 
 /** The 28 --gp-web-* token names (without the prefix) that a tone override may set. */
 export const TONE_KEYS: readonly string[] = [
@@ -15,7 +15,7 @@ export type ToneConfig = { light?: Partial<Record<string, string>>; dark?: Parti
 
 const MODES: readonly Mode[] = ["light", "dark"];
 // The values end up inside a <style> tag: only plain hex or rgb()/rgba() with digits, so no `;`, `}` or `<` can get in.
-const COLOR = [/^#[0-9a-f]{3,8}$/i, /^rgba?\(\s*[\d.\s,%]+\)$/i];
+const COLOR = [/^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i, /^rgba?\(\s*[\d.\s,%]+\)$/i];
 
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
 
@@ -37,9 +37,9 @@ function validate(raw: unknown, from: string): ToneConfig {
   return out;
 }
 
-/** The file's tones, then GP_THEME (same JSON shape) on top. Throws on an unknown key or a non-colour value. */
-export function readToneConfig(src: Record<string, string | undefined> = process.env, file = "theme.config.json"): ToneConfig {
-  const base = validate(JSON.parse(readFileSync(resolve(process.cwd(), file), "utf8")), file);
+/** The file's tones (parsed JSON), then GP_THEME (same shape) on top. Throws on an unknown key or a non-colour value. */
+export function readToneConfig(src: Record<string, string | undefined> = process.env, file: unknown = themeConfig): ToneConfig {
+  const base = validate(file, "theme.config.json");
   let env: ToneConfig = {};
   if (src.GP_THEME) {
     let parsed: unknown;
