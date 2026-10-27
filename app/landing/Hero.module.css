@@ -56,11 +56,11 @@
 :global(html.lp-m) .pick::-webkit-scrollbar { display: none; }
 :global(html.lp-m) .pick::after { content: ""; flex: 0 0 14px; }
 :global(html.lp-m) .pick > * { flex-shrink: 0; white-space: nowrap; }
-:global(html.lp-m) .pick small { font-size: 14px; }
+:global(html.lp-m) .pick small { font-size: max(14px, var(--fl, 0px)); }
 /* compact chips keep their look; an invisible pad brings the tap area to 44px */
-:global(html.lp-m) .pick button { position: relative; padding: 7px 12px; font-size: 14px; min-height: calc(44px / var(--z, 1)); }
+:global(html.lp-m) .pick button { position: relative; padding: 7px 12px; font-size: max(14px, var(--fl, 0px)); min-height: calc(44px / var(--z, 1)); }
 :global(html.lp-m) .pick button::before { content: ""; position: absolute; inset: -7px -4px; min-height: 44px; }
-:global(html.lp-m) .kick { top: 122px; inset-inline-start: 20px; font-size: 14px; }
+:global(html.lp-m) .kick { top: 122px; inset-inline-start: 20px; font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .h1 { top: 166px; inset-inline-start: 20px; width: 390px; font-size: 34px; white-space: normal; }
 :global(html.lp-m) .cap { top: 254px; inset-inline-start: 20px; width: 390px; font-size: 17px; }
 :global(html.lp-m[lang="ar"]) .cap { top: 268px; }
@@ -72,7 +72,7 @@
 :global(html.lp-m[dir="rtl"]) .digits { left: auto; right: 16px; }
 :global(html.lp-m) .lede { inset-inline-start: 20px; inset-inline-end: 20px; top: calc(42vh / var(--z) + 150px); bottom: auto; width: auto; font-size: 16px; text-align: start; }
 :global(html.lp-m) .tags { inset-inline-start: 20px; inset-inline-end: 20px; bottom: 110px; flex-wrap: wrap; gap: 6px; }
-:global(html.lp-m) .tags span { padding: 7px 12px; font-size: 14px; }
+:global(html.lp-m) .tags span { padding: 7px 12px; font-size: max(14px, var(--fl, 0px)); }
 
 /* html[data-gp-pick] (HomeSections boot script): the static HTML shows the charger, but this load will show another
    product; hold the product parts back until ProductProvider swaps it in, so no charger flashes. Failsafe: shown after 1s. */

@@ -27,4 +27,4 @@
 :global(html.lp-m) .track { padding: 28px 20px 10px; gap: 12px; }
 :global(html.lp-m) .st { width: 300px; height: 320px; padding: 20px; border-radius: 24px; }
 :global(html.lp-m) .st h3 { inset-inline-start: 20px; bottom: 76px; font-size: 40px; }
-:global(html.lp-m) .pill { inset-inline-start: 20px; bottom: 20px; font-size: 14px; }
+:global(html.lp-m) .pill { inset-inline-start: 20px; bottom: 20px; font-size: max(14px, var(--fl, 0px)); }

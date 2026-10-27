@@ -43,6 +43,7 @@
 .sec { position: relative; }
 .stage { position: sticky; top: 0; height: calc(100vh / var(--z, 1)); overflow: hidden; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-:global(html.lp-m) .stage .kick { font-size: 14px; }
+:global(html.lp-m) .canvas { --fl: calc(12px / var(--z, 1)); } /* phone text floor: 12 rendered px after the canvas zoom (z < 1 below 430px) */
+:global(html.lp-m) .stage .kick { font-size: max(14px, var(--fl, 0px)); }
 
 @media (prefers-reduced-motion: reduce) { .canvas * { transition: none !important; } }

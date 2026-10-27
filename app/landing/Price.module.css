@@ -4,7 +4,7 @@
    so the code keeps AA contrast there; on a filled pill it follows the pill's text. */
 .cur {
   font-family: "JetBrains Mono", monospace;
-  font-size: max(.62em, 10px);
+  font-size: max(.62em, 10px, var(--fl, 0px));
   font-weight: 400;
   letter-spacing: 0;
   color: var(--cur-c, var(--gp-web-mute));

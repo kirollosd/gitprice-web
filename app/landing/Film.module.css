@@ -32,5 +32,5 @@
 :global(html.lp-m[data-theme="dark"]) .fframe { background-image: var(--pmd, none); }
 @media (prefers-color-scheme: dark) { :global(html.lp-m:not([data-theme="light"])) .fframe { background-image: var(--pmd, none); } }
 :global(html.lp-m) .chap { bottom: 84px; gap: 6px; }
-:global(html.lp-m) .chap button { padding: 15px 13px; font-size: 14px; }
+:global(html.lp-m) .chap button { padding: 15px 13px; font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .chap .pp { min-width: max(46px, calc(44px / var(--z, 1))); }

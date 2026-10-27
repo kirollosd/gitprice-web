@@ -23,3 +23,18 @@ describe("film frame", () => {
     expect(film).not.toMatch(/background-image: var\(--p[lmd]+\);/);
   });
 });
+
+describe("phone text floor", () => {
+  // the phone canvas is zoomed by z < 1 under 430px, so small px sizes render under 12px; --fl = 12px / z lifts them
+  it("lp-m rules never set a bare px size of 14 or less", async () => {
+    const { readdirSync } = await import("node:fs");
+    const bare = /(font-size: |font: (?:\d+ )?)(\d+(?:\.\d+)?)px/;
+    for (const f of readdirSync("app/landing").filter((n) => n.endsWith(".css"))) {
+      for (const line of readFileSync(`app/landing/${f}`, "utf8").split("\n")) {
+        const m = line.includes("lp-m") && bare.exec(line);
+        if (m && /^(1[0-4]|[0-9])(\.\d+)?$/.test(m[2]) && !/\.eq\b|\.why \.eq/.test(line)) throw new Error(`${f}: ${line.trim().slice(0, 90)}`);
+      }
+    }
+    expect(readFileSync("app/landing/base.module.css", "utf8")).toMatch(/lp-m\) \.canvas \{ --fl: calc\(12px \/ var\(--z/);
+  });
+});

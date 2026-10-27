@@ -69,22 +69,22 @@
 :global(html.lp-m) .stage::before { content: ""; position: absolute; inset-inline-start: 0; inset-inline-end: 0; top: 0; height: 92px; background: var(--gp-web-ground); z-index: 4; }
 :global(html.lp-m) .copy { position: absolute; inset-inline-start: 20px; inset-inline-end: 20px; top: 92px; height: 200px; z-index: 4; background: var(--gp-web-ground); gap: 8px; margin-top: 0; }
 :global(html.lp-m) .copy h2 { font-size: 26px; }
-:global(html.lp-m) .copy p { font-size: 14px; margin-top: 6px; display: none; }
+:global(html.lp-m) .copy p { font-size: max(14px, var(--fl, 0px)); margin-top: 6px; display: none; }
 :global(html.lp-m) .c + .c p { font-size: 15px; margin-top: 4px; }
 :global(html.lp-m) .c + .c { padding-inline-start: 12px; }
 :global(html.lp-m) .c + .c h2 { font-size: 15px; }
 :global(html.lp-m) .tog { margin-top: 12px; }
-:global(html.lp-m) .tog button { position: relative; padding: 9px 14px; font-size: 14px; min-height: calc(44px / var(--z, 1)); }
+:global(html.lp-m) .tog button { position: relative; padding: 9px 14px; font-size: max(14px, var(--fl, 0px)); min-height: calc(44px / var(--z, 1)); }
 :global(html.lp-m) .tog button::before { content: ""; position: absolute; inset: -7px -4px; min-height: 44px; }
 :global(html.lp-m) .tally { inset-inline-start: 0; inset-inline-end: 0; top: 292px; padding: 0 20px 8px; z-index: 5; gap: 8px; background: var(--gp-web-ground); }
-:global(html.lp-m) .tally small { font-size: 14px; }
+:global(html.lp-m) .tally small { font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .tally b { font-size: 28px; }
 :global(html.lp-m) .slotwrap { padding-top: 350px; }
 :global(html.lp-m) .slot { height: 22px; }
-:global(html.lp-m) .paper { margin: -10px 10px 0; padding: 20px 18px 0; font-size: 12px; }
+:global(html.lp-m) .paper { margin: -10px 10px 0; padding: 20px 18px 0; font-size: max(12px, var(--fl, 0px)); }
 :global(html.lp-m) .logo { height: 24px; width: 83px; }
-:global(html.lp-m) .n { font-size: 14px; }
-:global(html.lp-m) .it .ln { font-size: 12px; }
-:global(html.lp-m) .ln span, :global(html.lp-m) .ln s, :global(html.lp-m) .ln b, :global(html.lp-m) .hd > span:last-child, :global(html.lp-m) .tot small { font-size: 14px; }
-:global(html.lp-m) .tot .ln { font-size: 13px; }
+:global(html.lp-m) .n { font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .it .ln { font-size: max(12px, var(--fl, 0px)); }
+:global(html.lp-m) .ln span, :global(html.lp-m) .ln s, :global(html.lp-m) .ln b, :global(html.lp-m) .hd > span:last-child, :global(html.lp-m) .tot small { font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .tot .ln { font-size: max(13px, var(--fl, 0px)); }
 :global(html.lp-m) .tot .big { font-size: 18px; }

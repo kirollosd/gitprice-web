@@ -62,20 +62,20 @@
 :global(html.lp-m) .steps p { font-size: 16px; margin-top: 10px; }
 :global(html.lp-m) .prog { inset-inline-start: 20px; top: 316px; }
 :global(html.lp-m) .browser { inset-inline-start: 20px; top: 340px; width: 390px; height: 430px; }
-:global(html.lp-m) .bar { height: 36px; font-size: 11px; }
-:global(html.lp-m) .bar .u { margin-inline-start: 6px; padding: 4px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
+:global(html.lp-m) .bar { height: 36px; font-size: max(11px, var(--fl, 0px)); }
+:global(html.lp-m) .bar .u { margin-inline-start: 6px; padding: 4px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .pdp { grid-template-columns: 110px 1fr; gap: 14px; padding: 16px; }
 :global(html.lp-m) .ph { height: 110px; }
 :global(html.lp-m) .pdp h4 { font-size: 15px; }
 :global(html.lp-m) .pdp .pr { font-size: 19px; margin-top: 8px; }
 :global(html.lp-m) .ln { display: none; }
-:global(html.lp-m) .badge { inset-inline-start: 140px; top: 168px; font-size: 14px; padding-block: 4px; padding-inline: 4px 12px; }
+:global(html.lp-m) .badge { inset-inline-start: 140px; top: 168px; font-size: max(14px, var(--fl, 0px)); padding-block: 4px; padding-inline: 4px 12px; }
 :global(html.lp-m) .badge .eq { width: 26px; height: 26px; }
 /* ship critique: the note sat under the panel (Arabic wraps to two lines); it now grows upward from just above the badge */
-:global(html.lp-m) .browser .bnote { inset-inline-start: 140px; inset-inline-end: 12px; top: auto; bottom: calc(100% - 160px); font-size: 14px; }
+:global(html.lp-m) .browser .bnote { inset-inline-start: 140px; inset-inline-end: 12px; top: auto; bottom: calc(100% - 160px); font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .panel { inset-inline-start: 12px; inset-inline-end: 12px; top: auto; bottom: 12px; width: auto; padding: 12px 16px; transform: translateY(240px); }
 :global(html.lp-m) .panel:global(.on) { transform: none; }
-:global(html.lp-m) .r { padding: 8px 0; font-size: 14px; }
+:global(html.lp-m) .r { padding: 8px 0; font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .r b { font-size: 15px; }
-:global(html.lp-m) .panel small, :global(html.lp-m) .panel em { font-size: 14px; }
-:global(html.lp-m) .r.lk em { font-size: 14px; }
+:global(html.lp-m) .panel small, :global(html.lp-m) .panel em { font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .r.lk em { font-size: max(14px, var(--fl, 0px)); }
