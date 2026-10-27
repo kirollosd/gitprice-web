@@ -266,9 +266,11 @@ main { flex: 1; }
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--gp-font);
   line-height: var(--gp-lh-tight);
-  font-weight: 700;
+  font-weight: 600;
   color: var(--gp-ink);
 }
+h1 { font-weight: 300; letter-spacing: -.03em; }
+:lang(ar) h1 { letter-spacing: normal; }
 
 p { color: var(--gp-ink); line-height: var(--gp-lh); }
 
@@ -343,3 +345,6 @@ h1[tabindex="-1"]:focus-visible { outline: none; }
   :root, [dir="rtl"] { --web-fs-hero: var(--web-fs-hero-web); --web-lh-hero: var(--web-lh-hero-web); }
   :root { --web-fs-h2: var(--web-fs-display); --web-fs-feature: 28px; }
 }
+
+/* A closing band that ends the page sits flush on the footer. */
+main:has(> [data-gp-section="bottom_cta"]:last-child) ~ footer { margin-block-start: 0; }

@@ -34,7 +34,7 @@ export function Steps({ locale, id, prefix }: { locale: Locale; id?: string; pre
 }
 
 /** Closing band on the ink ground; the form or button sits on a surface card. */
-export function CtaBand({ title, line, children }: { title: string; line?: string; children: ReactNode }) {
+export function CtaBand({ title, line, children, below }: { title: string; line?: string; children: ReactNode; below?: ReactNode }) {
   return (
     <section className={styles.band} data-gp-section="bottom_cta">
       <div className={`container ${styles.bandInner}`}>
@@ -43,6 +43,7 @@ export function CtaBand({ title, line, children }: { title: string; line?: strin
           {line && <p className={styles.bandLine}>{line}</p>}
         </div>
         <div className={styles.bandCard}>{children}</div>
+        {below}
       </div>
     </section>
   );

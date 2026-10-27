@@ -21,6 +21,9 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
   const access = (key: string, placement: "hero" | "bottom") => (
     <a className={styles.accessBtn} href={env.chromeStoreUrl} data-gp-track="cta_click" data-gp-cta-id="install_extension" data-gp-placement={placement}>{t(locale, S + key)}</a>
   );
+  const back = (
+    <Link href={pathFor(locale, "/")} className={`${styles.back} ${styles.backOnBand}`} data-gp-track="cta_click" data-gp-cta-id="back_to_shoppers" data-gp-placement="bottom">{t(locale, S + "backToShoppers")}</Link>
+  );
   return (
     <>
       <section className={`${styles.hero} ${styles.sellersHero}`} data-gp-section="hero">
@@ -60,17 +63,14 @@ export default async function SellersPage({ params }: { params: Promise<{ locale
       </section>
 
       {env.launch ? (
-        <CtaBand title={t(locale, S + "launch.cta.title")}>
+        <CtaBand title={t(locale, S + "launch.cta.title")} below={back}>
           {access("launch.cta.access.label", "bottom")}
         </CtaBand>
       ) : (
-        <CtaBand title={t(locale, S + "cta.title")} line={t(locale, S + "cta.line")}>
+        <CtaBand title={t(locale, S + "cta.title")} line={t(locale, S + "cta.line")} below={back}>
           <Waitlist locale={locale} label={t(locale, S + "cta.waitlist.button.submitLabel")} audience="seller" placement="bottom" />
         </CtaBand>
       )}
-      <div className={`container ${styles.backRow}`}>
-        <Link href={pathFor(locale, "/")} className={styles.back} data-gp-track="cta_click" data-gp-cta-id="back_to_shoppers" data-gp-placement="bottom">{t(locale, S + "backToShoppers")}</Link>
-      </div>
     </>
   );
 }

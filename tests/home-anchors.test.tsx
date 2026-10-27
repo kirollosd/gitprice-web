@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 let launch = false;
-vi.mock("next/navigation", () => ({ usePathname: () => (globalThis as { __path?: string }).__path ?? "/pricing" }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ replace: () => {}, push: () => {} }), useSearchParams: () => new URLSearchParams(), usePathname: () => (globalThis as { __path?: string }).__path ?? "/pricing" }));
 vi.mock("next/link", () => ({
   default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => <a href={href} {...rest}>{children}</a>,
 }));
@@ -36,7 +36,7 @@ describe("links into the landing", () => {
         window.matchMedia = ((q: string) => ({ matches: /768/.test(q), addEventListener() {}, removeEventListener() {} })) as unknown as typeof window.matchMedia;
         const { default: WebNav } = await import("../app/components/WebNav");
         render(<WebNav locale={locale} variant="site" />);
-        fireEvent.click(document.querySelector("button[aria-expanded]")!);
+        fireEvent.click(document.querySelector("button[aria-expanded]:not(#lng)")!);
         const { default: PricingPage } = await import("../app/[locale]/pricing/page");
         render(await PricingPage({ params: Promise.resolve({ locale }) }));
         const hrefs = [...document.querySelectorAll("a")].map((a) => a.getAttribute("href"));

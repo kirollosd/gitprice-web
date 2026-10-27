@@ -1,13 +1,15 @@
-/* The pre-Coral header, kept for every page except the landing: phone menu sheet, three label widths. */
-.links { display: flex; flex: 1; align-items: center; gap: var(--gp-sp-12); margin-inline-start: var(--gp-sp-12); }
-.link { color: var(--gp-ink); font-weight: 600; font-size: var(--gp-fs-body); white-space: nowrap; }
+/* The header of every page except the landing: the landing's Coral bar (WebNav .site colours, type and pill CTA) with the
+   phone menu sheet and three label widths. */
+.links { display: flex; flex: 1; align-items: center; gap: 28px; margin-inline-start: var(--gp-sp-12); }
+.link { color: var(--gp-web-mute); font-weight: 400; font-size: 17px; white-space: nowrap; }
+.link:hover { color: var(--gp-web-ink); text-decoration: none; }
 .sellers {
   margin-inline-start: auto;
   align-items: center;
   justify-content: center;
   min-block-size: var(--gp-target);
   padding-inline: var(--gp-sp-6);
-  border: 1px solid var(--gp-hairline-strong);
+  border: 1px solid var(--gp-web-line);
   border-radius: var(--gp-r-pill);
 }
 .sellers:hover { text-decoration: none; }
@@ -16,13 +18,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-inline-size: 232px;
   min-block-size: var(--gp-target);
-  background: var(--gp-ink);
-  color: var(--gp-surface);
-  padding: var(--gp-sp-2) var(--gp-sp-5);
+  background: var(--gp-web-ink);
+  color: var(--gp-web-ground);
+  padding: 10px 18px;
   border-radius: var(--gp-r-pill);
-  border: 0; font: inherit; font-weight: 600; cursor: pointer;
+  border: 0; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
   white-space: nowrap;
 }
 .cta:hover { text-decoration: none; }

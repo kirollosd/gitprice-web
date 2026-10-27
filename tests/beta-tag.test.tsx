@@ -18,8 +18,8 @@ async function home(launch: boolean, locale: "en" | "ar") {
   vi.doMock("../lib/env", () => ({ env: { launch, apiBaseUrl: "http://x", chromeStoreUrl: "https://c.test" } }));
   const { default: HomeContent } = await import("../app/components/HomeSections");
   const { default: Dock, JoinProvider } = await import("../app/landing/Dock");
-  const { default: WebFooter } = await import("../app/components/WebFooter");
-  render(<JoinProvider><main><HomeContent locale={locale} /></main><Dock locale={locale} /><WebFooter locale={locale} /></JoinProvider>);
+  // the landing's own footer (Foot, inside #foot) carries the tag; the layout's WebFooter steps aside on home
+  render(<JoinProvider><main><HomeContent locale={locale} /></main><Dock locale={locale} /></JoinProvider>);
 }
 
 describe.each([[false], [true]])("Beta tag (launch=%s)", (launch) => {
@@ -28,11 +28,13 @@ describe.each([[false], [true]])("Beta tag (launch=%s)", (launch) => {
       await home(launch, locale);
       expect(label(locale)).toBe(locale === "en" ? "Beta" : "بيتا");
       expect(tags().map((b) => b.textContent)).toEqual([label(locale), label(locale), label(locale)]);
-      const [hero, dock, foot] = tags();
+      const [hero, foot, dock] = tags();
       expect(near(hero, '[data-gp-placement="hero"]')).toBe(true);
       expect(hero.closest("#num")).toBeTruthy();
       expect(dock.closest("#dock")).toBeTruthy();
-      expect(foot.closest("footer")).toBeTruthy();
+      expect(foot.closest("footer#foot")).toBeTruthy();
+      // always the Latin word, isolated left-to-right inside the Arabic page
+      for (const b of [hero, dock, foot]) { expect(b.getAttribute("dir")).toBe("ltr"); expect(b.getAttribute("lang")).toBe("en"); }
     });
   }
 });

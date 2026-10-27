@@ -34,7 +34,7 @@ for (const [locale, base, L] of [["en", "", en], ["ar", "/ar", ar]] as const) {
     test("phone menu sheet: How it works and the CTA reach the landing; the CTA opens the dock form with focus", async ({ page }) => {
       await page.setViewportSize(PHONE);
       await page.goto(`${base}/privacy`);
-      await page.locator("header button[aria-expanded]").click();
+      await page.locator("header button[aria-expanded]:not(#lng)").click();
       const sheet = page.locator("#web-menu");
       await expect(sheet.locator('a[data-gp-cta-id="features"]')).toHaveCount(0);
       await expect(sheet.locator('a[data-gp-cta-id="how_it_works"]')).toHaveAttribute("href", `${base || "/"}#how`);
@@ -42,7 +42,7 @@ for (const [locale, base, L] of [["en", "", en], ["ar", "/ar", ar]] as const) {
       await expect(page).toHaveURL(new RegExp(`${base}/?#how$`));
 
       await page.goto(`${base}/privacy`);
-      await page.locator("header button[aria-expanded]").click();
+      await page.locator("header button[aria-expanded]:not(#lng)").click();
       await page.locator('#web-menu button[data-gp-cta-id="join_waitlist"]').click();
       await formFocused(page);
       await expect(page).toHaveURL(new RegExp(`${base}/privacy$`));

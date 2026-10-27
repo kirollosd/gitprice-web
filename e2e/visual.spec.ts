@@ -50,7 +50,7 @@ for (const width of WIDTHS) {
         for (const [name, path] of [["menu", "/sellers"], ["menu-ar", "/ar/sellers"]] as const) {
           test(`${name} open on ${path}`, async ({ page }) => {
             await page.goto(path);
-            await page.locator('header button[aria-expanded]').click();
+            await page.locator('header button[aria-expanded]:not(#lng)').click();
             await page.locator("#web-menu").waitFor();
             await shoot(page, `prelaunch-${name}-${width}-${colorScheme}`);
           });

@@ -1,2 +1,2 @@
 /* currentColor keeps it legible on light, dark and the dock's flipping band */
-.beta { display: inline-flex; align-items: center; padding: 1px var(--gp-sp-2); border: 1px solid currentColor; border-radius: var(--gp-r-pill); font-size: var(--gp-fs-caption); font-weight: 600; line-height: 1.4; letter-spacing: .02em; white-space: nowrap; }
+.beta { unicode-bidi: isolate; display: inline-flex; align-items: center; padding: 1px var(--gp-sp-2); border: 1px solid currentColor; border-radius: var(--gp-r-pill); font-size: var(--gp-fs-caption); font-weight: 600; line-height: 1.4; letter-spacing: .02em; white-space: nowrap; }

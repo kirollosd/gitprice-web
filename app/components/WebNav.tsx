@@ -44,7 +44,7 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
   if (kind === "site") {
     // sellers, legal and the rest link into the landing (#how): they keep the phone menu sheet
     return (
-      <header className={`${styles.header} ${site.hdr}`}>
+      <header className={`${styles.header} ${styles.site} ${site.hdr}`}>
         <div className={`${styles.bar} container`}>
           <Logo locale={locale} />
           <nav aria-label={t(locale, N + "a11y.label.primary")} className={site.links}>
@@ -54,7 +54,7 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
             <NavSellers locale={locale} keys="768" className={`${site.link} ${site.sellers} ${site.l768}`} />
           </nav>
           <div className={site.actions}>
-            <span className={site.wide}><LanguageSwitch locale={locale} /></span>
+            <span className={site.wide}><LangMenu locale={locale} /></span>
             <NavCta locale={locale} keys="1440" className={`${site.cta} ${site.hideSmall}`} />
             <WebMenu locale={locale} />
           </div>
@@ -63,7 +63,7 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
     );
   }
   return (
-    <header className={`${styles.header} ${styles.site}`}>
+    <header className={`${styles.header} ${styles.site} ${styles.landing}`}>
       <div className={styles.bar}>
         <Wordmark locale={locale} className={styles.brand} />
         <nav aria-label={t(locale, N + "a11y.label.primary")} className={styles.links}>

@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ replace: () => {}, push: () => {} }), useSearchParams: () => new URLSearchParams(), usePathname: () => "/" }));
 
 const mockEnv = (sellersNav: boolean) =>
   vi.doMock("../lib/env", () => ({ env: { launch: false, sellersNav, siteUrl: "http://localhost:3000" } }));

@@ -1,5 +1,14 @@
-/* Board footer: a hairline rule across the content column, then wordmark, tagline, links and copyright stacked at the start edge. */
-.footer { background: var(--gp-surface); margin-block-start: calc(var(--gp-sp-16) + var(--gp-sp-8)); }
+/* Always dark, in both themes (owner ruling), like the landing's "Pay the smaller price" band: the Coral web dark tokens.
+   The app tokens the content uses (ink, muted, hairline, focus, logo mask) are re-pointed here. */
+.footer {
+  --gp-ink: var(--gp-web-on-dark);
+  --gp-ink-muted: var(--gp-web-on-dark-mute);
+  --gp-hairline: var(--gp-web-dark-line);
+  --gp-focus: var(--gp-web-on-dark);
+  --gp-web-logo: var(--gp-web-on-dark);
+  background: var(--gp-web-dark); color: var(--gp-web-on-dark);
+  margin-block-start: calc(var(--gp-sp-16) + var(--gp-sp-8));
+}
 .inner { display: flex; flex-direction: column; align-items: flex-start; gap: var(--gp-sp-3); border-block-start: 1px solid var(--gp-hairline); padding-block: var(--gp-sp-8); }
 .brand { display: flex; flex-direction: column; align-items: flex-start; gap: var(--gp-sp-2); }
 .tagline, .copy { color: var(--gp-ink-muted); font-size: var(--gp-fs-body-compact); }

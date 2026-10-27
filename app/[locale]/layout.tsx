@@ -6,6 +6,7 @@ import CookieNotice from "../components/CookieNotice";
 import FloatingStack from "../components/FloatingStack";
 import TrackListeners from "../components/TrackListeners";
 import LocaleSuggestion from "../components/LocaleSuggestion";
+import HideOnHome from "../components/HideOnHome";
 import WebFooter from "../components/WebFooter";
 import SkipLink from "../components/SkipLink";
 import WebNav from "../components/WebNav";
@@ -32,10 +33,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     openGraph: { type: "website", siteName: SITE_NAME, locale: OG_LOCALE[l], title: SITE_NAME, description },
     twitter: { card: "summary_large_image", title: SITE_NAME, description },
     icons: {
-      // The theme-aware SVG first; the PNG is for browsers and crawlers that skip SVG icons.
+      // Coral tile with the ink mark reads on light and dark tabs alike. The SVG first; the PNG and .ico are for browsers and crawlers that skip SVG icons.
       icon: [
         { url: "/logo_icon.svg", type: "image/svg+xml" },
         { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+        { url: "/favicon.ico", sizes: "16x16 32x32 48x48" },
       ],
       apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
     },
@@ -100,7 +102,7 @@ export default async function LocaleLayout({
           {/* after <main> in tab order (ship critique); renders on home only */}
           <Dock locale={l} />
         </JoinProvider>
-        <WebFooter locale={l} />
+        <HideOnHome><WebFooter locale={l} /></HideOnHome>
         <Analytics />
         <TrackListeners />
       </body>

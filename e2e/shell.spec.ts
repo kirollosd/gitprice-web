@@ -18,7 +18,7 @@ for (const path of ["/sellers", "/ar/sellers", "/privacy"]) {
     await page.goto(path);
     const width = () => page.evaluate(() => document.documentElement.scrollWidth);
     expect(await width()).toBe(390);
-    const btn = page.locator("header button[aria-expanded]");
+    const btn = page.locator("header button[aria-expanded]:not(#lng)");
     await btn.click();
     await expect(btn).toHaveAttribute("aria-expanded", "true");
     await expect(page.locator("#web-menu")).toBeVisible();
@@ -32,9 +32,11 @@ for (const path of ["/sellers", "/ar/sellers", "/privacy"]) {
 test("language switch keeps the page and flips locale", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/privacy");
-  await page.locator("header").getByRole("link", { name: "العربية" }).click();
+  await page.locator("header #lng").click();
+  await page.locator("header").getByRole("option", { name: "العربية" }).click();
   await expect(page).toHaveURL(/\/ar\/privacy$/);
-  await page.locator("header").getByRole("link", { name: "English" }).click();
+  await page.locator("header #lng").click();
+  await page.locator("header").getByRole("option", { name: "English" }).click();
   await expect(page).toHaveURL(/\/privacy$/);
 });
 
@@ -46,7 +48,7 @@ test("unknown path renders localized not-found with 404", async ({ page }) => {
 
 test("the same button opens and closes the menu by click", async ({ page }) => {
   await page.goto("/sellers");
-  const btn = page.locator("header button[aria-expanded]");
+  const btn = page.locator("header button[aria-expanded]:not(#lng)");
   await btn.click();
   await expect(page.locator("#web-menu")).toBeVisible();
   await expect(page.locator("#web-menu a").first()).toBeFocused();
@@ -60,7 +62,7 @@ test("the same button opens and closes the menu by click", async ({ page }) => {
 
 test("growing the viewport to 1024 closes the open menu", async ({ page }) => {
   await page.goto("/sellers");
-  const btn = page.locator("header button[aria-expanded]");
+  const btn = page.locator("header button[aria-expanded]:not(#lng)");
   await btn.click();
   await expect(btn).toHaveAttribute("aria-expanded", "true");
   await page.setViewportSize({ width: 1024, height: 800 });
