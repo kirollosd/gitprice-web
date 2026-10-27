@@ -14,14 +14,14 @@ export const dynamic = "force-static";
 export const generateStaticParams = () => [{ locale: "en" }, { locale: "ar" }];
 
 const root = process.cwd();
-// Satori reads woff but not woff2, so the font comes from the @fontsource package public/fonts was copied from.
-const fustat700 = () => readFileSync(join(root, "node_modules/@fontsource/fustat/files/fustat-latin-700-normal.woff"));
-const wordmark = () => "data:image/svg+xml;base64," + readFileSync(join(root, "public/logo_wordmark.svg")).toString("base64");
+// Satori reads woff but not woff2, so the font comes from the @fontsource package public/fonts was copied from (Outfit, as on the landing hero).
+const outfit500 = () => readFileSync(join(root, "node_modules/@fontsource/outfit/files/outfit-latin-500-normal.woff"));
+const wordmark = () => "data:image/svg+xml;base64," + Buffer.from(readFileSync(join(root, "public/logo_wordmark.svg"), "utf8").replaceAll("#2D415E", tokenColor("web-logo"))).toString("base64");
 
 /**
- * Share card: wordmark, hero line and a jade rule on the light surface.
+ * Share card: wordmark, hero line and a coral rule on the light surface.
  * Arabic is a committed PNG of the same card from scripts/render-og-ar.mjs: Satori has no bidi or Arabic contextual
- * shaping (it throws on Noto Sans Arabic's GSUB and lays Arabic out left to right), so it would render broken.
+ * shaping (it throws on Arabic fonts' GSUB and lays Arabic out left to right), so it would render broken.
  */
 export default async function OpengraphImage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -39,18 +39,18 @@ export default async function OpengraphImage({ params }: { params: Promise<{ loc
           justifyContent: "space-between",
           alignItems: "flex-start",
           padding: 80,
-          background: tokenColor("surface"),
+          background: tokenColor("web-ground"),
           // Satori has no logical properties; the rule is physical-bottom in both locales.
-          borderBottom: `16px solid ${tokenColor("accent")}`,
-          fontFamily: "Fustat",
+          borderBottom: `16px solid ${tokenColor("web-fill")}`,
+          fontFamily: "Outfit",
         }}
       >
         <img src={wordmark()} width={278} height={80} alt="" />
-        <div style={{ display: "flex", color: tokenColor("ink"), fontSize: 72, fontWeight: 700, lineHeight: 1.15, maxWidth: 1040 }}>
-          {t("en", "web.home.hero.headline")}
+        <div style={{ display: "flex", color: tokenColor("web-ink"), fontSize: 72, fontWeight: 500, lineHeight: 1.15, maxWidth: 1040 }}>
+          {t("en", "web.landing.hero.headline")}
         </div>
       </div>
     ),
-    { ...size, fonts: [{ name: "Fustat", data: fustat700(), weight: 700 }] },
+    { ...size, fonts: [{ name: "Outfit", data: outfit500(), weight: 500 }] },
   );
 }
