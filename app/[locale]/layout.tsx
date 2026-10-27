@@ -52,7 +52,7 @@ export const viewport: Viewport = {
 
 const PRELOAD: Record<Locale, string[]> = {
   en: ["outfit-latin-core-400-normal", "outfit-latin-core-800-normal", "outfit-latin-core-300-normal"],
-  ar: ["alexandria-arabic-400-normal", "alexandria-arabic-600-normal", "alexandria-arabic-700-normal", "alexandria-arabic-300-normal"],
+  ar: ["alexandria-arabic-core-400-normal", "alexandria-arabic-core-600-normal", "alexandria-arabic-core-700-normal", "alexandria-arabic-core-300-normal"],
 };
 
 export const dynamicParams = false;

@@ -1,6 +1,7 @@
 #!/bin/sh
 # Writes public/fonts/<family>-latin-core-<weight>-normal.woff2: the Latin faces cut down to ASCII plus the few
-# non-ASCII characters the copy uses (see CORE in app/globals.css). The full files stay for every other character,
+# non-ASCII characters the copy uses, and alexandria-arabic-core-*: the Arabic faces cut down to standard Arabic
+# (no Persian/Urdu extensions). The ranges are the CORE blocks in app/globals.css; tests/assets.test.ts checks the copy stays inside them. The full files stay for every other character,
 # so nothing falls back to a system font; the core file is just what the first paint has to download (GP-406 perf).
 # --glyph-names matters: without it (post table v3) Chrome rasterises the same outlines slightly differently.
 # Needs fonttools + brotli: python3 -m venv /tmp/v && /tmp/v/bin/pip install fonttools brotli && PYFTSUBSET=/tmp/v/bin/pyftsubset sh scripts/subset-fonts.sh
@@ -10,4 +11,8 @@ CORE="U+0020-007E,U+00A0,U+00A9,U+00AB,U+00B7,U+00BB,U+200E-200F,U+2011,U+2013-2
 for f in outfit-latin-300 outfit-latin-400 outfit-latin-600 outfit-latin-800 jetbrains-mono-latin-400 jetbrains-mono-latin-700 alexandria-latin-400 alexandria-latin-600; do
   out=$(echo "$f" | sed 's/-latin-/-latin-core-/')-normal.woff2
   "${PYFTSUBSET:-pyftsubset}" "$f-normal.woff2" --unicodes="$CORE" --layout-features='*' --glyph-names --flavor=woff2 --output-file="$out"
+done
+ACORE="U+0600-061F,U+0621-063A,U+0640-0652,U+0660-066D,U+200C-200F,U+2010-2011"
+for w in 300 400 600 700; do
+  "${PYFTSUBSET:-pyftsubset}" "alexandria-arabic-$w-normal.woff2" --unicodes="$ACORE" --layout-features='*' --glyph-names --flavor=woff2 --output-file="alexandria-arabic-core-$w-normal.woff2"
 done
