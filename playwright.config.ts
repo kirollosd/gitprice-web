@@ -36,6 +36,8 @@ export default defineConfig({
   snapshotPathTemplate: "{testDir}/.parity/{arg}{ext}",
   globalSetup: "./e2e/global-setup.ts",
   // threshold 0.1 (default 0.2) so small colour and token shifts show up; the ratio budget is the default; shoot() tightens it for viewport shots.
+  // Example prices follow the visitor's time zone (Rates.tsx): pin Cairo so a UTC runner does not convert them to USD.
+  use: { timezoneId: "Africa/Cairo" },
   expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.02, threshold: 0.1 } },
   projects: [
     { name: "prelaunch", testIgnore: [/\.launch\.spec\.ts$/, /visual/, ...noParity], use: { baseURL: baseFor(PRELAUNCH), storageState } },

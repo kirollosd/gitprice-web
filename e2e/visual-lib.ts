@@ -50,7 +50,10 @@ async function settleLazy(page: Page) {
     window.scrollTo(0, 0);
   });
   // DemoVideo sets the film's poster once it has been near the viewport; the scroll above must have reached it.
+  // The sweep can still skip it on a slow runner (the observer reports after the film has scrolled past), so go to the film itself.
+  await page.evaluate(() => document.getElementById("fframe")?.scrollIntoView({ block: "center", behavior: "instant" }));
   await page.waitForFunction(() => { const f = document.getElementById("fframe"); return !f || !!f.style.getPropertyValue("--pd"); });
+  await page.evaluate(() => window.scrollTo(0, 0));
   // Posters are CSS backgrounds set once the film is near (DemoVideo); wait until every background and <img> has decoded.
   await page.evaluate(async () => {
     const urls = new Set<string>();
