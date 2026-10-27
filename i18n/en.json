@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@7f7ade03",
+  "_source": "gitprice@ad7b1ab1",
   "web": {
     "component": {
       "webNav": {
@@ -967,6 +967,7 @@
         "done": "You're on the list. One email when we launch.",
         "joined": "You're on the list"
       },
+      "beta": "Beta",
       "hero": {
         "eyebrow": "Chrome extension · compares prices while you shop",
         "headline": "See where it costs less, before you buy.",

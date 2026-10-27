@@ -62,8 +62,8 @@ jobs:
 
       - name: Visual baselines (new site)
         # Linux Chromium baselines from `npm run visual:update` (Playwright docker image, same version as package.json).
-        # Non-blocking: the preview's env (sellers nav flag, Beta key, live rates) can differ from the local builds the baselines
-        # come from; promote to blocking once a few previews match. Mismatch images land in the preview-reports artifact.
+        # Advisory only: the blocking check is the "visual" job in ci.yml (same baselines, local builds, pinned image). A preview's
+        # env (sellers nav flag, live rates) can differ from those builds, so a red here is a hint, not a verdict. Images: preview-reports.
         continue-on-error: true
         env:
           PLAYWRIGHT_BASE_URL: ${{ github.event.deployment_status.target_url }}

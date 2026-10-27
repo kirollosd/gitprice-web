@@ -1,10 +1,13 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
 // Visual tests of the new site (GP-406): Playwright toHaveScreenshot against Linux Chromium baselines in e2e/visual-snapshots.
-// Regenerate with `npm run visual:update` (needs docker) or the "Update visual baselines" workflow; never on macOS.
+// Regenerate with `npm run visual:update` (needs docker); never on macOS.
 export const SIZES = { 1440: { width: 1440, height: 900 }, 390: { width: 390, height: 844 } } as const;
 export type Width = keyof typeof SIZES;
 export const THEMES = ["light", "dark"] as const;
+
+/** Rates.tsx picks the display currency from the time zone and navigator.language; pin both so prices never depend on the host (Cairo: EGP). */
+export const PINNED = { timezoneId: "Africa/Cairo", locale: "en-US" } as const;
 
 /** Regions that change between runs: demo video frames, converted (live-rate) prices, the receipt's current month. */
 const volatile = (page: Page): Locator[] => [page.locator("video"), page.locator("[data-egp], [data-cur]"), page.locator("#rmonth")];

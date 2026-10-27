@@ -10,9 +10,7 @@ vi.mock("next/link", () => ({
 
 afterEach(() => { cleanup(); vi.doUnmock("../lib/env"); vi.resetModules(); });
 
-// the key arrives with the next sync; until then t() has nothing and the tag shows the raw key (what production returns)
-const KEY = "web.landing.beta";
-const label = (l: "en" | "ar") => { try { return t(l, KEY); } catch { return KEY; } };
+const label = (l: "en" | "ar") => t(l, "web.landing.beta");
 const tags = () => [...document.querySelectorAll<HTMLElement>("[data-beta]")];
 const near = (el: Element | null, sel: string) => !!el && !!el.parentElement?.querySelector(sel);
 
@@ -28,6 +26,7 @@ describe.each([[false], [true]])("Beta tag (launch=%s)", (launch) => {
   for (const locale of ["en", "ar"] as const) {
     it(`${locale}: sits by the hero CTA and the dock CTA, and in the footer`, async () => {
       await home(launch, locale);
+      expect(label(locale)).toBe(locale === "en" ? "Beta" : "بيتا");
       expect(tags().map((b) => b.textContent)).toEqual([label(locale), label(locale), label(locale)]);
       const [hero, dock, foot] = tags();
       expect(near(hero, '[data-gp-placement="hero"]')).toBe(true);

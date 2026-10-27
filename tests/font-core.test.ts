@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import ar from "../i18n/ar.json";
@@ -32,5 +32,24 @@ describe("core font subsets cover the copy", () => {
   it("every Latin character in the copy is in the Latin core range", () => {
     const core = rangeOf("outfit-latin-core-400-normal");
     expect(chars.filter((c) => fullLatin(c) && !core(c) && c > 0x1f && c !== 0x7f && !(c >= 0x2066 && c <= 0x2069)).map((c) => c.toString(16))).toEqual([]);
+  });
+});
+
+// The browser takes a character in a core file's unicode-range from that file and never falls back to the full one, so the
+// core file must really contain every glyph its range claims that the full file has. Read from the woff2 cmap, not the CSS.
+import { cmapOf } from "./woff2-cmap";
+const dir = join(__dirname, "../public/fonts");
+const weights = (family: string, script: string) =>
+  readdirSync(dir).filter((f) => f.startsWith(`${family}-${script}-core-`)).map((f) => [f, f.replace("-core-", "-")] as const);
+
+describe("core font files hold every glyph their unicode-range claims", () => {
+  const cases = [...weights("alexandria", "arabic"), ...weights("alexandria", "latin"), ...weights("outfit", "latin"), ...weights("jetbrains-mono", "latin")];
+  it("finds the core files", () => expect(cases.length).toBe(12));
+  it.each(cases)("%s covers the full file within its range", (core, full) => {
+    const inRange = rangeOf(core.replace(".woff2", ""));
+    const have = cmapOf(join(dir, core));
+    expect(have.has(core.includes("arabic") ? 0x627 : 0x41), "cmap parsed").toBe(true);
+    const missing = [...cmapOf(join(dir, full))].filter((c) => inRange(c) && !have.has(c));
+    expect(missing.map((c) => c.toString(16))).toEqual([]);
   });
 });

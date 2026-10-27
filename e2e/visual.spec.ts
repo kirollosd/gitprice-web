@@ -1,12 +1,12 @@
 import { expect, test } from "./fixtures";
 import { waitlistReply, seedCheckout, seedReset } from "./parity-lib";
-import { prepare, shoot, SIZES, THEMES, type Width } from "./visual-lib";
+import { PINNED, prepare, shoot, SIZES, THEMES, type Width } from "./visual-lib";
 import type { Page } from "@playwright/test";
 import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 
 // Prelaunch build (:3000, or the preview when its mode is prelaunch). Launch states: visual.launch.spec.ts.
-test.use({ reducedMotion: "reduce" });
+test.use({ reducedMotion: "reduce", ...PINNED });
 
 const PAGES = [["home", "/"], ["home-ar", "/ar"], ["sellers", "/sellers"], ["privacy", "/privacy"]] as const;
 const WIDTHS = Object.keys(SIZES).map(Number) as Width[];

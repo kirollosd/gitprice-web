@@ -1,9 +1,9 @@
 import { test } from "./fixtures";
-import { prepare, shoot, SIZES, THEMES, type Width } from "./visual-lib";
+import { PINNED, prepare, shoot, SIZES, THEMES, type Width } from "./visual-lib";
 import { expect } from "@playwright/test";
 
 // Launch build (:3001, or the preview when its mode is launch): Add to Chrome only (phase 1), Beta tag, no app badges.
-test.use({ reducedMotion: "reduce" });
+test.use({ reducedMotion: "reduce", ...PINNED });
 
 const PAGES = [["home", "/"], ["home-ar", "/ar"], ["sellers", "/sellers"]] as const;
 
