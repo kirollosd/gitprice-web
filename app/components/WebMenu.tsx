@@ -55,7 +55,7 @@ export default function WebMenu({ locale }: { locale: Locale }) {
     const onDesktop = () => desktop?.matches && setOpen(false);
     desktop?.addEventListener("change", onDesktop);
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") return close();
+      if (e.key === "Escape") { e.preventDefault(); return close(); } // capture phase below: the dock sees the press as handled
       if (e.key !== "Tab") return;
       // Keep Tab inside the button + overlay links (smaller than inerting the page behind).
       const items = [button.current!, ...overlay.current!.querySelectorAll<HTMLElement>("a, button")];
@@ -63,11 +63,11 @@ export default function WebMenu({ locale }: { locale: Locale }) {
       e.preventDefault();
       items[(i + (e.shiftKey ? -1 : 1) + items.length) % items.length].focus();
     };
-    document.addEventListener("keydown", onKey);
+    document.addEventListener("keydown", onKey, true);
     return () => {
       document.body.style.overflow = prevOverflow;
       desktop?.removeEventListener("change", onDesktop);
-      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("keydown", onKey, true);
     };
   }, [open]);
 

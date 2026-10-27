@@ -151,10 +151,10 @@ export default function Dock({ locale }: { locale: Locale }) {
   useEffect(() => {
     if (isOpen) ref.current?.querySelector<HTMLInputElement>('input[type="email"]')?.focus({ preventScroll: true });
   }, [isOpen]);
-  // Esc closes the open form wherever focus is, and hands focus back to the opener
+  // Esc closes the open form wherever focus is, and hands focus back to the opener; a press another popup (menu sheet, language menu) already used is left alone
   useEffect(() => {
     if (!isOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape" && !e.defaultPrevented) close(); };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [isOpen, close]);

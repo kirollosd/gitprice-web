@@ -91,6 +91,16 @@ describe("Dock", () => {
     expect(dock().getAttribute("role")).toBeNull();
   });
 
+  it("an Escape another popup already handled does not also close the form", async () => {
+    await page();
+    act(() => { fireEvent.click(heroJoin()); });
+    const stop = (e: Event) => e.preventDefault();
+    document.addEventListener("keydown", stop, true);
+    act(() => { fireEvent.keyDown(document.body, { key: "Escape" }); });
+    document.removeEventListener("keydown", stop, true);
+    expect(dock().querySelector('input[type="email"]')).toBeTruthy();
+  });
+
   it("after joining, pressing a Join button moves focus to the announced confirmation instead of doing nothing", async () => {
     await page();
     vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ data: { status: "created" } }), { status: 201, headers: { "content-type": "application/json" } })));
