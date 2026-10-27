@@ -54,3 +54,22 @@ describe("phone text floor", () => {
     expect(decls(r, /^font(-size)?$/)[0].value).toBe("11px");
   });
 });
+
+describe("Arabic type parity with the mock", () => {
+  // the mock excludes only the .dg/.digits/.word element itself from the no-tracking rule, so the cells' children read normal
+  it("the no-tracking rule exempts the keep-ls element only, not its subtree", () => {
+    expect(css).toMatch(/\*:not\(\[data-keep-ls\]\) \{ letter-spacing: normal !important/);
+    expect(css).not.toMatch(/:not\(\[data-keep-ls\] \*\)/);
+  });
+  it("the Arabic button line-height has zero specificity so chip `font:` shorthands reset it like the mock", () => {
+    expect(css).toMatch(/:where\(:global\(html\[lang="ar"\]\) \.canvas button\) \{ line-height: 1\.25; \}/);
+  });
+  it("the footer word beats .mono's weight", () => {
+    expect(readFileSync("app/landing/Foot.module.css", "utf8")).toMatch(/^\.foot \.word \{[^}]*font-weight: 300/m);
+  });
+  it("the phone header Beta tag renders at 12px after the landing zoom", () => {
+    const nav = readFileSync("app/components/WebNav.module.css", "utf8");
+    expect(nav).not.toMatch(/\.navBeta \{[^}]*font-size: 10px/);
+    expect(nav).toMatch(/\.navBeta \{[^}]*font-size: max\(12px, calc\(12px \/ var\(--z, 1\)\)\)/);
+  });
+});

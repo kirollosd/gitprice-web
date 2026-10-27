@@ -17,7 +17,7 @@
 /* 44px hit areas without a taller look */
 .legal a::after, .legal button::after { content: ""; position: absolute; inset-block-start: 50%; block-size: 44px; translate: 0 -50%; inset-inline: -4px; }
 .legal [data-beta] { text-decoration: none; }
-.word { position: absolute; inset-inline-start: 10px; bottom: -150px; font-weight: 300; font-size: 520px; letter-spacing: -.07em; line-height: .8; color: var(--gp-web-accd); white-space: nowrap; will-change: transform; }
+.foot .word { position: absolute; inset-inline-start: 10px; bottom: -150px; font-weight: 300; font-size: 520px; letter-spacing: -.07em; line-height: .8; color: var(--gp-web-accd); white-space: nowrap; will-change: transform; }
 :global(html[dir="rtl"]) .word { direction: ltr; }
 
 /* phone canvas: the blocks stack in flow, so longer copy or larger text pushes the next block down instead of overlapping or clipping */

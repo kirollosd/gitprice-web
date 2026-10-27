@@ -37,9 +37,9 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
         <div key={`digits:${P.id}:${from}:${to}`} className={`${s.digits} ${b.mono}`} id="digits" aria-hidden="true" data-keep-ls="" data-from={from} data-to={to}>
           {[...from].map((c, i) =>
             isFixed(c) ? (
-              <span key={i} className={`${s.dg} ${s.dot}`}>{c}</span>
+              <span key={i} className={`${s.dg} ${s.dot}`} data-keep-ls="">{c}</span>
             ) : (
-              <span key={i} className={s.dg}>
+              <span key={i} className={s.dg} data-keep-ls="">
                 <i style={{ transform: `translateY(-${c}em)` }}>
                   {[..."0123456789", " "].map((d) => <span key={d}>{d}</span>)}
                 </i>
