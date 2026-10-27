@@ -12,8 +12,8 @@ const preload = layout.match(/const PRELOAD[^=]*=\s*\{([\s\S]*?)\n\};/)?.[1] ?? 
 const fonts = [...preload.matchAll(/"([a-z0-9-]+-normal)"/g)].map((m) => m[1]);
 
 describe("self-hosted assets", () => {
-  it("preloads Outfit/Alexandria/JetBrains Mono only", () => {
-    expect(fonts.length).toBe(6);
+  it("preloads Outfit/Alexandria only", () => {
+    expect(fonts.length).toBe(4);
     expect(fonts.filter((f) => /fustat|noto/.test(f))).toEqual([]);
   });
   it("every PRELOAD font exists in public/fonts", () => {
