@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@5539d527",
+  "_source": "gitprice@07d0da81",
   "web": {
     "component": {
       "webNav": {
@@ -192,7 +192,7 @@
       "webCookieNotice": {
         "default": {
           "title": "Analytics cookies",
-          "body": "This site uses analytics cookies from Google Analytics and Heap to understand how it's used. No ads, and we never sell your data.",
+          "body": "This site uses analytics cookies to understand how it's used. No ads, and we never sell your data.",
           "label": {
             "privacy": "Read the privacy policy"
           },
@@ -665,27 +665,16 @@
       },
       "noPrices": {
         "title": "GitPrice is free",
-        "subtitle": "Compare prices and set alerts at no cost. Pro comes later, for people who track more products.",
+        "subtitle": "GitPrice is free, and stays free forever. Pro comes later.",
         "plan": {
           "free": {
             "plan": "Free",
-            "period": "Free forever. No card needed.",
-            "feature": {
-              "1": "3 price alerts",
-              "2": "Compare prices across stores",
-              "3": "Your savings history"
-            },
+            "period": "Free forever",
             "label": "Get started"
           },
           "pro": {
             "plan": "Pro",
             "price": "Coming later",
-            "period": "No price yet",
-            "feature": {
-              "1": "100 price alerts",
-              "2": "Faster price checks",
-              "3": "Everything in Free"
-            },
             "label": "Notify me"
           }
         }
