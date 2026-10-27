@@ -17,6 +17,7 @@ describe("Pricing (no-prices board)", () => {
     const { container } = render(await PricingPage({ params: Promise.resolve({ locale: "en" }) }));
     const [free] = container.querySelectorAll("article");
     expect(free.querySelector("p")!.textContent).toBe("0");
+    expect(container.querySelector("article ul")).toBeNull(); // no feature lists or limits
     const row = container.querySelector("aside")!;
     expect(within(row).getByRole("heading").textContent).toBe(S.title);
     expect(within(row).getByRole("link", { name: S.cta.label }).getAttribute("href")).toBe("/sellers");

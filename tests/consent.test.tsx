@@ -1,6 +1,7 @@
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import ar from "../i18n/ar.json";
 import en from "../i18n/en.json";
 import { ANALYTICS_COOKIE_PREFIXES, consentCookie, cookieExpiries, readConsent } from "../lib/consent";
 
@@ -206,13 +207,12 @@ describe("setConsent and the dataLayer", () => {
   });
 });
 
-describe("cookie notice names Google Analytics", () => {
-  it.each([
-    ["en", "Google Analytics and Heap"],
-    ["ar", "Google Analytics وHeap"],
-  ] as const)("%s body mentions GA and Heap", async (locale, phrase) => {
+describe("cookie notice copy", () => {
+  it.each(["en", "ar"] as const)("%s body renders the synced text and names no vendor", async (locale) => {
     const { default: CookieNotice } = await import("../app/components/CookieNotice");
     const { container } = render(<CookieNotice locale={locale} />);
-    expect(container.textContent).toContain(phrase);
+    const body = (locale === "en" ? en : ar).web.component.webCookieNotice.default.body;
+    expect(container.textContent).toContain(body);
+    expect(container.textContent).not.toMatch(/Google|Heap/);
   });
 });

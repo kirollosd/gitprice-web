@@ -27,18 +27,6 @@ export default async function PricingPage({ params }: Props) {
   ) : (
     <JoinCta label={label} className={primary ? styles.btnPrimary : styles.btn} placement="pricing" />
   );
-  const features = (plan: "free" | "pro") => (
-    <ul className={styles.features}>
-      {[1, 2, 3].map((n) => (
-        <li key={n}>
-          <svg aria-hidden="true" className={styles.check} viewBox="0 0 20 20" width="20" height="20" fill="none">
-            <path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          {t(locale, `${P}plan.${plan}.feature.${n}`)}
-        </li>
-      ))}
-    </ul>
-  );
   return (
     <section className={`container ${styles.page} ${styles.center}`}>
       <h1 className={styles.h1}>{t(locale, P + "title")}</h1>
@@ -48,14 +36,11 @@ export default async function PricingPage({ params }: Props) {
           <h2 className={styles.h2}>{t(locale, P + "plan.free.plan")}</h2>
           <p className={styles.price}><bdi dir="ltr">{FREE_PRICE}</bdi></p>
           <p className={styles.period}>{t(locale, P + "plan.free.period")}</p>
-          {features("free")}
           {cta(t(locale, P + "plan.free.label"), true)}
         </article>
         <article className={styles.card}>
           <h2 className={styles.h2}>{t(locale, P + "plan.pro.plan")}</h2>
           <p className={styles.price}>{t(locale, P + "plan.pro.price")}</p>
-          <p className={styles.period}>{t(locale, P + "plan.pro.period")}</p>
-          {features("pro")}
           {env.launch ? <StoreBadges locale={locale} placement="bottom" /> : cta(t(locale, P + "plan.pro.label"), false)}
         </article>
       </div>
