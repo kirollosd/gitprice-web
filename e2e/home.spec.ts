@@ -196,14 +196,14 @@ test.describe("Home prelaunch", () => {
     }
   });
 
-  test("the dock stays hidden while #foot is in view and shows at the film", async ({ page }) => {
+  test("the dock shows at the film and stays over #foot (the preview's dockIn)", async ({ page }) => {
     await page.goto("/");
     const dock = page.locator("#dock");
     const shown = /(^|\s)in(\s|$)/;
     await page.evaluate(() => document.getElementById("film")!.scrollIntoView());
     await expect(dock).toHaveClass(shown);
     await page.evaluate(() => document.getElementById("foot")!.scrollIntoView());
-    await expect(dock).not.toHaveClass(shown);
+    await expect(dock).toHaveClass(shown);
   });
 });
 
