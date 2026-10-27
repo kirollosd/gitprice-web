@@ -63,6 +63,8 @@ export function createScenes(reduce: boolean, wake: () => void) {
   let c = canvas();
   let M: Metrics | null = null;
   let tallyS = NaN;
+  /** The intro (kickHero) has started: a product swap before that (the one picked at hydration) must not start the hero early. */
+  let kicked = false;
   // each swapped element's first (server-rendered) copy; a re-rendered element starts over
   const html0 = new WeakMap<Element, string>();
   const shown = new WeakMap<Element, string>();
@@ -261,7 +263,7 @@ export function createScenes(reduce: boolean, wake: () => void) {
       return Object.values(PLAY).some((s) => s.d !== s.tgt);
     },
     /** The hero plays itself shortly after load. */
-    kickHero() { const s = PLAY.num; if (s && s.tgt < 1) s.tgt = 1; },
+    kickHero() { kicked = true; const s = PLAY.num; if (s && s.tgt < 1) s.tgt = 1; },
     /** Fonts, canvas or content changed: re-measure the board cells and the receipt on the next frame. */
     measure() { M = null; },
     /** A new product is on the page: re-measure, recount the tally and replay the hero from the struck price. */
@@ -269,7 +271,7 @@ export function createScenes(reduce: boolean, wake: () => void) {
       M = null;
       tallyS = NaN;
       const s = PLAY.num;
-      if (s && !reduce) { s.d = 0; s.tgt = 1; }
+      if (s && !reduce) { s.d = 0; if (kicked) s.tgt = 1; }
     },
     stop() { Object.values(idleT).forEach((t) => clearTimeout(t)); unsub(); },
   };

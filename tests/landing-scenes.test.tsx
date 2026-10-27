@@ -143,4 +143,15 @@ describe("ScrollScenes", () => {
     act(() => { vi.advanceTimersByTime(6000); });
     expect(cap.innerHTML).toBe(cap.dataset.done);
   });
+
+  it("the product picked at hydration does not start the hero early: the intro still waits for its 800ms kick", async () => {
+    stubMotion(false);
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout", "requestAnimationFrame", "cancelAnimationFrame", "performance"] });
+    const { container } = await mount("en", ["Hero"]);
+    const strike = container.querySelector("#strike") as HTMLElement;
+    act(() => { window.dispatchEvent(new Event("gp:product")); vi.advanceTimersByTime(700); });
+    expect(strike.style.transform).toBe("scaleX(0)");
+    act(() => { vi.advanceTimersByTime(1500); });
+    expect(strike.style.transform).not.toBe("scaleX(0)");
+  });
 });
