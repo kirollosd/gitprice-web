@@ -48,10 +48,9 @@ export const viewport: Viewport = {
   ],
 };
 
-const FUSTAT = ["fustat-latin-400-normal", "fustat-latin-600-normal", "fustat-latin-700-normal"];
 const PRELOAD: Record<Locale, string[]> = {
-  en: FUSTAT,
-  ar: ["fustat-latin-400-normal", "noto-sans-arabic-arabic-400-normal", "noto-sans-arabic-arabic-600-normal", "noto-sans-arabic-arabic-700-normal"],
+  en: ["outfit-latin-400-normal", "outfit-latin-800-normal", "jetbrains-mono-latin-400-normal"],
+  ar: ["alexandria-arabic-400-normal", "alexandria-arabic-700-normal", "jetbrains-mono-latin-400-normal"],
 };
 
 export const dynamicParams = false;
