@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { env } from "../../lib/env";
 import { t, type Locale } from "../../lib/i18n";
-import { localeFromPath } from "../../lib/locale";
+import { hasMinimalNav, localeFromPath } from "../../lib/locale";
 import BetaTag from "../components/BetaTag";
 import StoreBadges from "../components/StoreBadges";
 import WaitlistForm from "../components/WaitlistForm";
@@ -108,6 +108,12 @@ function read(): { msg: Msg; from: number; best: number } {
  * its form is open; on every other page it is simply there. Over a dark band it flips light (`dk`), and flips the header too.
  */
 export default function Dock({ locale }: { locale: Locale }) {
+  // hosted pages (reset password, checkout, welcome) keep the minimal shell: nothing floats over them
+  const pathname = usePathname();
+  return hasMinimalNav(localeFromPath(pathname ?? "/").rest) ? null : <DockBar locale={locale} />;
+}
+
+function DockBar({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const home = localeFromPath(pathname ?? "/").rest === "/";
   const { isOpen, joined, open, close, join } = useContext(JoinCtx);

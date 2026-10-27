@@ -193,4 +193,13 @@ describe("Dock", () => {
     expect(document.activeElement).toBe(dock().querySelector('input[type="email"]'));
     vi.doUnmock("next/navigation");
   });
+
+  it.each(["/reset-password", "/checkout", "/welcome", "/ar/welcome"])("hosted page %s has no dock", async (path) => {
+    vi.doMock("next/navigation", () => ({ useRouter: () => ({ replace: vi.fn(), push: vi.fn() }), useSearchParams: () => new URLSearchParams(), usePathname: () => path }));
+    mockEnv(false);
+    const { default: Dock, JoinProvider } = await import("../app/landing/Dock");
+    render(<JoinProvider><main id="main" /><Dock locale="en" /></JoinProvider>);
+    expect(document.getElementById("dgo")).toBeNull();
+    vi.doUnmock("next/navigation");
+  });
 });

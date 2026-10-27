@@ -99,7 +99,7 @@ export default async function LocaleLayout({
             <CookieNotice locale={l} />
           </FloatingStack>
           <main id="main" tabIndex={-1}>{children}</main>
-          {/* after <main> in tab order (ship critique); renders on home only */}
+          {/* after <main> in tab order (ship critique); renders on every page except the hosted ones (Dock decides) */}
           <Dock locale={l} />
         </JoinProvider>
         <HideOnHome><WebFooter locale={l} /></HideOnHome>
