@@ -87,10 +87,10 @@ describe("DemoVideo", () => {
   });
 });
 
-describe("WebNav (site)", () => {
+describe("WebNav (landing)", () => {
   it("has the board wordmark, the five landing links, the language menu, the theme toggle and the join CTA", async () => {
     const { default: WebNav } = await import("../app/components/WebNav");
-    render(<WebNav locale="en" variant="site" />);
+    render(<WebNav locale="en" variant="landing" />);
     const N = en.web.landing.nav;
     const nav = screen.getByRole("navigation");
     const links = [...nav.querySelectorAll("a")].map((a) => [a.textContent, a.getAttribute("href")]);
@@ -100,6 +100,27 @@ describe("WebNav (site)", () => {
     expect(screen.getByRole("button", { name: en.web.landing.theme.toDark })).toBeTruthy();
     const cta = document.querySelector('header [data-join][data-gp-placement="nav"]');
     expect(cta?.textContent).toBe(N.join);
+  });
+});
+
+describe("WebNav (site, non-home pages)", () => {
+  it("keeps the phone menu button and no landing wordmark/dock CTA", async () => {
+    window.matchMedia = ((q: string) => ({ matches: false, media: q, addEventListener() {}, removeEventListener() {} })) as unknown as typeof window.matchMedia;
+    const { default: WebNav } = await import("../app/components/WebNav");
+    render(<WebNav locale="en" variant="site" />);
+    expect(screen.getByRole("button", { name: "Open menu" })).toBeTruthy();
+    expect(document.querySelector("[data-join]")).toBeNull();
+  });
+
+  it("is picked by default off the home route", async () => {
+    window.matchMedia = ((q: string) => ({ matches: false, media: q, addEventListener() {}, removeEventListener() {} })) as unknown as typeof window.matchMedia;
+    vi.doMock("next/navigation", () => ({ usePathname: () => "/sellers", useRouter: () => ({ push: vi.fn(), replace: vi.fn() }), useSearchParams: () => new URLSearchParams() }));
+    vi.resetModules();
+    const { default: WebNav } = await import("../app/components/WebNav");
+    render(<WebNav locale="en" />);
+    expect(screen.getByRole("button", { name: "Open menu" })).toBeTruthy();
+    vi.doUnmock("next/navigation");
+    vi.resetModules();
   });
 });
 

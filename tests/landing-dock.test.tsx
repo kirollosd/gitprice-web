@@ -19,10 +19,11 @@ const mockEnv = (launch: boolean) =>
     env: { launch, apiBaseUrl: "http://localhost:8080", chromeStoreUrl: CHROME, appStoreUrl: "https://a.test", playStoreUrl: "https://p.test" },
   }));
 
-beforeEach(() => stubMotion(true));
+beforeEach(() => { stubMotion(true); vi.useFakeTimers({ toFake: ["requestAnimationFrame", "cancelAnimationFrame"] }); });
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
+  vi.useRealTimers();
   vi.doUnmock("../lib/env");
   vi.resetModules();
   delete document.documentElement.dataset.gpJoin;
@@ -100,7 +101,35 @@ describe("Dock", () => {
     expect(text()).toContain("412.00");
     const film = document.getElementById("film")!;
     film.getBoundingClientRect = () => ({ top: 10, bottom: 900 } as DOMRect);
-    act(() => { dispatchEvent(new Event("scroll")); });
+    act(() => { dispatchEvent(new Event("scroll")); vi.advanceTimersToNextFrame(); });
     expect(text()).toBe(en.web.landing.dock.film);
+  });
+
+  it("coalesces a burst of scroll events into one layout pass per frame", async () => {
+    await page();
+    const spy = vi.spyOn(document.getElementById("film")!, "getBoundingClientRect");
+    const frame = (events: number) => {
+      spy.mockClear();
+      act(() => { for (let i = 0; i < events; i++) dispatchEvent(new Event("scroll")); });
+      expect(spy).not.toHaveBeenCalled();
+      act(() => { vi.advanceTimersToNextFrame(); });
+      return spy.mock.calls.length;
+    };
+    const one = frame(1);
+    expect(one).toBeGreaterThan(0);
+    expect(frame(20)).toBe(one);
+  });
+
+  it("still hides at #foot after a product pick remounts it", async () => {
+    await page();
+    const old = document.getElementById("foot")!;
+    const cta = heroJoin();
+    act(() => intersect(cta, false));
+    expect(dock().classList.contains("in")).toBe(true);
+    const fresh = Object.assign(document.createElement("section"), { id: "foot" });
+    old.replaceWith(fresh);
+    act(() => { dispatchEvent(new Event("gp:product")); });
+    act(() => intersect(fresh, true));
+    expect(dock().classList.contains("in")).toBe(false);
   });
 });

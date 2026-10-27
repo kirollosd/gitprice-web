@@ -71,4 +71,27 @@ describe("ProductPicker", () => {
     act(() => { fireEvent.click(chip("charger")); });
     expect(replace).not.toHaveBeenCalled();
   });
+
+  it("keeps the hash on the written URL", async () => {
+    history.replaceState(null, "", "/#rail");
+    await home();
+    act(() => { fireEvent.click(chip("iphone")); });
+    history.replaceState(null, "", "/");
+    expect(replace.mock.calls[0][0]).toMatch(/\?p=iphone#rail$/);
+  });
+
+  it("ignores a late URL commit of an earlier pick, and follows the URL once the last pick lands", async () => {
+    const { default: HomeContent } = await import("../app/components/HomeSections");
+    const { rerender } = render(<HomeContent locale="en" />);
+    act(() => { fireEvent.click(chip("iphone")); });
+    act(() => { fireEvent.click(chip("cerave")); });
+    query = "p=iphone"; // the first replace commits after the second pick
+    rerender(<HomeContent locale="en" />);
+    expect(chip("cerave").getAttribute("aria-pressed")).toBe("true");
+    query = "p=cerave";
+    rerender(<HomeContent locale="en" />);
+    query = "p=pampers"; // later, an outside navigation
+    rerender(<HomeContent locale="en" />);
+    expect(chip("pampers").getAttribute("aria-pressed")).toBe("true");
+  });
 });

@@ -16,7 +16,7 @@ export const RATE_URLS = [
 const RATE_KEY = "gp-rates";
 const DAY = 864e5;
 /** A fetched or cached rate counts only within this factor of the built-in one. */
-const SANE = 5;
+const SANE = 2;
 /** EGP → currency, built in 2026-10-26. */
 export const RATE: Readonly<Record<string, number>> = {
   EGP: 1, AED: 0.0668, SAR: 0.0682, KWD: 0.00565, QAR: 0.0662, BHD: 0.00684, OMR: 0.007, JOD: 0.0129,
@@ -32,8 +32,8 @@ const REGION_CUR: Record<string, string> = {
 };
 
 export function pickCurrency(search: string, timeZone: string, language: string): string {
-  const q = new URLSearchParams(search).get("cur");
-  if (q && RATE[q]) return q;
+  const q = new URLSearchParams(search).get("cur")?.toUpperCase();
+  if (q && Object.hasOwn(RATE, q)) return q;
   const city = timeZone.split("/").pop() ?? "";
   if (TZ_CUR[city]) return TZ_CUR[city];
   if (timeZone.startsWith("Europe/")) return "EUR";

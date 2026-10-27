@@ -30,15 +30,23 @@ export default function Wordmark({ locale, href, className }: { locale: Locale; 
     const svg = ref.current;
     if (!svg || typeof matchMedia !== "function" || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     playBoard(svg);
-    const foot = document.getElementById("foot");
-    if (!foot || typeof IntersectionObserver !== "function") return;
+    if (typeof IntersectionObserver !== "function") return;
     let seen = false;
-    const io = new IntersectionObserver((es) => es.forEach((e) => {
-      if (e.isIntersecting && !seen) playBoard(svg);
-      seen = e.isIntersecting;
-    }), { threshold: 0.3 });
-    io.observe(foot);
-    return () => io.disconnect();
+    let io: IntersectionObserver | undefined;
+    // #foot is rebuilt when the landing's product changes, so follow the new node
+    const watch = () => {
+      io?.disconnect();
+      const foot = document.getElementById("foot");
+      if (!foot) return;
+      io = new IntersectionObserver((es) => es.forEach((e) => {
+        if (e.isIntersecting && !seen) playBoard(svg);
+        seen = e.isIntersecting;
+      }), { threshold: 0.3 });
+      io.observe(foot);
+    };
+    watch();
+    addEventListener("gp:product", watch);
+    return () => { io?.disconnect(); removeEventListener("gp:product", watch); };
   }, []);
 
   return (

@@ -21,6 +21,9 @@ const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayout
 export default function RankSort({ rows, locale }: { rows: RankRow[]; locale: Locale }) {
   const [gp, setGp] = useState(false);
   const rank = useRef<HTMLDivElement>(null);
+  const stopAuto = useRef<() => void>(() => {});
+  /** The visitor's own choice wins over the scroll-in flip, pending or not yet armed. */
+  const choose = (v: boolean) => { stopAuto.current(); setGp(v); };
 
   useIsoLayoutEffect(() => {
     const box = rank.current;
@@ -62,14 +65,15 @@ export default function RankSort({ rows, locale }: { rows: RankRow[]; locale: Lo
       timer = setTimeout(() => setGp(true), reduce ? 0 : FLIP_MS);
     }, { threshold: 0.6 });
     io.observe(box);
-    return () => { io.disconnect(); clearTimeout(timer); };
+    stopAuto.current = () => { io.disconnect(); clearTimeout(timer); };
+    return stopAuto.current;
   }, []);
 
   return (
     <div className={s.rank}>
       <div className={s.tg}>
-        <button type="button" id="tgAll" className={gp ? undefined : "on"} aria-pressed={!gp} onClick={() => setGp(false)}>{t(locale, K + "byPrice")}</button>
-        <button type="button" id="tgGp" className={gp ? "on" : undefined} aria-pressed={gp} onClick={() => setGp(true)}>{t(locale, K + "byGitPrice")}</button>
+        <button type="button" id="tgAll" className={gp ? undefined : "on"} aria-pressed={!gp} onClick={() => choose(false)}>{t(locale, K + "byPrice")}</button>
+        <button type="button" id="tgGp" className={gp ? "on" : undefined} aria-pressed={gp} onClick={() => choose(true)}>{t(locale, K + "byGitPrice")}</button>
       </div>
       <div id="rank" ref={rank}>
         {rows.map((r, i) => (

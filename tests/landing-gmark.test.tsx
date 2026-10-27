@@ -124,6 +124,21 @@ describe("Wordmark", () => {
     foot.remove();
   });
 
+  it("replays at the new #foot after a product pick remounts it", async () => {
+    stubMotion(false);
+    const foot = document.body.appendChild(Object.assign(document.createElement("section"), { id: "foot" }));
+    const { default: Wordmark } = await import("../app/landing/Wordmark");
+    const { container } = render(<Wordmark locale="en" />);
+    const svg = container.querySelector("svg")!;
+    const fresh = Object.assign(document.createElement("section"), { id: "foot" });
+    foot.replaceWith(fresh);
+    act(() => { dispatchEvent(new Event("gp:product")); });
+    svg.dataset.board = "idle";
+    act(() => intersect(fresh));
+    expect(svg.dataset.board).toBe("go");
+    fresh.remove();
+  });
+
   it("playBoard applies '' then 'go' synchronously with a reflow between", async () => {
     const { playBoard } = await import("../app/landing/Wordmark");
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");

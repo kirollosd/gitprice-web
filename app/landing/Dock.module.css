@@ -4,7 +4,7 @@
   --fill-d: var(--gp-web-fd); --on-fill-d: var(--gp-web-onfd); --ring: var(--gp-web-on-dock);
   /* error text: amber on the dark dock, the light-mode accent on a light one (ship critique, >= 4.5:1 both) */
   --dock-err: #E8B45E;
-  position: fixed; z-index: 30; left: 50%; bottom: 32px;
+  position: fixed; z-index: 30; left: 50%; bottom: calc(32px + var(--gp-stack-h, 0px)); /* above the cookie notice / locale suggestion (FloatingStack) */
   transform: translateX(-50%) translateY(140px);
   display: flex; align-items: center;
   background: var(--dock); color: var(--on-dock);
@@ -41,7 +41,7 @@
 .dock [data-gp-store="chrome"] { background: var(--on-dock); color: var(--dock); min-height: 44px; }
 
 /* phones */
-:global(html.lp-m) .dock { left: 12px; right: 12px; bottom: 16px; transform: translateY(140px); }
+:global(html.lp-m) .dock { left: 12px; right: 12px; bottom: calc(16px + var(--gp-stack-h, 0px)); transform: translateY(140px); }
 :global(html.lp-m) .dock:global(.in) { transform: none; }
 :global(html.lp-m) .dock:global(.join) { min-width: 0; }
 :global(html.lp-m) .eq { width: 38px; height: 38px; }

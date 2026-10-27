@@ -116,11 +116,25 @@ export default function Dock({ locale }: { locale: Locale }) {
       io.observe(el);
       return io;
     };
-    const ios = [watch(document.querySelector('#num [data-gp-placement="hero"]'), "cta"), watch(document.getElementById("foot"), "foot")];
-    ["scroll", "resize", "gp:product"].forEach((e) => addEventListener(e, update, { passive: true }));
+    const cta = watch(document.querySelector('#num [data-gp-placement="hero"]'), "cta");
+    // #foot is rebuilt with the product (keyed sections), so follow the new node
+    let foot = watch(document.getElementById("foot"), "foot");
+    // one layout pass per frame, however many scroll events arrive
+    let raf = 0;
+    const onFrame = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); };
+    const onProduct = () => {
+      foot?.disconnect();
+      foot = watch(document.getElementById("foot"), "foot");
+      onFrame();
+    };
+    ["scroll", "resize"].forEach((e) => addEventListener(e, onFrame, { passive: true }));
+    addEventListener("gp:product", onProduct);
     return () => {
-      ios.forEach((io) => io?.disconnect());
-      ["scroll", "resize", "gp:product"].forEach((e) => removeEventListener(e, update));
+      cancelAnimationFrame(raf);
+      cta?.disconnect();
+      foot?.disconnect();
+      ["scroll", "resize"].forEach((e) => removeEventListener(e, onFrame));
+      removeEventListener("gp:product", onProduct);
       document.querySelector("header")?.removeAttribute("data-dk");
     };
   }, [home]);

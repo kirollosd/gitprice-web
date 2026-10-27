@@ -88,6 +88,8 @@ describe("rates helpers", () => {
     const { pickCurrency } = await import("../app/landing/Rates");
     expect(pickCurrency("?cur=GBP", "Africa/Cairo", "en-US")).toBe("GBP");
     expect(pickCurrency("?cur=XYZ", "Africa/Cairo", "en-US")).toBe("EGP");
+    expect(pickCurrency("?cur=gbp", "Africa/Cairo", "en-US")).toBe("GBP");
+    for (const bad of ["constructor", "__proto__", "toString", "hasOwnProperty"]) expect(pickCurrency(`?cur=${bad}`, "Africa/Cairo", "en-US")).toBe("EGP");
     expect(pickCurrency("", "Asia/Riyadh", "en-US")).toBe("SAR");
     expect(pickCurrency("", "Europe/Paris", "en-US")).toBe("EUR");
     expect(pickCurrency("", "UTC", "ar-AE")).toBe("AED");
@@ -99,8 +101,9 @@ describe("rates helpers", () => {
     expect(parseRates(null)).toEqual({});
     expect(parseRates({ egp: "<img>" })).toEqual({});
     expect(parseRates({ egp: { usd: 0.0185, aed: 99, sar: "0.07", kwd: Infinity, qar: 0, gbp: { a: 1 } } })).toEqual({ USD: 0.0185 });
-    expect(parseRates({ egp: { usd: RATE.USD * 4.9 } })).toEqual({ USD: RATE.USD * 4.9 });
-    expect(parseRates({ egp: { usd: RATE.USD * 5.1 } })).toEqual({});
+    expect(parseRates({ egp: { usd: RATE.USD * 1.9 } })).toEqual({ USD: RATE.USD * 1.9 });
+    expect(parseRates({ egp: { usd: RATE.USD * 2.1 } })).toEqual({});
+    expect(parseRates({ egp: { usd: RATE.USD / 2.1 } })).toEqual({});
   });
 
   it("ignores a stale or malformed cache", async () => {

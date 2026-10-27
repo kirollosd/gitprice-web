@@ -54,6 +54,24 @@ describe("RankSort", () => {
   });
 });
 
+describe("RankSort manual choice", () => {
+  it("a manual toggle before the auto-flip cancels it", async () => {
+    vi.useFakeTimers();
+    await spot();
+    act(() => { intersect(document.getElementById("rank")!); });
+    act(() => { fireEvent.click(document.getElementById("tgAll")!); vi.runAllTimers(); });
+    expect(document.getElementById("tgAll")!.getAttribute("aria-pressed")).toBe("true");
+  });
+
+  it("a manual toggle before the ranking is in view keeps the observer from flipping later", async () => {
+    vi.useFakeTimers();
+    await spot();
+    act(() => { fireEvent.click(document.getElementById("tgAll")!); });
+    act(() => { intersect(document.getElementById("rank")!); vi.runAllTimers(); });
+    expect(document.getElementById("tgAll")!.getAttribute("aria-pressed")).toBe("true");
+  });
+});
+
 describe("Lineup", () => {
   it("guessing the exact card stamps it Same product, says Right, and stops the scroll scrub", async () => {
     vi.useFakeTimers();
