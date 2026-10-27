@@ -5,6 +5,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, ty
 import { env } from "../../lib/env";
 import { t, type Locale } from "../../lib/i18n";
 import { localeFromPath } from "../../lib/locale";
+import BetaTag from "../components/BetaTag";
 import StoreBadges from "../components/StoreBadges";
 import WaitlistForm from "../components/WaitlistForm";
 import GMark from "./GMark";
@@ -158,6 +159,7 @@ export default function Dock({ locale }: { locale: Locale }) {
     <div ref={ref} className={cls} id="dock" onKeyDown={(e) => { if (e.key === "Escape" && isOpen) close(); }}>
       <GMark className={s.eq} state="idle" label="" />
       {!isOpen && <span className={s.t} id="dt" tabIndex={joined ? -1 : undefined} aria-live={joined ? "polite" : undefined} dangerouslySetInnerHTML={{ __html: line }} />}
+      {!isOpen && <BetaTag locale={locale} />}
       {env.launch ? (
         <StoreBadges locale={locale} placement="dock" />
       ) : isOpen ? (

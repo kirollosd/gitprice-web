@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
+import BetaTag from "../components/BetaTag";
 import { JoinButton } from "./Dock";
 import { html } from "./html";
 import { splitMoney, useMoney } from "./money";
@@ -57,6 +58,7 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
           <p id="lede">{t(locale, K + "lede")}</p>
           <div className={s.hcta}>
             <JoinButton locale={locale} placement="hero" className={s.p} />
+            <BetaTag locale={locale} />
             <a href="#how">{t(locale, K + "seeHow")}</a>
           </div>
           <small>{t(locale, K + "free")}</small>

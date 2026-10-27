@@ -4,6 +4,7 @@ import { pathFor } from "../../lib/locale";
 import { CookieSettingsButton } from "./CookieNotice";
 import LanguageSwitch from "./LanguageSwitch";
 import FooterTagline from "./FooterTagline";
+import BetaTag from "./BetaTag";
 import Logo from "./Logo";
 import styles from "./WebFooter.module.css";
 
@@ -16,6 +17,7 @@ export default function WebFooter({ locale }: { locale: Locale }) {
        <div className={styles.inner}>
         <div className={styles.brand}>
           <Logo locale={locale} />
+          <BetaTag locale={locale} />
           <FooterTagline locale={locale} className={styles.tagline} />
         </div>
         <nav aria-label={t(locale, K + "label.nav")}>

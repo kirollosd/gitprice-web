@@ -56,6 +56,14 @@ const submit = (page: Page) => page.locator("#dock").getByRole("button", { name:
 test.describe("Home prelaunch", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
+  test("the Beta tag sits by the hero CTA, the dock CTA and in the footer; no pricing or app-store links", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("#num [data-beta]")).toHaveCount(1);
+    await expect(page.locator("#dock [data-beta]")).toHaveCount(1);
+    await expect(page.locator("footer [data-beta]")).toHaveCount(1);
+    await expect(page.locator('a[href*="pricing"], a[data-gp-store="app_store"], a[data-gp-store="play"]')).toHaveCount(0);
+  });
+
   test("has the nav anchors and one dock waitlist form, no Tally", async ({ page }) => {
     const tally: string[] = [];
     page.on("request", (r) => { if (r.url().includes("tally.so")) tally.push(r.url()); });

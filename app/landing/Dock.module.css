@@ -29,6 +29,7 @@
 
 .eq { flex: none; width: 46px; height: 46px; border-radius: 50%; background: var(--fill-d); color: var(--on-fill-d); display: grid; place-items: center; }
 .t { padding: 0 16px; font-size: 17px; }
+.dock > [data-beta] { margin-inline-end: 12px; }
 .t:focus { outline: none; }
 .t b { font-family: "JetBrains Mono", monospace; font-weight: 500; }
 .t :global(.save) { color: var(--dock-save); }
