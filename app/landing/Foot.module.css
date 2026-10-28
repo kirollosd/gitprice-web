@@ -11,7 +11,7 @@
 .meta { font-size: 16px; line-height: 1.6; color: var(--gp-web-on-dark-mute); }
 .legal { margin-top: 32px; font-size: max(14px, var(--fl, 0px)); color: var(--gp-web-on-dark-mute); }
 .legal p { margin: 0; }
-.legal nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; margin-top: 8px; }
+.legal nav { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 8px; }
 .legal a, .legal button { position: relative; color: inherit; font: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .legal a:hover, .legal button:hover { color: var(--gp-web-on-dark); }
 /* 44px hit areas without a taller look */

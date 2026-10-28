@@ -15,12 +15,4 @@
 @keyframes cue { 0% { transform: translateY(-3px); opacity: .4; } 60% { transform: translateY(3px); opacity: 1; } 100% { transform: translateY(3px); opacity: 0; } }
 :global(html.lp-m) .cue { bottom: 96px; }
 
-/* the rail's "Drag" cursor, desktop only */
-.dragc {
-  position: fixed; z-index: 35; width: 86px; height: 86px; border-radius: 50%; background: var(--gp-web-ink); color: var(--gp-web-ground);
-  display: grid; place-items: center; font-size: 15px; pointer-events: none; transform: translate(-50%, -50%) scale(0); transition: transform .35s var(--spring);
-}
-.dragc:global(.on) { transform: translate(-50%, -50%) scale(1); }
-:global(html.lp-m) .dragc { display: none; }
-
 @media (prefers-reduced-motion: reduce) { .cue:global(.on) svg { animation: none; } }

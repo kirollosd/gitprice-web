@@ -108,7 +108,7 @@ describe("Lineup", () => {
     const next = document.getElementById("next")!;
     act(() => { fireEvent.click(next); vi.runAllTimers(); });
     expect(document.getElementById("refname")!.textContent).toBe(products[1].name);
-    expect([...document.querySelectorAll("#dots i")].map((d) => d.classList.contains("on"))).toEqual([false, true, false]);
+    expect([...document.querySelectorAll("#dots button")].map((d) => d.classList.contains("on"))).toEqual([false, true, false]);
     expect([...document.querySelectorAll("#sus > button")].every((b) => b.classList.contains("in"))).toBe(true);
     expect(document.getElementById("verdict")!.classList.contains("on")).toBe(false);
     act(() => { fireEvent.click(next); vi.runAllTimers(); });
@@ -117,5 +117,43 @@ describe("Lineup", () => {
     act(() => { fireEvent.click(next); vi.runAllTimers(); });
     expect(document.getElementById("refname")!.textContent).toBe(products[0].name);
     expect(next.textContent).toBe(R.next);
+  });
+
+  it("the dots jump straight to a lineup", async () => {
+    vi.useFakeTimers();
+    const { products } = await import("../app/landing/products");
+    await spot();
+    const dots = () => [...document.querySelectorAll("#dots button")] as HTMLElement[];
+    expect(dots().map((d) => d.getAttribute("aria-label"))).toEqual(["Lineup 1 of 3", "Lineup 2 of 3", "Lineup 3 of 3"]);
+    act(() => { fireEvent.click(dots()[2]); vi.runAllTimers(); });
+    expect(document.getElementById("refname")!.textContent).toBe(products[2].name);
+    expect(dots().map((d) => d.getAttribute("aria-current"))).toEqual([null, null, "true"]);
+    act(() => { fireEvent.click(dots()[0]); vi.runAllTimers(); });
+    expect(document.getElementById("refname")!.textContent).toBe(products[0].name);
+  });
+
+  it("a touch swipe on the wall flips lineups; a mouse drag or a short move does not", async () => {
+    vi.useFakeTimers();
+    const { products } = await import("../app/landing/products");
+    await spot();
+    const wall = document.getElementById("sus")!.parentElement!;
+    const drag = (type: string, dx: number, dy = 0) => {
+      act(() => {
+        fireEvent.pointerDown(wall, { pointerType: type, clientX: 200, clientY: 200 });
+        fireEvent.pointerUp(wall, { pointerType: type, clientX: 200 + dx, clientY: 200 + dy });
+        vi.runAllTimers();
+      });
+    };
+    const shown = () => document.getElementById("refname")!.textContent;
+    drag("mouse", -120);
+    expect(shown()).toBe(products[0].name);
+    drag("touch", -20);
+    expect(shown()).toBe(products[0].name);
+    drag("touch", -120, 150);
+    expect(shown()).toBe(products[0].name);
+    drag("touch", -120);
+    expect(shown()).toBe(products[1].name);
+    drag("touch", 120);
+    expect(shown()).toBe(products[0].name);
   });
 });
