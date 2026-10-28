@@ -49,3 +49,4 @@
 :global(html.lp-m) .stage .kick { font-size: max(14px, var(--fl, 0px)); }
 
 @media (prefers-reduced-motion: reduce) { .canvas * { transition: none !important; } }
+:global(html.lp-m) .kick { text-transform: none; letter-spacing: .02em; } /* small caps shout on a phone: sentence case there */

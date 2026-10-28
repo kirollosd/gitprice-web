@@ -79,3 +79,4 @@
 :global(html.lp-m) .r b { font-size: 15px; }
 :global(html.lp-m) .panel small, :global(html.lp-m) .panel em { font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .r.lk em { font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .panel small { text-transform: none; letter-spacing: .02em; }
