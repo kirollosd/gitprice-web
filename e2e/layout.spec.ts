@@ -1,7 +1,7 @@
 import { expect, test } from "./fixtures";
 
 // 1280, 1024 and 768 are layout-only checks (no pixel parity): no horizontal scroll, and the right nav variant.
-const ROUTES = ["/", "/sellers", "/pricing", "/welcome", "/privacy", "/terms", "/reset-password", "/checkout", "/checkout/return", "/nope"];
+const ROUTES = ["/", "/sellers", "/pricing", "/welcome", "/faq", "/privacy", "/terms", "/reset-password", "/checkout", "/checkout/return", "/nope"];
 const HOSTED = /^\/(reset-password|checkout|welcome)/; // logo and language switch only
 
 for (const width of [1280, 1024, 768]) {

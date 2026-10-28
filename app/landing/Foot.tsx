@@ -37,6 +37,7 @@ export default function Foot({ locale, product: P }: { locale: Locale; product: 
       <div className={s.legal}>
         <p>{t(locale, K + "copyright", { year: 2026 })}</p>
         <nav aria-label={t(locale, W + "label.nav")}>
+          <Link href={pathFor(locale, "/faq")} data-gp-track="cta_click" data-gp-cta-id="faq" data-gp-placement="footer">{t(locale, W + "label.faq")}</Link>
           <Link href={pathFor(locale, "/privacy")} data-gp-track="cta_click" data-gp-cta-id="privacy_policy" data-gp-placement="footer">{t(locale, W + "label.privacy")}</Link>
           <Link href={pathFor(locale, "/terms")} data-gp-track="cta_click" data-gp-cta-id="terms" data-gp-placement="footer">{t(locale, W + "label.terms")}</Link>
           <CookieSettingsButton locale={locale} />
