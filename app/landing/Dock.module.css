@@ -31,9 +31,9 @@
 
 .eq { flex: none; width: 46px; height: 46px; border-radius: 50%; background: var(--fill-d); color: var(--on-fill-d); display: grid; place-items: center; }
 .t { padding: 0 16px; font-size: 1.0625rem; }
-.dock > [data-beta] { margin-inline-end: 12px; align-self: center; }
+.dock > [data-beta] { margin-inline: 8px 12px; align-self: center; } /* 8px off the mark, 12px before the button */
 /* the tag is dir=ltr (an English run), so its logical margin points the wrong way on an RTL page: put the gap on the button side */
-:global(html[dir="rtl"]) .dock > [data-beta] { margin-inline: 12px 0; }
+:global(html[dir="rtl"]) .dock > [data-beta] { margin-inline: 12px 8px; }
 .t:focus { outline: none; }
 .t b { font-family: "JetBrains Mono", monospace; font-weight: 500; }
 .t :global(.save) { color: var(--dock-save); }
