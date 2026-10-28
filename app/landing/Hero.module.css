@@ -51,7 +51,8 @@
 :global(html[dir="rtl"]) .strike { left: auto; right: 30px; transform-origin: 100% 50%; }
 
 /* phone canvas */
-:global(html.lp-m) .num > div { --dtop: calc(42vh / var(--z)); --fs: min(130px, calc((var(--cw, 430px) - 40px) / (var(--len, 3) * .56))); }
+:global(html.lp-m) .num > div { --dtop: max(calc(42vh / var(--z)), 330px); --fs: min(130px, calc((var(--cw, 430px) - 40px) / (var(--len, 3) * .56))); }
+:global(html.lp-m[dir="rtl"]) .num > div { --fs: min(130px, calc((var(--cw, 430px) - 40px - 60px) / (var(--len, 3) * .56))); } /* the code sits left of the digits here, so it needs room too */
 :global(html.lp-m) .pick { inset-inline-start: 0; inset-inline-end: 0; top: 70px; padding: 0 20px 4px; gap: 6px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 84%, transparent); mask-image: linear-gradient(to right, #000 84%, transparent); }
 :global(html.lp-m[dir="rtl"]) .pick { -webkit-mask-image: linear-gradient(to left, #000 84%, transparent); mask-image: linear-gradient(to left, #000 84%, transparent); }
 :global(html.lp-m) .pick::-webkit-scrollbar { display: none; }
@@ -72,9 +73,12 @@
 :global(html.lp-m) .strike { left: 16px; height: 8px; }
 :global(html.lp-m[dir="rtl"]) .strike { left: auto; right: 16px; }
 :global(html.lp-m[dir="rtl"]) .digits { left: auto; right: 16px; }
-:global(html.lp-m) .lede { inset-inline-start: 20px; inset-inline-end: 20px; top: calc(42vh / var(--z) + 150px); bottom: auto; width: auto; font-size: 16px; text-align: start; }
+:global(html.lp-m) .lede { inset-inline-start: 20px; inset-inline-end: 20px; top: calc(var(--dtop, 330px) + 150px); bottom: auto; width: auto; font-size: 16px; text-align: start; }
 :global(html.lp-m) .tags { inset-inline-start: 20px; inset-inline-end: 20px; bottom: 110px; flex-wrap: wrap; gap: 6px; }
 :global(html.lp-m) .tags span { padding: 7px 12px; font-size: max(14px, var(--fl, 0px)); }
+
+/* short phone windows (an in-app browser with its translate bar and toolbars): no room for the lede between the board and the chips */
+@media (max-height: 740px) { :global(html.lp-m) .lede { display: none; } }
 
 /* html[data-gp-pick] (HomeSections boot script): the static HTML shows the charger, but this load will show another
    product; hold the product parts back until ProductProvider swaps it in, so no charger flashes. Failsafe: shown after 1s. */

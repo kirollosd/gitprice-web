@@ -21,12 +21,12 @@
 :global(html[dir="rtl"]) .word { direction: ltr; }
 
 /* phone canvas: the blocks stack in flow, so longer copy or larger text pushes the next block down instead of overlapping or clipping */
-:global(html.lp-m) .foot { padding: 90px 20px calc(max(150px, (var(--gp-dock-h, 0px) + 48px) / var(--z, 1)) + var(--gp-stack-h, 0px) / var(--z, 1)); }
+:global(html.lp-m) .foot { padding: 56px 20px calc(max(150px, (var(--gp-dock-h, 0px) + 48px) / var(--z, 1)) + var(--gp-stack-h, 0px) / var(--z, 1)); }
 :global(html.lp-m) .cta { position: relative; inset: auto; }
 :global(html.lp-m) .cta h2 { font-size: 56px; }
 :global(html.lp-m) .cta > div:first-child { font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .btns { flex-wrap: wrap; }
 :global(html.lp-m) .btns > * { position: relative; display: inline-flex; align-items: center; padding: 12px 18px; font-size: 15px; min-height: calc(44px / var(--z, 1)); }
 :global(html.lp-m) .btns > *::after { content: ""; position: absolute; inset: -4px 0; }
-:global(html.lp-m) .aside { position: relative; inset: auto; width: auto; margin-top: 90px; }
+:global(html.lp-m) .aside { position: relative; inset: auto; width: auto; margin-top: 56px; }
 :global(html.lp-m) .meta { font-size: max(14px, var(--fl, 0px)); }

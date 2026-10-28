@@ -31,8 +31,11 @@ const ar = (s) => {
 // Store labels other than the one translated above keep their English detail (a model or size), as in the mock.
 const arLabel = (s) => AR[s] ?? s;
 
+// the English tags are written "= same model"; the page shows them sentence-cased ("= Same model")
+const cap = (s) => s.replace(/^= (\w)/, (_, c) => "= " + c.toUpperCase());
 const data = JSON.parse(readFileSync(src, "utf8")).map((p) => ({
   ...p,
+  tags: p.tags.map(cap),
   ar: {
     chip: ar(p.chip),
     checks: ar(p.checks),

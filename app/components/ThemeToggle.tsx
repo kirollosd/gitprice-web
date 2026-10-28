@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import styles from "./ThemeToggle.module.css";
 
@@ -13,10 +13,21 @@ export function effectiveTheme(): "light" | "dark" {
   return window.matchMedia?.(DARK_QUERY).matches ? "dark" : "light";
 }
 
+const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
 /** Flips the effective theme and remembers the choice (THEME_BOOT applies it on the next load). */
 export default function ThemeToggle({ locale }: { locale: Locale }) {
   // Static HTML assumes light; the real value is read after mount.
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  // Switching language remounts <html> without re-running THEME_BOOT, which drops the data-theme set on it: put the remembered choice back before paint.
+  useIsoLayoutEffect(() => {
+    try {
+      const saved = localStorage.getItem("gp-theme");
+      if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+    } catch {
+      // Storage blocked: nothing remembered to restore.
+    }
+  }, []);
   useEffect(() => {
     setTheme(effectiveTheme());
     const mq = window.matchMedia?.(DARK_QUERY);
