@@ -59,8 +59,11 @@ export default function AlertSlider({ locale, product: P }: { locale: Locale; pr
     if (!el) return;
     const fit = () => setSize({ w: el.clientWidth || 800, h: el.clientHeight || 380 });
     fit();
-    addEventListener("resize", fit);
-    return () => removeEventListener("resize", fit);
+    // width only: a phone's URL bar showing or hiding mid-scroll must not redraw the chart
+    let width = innerWidth;
+    const onResize = () => { if (innerWidth !== width) { width = innerWidth; fit(); } };
+    addEventListener("resize", onResize);
+    return () => removeEventListener("resize", onResize);
   }, []);
 
   // the toast pops when what it says changes, but not on every step of a sweep or drag (it would flicker)

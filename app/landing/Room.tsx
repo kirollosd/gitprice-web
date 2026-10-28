@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
 import GMark from "./GMark";
@@ -15,6 +15,8 @@ const K = "web.landing.room.";
 const LETTERS = "ABCD";
 // the mock's "Suspect A: <name>" name for a lineup card; ponytail: no i18n key yet (web.landing.spot.suspect), the monorepo owns copy
 const ROUNDS = 3;
+/** Horizontal travel that counts as a swipe between lineups. */
+const SWIPE_PX = 48;
 const reduced = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** Product art is drawn, not photographed: "charger small" → the module's .art.charger.small. */
@@ -75,6 +77,20 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
     if (h) h.innerHTML = html(locale, K + (pick === ex ? "right" : "wrong")).__html;
   };
   const next = () => { takeOver(); setRound((r) => (r + 1) % ROUNDS); };
+  const goTo = (k: number) => { if (k === round) return; takeOver(); setRound(k); };
+  // touch: a horizontal swipe on the wall flips to the neighbouring lineup (mouse users have the dots and the button)
+  const swipe = useRef<{ x: number; y: number } | null>(null), swiped = useRef(false);
+  const rtl = locale === "ar";
+  const onSwipeEnd = (e: PointerEvent<HTMLDivElement>) => {
+    const from = swipe.current;
+    swipe.current = null;
+    if (!from) return;
+    const dx = e.clientX - from.x, dy = e.clientY - from.y;
+    if (Math.abs(dx) < SWIPE_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    swiped.current = true;
+    const forward = rtl ? dx > 0 : dx < 0;
+    goTo(Math.min(ROUNDS - 1, Math.max(0, round + (forward ? 1 : -1))));
+  };
 
   // a new round: reset the verdict and heading, deal the cards in (round one waits for the scroll until played)
   useEffect(() => {
@@ -110,7 +126,13 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
           </div>
         </div>
       </div>
-      <div className={s.wall}>
+      <div
+        className={s.wall}
+        onPointerDown={(e) => { swipe.current = e.pointerType === "mouse" ? null : { x: e.clientX, y: e.clientY }; swiped.current = false; }}
+        onPointerUp={onSwipeEnd}
+        onPointerCancel={() => { swipe.current = null; }}
+        onClickCapture={(e) => { if (swiped.current) { swiped.current = false; e.stopPropagation(); e.preventDefault(); } }}
+      >
         <div className={s.lines} id="lines" aria-hidden="true">
           {[0, 1, 2, 3].map((k) => (
             <div key={k} style={{ top: 110 + k * 110 }}><span>{R.units[3 - k]}</span><span className={s.r}>{R.units[3 - k]}</span></div>
@@ -136,7 +158,11 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
       <div className={s.lbar}>
         <p className={s.verdict} id="verdict" aria-live="polite" data-done={scrubDone} />
         <div className={s.ctl}>
-          <span className={s.dots} id="dots" aria-hidden="true">{[0, 1, 2].map((k) => <i key={k} className={k === round ? "on" : undefined} />)}</span>
+          <span className={s.dots} id="dots">
+            {[0, 1, 2].map((k) => (
+              <button key={k} type="button" className={k === round ? "on" : undefined} aria-label={t(locale, K + "lineupN", { n: k + 1, total: ROUNDS })} aria-current={k === round ? "true" : undefined} onClick={() => goTo(k)} />
+            ))}
+          </span>
           <button type="button" className={s.g} id="reveal" onClick={() => reveal(null)}>{t(locale, K + "show")}</button>
           <button type="button" className={s.p} id="next" onClick={next}>{t(locale, K + (round < ROUNDS - 1 ? "next" : "startOver"))}</button>
         </div>

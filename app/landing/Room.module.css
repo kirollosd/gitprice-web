@@ -13,7 +13,7 @@
 .ref div div { font-size: 17px; font-weight: 600; line-height: 1.25; margin-top: 2px; }
 .ref .pr { font-size: 18px; margin-top: 6px; }
 
-.wall { position: relative; margin-top: 24px; height: clamp(340px, calc(100vh / var(--z, 1) - 520px), 460px); border-radius: 28px; background: var(--gp-web-slab); overflow: hidden; padding: 0 40px; }
+.wall { touch-action: pan-y; position: relative; margin-top: 24px; height: clamp(340px, calc(100vh / var(--z, 1) - 520px), 460px); border-radius: 28px; background: var(--gp-web-slab); overflow: hidden; padding: 0 40px; }
 .lines { position: absolute; inset: 0; pointer-events: none; }
 .lines div { position: absolute; inset-inline-start: 0; inset-inline-end: 0; border-top: 1px solid rgba(34, 27, 21, .13); }
 .lines span { position: absolute; inset-inline-start: 14px; top: -9px; font: 500 max(12px, var(--fl, 0px)) var(--f-mono); color: var(--gp-web-mute); }
@@ -53,9 +53,13 @@
 .ctl button:hover { transform: translateY(-2px); }
 .ctl .p { background: var(--gp-web-ink); color: var(--gp-web-ground); }
 .ctl .g { background: transparent; color: var(--gp-web-ink); box-shadow: inset 0 0 0 1.5px var(--gp-web-ink); }
-.dots { display: flex; gap: 6px; margin-inline-end: 10px; }
-.dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--gp-web-dim); }
-.dots i:global(.on) { background: var(--gp-web-ink); }
+.dots { display: flex; margin-inline-end: 6px; }
+/* 9px dot, 24px hit area (44px on phones, below) */
+.dots button { position: relative; width: 24px; height: 24px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+.dots button::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--gp-web-dim); transition: background .2s, scale .2s; }
+.dots button:global(.on)::before { background: var(--gp-web-ink); }
+.dots button:hover::before { scale: 1.3; }
+.ctl .dots button:hover { transform: none; }
 .hint { font-size: 14px; color: var(--gp-web-mute); margin-top: 14px; }
 
 /* product art: drawn, not photographed */
@@ -130,5 +134,7 @@
 :global(html.lp-m) .ctl { justify-content: flex-end; }
 :global(html.lp-m) .ctl button { position: relative; padding: 10px 16px; font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .ctl button::before { content: ""; position: absolute; inset: -7px -4px; min-height: 44px; }
+:global(html.lp-m) .dots button { width: 32px; height: 44px; padding: 0; }
+:global(html.lp-m) .dots button::before { position: static; inset: auto; min-height: 0; }
 :global(html.lp-m) .hint { display: none; }
 :global(html.lp-m) .s .store { text-transform: none; letter-spacing: .02em; }

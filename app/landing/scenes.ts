@@ -198,7 +198,10 @@ export function createScenes(reduce: boolean, wake: () => void) {
     if (!paper || !wrap) return;
     const fed = Math.round(m.full * clamp(p));
     css(paper, "--fed", fed + "px");
-    css(wrap, "transform", `translateY(${-Math.max(0, fed + m.top0 - c.VH + 80)}px)`);
+    // the slot stays put; once the receipt outgrows the screen the paper slides on under it, its top hidden behind the bar
+    const roll = Math.max(0, fed + m.top0 - c.VH + 80);
+    css(paper, "--cut", roll ? roll + 12 + "px" : "0px");
+    css(paper, "transform", `translateY(${-roll}px)`);
     const step = p < 0.22 ? 0 : p < 0.62 ? 1 : p < 0.9 ? 2 : 3;
     kids(document.querySelector("#print [data-copy]")).forEach((d, i) => {
       d.classList.toggle("on", i <= step);

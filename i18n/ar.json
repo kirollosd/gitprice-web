@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@bc700180",
+  "_source": "gitprice@19b5f214",
   "web": {
     "component": {
       "webNav": {
@@ -1011,7 +1011,8 @@
         "verdictRight": "<b>صح.</b>",
         "verdictWrong": "<b>لأ، مش ده: {reason}.</b>",
         "verdictCheaper": "المنتج نفسه بـ <b>{price} في {store}</b>، أرخص من الـ {ref} اللي قدامك. وده السعر الوحيد اللي GitPrice هيوريهولك.",
-        "verdictPricier": "المنتج نفسه <b>أغلى</b> في {store}. GitPrice هيقولك إنك أصلًا في أرخص مكان للمنتج ده بالظبط."
+        "verdictPricier": "المنتج نفسه <b>أغلى</b> في {store}. GitPrice هيقولك إنك أصلًا في أرخص مكان للمنتج ده بالظبط.",
+        "lineupN": "الجولة {n} من {total}"
       },
       "trap": {
         "title": "الشبيه الأرخص مش دايمًا الصح.",

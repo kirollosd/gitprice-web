@@ -40,8 +40,10 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
     if (rm) rm.textContent = receiptMonth(locale);
 
     const reduce = typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let quietUntil = 0, on = false, raf = 0;
+    let quietUntil = 0, on = false, raf = 0, lastY = scrollY;
     const run = () => {
+      // some in-app browsers (Chrome and the Google app on iOS) hold scroll events back during a flick: moving is what keeps the loop on
+      if (scrollY !== lastY) { lastY = scrollY; quietUntil = performance.now() + QUIET_MS; }
       if (sc.frame() || performance.now() < quietUntil) raf = requestAnimationFrame(run);
       else on = false;
     };
@@ -55,7 +57,10 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
     sc.frame();
     wake();
     WAKE_ON.forEach((e) => addEventListener(e, wake, { passive: true }));
-    addEventListener("resize", refit);
+    // width only: a phone's URL bar showing or hiding mid-scroll is a height-only resize and must not re-measure every scene
+    let width = innerWidth;
+    const onResize = () => { if (innerWidth !== width) { width = innerWidth; refit(); } };
+    addEventListener("resize", onResize);
     const fonts = typeof document.fonts === "object" ? document.fonts : null;
     fonts?.ready.then(refit);
     fonts?.addEventListener("loadingdone", refit);
@@ -89,19 +94,13 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
     const stack = new MutationObserver(() => { clearTimeout(cueT); cueT = setTimeout(cueCheck, CUE_FIRST_MS); });
     stack.observe(document.documentElement, { attributes: true, attributeFilter: ["data-gp-stack"] });
 
-    // drag rail: pointer drag on top of native scroll-snap, with a "Drag" cursor that follows the pointer (desktop)
-    const tr = document.getElementById("track"), dc = document.getElementById("dragc");
+    // drag rail: pointer drag on top of native scroll-snap
+    const tr = document.getElementById("track");
     let down: { x: number; s: number } | null = null;
-    const zoom = () => parseFloat(document.documentElement.style.getPropertyValue("--z")) || 1;
-    const enter = () => dc?.classList.add("on");
-    const leave = () => { dc?.classList.remove("on"); down = null; tr?.classList.remove("drag"); };
-    const move = (e: PointerEvent) => {
-      if (dc) { dc.style.left = e.clientX / zoom() + "px"; dc.style.top = e.clientY / zoom() + "px"; }
-      if (down && tr) tr.scrollLeft = down.s - (e.clientX - down.x);
-    };
+    const leave = () => { down = null; tr?.classList.remove("drag"); };
+    const move = (e: PointerEvent) => { if (down && tr) tr.scrollLeft = down.s - (e.clientX - down.x); };
     const press = (e: PointerEvent) => { if (!tr) return; down = { x: e.clientX, s: tr.scrollLeft }; tr.classList.add("drag"); };
     const release = () => { down = null; tr?.classList.remove("drag"); };
-    tr?.addEventListener("pointerenter", enter);
     tr?.addEventListener("pointerleave", leave);
     tr?.addEventListener("pointermove", move);
     tr?.addEventListener("pointerdown", press);
@@ -116,11 +115,10 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
       sc.stop();
       [kick, cueT, cueFirst].forEach((x) => clearTimeout(x));
       WAKE_ON.forEach((e) => removeEventListener(e, wake));
-      removeEventListener("resize", refit);
+      removeEventListener("resize", onResize);
       removeEventListener("scroll", onScroll);
       stack.disconnect();
       fonts?.removeEventListener("loadingdone", refit);
-      tr?.removeEventListener("pointerenter", enter);
       tr?.removeEventListener("pointerleave", leave);
       tr?.removeEventListener("pointermove", move);
       tr?.removeEventListener("pointerdown", press);
@@ -135,7 +133,6 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
         <svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
         <span>{t(locale, "web.landing.hero.scrollCue")}</span>
       </div>
-      <div className={s.dragc} id="dragc" aria-hidden="true">{t(locale, "web.landing.rail.dragCue")}</div>
     </>
   );
 }

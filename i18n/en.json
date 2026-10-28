@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@bc700180",
+  "_source": "gitprice@19b5f214",
   "web": {
     "component": {
       "webNav": {
@@ -1011,7 +1011,8 @@
         "verdictRight": "<b>Right.</b>",
         "verdictWrong": "<b>Not quite: {reason}.</b>",
         "verdictCheaper": "The exact one is <b>{price} on {store}</b>, less than the {ref} you're looking at. That's the only price GitPrice would show you.",
-        "verdictPricier": "The exact one costs <b>more</b> on {store}. GitPrice would tell you you're already on the cheapest exact match."
+        "verdictPricier": "The exact one costs <b>more</b> on {store}. GitPrice would tell you you're already on the cheapest exact match.",
+        "lineupN": "Lineup {n} of {total}"
       },
       "trap": {
         "title": "The cheapest look-alike shouldn't win.",
