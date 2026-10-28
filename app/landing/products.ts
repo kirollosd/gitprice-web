@@ -49,9 +49,9 @@ export const products: Product[] = [
     "bullet": "30W USB-C Power Delivery for phones and tablets",
     "checks": "model, wattage and color",
     "tags": [
-      "= same model",
-      "= same wattage",
-      "= same color"
+      "= Same model",
+      "= Same wattage",
+      "= Same color"
     ],
     "art": "charger",
     "from": 699,
@@ -157,9 +157,9 @@ export const products: Product[] = [
     "bullet": "6.9-inch display, 256GB storage, Cosmic Orange",
     "checks": "model, storage and color",
     "tags": [
-      "= same model",
-      "= same storage",
-      "= same color"
+      "= Same model",
+      "= Same storage",
+      "= Same color"
     ],
     "art": "phone",
     "from": 96999,
@@ -265,8 +265,8 @@ export const products: Product[] = [
     "bullet": "With 3 essential ceramides and hyaluronic acid",
     "checks": "formula, size and pack",
     "tags": [
-      "= same formula",
-      "= same 454g size"
+      "= Same formula",
+      "= Same 454g size"
     ],
     "art": "tub",
     "from": 1150,
@@ -371,9 +371,9 @@ export const products: Product[] = [
     "bullet": "4.1L basket, Rapid Air technology, 1500W",
     "checks": "series, size and color",
     "tags": [
-      "= same series",
-      "= same 4.1L size",
-      "= same color"
+      "= Same series",
+      "= Same 4.1L size",
+      "= Same color"
     ],
     "art": "fryer",
     "from": 4799,
@@ -479,9 +479,9 @@ export const products: Product[] = [
     "bullet": "Size 4 for 9–14 kg, up to 12 hours dry",
     "checks": "line, size and count",
     "tags": [
-      "= same line",
-      "= same size 4",
-      "= same 64 count"
+      "= Same line",
+      "= Same size 4",
+      "= Same 64 count"
     ],
     "art": "pack",
     "from": 899,

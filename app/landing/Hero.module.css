@@ -52,6 +52,7 @@
 
 /* phone canvas */
 :global(html.lp-m) .num > div { --dtop: calc(42vh / var(--z)); --fs: min(130px, calc((var(--cw, 430px) - 40px) / (var(--len, 3) * .56))); }
+:global(html.lp-m[dir="rtl"]) .num > div { --fs: min(130px, calc((var(--cw, 430px) - 40px - 60px) / (var(--len, 3) * .56))); } /* the code sits left of the digits here, so it needs room too */
 :global(html.lp-m) .pick { inset-inline-start: 0; inset-inline-end: 0; top: 70px; padding: 0 20px 4px; gap: 6px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 84%, transparent); mask-image: linear-gradient(to right, #000 84%, transparent); }
 :global(html.lp-m[dir="rtl"]) .pick { -webkit-mask-image: linear-gradient(to left, #000 84%, transparent); mask-image: linear-gradient(to left, #000 84%, transparent); }
 :global(html.lp-m) .pick::-webkit-scrollbar { display: none; }
