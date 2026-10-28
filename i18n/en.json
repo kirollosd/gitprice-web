@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@07d0da81",
+  "_source": "gitprice@5e0e1f67",
   "web": {
     "component": {
       "webNav": {
@@ -939,7 +939,7 @@
       "dock": {
         "join": "Join the waitlist",
         "elsewhere": "<b>{price}</b> elsewhere · <span class=\"save\">↓ {less} less</span>",
-        "film": "It takes 10 seconds to know",
+        "film": "It takes 15 seconds to know",
         "spot": "Your turn: spot the same one",
         "print": "Exact matches only. Priced now.",
         "alerts": "Alert set · we keep watching",

@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@07d0da81",
+  "_source": "gitprice@5e0e1f67",
   "web": {
     "component": {
       "webNav": {
@@ -939,7 +939,7 @@
       "dock": {
         "join": "سجّل الآن",
         "elsewhere": "متجر تاني بـ <b>{price}</b> · <span class=\"save\">↓ أرخص بـ {less}</span>",
-        "film": "10 ثواني وتعرف",
+        "film": "15 ثانية وتعرف",
         "spot": "دورك: لاقي نفس المنتج",
         "print": "المطابق بالظبط بس. وبأسعار دلوقتي.",
         "alerts": "التنبيه اتعمل · وإحنا متابعين",
