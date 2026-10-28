@@ -34,7 +34,7 @@
 .badge:global(.on) { opacity: 1; transform: none; }
 .badge::after { content: ''; position: absolute; inset: -7px; border: 1.5px dashed var(--gp-web-fill); border-radius: 999px; }
 .badge .eq { width: 32px; height: 32px; border-radius: 50%; background: var(--gp-web-fill); color: var(--gp-web-on-fill); display: grid; place-items: center; font-weight: 800; }
-.browser .bnote { position: absolute; inset-inline-start: 342px; top: 312px; font-size: 12px; color: var(--gp-web-accl); opacity: 0; transition: opacity .4s .25s; }
+.browser .bnote { text-transform: none; letter-spacing: .02em; position: absolute; inset-inline-start: 342px; top: 312px; font-size: 12px; color: var(--gp-web-accl); opacity: 0; transition: opacity .4s .25s; }
 .browser .bnote:global(.on) { opacity: 1; }
 
 /* slides in over the image placeholder, so the title, price and badge stay readable */
