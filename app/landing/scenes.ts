@@ -23,8 +23,8 @@ const DOCK_AT = 0.82;
 export const IDLE_MS = 1200;
 const FIRST: Record<string, number> = { spotpin: 0.2, print: 0.22 };
 // lineup scrub beats: each look-alike is ruled out in turn, then the exact one is stamped
-const CHECK = [0.34, 0.54, 0.74];
-const STAMP = 0.94; // late in the runway: once the exact one is stamped there is little scroll left before the next section
+const CHECK = [0.34, 0.56, 0.78];
+const STAMP = 0.97; // late in the runway: once the exact one is stamped there is little scroll left before the next section
 // receipt: when each point lights up, and the story bar of points 2-4
 const BAR = [[0.22, 0.62], [0.62, 0.9], [0.9, 1]];
 const SCENES = ["num", "how", "film", "spotpin", "print", "foot"] as const;
