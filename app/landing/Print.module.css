@@ -23,7 +23,7 @@
 .slot { position: relative; z-index: 3; height: 30px; border-radius: 15px; background: var(--gp-web-ink); box-shadow: 0 14px 24px -12px rgba(34, 27, 21, .6); }
 .slot::after { content: ""; position: absolute; inset-inline-start: 30px; inset-inline-end: 30px; top: 13px; height: 4px; border-radius: 2px; background: #000; }
 /* the one monospace surface; first state: nothing fed yet */
-.paper { --f-mono: var(--f-rcpt); position: relative; z-index: 2; margin: -12px 26px 0; background: var(--paper); padding: 34px 34px 0; font-family: var(--f-mono); font-size: 15px; color: var(--gp-web-ink); box-shadow: 0 30px 50px -30px rgba(34, 27, 21, .45); clip-path: inset(0 0 calc(100% - var(--fed, 0px)) 0); will-change: clip-path; }
+.paper { --f-mono: var(--f-rcpt); position: relative; z-index: 2; margin: -12px 26px 0; background: var(--paper); padding: 34px 34px 0; font-family: var(--f-mono); font-size: 15px; color: var(--gp-web-ink); box-shadow: 0 30px 50px -30px rgba(34, 27, 21, .45); clip-path: inset(var(--cut, 0px) 0 calc(100% - var(--fed, 0px)) 0); will-change: clip-path, transform; }
 .paper::after { content: ""; position: absolute; inset-inline-start: 0; inset-inline-end: 0; bottom: -12px; height: 12px; background: radial-gradient(circle at 8px 0, transparent 8px, var(--paper) 8.5px) 0 0 / 16px 12px repeat-x; }
 .hd { text-align: center; padding-bottom: 18px; border-bottom: 2px dashed var(--gp-web-dim); }
 .logo { display: block; height: 30px; width: 104px; margin: 0 auto; background-color: currentColor; mask: url("/logo_wordmark.svg") center / contain no-repeat; }
