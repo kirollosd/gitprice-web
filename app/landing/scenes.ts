@@ -215,12 +215,12 @@ export function createScenes(reduce: boolean, wake: () => void) {
     if (w) css(w, "transform", reduce ? "none" : `translateY(${mix(300, 0, ease(seg(innerHeight - b.top, 0, innerHeight)))}px)`);
   }
 
-  /** Phones: a scrubbed scene sitting at 0 while on screen for IDLE_MS plays to its first step (ship critique). */
+  /** Phones: a scrubbed scene sitting at 0 while pinned (its top within reach of the viewport top) for IDLE_MS plays to its first step (ship critique). A sliver at the bottom edge does not count: the receipt would print before the section is there. */
   function idle(B: Partial<Record<string, Box>>) {
     for (const id of Object.keys(FIRST)) {
       const b = B[id];
       if (!b) continue;
-      const inView = b.top < innerHeight && b.bottom > 0, s = PLAY[id];
+      const inView = b.top < innerHeight * 0.15 && b.bottom > 0, s = PLAY[id];
       if (!inView && s) s.floor = 0;
       if (!(c.isM && !reduce && inView && progOf(b, true) === 0 && !s?.floor)) { clearTimeout(idleT[id]); idleT[id] = undefined; continue; }
       idleT[id] ??= setTimeout(() => {
