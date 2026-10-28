@@ -30,7 +30,7 @@
 :global(html[dir="rtl"]) .hint { direction: rtl; }
 
 /* phone canvas: the chart scrolls with the page, a tap moves the line */
-:global(html.lp-m) .alerts { padding: 90px 20px 80px; }
+:global(html.lp-m) .alerts { padding: 56px 20px 48px; }
 :global(html.lp-m) .alerts h2 { font-size: 48px; }
 :global(html.lp-m) .aw { grid-template-columns: 1fr; gap: 20px; margin-top: 28px; }
 :global(html.lp-m) .rules { flex-direction: row; flex-wrap: wrap; gap: 6px; }

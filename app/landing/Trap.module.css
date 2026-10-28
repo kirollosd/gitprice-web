@@ -18,7 +18,7 @@
 :global(html[dir="rtl"]) .r em, :global(html[dir="rtl"]) .r bdi { unicode-bidi: isolate; }
 
 /* phone canvas */
-:global(html.lp-m) .trap { grid-template-columns: 1fr; gap: 30px; padding: 90px 20px; }
+:global(html.lp-m) .trap { grid-template-columns: 1fr; gap: 30px; padding: 56px 20px; }
 :global(html.lp-m) .trap h2 { font-size: 40px; }
 :global(html.lp-m) .trap p { font-size: 16px; }
 :global(html.lp-m) .rank { padding: 14px 16px; }

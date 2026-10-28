@@ -21,7 +21,7 @@
 :global(html[lang="ar"]) .st h3 { line-height: 1.25; }
 
 /* phone canvas */
-:global(html.lp-m) .rail { padding: 20px 0 90px; }
+:global(html.lp-m) .rail { padding: 16px 0 48px; }
 :global(html.lp-m) .hd { flex-direction: column; align-items: start; gap: 8px; padding: 0 20px; }
 :global(html.lp-m) .hd h2 { font-size: 48px; }
 :global(html.lp-m) .track { padding: 28px 20px 10px; gap: 12px; }
