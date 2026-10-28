@@ -1,6 +1,6 @@
 import { expect, test } from "./fixtures";
 
-const PAGES = ["/privacy", "/terms", "/welcome", "/pricing"];
+const PAGES = ["/faq", "/privacy", "/terms", "/welcome", "/pricing"];
 
 test.describe("390 wide", () => {
   test.use({ viewport: { width: 390, height: 800 } });

@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@5e0e1f67",
+  "_source": "gitprice@bc700180",
   "web": {
     "component": {
       "webNav": {
@@ -229,6 +229,7 @@
         "default": {
           "tagline": "Compares prices while you shop.",
           "label": {
+            "faq": "FAQ",
             "privacy": "Privacy",
             "terms": "Terms",
             "nav": "Footer links",
@@ -1098,6 +1099,10 @@
         "toDark": "Switch to dark",
         "toLight": "Switch to light"
       }
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "intro": "Short answers about how GitPrice works."
     }
   }
 }

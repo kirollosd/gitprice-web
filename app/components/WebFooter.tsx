@@ -22,6 +22,7 @@ export default function WebFooter({ locale }: { locale: Locale }) {
         </div>
         <nav aria-label={t(locale, K + "label.nav")}>
           <ul className={styles.links} role="list">
+            <li><Link href={pathFor(locale, "/faq")} className={styles.link} data-gp-track="cta_click" data-gp-cta-id="faq" data-gp-placement="footer">{t(locale, K + "label.faq")}</Link></li>
             <li><Link href={pathFor(locale, "/privacy")} className={styles.link} data-gp-track="cta_click" data-gp-cta-id="privacy_policy" data-gp-placement="footer">{t(locale, K + "label.privacy")}</Link></li>
             <li><Link href={pathFor(locale, "/terms")} className={styles.link} data-gp-track="cta_click" data-gp-cta-id="terms" data-gp-placement="footer">{t(locale, K + "label.terms")}</Link></li>
             <li><LanguageSwitch locale={locale} className={styles.link} icon /></li>

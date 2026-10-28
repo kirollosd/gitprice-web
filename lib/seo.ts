@@ -4,7 +4,7 @@ import type { Locale } from "./i18n";
 import { pathFor } from "./locale";
 
 /** Pages that appear in the sitemap. */
-export const INDEXABLE_PATHS = ["/", "/sellers", "/privacy", "/terms"] as const;
+export const INDEXABLE_PATHS = ["/", "/sellers", "/faq", "/privacy", "/terms"] as const;
 
 /** Unlisted or hosted pages: noindex, never in the sitemap. Reset-password and checkout pages import this. */
 export const NOINDEX_PATHS = ["/pricing", "/welcome", "/reset-password", "/checkout", "/checkout/return"] as const;
