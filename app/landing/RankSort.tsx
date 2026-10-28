@@ -45,11 +45,14 @@ export default function RankSort({ rows, locale }: { rows: RankRow[]; locale: Lo
       box.style.height = y + "px";
     };
     sort();
-    addEventListener("resize", sort);
+    // width only: a phone's URL bar showing or hiding mid-scroll is a height-only resize and must not re-lay the rows out
+    let width = innerWidth;
+    const onResize = () => { if (innerWidth !== width) { width = innerWidth; sort(); } };
+    addEventListener("resize", onResize);
     const fonts = typeof document.fonts === "object" ? document.fonts : null;
     let live = true;
     fonts?.ready.then(() => { if (live) sort(); });
-    return () => { live = false; removeEventListener("resize", sort); };
+    return () => { live = false; removeEventListener("resize", onResize); };
   }, [gp, rows]);
 
   // scroll it in: it flips to GitPrice order once the ranking is well in view

@@ -40,8 +40,10 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
     if (rm) rm.textContent = receiptMonth(locale);
 
     const reduce = typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let quietUntil = 0, on = false, raf = 0;
+    let quietUntil = 0, on = false, raf = 0, lastY = scrollY;
     const run = () => {
+      // some in-app browsers (Chrome and the Google app on iOS) hold scroll events back during a flick: moving is what keeps the loop on
+      if (scrollY !== lastY) { lastY = scrollY; quietUntil = performance.now() + QUIET_MS; }
       if (sc.frame() || performance.now() < quietUntil) raf = requestAnimationFrame(run);
       else on = false;
     };
@@ -55,7 +57,10 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
     sc.frame();
     wake();
     WAKE_ON.forEach((e) => addEventListener(e, wake, { passive: true }));
-    addEventListener("resize", refit);
+    // width only: a phone's URL bar showing or hiding mid-scroll is a height-only resize and must not re-measure every scene
+    let width = innerWidth;
+    const onResize = () => { if (innerWidth !== width) { width = innerWidth; refit(); } };
+    addEventListener("resize", onResize);
     const fonts = typeof document.fonts === "object" ? document.fonts : null;
     fonts?.ready.then(refit);
     fonts?.addEventListener("loadingdone", refit);
@@ -110,7 +115,7 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
       sc.stop();
       [kick, cueT, cueFirst].forEach((x) => clearTimeout(x));
       WAKE_ON.forEach((e) => removeEventListener(e, wake));
-      removeEventListener("resize", refit);
+      removeEventListener("resize", onResize);
       removeEventListener("scroll", onScroll);
       stack.disconnect();
       fonts?.removeEventListener("loadingdone", refit);
