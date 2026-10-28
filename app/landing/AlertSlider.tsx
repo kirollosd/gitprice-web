@@ -63,12 +63,13 @@ export default function AlertSlider({ locale, product: P }: { locale: Locale; pr
     return () => removeEventListener("resize", fit);
   }, []);
 
-  // the toast pops when what it says changes
+  // the toast pops when what it says changes, but not on every step of a sweep or drag (it would flicker)
   const said = useRef(ttText);
   useEffect(() => {
     const el = toast.current;
     if (!el || said.current === ttText) return;
     said.current = ttText;
+    if (demo.current || drag.current) return;
     el.classList.add("pop");
     let id = requestAnimationFrame(() => { id = requestAnimationFrame(() => el.classList.remove("pop")); });
     return () => cancelAnimationFrame(id);

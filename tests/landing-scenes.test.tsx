@@ -50,15 +50,21 @@ describe("ScrollScenes", () => {
     expect(container.querySelector("#cap")?.innerHTML).toBe(container.querySelector("#cap")?.getAttribute("data-done"));
   });
 
-  it("on phones, plays an idle receipt to its first step after 1.2 s in view", async () => {
+  it("on phones, plays an idle receipt to its first step after 1.2 s once pinned", async () => {
     stubMotion(false);
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout", "requestAnimationFrame", "cancelAnimationFrame", "performance"] });
     document.documentElement.classList.add("lp-m");
     const { container } = await mount("en", ["Print"]);
     const sec = container.querySelector("#print") as HTMLElement;
-    // below the top of the viewport (scroll progress 0) but on screen
-    sec.getBoundingClientRect = () => ({ top: 300, bottom: 2000, left: 0, right: 430, width: 430, height: 1700, x: 0, y: 300, toJSON() {} });
+    const at = (top: number) => { sec.getBoundingClientRect = () => ({ top, bottom: top + 1700, left: 0, right: 430, width: 430, height: 1700, x: 0, y: top, toJSON() {} }); };
     const copies = () => [...container.querySelectorAll("[data-copy] > div")].map((d) => d.classList.contains("on"));
+    // a sliver at the bottom edge of the screen is not the section arriving: nothing prints
+    at(innerHeight - 100);
+    act(() => { window.dispatchEvent(new Event("scroll")); });
+    act(() => { vi.advanceTimersByTime(3000); });
+    expect(copies()).toEqual([true, false, false, false]);
+    // near the top of the screen (scroll progress still 0): it plays to its first step
+    at(40);
     act(() => { window.dispatchEvent(new Event("scroll")); });
     act(() => { vi.advanceTimersByTime(1100); });
     expect(copies()).toEqual([true, false, false, false]);
