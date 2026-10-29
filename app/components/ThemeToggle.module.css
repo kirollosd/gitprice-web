@@ -5,7 +5,7 @@
   min-block-size: var(--gp-target);
   padding: 0;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--gp-r-control);
   background: none;
   color: var(--gp-ink);
   cursor: pointer;

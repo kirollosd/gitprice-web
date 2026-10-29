@@ -11,6 +11,7 @@ import WaitlistForm from "../components/WaitlistForm";
 import GMark from "./GMark";
 import { esc, html } from "./html";
 import { formatMoney, useMoney } from "./money";
+import { moneyTextHtml } from "./Price";
 import s from "./Dock.module.css";
 
 const K = "web.landing.dock.";
@@ -153,7 +154,7 @@ export default function Dock({ locale }: { locale: Locale }) {
   const less = fmt(view.from - view.best, 2).replace(".00 ", " ");
   const line = joined ? esc(t(locale, K + "done"))
     : view.msg ? esc(t(locale, MSG[view.msg]))
-    : html(locale, K + "elsewhere", {}, { price: `<bdi dir="ltr">${esc(formatMoney(view.best))}</bdi>`, less: `<bdi dir="ltr">${esc(less)}</bdi>` }).__html;
+    : html(locale, K + "elsewhere", {}, { price: `<bdi dir="ltr">${moneyTextHtml(formatMoney(view.best))}</bdi>`, less: `<bdi dir="ltr">${moneyTextHtml(less)}</bdi>` }).__html;
   const cls = [s.dock, shown && "in", view.dk && "dk", isOpen && "join", joined && "done"].filter(Boolean).join(" ");
   return (
     <div ref={ref} className={cls} id="dock" onKeyDown={(e) => { if (e.key === "Escape" && isOpen) close(); }}>

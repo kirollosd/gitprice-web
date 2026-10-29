@@ -12,7 +12,6 @@ import { marksHtml, StoreText, storeTextHtml } from "./StoreMark";
 import s from "./Room.module.css";
 
 const K = "web.landing.room.";
-const LETTERS = "ABCD";
 const ROUNDS = 3;
 const reduced = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -110,11 +109,6 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
         </div>
       </div>
       <div className={s.wall}>
-        <div className={s.lines} id="lines" aria-hidden="true">
-          {[0, 1, 2, 3].map((k) => (
-            <div key={k} style={{ top: 110 + k * 110 }}><span>{R.units[3 - k]}</span><span className={s.r}>{R.units[3 - k]}</span></div>
-          ))}
-        </div>
         <div className={s.sus} id="sus">
           {R.lineup.map(([store, name, price, art, exact, why], k) => (
             <button key={`${R.id}-${k}`} type="button" className={s.s} data-k={k} data-exact={exact === 1 ? "" : undefined} onClick={() => reveal(k)}>
@@ -122,12 +116,11 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
               {exact === 1 ? (
                 <span className={s.stamp}><GMark className={s.eq} state="same" settleOnView label="" />{t(locale, K + "stamp")}</span>
               ) : (
-                <span className={s.why}><GMark className={s.eq} state="ne" settleOnView label="" />{why}</span>
+                <span className={`${b.chip} ${s.why}`}><GMark className={s.eq} state="ne" settleOnView label="" />{why}</span>
               )}
               <div className={s.store}><StoreText label={store} locale={locale} /></div>
               <h3>{nb(name)}</h3>
               <div className={`${s.pr} ${b.mono}`}><Price v={price} /></div>
-              <span className={s.plac} aria-hidden="true">{LETTERS[k]}</span>
             </button>
           ))}
         </div>
@@ -136,8 +129,8 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
         <p className={s.verdict} id="verdict" aria-live="polite" data-done={scrubDone} />
         <div className={s.ctl}>
           <span className={s.dots} id="dots" aria-hidden="true">{[0, 1, 2].map((k) => <i key={k} className={k === round ? "on" : undefined} />)}</span>
-          <button type="button" className={s.g} id="reveal" onClick={() => reveal(null)}>{t(locale, K + "show")}</button>
-          <button type="button" className={s.p} id="next" onClick={next}>{t(locale, K + (round < ROUNDS - 1 ? "next" : "startOver"))}</button>
+          <button type="button" className={`gp-btn-2 ${s.g}`} id="reveal" onClick={() => reveal(null)}>{t(locale, K + "show")}</button>
+          <button type="button" className={`gp-btn-2 ${s.p}`} id="next" onClick={next}>{t(locale, K + (round < ROUNDS - 1 ? "next" : "startOver"))}</button>
         </div>
       </div>
       <p className={s.hint} dangerouslySetInnerHTML={html(locale, "web.landing.spot.note", {}, { marks: marksHtml(locale) })} />

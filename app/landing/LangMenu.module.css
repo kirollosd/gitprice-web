@@ -2,7 +2,7 @@
 .lsel { position: relative; display: flex; align-items: center; }
 .lng {
   position: relative; display: flex; align-items: center; gap: 6px; min-height: 36px;
-  background: none; border: 1px solid var(--gp-web-line); border-radius: 999px; padding: 5px 12px 5px 10px;
+  background: none; border: 1px solid var(--gp-control); border-radius: var(--gp-r-control); padding: 5px 12px 5px 10px;
   font: inherit; font-size: 15px; color: inherit; cursor: pointer;
 }
 /* below the desktop nav the pill itself is a 44px target */
@@ -10,12 +10,12 @@
 .lmenu {
   position: absolute; top: calc(100% + 10px); inset-inline-end: 0; z-index: 60; min-width: 176px; margin: 0; padding: 6px;
   list-style: none; background: var(--gp-web-raised); color: var(--gp-web-ink);
-  border: 1px solid var(--gp-web-line); border-radius: 16px; box-shadow: 0 18px 40px -18px rgba(34, 27, 21, .35);
+  border: 1px solid var(--gp-web-line); border-radius: var(--gp-r-card); box-shadow: 0 18px 40px -18px rgb(10 10 11 / .35);
 }
 .lmenu[hidden] { display: none; }
 .lmenu li {
   display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 44px;
-  padding: 10px 12px; border-radius: 10px; cursor: pointer; font-size: 15px; outline-offset: -2px;
+  padding: 10px 12px; border-radius: var(--gp-r-control); cursor: pointer; font-size: 15px; outline-offset: -2px;
 }
 .lmenu li[lang="en"] { font-family: "Outfit", system-ui, sans-serif; }
 .lmenu li[lang="ar"] { font-family: "Alexandria", system-ui, sans-serif; }

@@ -1,7 +1,7 @@
 /* 2 · pinned browser with swapping text; the slab grows in behind it */
 .how { height: 200vh; }
 /* first state of the scroll scene (the mock sets these in JS at progress 0) */
-.slab { position: absolute; background: var(--gp-web-slab); left: 520px; right: 40px; top: 220px; bottom: 120px; border-radius: 44px; }
+.slab { position: absolute; background: var(--gp-web-slab); left: 520px; right: 40px; top: 220px; bottom: 120px; border-radius: var(--gp-r-card); }
 .steps { position: absolute; inset-inline-start: 56px; top: 260px; width: 430px; height: 300px; }
 .steps > div { position: absolute; inset: 0; opacity: 0; transform: translateY(24px); transition: opacity .4s, transform .5s var(--spring); }
 .steps > div:global(.on) { opacity: 1; transform: none; }
@@ -15,14 +15,14 @@
 .browser {
   position: absolute; inset-inline-start: max(520px, calc(var(--cw, 1440px) * .389)); top: 150px;
   width: min(calc(var(--cw, 1440px) * .556), calc(var(--cw, 1440px) * .611 - 50px)); height: min(560px, calc(100vh / var(--z, 1) - 220px));
-  background: #fff; border-radius: 20px; box-shadow: 0 50px 90px -30px rgba(42, 11, 22, .35); overflow: hidden; border: 1px solid #eadfe2;
+  background: #F4F4F5; border-radius: var(--gp-r-card); box-shadow: 0 50px 90px -30px rgb(10 10 11 / .35); overflow: hidden; border: 1px solid #eadfe2;
   transform-origin: 50% 100%; transform: rotateX(26deg) scale(.92);
 }
 .bar { height: 42px; background: #F3EEEF; display: flex; align-items: center; gap: 8px; padding: 0 14px; font-size: 13px; color: #6d6264; }
 .bar i { width: 10px; height: 10px; border-radius: 50%; background: #d9cfd1; }
-.bar .u { margin-inline-start: 14px; background: #fff; border-radius: 999px; padding: 5px 14px; }
+.bar .u { margin-inline-start: 14px; background: #F4F4F5; border-radius: var(--gp-r-control); padding: 5px 14px; }
 .pdp { display: grid; grid-template-columns: 280px 1fr; gap: 30px; padding: 32px; }
-.ph { height: 280px; border-radius: 16px; background: #2b2b2e; position: relative; overflow: hidden; }
+.ph { height: 280px; border-radius: var(--gp-r-control); background: #2b2b2e; position: relative; overflow: hidden; }
 .ph::after { content: ""; position: absolute; inset-inline-start: 30%; top: 22%; width: 40%; height: 56%; border-radius: 18px; background: #3c3c40; }
 .pdp h4 { font-size: 24px; font-weight: 600; color: #161314; }
 .pdp .pr { font-size: 32px; margin-top: 14px; color: #161314; }
@@ -30,24 +30,25 @@
 /* the price sits on the white page: its code keeps the light-theme mute */
 .browser { --cur-c: #6B6B73; }
 
-.badge { position: absolute; inset-inline-start: 342px; top: 250px; display: flex; align-items: center; gap: 10px; background: var(--gp-web-dock); color: var(--gp-web-on-dock); border-radius: 999px; padding-block: 6px; padding-inline: 6px 16px; font-size: 15px; opacity: 0; transform: scale(.6); transition: opacity .3s, transform .55s var(--spring); --cur-c: currentColor; }
+.badge { position: absolute; inset-inline-start: 342px; top: 250px; display: flex; align-items: center; gap: 10px; background: var(--gp-web-dock); color: var(--gp-web-on-dock); border-radius: var(--gp-r-control); padding-block: 4px; padding-inline: 4px 16px; font-size: 15px; opacity: 0; transform: scale(.6); transition: opacity .3s, transform .55s var(--spring); --cur-c: currentColor; }
 .badge:global(.on) { opacity: 1; transform: none; }
-.badge::after { content: ''; position: absolute; inset: -7px; border: 1.5px dashed var(--gp-web-fill); border-radius: 999px; }
-.badge .eq { width: 32px; height: 32px; border-radius: 50%; background: var(--gp-web-fill); color: var(--gp-web-on-fill); display: grid; place-items: center; font-weight: 800; }
+.badge::after { content: ''; position: absolute; inset: -7px; border: 1.5px dashed var(--gp-web-fill); border-radius: var(--gp-r-card); }
+.badge .eq { width: 32px; height: 32px; border-radius: var(--gp-r-xs); background: var(--gp-web-fill); color: var(--gp-web-on-fill); display: grid; place-items: center; font-weight: 800; }
 .browser .bnote { position: absolute; inset-inline-start: 342px; top: 312px; font-size: 12px; color: var(--gp-web-accl); opacity: 0; transition: opacity .4s .25s; }
 .browser .bnote:global(.on) { opacity: 1; }
 
 /* slides in over the image placeholder, so the title, price and badge stay readable */
-.panel { position: absolute; inset-inline-start: 22px; top: 62px; width: 300px; background: var(--gp-web-dark); color: var(--gp-web-on-dark); border-radius: 20px; padding: 18px 20px; transform: translateX(-360px); transition: transform .7s var(--spring); --cur-c: var(--gp-web-on-dark-mute); }
+.panel { position: absolute; inset-inline-start: 22px; top: 62px; width: 300px; background: var(--gp-web-dark); color: var(--gp-web-on-dark); border-radius: var(--gp-r-card); padding: 16px 24px; transform: translateX(-360px); transition: transform .7s var(--spring); --cur-c: var(--gp-web-on-dark-mute); --chip-bg: var(--gp-web-dark-3); --chip-edge: var(--gp-web-dark-line); --chip-ink: var(--gp-web-on-dark); }
 .panel:global(.on) { transform: none; }
 .panel small { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--gp-web-on-dark-mute); }
 .r { display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid var(--gp-web-dark-line); font-size: 16px; }
 .r:first-of-type { border-top: 0; }
 .r b { font-family: var(--f-mono); font-weight: 500; font-size: 19px; white-space: nowrap; }
 .r s { color: var(--gp-web-on-dark-mute); }
-.r.w b { background: var(--gp-web-fill); color: var(--gp-web-on-fill); padding: 2px 10px; border-radius: 999px; --cur-c: currentColor; }
+/* the cheapest exact match: contrast ink, never a coral number (GP-407 round 3) */
+.r.w b { background: var(--gp-web-on-dark); color: var(--gp-web-dark); padding: 2px 8px; border-radius: var(--gp-r-xs); --cur-c: currentColor; }
 .r.lk { color: var(--gp-web-on-dark-mute); }
-.r.lk em { font-style: normal; font-size: 12px; border: 1px solid currentColor; border-radius: 999px; padding: 1px 8px; margin-inline-start: 6px; white-space: nowrap; }
+.r.lk em { font-style: normal; margin-inline-start: 8px; }
 
 :global(html[dir="rtl"]) .pdp h4 { unicode-bidi: plaintext; text-align: right; }
 :global(html[dir="rtl"]) .bar .u { direction: ltr; }
@@ -77,5 +78,4 @@
 :global(html.lp-m) .panel:global(.on) { transform: none; }
 :global(html.lp-m) .r { padding: 8px 0; font-size: 14px; }
 :global(html.lp-m) .r b { font-size: 15px; }
-:global(html.lp-m) .panel small, :global(html.lp-m) .panel em { font-size: 14px; }
-:global(html.lp-m) .r.lk em { font-size: 14px; }
+:global(html.lp-m) .panel small { font-size: 14px; }

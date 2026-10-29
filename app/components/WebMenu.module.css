@@ -57,9 +57,9 @@
   justify-content: center;
   min-block-size: var(--gp-target);
   margin-block-start: var(--gp-sp-6);
-  background: var(--gp-ink);
-  color: var(--gp-surface);
-  border-radius: var(--gp-r-pill);
+  background: var(--gp-web-fill);
+  color: var(--gp-web-on-fill);
+  border-radius: var(--gp-r-control);
   font-weight: 600;
 }
 .cta:hover { text-decoration: none; }

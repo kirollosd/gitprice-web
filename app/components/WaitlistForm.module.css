@@ -18,8 +18,8 @@
   inline-size: 100%;
   block-size: var(--gp-sp-12);
   padding-inline: var(--gp-sp-4);
-  border: 1px solid var(--gp-hairline-strong);
-  border-radius: var(--gp-r-md);
+  border: 1px solid var(--gp-control);
+  border-radius: var(--gp-r-control);
   background: var(--gp-surface);
   color: var(--gp-ink);
   font: var(--gp-fw-body) var(--gp-fs-body) / var(--web-lh-text) var(--gp-font);
@@ -32,18 +32,18 @@
 .input[aria-invalid="true"] { border-width: 2px; border-color: var(--gp-danger); padding-inline: calc(var(--gp-sp-4) - 1px); }
 .error { margin-block-start: var(--gp-sp-2); color: var(--gp-danger); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); }
 
-/* Button/primary-block: a full-width ink pill. The busy state keeps the board's full ink fill. */
+/* Button/primary-block: the one website primary (GP-407 round 3), full width, coral with ink text, 48 tall. */
 .button {
   display: flex;
   align-items: center;
   justify-content: center;
   inline-size: 100%;
-  min-block-size: var(--gp-target);
-  padding-inline: var(--gp-sp-3);
+  min-block-size: var(--gp-wbtn-h);
+  padding-inline: var(--gp-wbtn-px);
   border: 0;
-  border-radius: var(--gp-r-pill);
-  background: var(--gp-ink);
-  color: var(--gp-surface);
+  border-radius: var(--gp-r-control);
+  background: var(--gp-web-fill);
+  color: var(--gp-web-on-fill);
   font: var(--gp-fw-headline) var(--gp-fs-headline) / var(--web-lh-text) var(--gp-font);
   cursor: pointer;
 }
@@ -79,12 +79,12 @@
 .dock .label { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .dock .input {
   block-size: 46px; padding-inline: 18px; border: 1.5px solid color-mix(in srgb, var(--on-dock) 35%, transparent);
-  border-radius: 999px; background: none; color: var(--on-dock); font: 400 16px / 1.2 inherit; font-family: inherit;
+  border-radius: var(--gp-r-control); background: none; color: var(--on-dock); font: 400 16px / 1.2 inherit; font-family: inherit;
 }
 .dock .input::placeholder { color: color-mix(in srgb, var(--on-dock) 65%, transparent); }
 .dock .input[aria-invalid="true"] { border-color: var(--dock-err); padding-inline: 17.5px; border-width: 1.5px; }
 .dock .input:focus-visible, .dock .button:focus-visible { outline-color: var(--ring); }
-.dock .button { inline-size: auto; min-block-size: 46px; padding-inline: 20px; background: var(--on-dock); color: var(--dock); font: 600 16px / 1.2 inherit; font-family: inherit; }
+.dock .button { inline-size: auto; min-block-size: 46px; padding-inline: var(--gp-wbtn-px); background: var(--gp-web-fill); color: var(--gp-web-on-fill); font: 600 16px / 1.2 inherit; font-family: inherit; }
 .dock .note, .dock .error, .dock .failed { flex-basis: 100%; padding-inline: 18px; font-size: 14px; line-height: 1.4; white-space: normal; }
 .dock .note { color: color-mix(in srgb, var(--on-dock) 75%, transparent); }
 .dock .error, .dock .failed { color: var(--dock-err); }

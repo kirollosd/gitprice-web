@@ -21,7 +21,7 @@
   aspect-ratio: 7 / 5;
   padding: var(--gp-sp-6) var(--gp-sp-4);
   background: var(--gp-surface-raised);
-  border-radius: var(--gp-r-lg);
+  border-radius: var(--gp-r-card);
   min-inline-size: 0;
 }
 
@@ -69,7 +69,7 @@
   inline-size: var(--gp-sp-8);
   block-size: var(--gp-sp-4);
   border: 2px solid var(--gp-surface-raised);
-  border-radius: var(--gp-r-pill);
+  border-radius: var(--gp-r-control);
   background: var(--gp-accent);
 }
 .toolbarCheck .tickSmall { color: var(--gp-on-accent); }
@@ -82,7 +82,7 @@
   padding-inline: var(--gp-sp-4) var(--gp-sp-3);
   background: var(--gp-surface);
   border: 1px solid var(--gp-hairline);
-  border-radius: var(--gp-r-pill);
+  border-radius: var(--gp-r-control);
   color: var(--gp-savings);
   font-size: var(--gp-fs-body-compact);
   font-weight: 600;

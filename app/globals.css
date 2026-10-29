@@ -343,3 +343,19 @@ h1[tabindex="-1"]:focus-visible { outline: none; }
   :root, [dir="rtl"] { --web-fs-hero: var(--web-fs-hero-web); --web-lh-hero: var(--web-lh-hero-web); }
   :root { --web-fs-h2: var(--web-fs-display); --web-fs-feature: 28px; }
 }
+
+/* GP-407 round 3: the website's two buttons. Primary is coral with ink text, at most one per view (every waitlist CTA
+   included); every other action is the secondary (no fill, 1px control edge, the surrounding text colour).
+   Both 48 tall with 24 inline padding and radius 8; the nav uses .gp-btn-sm (40 / 16). `:is(a, button)` outranks the
+   landing canvas's `:where(button)` reset. */
+:is(a, button).gp-btn, :is(a, button).gp-btn-2 {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--gp-wsp-1);
+  min-block-size: var(--gp-wbtn-h); padding: 0 var(--gp-wbtn-px);
+  border: 0; border-radius: var(--gp-r-control);
+  font-family: inherit; font-size: 16px; font-weight: 600; line-height: 1.2;
+  white-space: nowrap; text-decoration: none; cursor: pointer;
+}
+:is(a, button).gp-btn { background: var(--gp-web-fill); color: var(--gp-web-on-fill); }
+:is(a, button).gp-btn-2 { background: none; color: inherit; box-shadow: inset 0 0 0 1px var(--gp-control); }
+:is(a, button).gp-btn-sm { min-block-size: var(--gp-wbtn-h-sm); padding: 0 var(--gp-wbtn-px-sm); }
+:is(a, button):is(.gp-btn, .gp-btn-2):hover { text-decoration: none; }

@@ -1,3 +1,4 @@
+import { esc } from "./html";
 import { CUR, money, splitMoney, useMoney } from "./money";
 import s from "./Price.module.css";
 
@@ -16,6 +17,12 @@ export function Price({ v, d = 2 }: { v: number; d?: number }) {
     </bdi>
   );
 }
+
+/** A formatted "<value> <CODE>" string as HTML, the code in the text family (s.cur), for writers that build HTML. */
+export const moneyTextHtml = (out: string) => {
+  const [value, code] = splitMoney(out);
+  return code ? `${esc(value)} <span class="${s.cur}">${esc(code)}</span>` : esc(value);
+};
 
 /** The same markup as a string, for copy that carries its own HTML; money.ts applyMoney converts it in place. */
 export const priceHtml = (v: number, d = 2) =>

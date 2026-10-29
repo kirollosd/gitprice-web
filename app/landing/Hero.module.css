@@ -12,7 +12,6 @@
 .cap s { text-decoration-color: var(--gp-web-fill); text-decoration-thickness: 3px; }
 
 .hcta { display: flex; gap: 18px; align-items: center; justify-content: flex-end; margin-top: 18px; }
-.hcta .p { border: 0; font-family: inherit; cursor: pointer; background: var(--gp-web-fill); color: var(--gp-web-on-fill); border-radius: 999px; padding: 13px 22px; font-weight: 600; font-size: 16px; }
 .hcta a { color: var(--gp-web-ink); font-weight: 600; text-decoration: none; }
 .lede { position: absolute; inset-inline-end: 56px; bottom: 130px; width: 400px; font-size: 19px; line-height: 1.45; color: var(--gp-web-body); text-align: end; }
 .lede small { display: block; margin-top: 10px; font-size: 14px; color: var(--gp-web-mute); }
@@ -23,21 +22,22 @@
 .dg i { display: block; font-style: normal; }
 .dg i span { display: block; height: 1em; }
 .dg.dot { font-variant-numeric: normal; text-align: center; overflow: visible; }
-.strike { position: absolute; left: 30px; top: calc(var(--dtop) + var(--fs) * .686); height: 14px; width: 1380px; background: var(--gp-web-fill); transform-origin: 0 50%; transform: scaleX(0); border-radius: 7px; }
-/* the board's currency code (owner, 2026-10-27): mono, muted */
-.unit { position: absolute; inset-inline-end: 56px; top: 220px; font-size: 30px; font-family: "JetBrains Mono", monospace; color: var(--gp-web-mute); }
+.strike { position: absolute; left: 30px; top: calc(var(--dtop) + var(--fs) * .686); height: 14px; width: 1380px; background: var(--gp-web-fill); transform-origin: 0 50%; transform: scaleX(0); border-radius: var(--gp-r-xs); }
+/* the board's currency code, muted, in the text family with tabular figures (GP-407 round 3 .gp-cur rule) */
+.unit { position: absolute; inset-inline-end: 56px; top: 220px; font-size: 30px; font-family: var(--gp-font); font-variant-numeric: tabular-nums; color: var(--gp-web-mute); }
 
 .pick { position: absolute; inset-inline-end: 56px; top: 124px; z-index: 2; display: flex; gap: 8px; align-items: center; }
 .pick small { font-size: 15px; color: var(--gp-web-mute); margin-inline-end: 4px; }
-.pick button { border: 1.5px solid var(--gp-web-ink); background: transparent; border-radius: 999px; padding: 9px 15px; font: 600 15px var(--f-sans); color: var(--gp-web-ink); cursor: pointer; transition: background .2s, color .2s, transform .3s var(--spring); }
+/* the unified chip (base .chip); an invisible pad brings the tap area to 44px */
+.pick button { position: relative; font-family: var(--f-sans); cursor: pointer; transition: background .2s, color .2s, transform .3s var(--spring); }
+.pick button::before { content: ""; position: absolute; inset: -8px -2px; }
 .pick button:hover { transform: translateY(-2px); }
-.pick button:global(.on) { background: var(--gp-web-ink); color: var(--gp-web-ground); }
 
-/* spec chips: never wrap inside a chip (ship critique) */
-.tags { position: absolute; inset-inline-start: 48px; bottom: 140px; display: flex; gap: 10px; }
-.tags span { border: 1.5px solid var(--gp-web-ink); border-radius: 999px; padding: 10px 18px; font-size: 17px; white-space: nowrap; opacity: 0; transform: translateY(16px); transition: opacity .4s, transform .6s var(--spring); }
+/* spec chips (base .chip), then the store as a plain ink label: never the coral primary (GP-407 round 3) */
+.tags { position: absolute; inset-inline-start: 48px; bottom: 140px; display: flex; align-items: center; gap: 8px; }
+.tags span { opacity: 0; transform: translateY(16px); transition: opacity .4s, transform .6s var(--spring); }
 .tags span:global(.on) { opacity: 1; transform: none; }
-.tags span.w { background: var(--gp-web-fill); border-color: var(--gp-web-fill); color: var(--gp-web-on-fill); }
+.tags span.w { display: inline-flex; align-items: center; margin-inline-start: 8px; font-size: 15px; font-weight: 600; color: var(--gp-web-ink); white-space: nowrap; }
 
 :global(html.lp-short) .lede p { display: none; }
 :global(html[lang="ar"]) .cap { top: 262px; }
@@ -46,15 +46,12 @@
 
 /* phone canvas */
 :global(html.lp-m) .num > div { --dtop: calc(42vh / var(--z)); --fs: min(130px, calc((var(--cw, 430px) - 40px) / (var(--len, 3) * .56))); }
-:global(html.lp-m) .pick { inset-inline-start: 0; inset-inline-end: 0; top: 70px; padding: 0 20px 4px; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 84%, transparent); mask-image: linear-gradient(to right, #000 84%, transparent); }
-:global(html.lp-m[dir="rtl"]) .pick { -webkit-mask-image: linear-gradient(to left, #000 84%, transparent); mask-image: linear-gradient(to left, #000 84%, transparent); }
+:global(html.lp-m) .pick { inset-inline-start: 0; inset-inline-end: 0; top: 70px; padding: 0 20px 4px; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, rgb(10 10 11) 84%, transparent); mask-image: linear-gradient(to right, rgb(10 10 11) 84%, transparent); }
+:global(html.lp-m[dir="rtl"]) .pick { -webkit-mask-image: linear-gradient(to left, rgb(10 10 11) 84%, transparent); mask-image: linear-gradient(to left, rgb(10 10 11) 84%, transparent); }
 :global(html.lp-m) .pick::-webkit-scrollbar { display: none; }
 :global(html.lp-m) .pick::after { content: ""; flex: 0 0 14px; }
 :global(html.lp-m) .pick > * { flex-shrink: 0; white-space: nowrap; }
 :global(html.lp-m) .pick small { font-size: 14px; }
-/* compact chips keep their look; an invisible pad brings the tap area to 44px */
-:global(html.lp-m) .pick button { position: relative; padding: 7px 12px; font-size: 14px; min-height: calc(44px / var(--z, 1)); }
-:global(html.lp-m) .pick button::before { content: ""; position: absolute; inset: -7px -4px; min-height: 44px; }
 :global(html.lp-m) .kick { top: 122px; inset-inline-start: 20px; font-size: 14px; }
 :global(html.lp-m) .h1 { top: 166px; inset-inline-start: 20px; width: 390px; font-size: 34px; white-space: normal; }
 :global(html.lp-m) .cap { top: 254px; inset-inline-start: 20px; width: 390px; font-size: 17px; }
@@ -67,4 +64,3 @@
 :global(html.lp-m[dir="rtl"]) .digits { left: auto; right: 16px; }
 :global(html.lp-m) .lede { inset-inline-start: 20px; inset-inline-end: 20px; top: calc(42vh / var(--z) + 150px); bottom: auto; width: auto; font-size: 16px; text-align: start; }
 :global(html.lp-m) .tags { inset-inline-start: 20px; inset-inline-end: 20px; bottom: 110px; flex-wrap: wrap; gap: 6px; }
-:global(html.lp-m) .tags span { padding: 7px 12px; font-size: 14px; }

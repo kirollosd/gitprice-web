@@ -5,9 +5,9 @@
 /* first state of the grow (the mock sets it in JS at progress 0): a 600px 16:9 card, centred, tilted */
 .fframe {
   position: absolute; overflow: hidden; will-change: left, top;
-  width: 600px; height: 337.5px; left: calc((var(--cw, 1440px) - 600px) / 2); top: 400px; border-radius: 36px; transform: rotate(-3deg);
+  width: 600px; height: 337.5px; left: calc((var(--cw, 1440px) - 600px) / 2); top: 400px; border-radius: var(--gp-r-card); transform: rotate(-3deg);
   background: var(--gp-web-slab) var(--pl) center / cover no-repeat;
-  box-shadow: 0 60px 120px -40px rgba(34, 27, 21, .45);
+  box-shadow: 0 60px 120px -40px rgb(10 10 11 / .45);
 }
 :global(html[data-theme="dark"]) .fframe { background-image: var(--pd); }
 @media (prefers-color-scheme: dark) { :global(html:not([data-theme="light"])) .fframe { background-image: var(--pd); } }
@@ -15,7 +15,7 @@
 
 .chap { position: absolute; left: 50%; bottom: 112px; transform: translateX(-50%) translateY(30px); display: flex; gap: 8px; z-index: 3; opacity: 0; pointer-events: none; visibility: hidden; transition: opacity .4s, transform .6s var(--spring), visibility 0s .4s; --ring: var(--gp-web-on-dark); }
 .chap:global(.on) { opacity: 1; transform: translateX(-50%); pointer-events: auto; visibility: visible; transition-delay: 0s; }
-.chap button { position: relative; overflow: hidden; border: 0; border-radius: 999px; padding: 12px 20px; font: 600 15px var(--f-sans); background: var(--gp-web-dock); color: var(--gp-web-on-dock); cursor: pointer; opacity: .75; transition: opacity .2s, scale .3s var(--spring); }
+.chap button { position: relative; overflow: hidden; border: 0; border-radius: var(--gp-r-control); padding: 12px 20px; font: 600 15px var(--f-sans); background: var(--gp-web-dock); color: var(--gp-web-on-dock); cursor: pointer; opacity: .75; transition: opacity .2s, scale .3s var(--spring); }
 .chap button:hover { scale: 1.06; }
 .chap button:global(.on) { opacity: 1; }
 .chap .pp { display: grid; place-items: center; padding-inline: 16px; }

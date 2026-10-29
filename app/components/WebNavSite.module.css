@@ -8,7 +8,7 @@
   min-block-size: var(--gp-target);
   padding-inline: var(--gp-sp-6);
   border: 1px solid var(--gp-hairline-strong);
-  border-radius: var(--gp-r-pill);
+  border-radius: var(--gp-r-control);
 }
 .sellers:hover { text-decoration: none; }
 .actions { display: flex; align-items: center; gap: var(--gp-sp-6); }
@@ -18,10 +18,10 @@
   justify-content: center;
   min-inline-size: 232px;
   min-block-size: var(--gp-target);
-  background: var(--gp-ink);
-  color: var(--gp-surface);
+  background: var(--gp-web-fill);
+  color: var(--gp-web-on-fill);
   padding: var(--gp-sp-2) var(--gp-sp-5);
-  border-radius: var(--gp-r-pill);
+  border-radius: var(--gp-r-control);
   font-weight: 600;
   white-space: nowrap;
 }

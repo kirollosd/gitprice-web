@@ -1,19 +1,20 @@
 /* after the game: the cheapest look-alike shouldn't win */
-.trap { background: var(--gp-web-dark); color: var(--gp-web-on-dark); padding: 140px 48px 130px; display: grid; grid-template-columns: 1fr 560px; gap: 80px; align-items: center; --ring: var(--gp-web-on-dark); --cur-c: var(--gp-web-on-dark-mute); }
+.trap { background: var(--gp-web-dark); color: var(--gp-web-on-dark); padding: 140px 48px 130px; display: grid; grid-template-columns: 1fr 560px; gap: 80px; align-items: center; --ring: var(--gp-web-on-dark); --cur-c: var(--gp-web-on-dark-mute);
+  --seg-bg: var(--gp-web-dark-3); --seg-text: var(--gp-web-on-dark-mute); --seg-on: var(--gp-web-on-dark); --seg-on-text: var(--gp-web-dark);
+  --chip-bg: var(--gp-web-dark-3); --chip-edge: var(--gp-web-dark-line); --chip-ink: var(--gp-web-on-dark); }
 .trap h2 { font-weight: 300; font-size: 80px; line-height: .98; letter-spacing: -.04em; }
 .trap p { font-size: 19px; line-height: 1.5; color: var(--gp-web-on-dark-mute); margin-top: 22px; max-width: 560px; }
 .trap p bdi { white-space: nowrap; }
-.rank { background: var(--gp-web-dark-2); border-radius: 24px; padding: 22px 24px; }
+.rank { background: var(--gp-web-dark-2); border-radius: var(--gp-r-card); padding: 22px 24px; }
 .r { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-top: 1px solid var(--gp-web-dark-line); font-size: 17px; transition: transform .7s var(--spring), opacity .4s; }
 .r:global(.first) { border-top-color: transparent; }
-.r span { flex: 1; min-width: 0; margin-inline-end: 16px; line-height: 1.4; }
-.r b { flex: none; font-family: var(--f-mono); font-weight: 500; font-size: 19px; padding: 5px 10px; border-radius: 999px; }
-.r:global(.w) b { background: var(--gp-web-fill); color: var(--gp-web-on-fill); --cur-c: currentColor; }
+.r > span { flex: 1; min-width: 0; margin-inline-end: 16px; line-height: 1.4; }
+.r b { flex: none; font-family: var(--f-mono); font-weight: 500; font-size: 19px; padding: 5px 10px; border-radius: var(--gp-r-control); }
+/* the winner: contrast ink, never coral (GP-407 round 3: no coral numbers) */
+.r:global(.w) b { background: var(--gp-web-on-dark); color: var(--gp-web-dark); --cur-c: currentColor; }
 .r:global(.x) { color: var(--gp-web-on-dark-mute); }
-.r em { font-style: normal; font-size: 12px; border: 1px solid currentColor; border-radius: 999px; padding: 1px 8px; margin-inline-start: 8px; white-space: nowrap; }
-.tg { display: flex; gap: 6px; margin-bottom: 12px; }
-.tg button { border: 0; border-radius: 999px; padding: 9px 14px; font: 600 14px var(--f-sans); cursor: pointer; background: transparent; color: var(--gp-web-on-dark-mute); box-shadow: inset 0 0 0 1.5px var(--gp-web-dark-line); }
-.tg button:global(.on) { background: var(--gp-web-on-dark); color: var(--gp-web-dark); box-shadow: none; }
+.r em { font-style: normal; margin-inline-start: 8px; }
+.tg { margin-bottom: 12px; }
 
 :global(html[dir="rtl"]) .r em, :global(html[dir="rtl"]) .r bdi { unicode-bidi: isolate; }
 
@@ -24,7 +25,5 @@
 :global(html.lp-m) .rank { padding: 14px 16px; }
 :global(html.lp-m) .r { font-size: 14px; padding: 10px 0; }
 :global(html.lp-m) .r b { font-size: 15px; }
-:global(html.lp-m) .r span { display: block; margin-inline-end: 10px; }
-:global(html.lp-m) .r em { display: table; margin: 4px 0 0; font-size: 14px; }
-:global(html.lp-m) .tg button { position: relative; }
-:global(html.lp-m) .tg button::after { content: ""; position: absolute; inset: -8px -3px; }
+:global(html.lp-m) .r > span { display: block; margin-inline-end: 10px; }
+:global(html.lp-m) .r em { display: flex; width: fit-content; margin: 4px 0 0; }

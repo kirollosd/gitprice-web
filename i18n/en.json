@@ -1026,8 +1026,8 @@
       "trap": {
         "title": "The cheapest look-alike shouldn't win.",
         "body": "Sort these by price and <b>{item}</b> tops the list. It isn't what you were buying, so GitPrice doesn't count it.",
-        "byPrice": "Sorted by price",
-        "byGitPrice": "Sorted by GitPrice"
+        "byPrice": "Sort by price",
+        "byGitPrice": "Sort by GitPrice"
       },
       "print": {
         "title": "A month of shopping, checked line by line.",

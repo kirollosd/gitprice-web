@@ -22,10 +22,10 @@
 .button {
   flex: 1;
   min-block-size: var(--gp-target);
-  background: var(--gp-surface);
+  background: none;
   color: var(--gp-ink);
-  border: 1px solid var(--gp-hairline-strong);
-  border-radius: var(--gp-r-pill);
+  border: 1px solid var(--gp-control);
+  border-radius: var(--gp-r-control);
   font: var(--gp-fw-headline) var(--gp-fs-body) var(--gp-font);
   cursor: pointer;
 }
