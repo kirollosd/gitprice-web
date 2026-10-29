@@ -1,5 +1,5 @@
 /* 3 · the receipt: one long pinned scene, copy on the left, a receipt printing out of a slot on the right */
-.rcpt { --paper: #FFFEFA; }
+.rcpt { --paper: #F4F4F5; }
 .print { position: relative; height: 200vh; }
 .stage { position: sticky; top: 0; height: calc(100vh / var(--z, 1)); display: grid; grid-template-columns: 1fr 560px; gap: 80px; padding-inline: 48px 120px; overflow: hidden; clip-path: inset(80px 0 0 0); }
 .eq { flex: none; display: inline-grid; place-items: center; border-radius: 50%; background: var(--gp-web-fill); color: var(--gp-web-on-fill); font-weight: 800; line-height: 1; }
@@ -15,15 +15,14 @@
 .c + .c h2 { font-size: 24px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; }
 .c + .c p { font-size: 15px; margin-top: 4px; }
 .copy p b { color: var(--gp-web-ink); font-weight: 600; }
-.tog { display: inline-flex; margin-top: 34px; background: var(--gp-web-slab); border-radius: 999px; padding: 4px; }
-.tog button { border: 0; background: transparent; border-radius: 999px; padding: 12px 20px; font: 600 16px var(--f-sans); color: var(--gp-web-body); cursor: pointer; transition: background .25s, color .25s; }
-.tog button:global(.on) { background: var(--gp-web-ink); color: var(--gp-web-ground); }
+/* the shared segmented toggle (base .seg); only its place in the copy is set here */
+.tog { margin-top: 34px; }
 
 .slotwrap { position: relative; padding-top: 96px; }
-.slot { position: relative; z-index: 3; height: 30px; border-radius: 15px; background: var(--gp-web-ink); box-shadow: 0 14px 24px -12px rgba(34, 27, 21, .6); }
-.slot::after { content: ""; position: absolute; inset-inline-start: 30px; inset-inline-end: 30px; top: 13px; height: 4px; border-radius: 2px; background: #000; }
+.slot { position: relative; z-index: 3; height: 30px; border-radius: var(--gp-r-control); background: var(--gp-web-ink); box-shadow: 0 14px 24px -12px rgb(10 10 11 / .6); }
+.slot::after { content: ""; position: absolute; inset-inline-start: 30px; inset-inline-end: 30px; top: 13px; height: 4px; border-radius: 2px; background: var(--gp-web-dark); }
 /* the one monospace surface; first state: nothing fed yet */
-.paper { --f-mono: var(--f-rcpt); position: relative; z-index: 2; margin: -12px 26px 0; background: var(--paper); padding: 34px 34px 0; font-family: var(--f-mono); font-size: 15px; color: var(--gp-web-ink); box-shadow: 0 30px 50px -30px rgba(34, 27, 21, .45); clip-path: inset(var(--cut, 0px) 0 calc(100% - var(--fed, 0px)) 0); will-change: clip-path, transform; }
+.paper { --f-mono: var(--f-rcpt); position: relative; z-index: 2; margin: -12px 26px 0; background: var(--paper); padding: 34px 34px 0; font-family: var(--f-mono); font-size: 15px; color: var(--gp-web-ink); box-shadow: inset 0 0 0 1px #DCDCE0, 0 30px 50px -30px rgb(10 10 11 / .45); clip-path: inset(var(--cut, 0px) 0 calc(100% - var(--fed, 0px)) 0); will-change: clip-path, transform; }
 .paper::after { content: ""; position: absolute; inset-inline-start: 0; inset-inline-end: 0; bottom: -12px; height: 12px; background: radial-gradient(circle at 8px 0, transparent 8px, var(--paper) 8.5px) 0 0 / 16px 12px repeat-x; }
 .hd { text-align: center; padding-bottom: 18px; border-bottom: 2px dashed var(--gp-web-dim); }
 .logo { display: block; height: 30px; width: 104px; margin: 0 auto; background-color: currentColor; mask: url("/logo_wordmark.svg") center / contain no-repeat; }
@@ -33,9 +32,9 @@
 .it .ln { display: flex; justify-content: space-between; align-items: center; margin-top: 7px; font-size: 14px; color: var(--gp-web-body); }
 .it .ln s { color: var(--gp-web-mute); }
 .ok { display: inline-flex; align-items: center; gap: 6px; color: var(--gp-web-save); }
-.ok .eq { width: 18px; height: 18px; font-size: 11px; background: var(--gp-web-save); color: #fff; }
+.ok .eq { width: 18px; height: 18px; font-size: 11px; background: var(--gp-web-save); color: #F4F4F5; }
 .no { display: inline-flex; align-items: center; gap: 6px; color: var(--gp-web-mute); }
-.no .eq { width: 18px; height: 18px; font-size: 11px; background: var(--gp-web-mute); color: #fff; }
+.no .eq { width: 18px; height: 18px; font-size: 11px; background: var(--gp-web-mute); color: #F4F4F5; }
 .it .ln b { font-weight: 700; color: var(--gp-web-ink); font-size: 15px; }
 .tot { padding: 20px 0 30px; }
 .tot .ln { display: flex; justify-content: space-between; font-size: 15px; margin-top: 6px; color: var(--gp-web-body); }
@@ -74,8 +73,6 @@
 :global(html.lp-m) .c + .c { padding-inline-start: 12px; }
 :global(html.lp-m) .c + .c h2 { font-size: 15px; }
 :global(html.lp-m) .tog { margin-top: 12px; }
-:global(html.lp-m) .tog button { position: relative; padding: 9px 14px; font-size: max(14px, var(--fl, 0px)); min-height: calc(44px / var(--z, 1)); }
-:global(html.lp-m) .tog button::before { content: ""; position: absolute; inset: -7px -4px; min-height: 44px; }
 :global(html.lp-m) .tally { inset-inline-start: 0; inset-inline-end: 0; top: 292px; padding: 0 20px 8px; z-index: 5; gap: 8px; background: var(--gp-web-ground); }
 :global(html.lp-m) .tally small { font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .tally b { font-size: 28px; }

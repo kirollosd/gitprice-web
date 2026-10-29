@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t, type Locale } from "../../lib/i18n";
+import b from "./base.module.css";
 import { Price } from "./Price";
 import { StoreText } from "./StoreMark";
 import type { RankRow } from "./Trap";
@@ -73,14 +74,14 @@ export default function RankSort({ rows, locale }: { rows: RankRow[]; locale: Lo
 
   return (
     <div className={s.rank}>
-      <div className={s.tg}>
+      <div className={`${b.seg} ${s.tg}`} role="group">
         <button type="button" id="tgAll" className={gp ? undefined : "on"} aria-pressed={!gp} onClick={() => choose(false)}>{t(locale, K + "byPrice")}</button>
         <button type="button" id="tgGp" className={gp ? "on" : undefined} aria-pressed={gp} onClick={() => choose(true)}>{t(locale, K + "byGitPrice")}</button>
       </div>
       <div id="rank" ref={rank}>
         {rows.map((r, i) => (
           <div key={r.label + r.price} className={`${s.r} ${i === 0 ? "first w" : ""}`} data-exact={r.exact ? "" : undefined}>
-            <span><bdi><StoreText label={r.label} locale={locale} /></bdi>{r.why && <em><span aria-hidden="true">≠ </span>{r.why}</em>}</span>
+            <span><bdi><StoreText label={r.label} locale={locale} /></bdi>{r.why && <em className={b.chip}><span aria-hidden="true">≠ </span>{r.why}</em>}</span>
             <b><Price v={r.price} /></b>
           </div>
         ))}

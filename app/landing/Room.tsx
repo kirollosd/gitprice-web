@@ -12,8 +12,6 @@ import { marksHtml, StoreText, storeTextHtml } from "./StoreMark";
 import s from "./Room.module.css";
 
 const K = "web.landing.room.";
-const LETTERS = "ABCD";
-// the mock's "Suspect A: <name>" name for a lineup card; ponytail: no i18n key yet (web.landing.spot.suspect), the monorepo owns copy
 const ROUNDS = 3;
 /** Horizontal travel that counts as a swipe between lineups. */
 const SWIPE_PX = 48;
@@ -133,11 +131,6 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
         onPointerCancel={() => { swipe.current = null; }}
         onClickCapture={(e) => { if (swiped.current) { swiped.current = false; e.stopPropagation(); e.preventDefault(); } }}
       >
-        <div className={s.lines} id="lines" aria-hidden="true">
-          {[0, 1, 2, 3].map((k) => (
-            <div key={k} style={{ top: 110 + k * 110 }}><span>{R.units[3 - k]}</span><span className={s.r}>{R.units[3 - k]}</span></div>
-          ))}
-        </div>
         <div className={s.sus} id="sus">
           {R.lineup.map(([store, name, price, art, exact, why], k) => (
             <button key={`${R.id}-${k}`} type="button" className={s.s} data-k={k} data-exact={exact === 1 ? "" : undefined} onClick={() => reveal(k)}>
@@ -145,12 +138,11 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
               {exact === 1 ? (
                 <span className={s.stamp}><GMark className={s.eq} state="same" settleOnView label="" />{t(locale, K + "stamp")}</span>
               ) : (
-                <span className={s.why}><GMark className={s.eq} state="ne" settleOnView label="" />{why}</span>
+                <span className={`${b.chip} ${s.why}`}><GMark className={s.eq} state="ne" settleOnView label="" />{why}</span>
               )}
               <div className={s.store}><StoreText label={store} locale={locale} /></div>
               <h3>{name}</h3>
               <div className={`${s.pr} ${b.mono}`}><Price v={price} /></div>
-              <span className={s.plac} aria-hidden="true">{LETTERS[k]}</span>
             </button>
           ))}
         </div>
@@ -163,8 +155,8 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
               <button key={k} type="button" className={k === round ? "on" : undefined} aria-label={t(locale, K + "lineupN", { n: k + 1, total: ROUNDS })} aria-current={k === round ? "true" : undefined} onClick={() => goTo(k)} />
             ))}
           </span>
-          <button type="button" className={s.g} id="reveal" onClick={() => reveal(null)}>{t(locale, K + "show")}</button>
-          <button type="button" className={s.p} id="next" onClick={next}>{t(locale, K + (round < ROUNDS - 1 ? "next" : "startOver"))}</button>
+          <button type="button" className={`gp-btn-2 ${s.g}`} id="reveal" onClick={() => reveal(null)}>{t(locale, K + "show")}</button>
+          <button type="button" className={`gp-btn-2 ${s.p}`} id="next" onClick={next}>{t(locale, K + (round < ROUNDS - 1 ? "next" : "startOver"))}</button>
         </div>
       </div>
       <p className={s.hint} dangerouslySetInnerHTML={html(locale, "web.landing.spot.note", {}, { marks: marksHtml(locale) })} />

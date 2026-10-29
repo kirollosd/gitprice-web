@@ -59,7 +59,7 @@ export default function How({ locale, product: P }: { locale: Locale; product: P
               <div className={s.r}><span><StoreText label={P.other.store} locale={locale} /></span><b><Price v={P.other.price} /></b></div>
               <div className={s.r}><span><StoreText label={P.on} locale={locale} /> · {t(locale, K + "youreHere")}</span><b><s><Price v={P.from} /></s></b></div>
               <div className={`${s.r} ${s.lk}`}>
-                <span><StoreText label={P.lookalike.label} locale={locale} bdiRest /> <em>{reason(P.lookalike.reason)}</em></span>
+                <span><StoreText label={P.lookalike.label} locale={locale} bdiRest /> <em className={b.chip}>{reason(P.lookalike.reason)}</em></span>
                 <b><Price v={P.lookalike.price} /></b>
               </div>
             </div>

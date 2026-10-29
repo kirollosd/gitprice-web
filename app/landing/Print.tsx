@@ -54,7 +54,7 @@ export default function Print({ locale, product: P }: { locale: Locale; product:
                 <h2>{t(locale, K + h)}</h2>
                 <p dangerouslySetInnerHTML={html(locale, K + p)} />
                 {i === 3 && (
-                  <div className={s.tog} role="group" aria-label={t(locale, K + "viewLabel")}>
+                  <div className={`${b.seg} ${s.tog}`} role="group" aria-label={t(locale, K + "viewLabel")}>
                     <button type="button" id="tWith" className={raw ? undefined : "on"} aria-pressed={!raw} onClick={() => setRaw(false)}>{t(locale, K + "with")}</button>
                     <button type="button" id="tWithout" className={raw ? "on" : undefined} aria-pressed={raw} onClick={() => setRaw(true)}>{t(locale, K + "without")}</button>
                   </div>

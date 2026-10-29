@@ -1,9 +1,11 @@
 /* value and code are one left-to-right unit that never breaks between them */
 .p { white-space: nowrap; }
-/* ISO code after every price (owner, 2026-10-27): small mono, muted. Dark bands set --cur-c to their own muted ink
+/* ISO code after every price (owner, 2026-10-27): small and muted. GP-407 round 3: it takes the surrounding text family
+   (Outfit EN / Alexandria AR, --gp-font) with tabular figures, never the mono numeral font (tokens .gp-cur). Dark bands set --cur-c to their own muted ink
    so the code keeps AA contrast there; on a filled pill it follows the pill's text. */
 .cur {
-  font-family: "JetBrains Mono", monospace;
+  font-family: var(--gp-font);
+  font-variant-numeric: tabular-nums;
   font-size: max(.62em, 10px, var(--fl, 0px));
   font-weight: 400;
   letter-spacing: 0;

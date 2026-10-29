@@ -52,13 +52,13 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
         <div className={s.strike} id="strike" aria-hidden="true" />
         <p className={b.sr} id="numsr">{t(locale, K + "srPrices", { from: `${from} ${code}`, to: `${to} ${code}` })}</p>
         <div key={`tags:${P.id}`} className={s.tags} id="tags">
-          {P.tags.map((x) => <span key={x}>{x}</span>)}
+          {P.tags.map((x) => <span key={x} className={b.chip}>{x}</span>)}
           <span className={s.w}><StoreText label={P.best.store} locale={locale} /></span>
         </div>
         <div className={s.lede}>
           <p id="lede">{t(locale, K + "lede")}</p>
           <div className={s.hcta}>
-            <JoinButton locale={locale} placement="hero" className={s.p} />
+            <JoinButton locale={locale} placement="hero" className="gp-btn" />
             <BetaTag locale={locale} />
             <a href="#how">{t(locale, K + "seeHow")}</a>
           </div>

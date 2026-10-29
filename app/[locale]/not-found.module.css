@@ -15,9 +15,9 @@
   min-inline-size: 200px;
   min-block-size: var(--gp-target);
   padding-inline: var(--gp-sp-6);
-  border-radius: var(--gp-r-pill);
-  background: var(--gp-ink);
-  color: var(--gp-surface);
+  border-radius: var(--gp-r-control);
+  background: var(--gp-web-fill);
+  color: var(--gp-web-on-fill);
   font-weight: 600;
 }
 .button:hover { text-decoration: none; }

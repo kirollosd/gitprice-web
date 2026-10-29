@@ -10,7 +10,7 @@
   --f-ar: "Alexandria", "Outfit", system-ui, sans-serif;
   --f-rcpt: "JetBrains Mono", "Alexandria", monospace;
   --f-mono: var(--f-sans);
-  --paper: #FFFEFA;
+  --paper: #F4F4F5;
   position: relative;
   width: var(--cw, 1440px);
   zoom: var(--z, 1);
@@ -50,3 +50,24 @@
 
 @media (prefers-reduced-motion: reduce) { .canvas * { transition: none !important; } }
 :global(html.lp-m) .kick { text-transform: none; letter-spacing: .02em; } /* small caps shout on a phone: sentence case there */
+
+/* GP-407 round 3 · the one chip: 28 tall, radius 8, raised fill, hairline-strong edge, ink 12/600. Meaning comes only from
+   the glyph and the word. Dark bands set --chip-bg / --chip-edge / --chip-ink. Selected (.sel or aria-pressed): ink fill. */
+.chip {
+  display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 0 8px;
+  border-radius: var(--gp-r-control); border: 1px solid var(--chip-edge, var(--gp-hairline-strong));
+  background: var(--chip-bg, var(--gp-web-raised)); color: var(--chip-ink, var(--gp-web-ink));
+  font-size: max(12px, var(--fl, 0px)); font-weight: 600; line-height: 1.2; white-space: nowrap;
+}
+.chip:is(:global(.sel), [aria-pressed="true"]) { background: var(--chip-ink, var(--gp-web-ink)); border-color: var(--chip-ink, var(--gp-web-ink)); color: var(--chip-on, var(--gp-web-ground)); }
+:global(html.lp-m) .chip { min-height: calc(28px / var(--z, 1)); }
+
+/* GP-407 round 3 · the one segmented toggle: the receipt's With / Without and the trap's sort. The selected segment is
+   contrast ink, never coral. A dark band sets --seg-bg / --seg-text / --seg-on / --seg-on-text. */
+.seg { display: inline-flex; gap: 4px; padding: 4px; border-radius: var(--gp-r-control); background: var(--seg-bg, var(--gp-web-slab)); }
+.seg button {
+  border: 0; background: transparent; border-radius: var(--gp-r-xs); min-height: 40px; padding: 0 16px;
+  font: 600 16px var(--f-sans); color: var(--seg-text, var(--gp-web-body)); cursor: pointer; transition: background .25s, color .25s;
+}
+.seg button:global(.on) { background: var(--seg-on, var(--gp-web-ink)); color: var(--seg-on-text, var(--gp-web-ground)); }
+:global(html.lp-m) .seg button { position: relative; padding: 0 12px; font-size: max(14px, var(--fl, 0px)); min-height: calc(44px / var(--z, 1)); }

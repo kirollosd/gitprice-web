@@ -1,5 +1,5 @@
 {
-  "_source": "gitprice@19b5f214",
+  "_source": "gitprice@13d52c81",
   "web": {
     "component": {
       "webNav": {
@@ -87,7 +87,7 @@
           "plan": "Free",
           "period": "Free forever",
           "feature": {
-            "1": "3 price alerts",
+            "1": "Price alerts",
             "2": "Compare prices across stores",
             "3": "Your savings history"
           },
@@ -100,7 +100,7 @@
           "price": "XX",
           "period": "per month, placeholder price",
           "feature": {
-            "1": "100 price alerts",
+            "1": "Price alerts",
             "2": "Faster price checks",
             "3": "Everything in Free"
           },
@@ -374,8 +374,8 @@
           "pro": "Longer history is coming with Pro."
         },
         "proLimits": {
-          "title": "More alerts, faster checks",
-          "body": "100 alerts instead of 3, and prices refreshed more often."
+          "title": "Faster checks",
+          "body": "Prices refreshed more often."
         },
         "orders": {
           "title": "Orders counted for you",
@@ -844,7 +844,7 @@
     "checkout": {
       "summary": {
         "title": "Upgrade to GitPrice Pro",
-        "body": "100 price alerts and faster checks. Payment happens on a secure provider page.",
+        "body": "Faster price checks. Payment happens on a secure provider page.",
         "row": {
           "label": "Plan",
           "value": "Pro · monthly",
@@ -1017,8 +1017,8 @@
       "trap": {
         "title": "The cheapest look-alike shouldn't win.",
         "body": "Sort these by price and <b>{item}</b> tops the list. It isn't what you were buying, so GitPrice doesn't count it.",
-        "byPrice": "Sorted by price",
-        "byGitPrice": "Sorted by GitPrice"
+        "byPrice": "Sort by price",
+        "byGitPrice": "Sort by GitPrice"
       },
       "print": {
         "title": "A month of shopping, checked line by line.",

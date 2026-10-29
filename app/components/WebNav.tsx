@@ -12,6 +12,7 @@ import BetaTag from "./BetaTag";
 import Logo from "./Logo";
 import { NavCta, NavSellers } from "./NavLinks";
 import ThemeToggle from "./ThemeToggle";
+import { useActiveSection } from "./useActiveSection";
 import styles from "./WebNav.module.css";
 import site from "./WebNavSite.module.css";
 import WebMenu from "./WebMenu";
@@ -20,6 +21,7 @@ const N = "web.component.webNav.";
 const L = "web.landing.nav.";
 /** The landing's sections, in page order. */
 const LINKS = [["how", "howItWorks"], ["film", "watchLive"], ["spot", "matchChallenge"], ["rcpt", "savings"], ["rail", "stores"]] as const;
+const IDS = LINKS.map(([id]) => id);
 
 /**
  * Landing nav (home only), ported from combo.html: the board wordmark, the five landing links (>= 1024), the language menu, the
@@ -30,6 +32,7 @@ const LINKS = [["how", "howItWorks"], ["film", "watchLive"], ["spot", "matchChal
 export default function WebNav({ locale, variant }: { locale: Locale; variant?: "landing" | "site" | "hosted" }) {
   const { rest } = localeFromPath(usePathname() ?? "/");
   const kind = variant ?? (hasMinimalNav(rest) ? "hosted" : rest === "/" ? "landing" : "site");
+  const active = useActiveSection(IDS);
   if (kind === "hosted") {
     return (
       <header className={styles.header}>
@@ -71,7 +74,7 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
         <Wordmark locale={locale} className={styles.brand} />
         <nav aria-label={t(locale, N + "a11y.label.primary")} className={styles.links}>
           {LINKS.map(([id, k]) => (
-            <Link key={id} href={`${home}#${id}`} className={styles.link} data-gp-track="cta_click" data-gp-cta-id={`nav_${id}`} data-gp-placement="nav">{t(locale, L + k)}</Link>
+            <Link key={id} href={`${home}#${id}`} className={styles.link} aria-current={active === id ? "true" : undefined} data-gp-track="cta_click" data-gp-cta-id={`nav_${id}`} data-gp-placement="nav">{t(locale, L + k)}</Link>
           ))}
           <NavSellers locale={locale} keys="1024" className={`${styles.link} ${styles.sellers} ${styles.sellersShort}`} />
           <NavSellers locale={locale} keys="1440" className={`${styles.link} ${styles.sellers} ${styles.sellersLong}`} />
