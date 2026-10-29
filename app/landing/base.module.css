@@ -10,7 +10,6 @@
   --f-ar: "Alexandria", "Outfit", system-ui, sans-serif;
   --f-rcpt: "JetBrains Mono", "Alexandria", monospace;
   --f-mono: var(--f-sans);
-  --paper: #F4F4F5;
   position: relative;
   width: var(--cw, 1440px);
   zoom: var(--z, 1);

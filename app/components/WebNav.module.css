@@ -41,12 +41,12 @@
 .site[data-dk] .link:hover { color: var(--gp-web-on-dark); }
 /* scroll-spy (useActiveSection): the link of the section in view gets a 2px ink rule 6px under the label, grown from the line's start (the right in RTL) */
 .link { position: relative; }
-.link::after { content: ""; position: absolute; inset-inline-start: 0; inset-block-start: calc(100% + 6px); inline-size: 0; block-size: 2px; border-radius: 1px; background: var(--gp-web-ink); opacity: 0; transition: inline-size .3s ease, opacity .2s; pointer-events: none; }
+.link::before { content: ""; position: absolute; inset-inline-start: 0; inset-block-start: calc(100% + 6px); inline-size: 0; block-size: 2px; border-radius: 1px; background: var(--gp-web-ink); opacity: 0; transition: inline-size .3s ease, opacity .2s; pointer-events: none; }
 .link[aria-current="true"] { color: var(--gp-web-ink); }
-.link[aria-current="true"]::after { inline-size: 100%; opacity: 1; }
+.link[aria-current="true"]::before { inline-size: 100%; opacity: 1; }
 .site[data-dk] .link[aria-current="true"] { color: var(--gp-web-on-dark); }
-.site[data-dk] .link::after { background: var(--gp-web-on-dark); }
-@media (prefers-reduced-motion: reduce) { .link::after { transition: none; } }
+.site[data-dk] .link::before { background: var(--gp-web-on-dark); }
+@media (prefers-reduced-motion: reduce) { .link::before { transition: none; } }
 .sellers { border: 1px solid var(--gp-control); border-radius: var(--gp-r-control); padding: 5px 12px; }
 /* The sellers pill only fits from 1280 (short label) and 1440 (long label); 1024-1279 tightens the bar instead. */
 .sellersShort, .sellersLong { display: none; }

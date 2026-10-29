@@ -39,8 +39,8 @@ export default function How({ locale, product: P }: { locale: Locale; product: P
         </div>
         <div className={s.persp}>
           <div className={s.browser} id="hb">
-            <div className={s.bar}><i /><i /><i /><span className={s.u}>example.store / {P.short}</span></div>
-            <div className={s.pdp}>
+            <div className={s.bar} data-gp="web" data-theme="light"><i /><i /><i /><span className={s.u}>example.store / {P.short}</span></div>
+            <div className={s.pdp} data-gp="web" data-theme="light">
               <div className={s.ph} />
               <div>
                 <h4>{P.name}</h4>

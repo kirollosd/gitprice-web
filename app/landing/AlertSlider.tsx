@@ -118,7 +118,7 @@ export default function AlertSlider({ locale, product: P }: { locale: Locale; pr
         ))}
       </div>
       <div className={s.chart} id="chart">
-        <div className={s.toast} id="toast" ref={toast}>
+        <div className={s.toast} id="toast" ref={toast} data-gp="web" data-theme="light">
           <GMark className={s.eq} state="same" settleOnView label="" />
           <div>
             <small>{t(locale, K + "toast")}</small>

@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
 import BetaTag from "../components/BetaTag";
@@ -6,6 +6,7 @@ import { JoinButton } from "./Dock";
 import { html } from "./html";
 import { splitMoney, useMoney } from "./money";
 import { priceHtml } from "./Price";
+import { useRootFlag } from "./rootFlag";
 import ProductPicker from "./ProductPicker";
 import type { Product } from "./products";
 import { StoreText } from "./StoreMark";
@@ -26,6 +27,17 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
   const [to] = splitMoney(f(P.best.price, 0));
   const less = P.from - P.best.price;
   // the caption once the board has landed; ScrollScenes swaps #cap to it
+  // one coral CTA per screen: html[data-gp-hero-cta] while the hero CTA is on screen turns the nav CTA secondary (globals.css)
+  const cta = useRef<HTMLDivElement>(null);
+  const [ctaSeen, setCtaSeen] = useState(false);
+  useEffect(() => {
+    const el = cta.current;
+    if (!el || typeof IntersectionObserver !== "function") return;
+    const io = new IntersectionObserver(([e]) => setCtaSeen(e.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  useRootFlag("data-gp-hero-cta", ctaSeen);
   const done = html(locale, K + "captionDone", { product: P.short }, { less: priceHtml(less, Number.isInteger(less) ? 0 : 2), from: priceHtml(P.from) }).__html;
   return (
     <section className={`${b.sec} ${s.num}`} id="num" data-gp-section="num" data-from={P.from} data-best={P.best.price}>
@@ -57,7 +69,7 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
         </div>
         <div className={s.lede}>
           <p id="lede">{t(locale, K + "lede")}</p>
-          <div className={s.hcta}>
+          <div className={s.hcta} ref={cta}>
             <JoinButton locale={locale} placement="hero" className="gp-btn" />
             <BetaTag locale={locale} />
             <a href="#how">{t(locale, K + "seeHow")}</a>

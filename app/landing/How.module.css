@@ -15,20 +15,21 @@
 .browser {
   position: absolute; inset-inline-start: max(520px, calc(var(--cw, 1440px) * .389)); top: 150px;
   width: min(calc(var(--cw, 1440px) * .556), calc(var(--cw, 1440px) * .611 - 50px)); height: min(560px, calc(100vh / var(--z, 1) - 220px));
-  background: #F4F4F5; border-radius: var(--gp-r-card); box-shadow: 0 50px 90px -30px rgb(10 10 11 / .35); overflow: hidden; border: 1px solid #eadfe2;
+  background: var(--gp-web-on-dark); border-radius: var(--gp-r-card); box-shadow: 0 50px 90px -30px rgb(10 10 11 / .35); overflow: hidden; border: 1px solid #eadfe2;
   transform-origin: 50% 100%; transform: rotateX(26deg) scale(.92);
 }
-.bar { height: 42px; background: #F3EEEF; display: flex; align-items: center; gap: 8px; padding: 0 14px; font-size: 13px; color: #6d6264; }
+.bar { height: 42px; background: #F3EEEF; display: flex; align-items: center; gap: 8px; padding: 0 14px; font-size: 13px; color: var(--gp-web-mute); }
 .bar i { width: 10px; height: 10px; border-radius: 50%; background: #d9cfd1; }
-.bar .u { margin-inline-start: 14px; background: #F4F4F5; border-radius: var(--gp-r-control); padding: 5px 14px; }
+.bar .u { margin-inline-start: 14px; background: var(--gp-web-ground); border-radius: var(--gp-r-control); padding: 5px 14px; }
 .pdp { display: grid; grid-template-columns: 280px 1fr; gap: 30px; padding: 32px; }
 .ph { height: 280px; border-radius: var(--gp-r-control); background: #2b2b2e; position: relative; overflow: hidden; }
 .ph::after { content: ""; position: absolute; inset-inline-start: 30%; top: 22%; width: 40%; height: 56%; border-radius: 18px; background: #3c3c40; }
-.pdp h4 { font-size: 24px; font-weight: 600; color: #161314; }
-.pdp .pr { font-size: 32px; margin-top: 14px; color: #161314; }
+.pdp h4 { font-size: 24px; font-weight: 600; color: var(--gp-web-ink); }
+.pdp .pr { font-size: 32px; margin-top: 14px; color: var(--gp-web-ink); }
 .ln { height: 10px; border-radius: 5px; background: #efe9ea; margin-top: 12px; }
-/* the price sits on the white page: its code keeps the light-theme mute */
-.browser { --cur-c: #6B6B73; }
+/* the mock store page is light in both themes: its bar and page carry data-gp="web" data-theme="light" (How.tsx), so the light web tokens apply there; the overlays keep the page theme */
+.browser { --cur-c: var(--gp-web-mute); }
+.pdp { --cur-c: var(--gp-web-mute); }
 
 .badge { position: absolute; inset-inline-start: 342px; top: 250px; display: flex; align-items: center; gap: 10px; background: var(--gp-web-dock); color: var(--gp-web-on-dock); border-radius: var(--gp-r-control); padding-block: 4px; padding-inline: 4px 16px; font-size: 15px; opacity: 0; transform: scale(.6); transition: opacity .3s, transform .55s var(--spring); --cur-c: currentColor; }
 .badge:global(.on) { opacity: 1; transform: none; }

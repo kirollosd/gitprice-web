@@ -30,6 +30,9 @@ export async function shoot(page: Page, name: string, { fullPage = false }: Opti
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
   if (fullPage) await settleLazy(page);
+  if (fullPage) await freezeCoral(page);
+  // The scroll cue comes back 1.5 s after a scroll (ScrollScenes.tsx); the capture's resize counts as one, so it is live in a full page.
+  if (fullPage) await page.addStyleTag({ content: "#cue { visibility: hidden !important; }" });
   await expect(page).toHaveScreenshot(`${name}.png`, {
     fullPage,
     // Viewport shots (dock, menu) guard small details: 0.2%. Full pages 0.5%, tight enough that a whole component moving or vanishing fails (the config's 2% default is for the parity specs).
@@ -37,6 +40,15 @@ export async function shoot(page: Page, name: string, { fullPage = false }: Opti
     animations: "disabled",
     caret: "hide",
   });
+}
+
+/**
+ * The one-coral flags on <html> (useRootFlag: data-gp-hero-cta, data-gp-dock-in) follow IntersectionObservers. The full-page capture
+ * resizes the viewport, the observers report again mid-capture and the CTAs repaint, so consecutive captures never match. Keep the
+ * settled scroll-top state for the shot: settleLazy has scrolled back to the top and waited 700 ms, so they hold the top-of-page state.
+ */
+async function freezeCoral(page: Page) {
+  await page.evaluate(() => { document.documentElement.toggleAttribute = (n: string) => document.documentElement.hasAttribute(n); });
 }
 
 /** Scrolls to the bottom and back so scroll-triggered scenes (reduced motion: settled at once) have all run before the full-page capture. */

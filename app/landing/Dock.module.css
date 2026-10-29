@@ -2,8 +2,6 @@
 .dock {
   --dock: var(--gp-web-dock); --on-dock: var(--gp-web-on-dock); --dock-save: var(--gp-web-dock-save);
   --fill-d: var(--gp-web-fd); --on-fill-d: var(--gp-web-onfd); --ring: var(--gp-web-on-dock); --cur-c: currentColor;
-  /* error text: amber on the dark dock, the light-mode accent on a light one (ship critique, >= 4.5:1 both) */
-  --dock-err: #E8B45E;
   position: fixed; z-index: 30; left: 50%; bottom: 32px;
   transform: translateX(-50%) translateY(140px);
   display: flex; align-items: center;
@@ -21,9 +19,7 @@
 :global(html[data-theme="dark"]) .dock:global(.dk) { --on-dock: var(--gp-web-dark); --dock-save: var(--gp-web-savel); --ring: var(--gp-web-dark); --on-fill-d: var(--gp-web-dark); }
 @media (prefers-color-scheme: dark) {
   :global(html:not([data-theme="light"])) .dock:global(.dk) { --on-dock: var(--gp-web-dark); --dock-save: var(--gp-web-savel); --ring: var(--gp-web-dark); --on-fill-d: var(--gp-web-dark); }
-  :global(html:not([data-theme="light"])) .dock { --dock-err: var(--gp-web-accl); }
 }
-:global(html[data-theme="dark"]) .dock, .dock:global(.dk) { --dock-err: var(--gp-web-accl); }
 .dock :focus-visible { outline-color: var(--ring); }
 /* Arabic: Alexandria first, and buttons keep the mock's 1.25 lines */
 :global(html[lang="ar"]) .dock { font-family: "Alexandria", "Outfit", system-ui, sans-serif; }

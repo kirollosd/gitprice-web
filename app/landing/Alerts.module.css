@@ -12,7 +12,7 @@
 .csvg { width: 100%; height: 380px; display: block; overflow: visible; cursor: ns-resize; }
 .hint { font-size: 14px; color: var(--gp-web-mute); margin-top: 8px; }
 .tap { display: none; }
-.toast { position: absolute; inset-inline-end: 20px; top: -34px; display: flex; gap: 14px; align-items: center; background: #F4F4F5; color: var(--gp-web-ink); border-radius: var(--gp-r-card); padding: 16px; box-shadow: 0 24px 50px -18px rgb(10 10 11 / .45); transition: transform .5s var(--spring), opacity .3s; width: 400px; }
+.toast { position: absolute; inset-inline-end: 20px; top: -34px; display: flex; gap: 14px; align-items: center; background: var(--gp-web-ground); color: var(--gp-web-ink); border-radius: var(--gp-r-card); padding: 16px; box-shadow: 0 24px 50px -18px rgb(10 10 11 / .45); transition: transform .5s var(--spring), opacity .3s; width: 400px; }
 .toast:global(.pop) { transform: translateY(-4px) scale(.98); opacity: .6; }
 .eq { flex: none; width: 42px; height: 42px; border-radius: var(--gp-r-control); background: var(--gp-web-fill); color: var(--gp-web-on-fill); display: grid; place-items: center; font-weight: 800; font-size: 22px; }
 .toast small { font-size: 13px; color: var(--gp-web-mute); }
@@ -20,11 +20,7 @@
 /* threshold label Task 5 appends to #chart */
 .chart :global(.th-label) { font: 500 15px var(--f-mono); }
 
-/* the toast is a light paper surface on dark looks too */
-:global(html[data-theme="dark"]) .toast { --gp-web-ink: #0A0A0B; --gp-web-body: #3A3A40; --gp-web-mute: #6B6B73; --gp-web-dim: #B5B5BC; --gp-web-line: #E4E4E7; --gp-web-save: var(--gp-web-savel); --gp-web-acc: var(--gp-web-accl); }
-@media (prefers-color-scheme: dark) {
-  :global(html:not([data-theme="light"])) .toast { --gp-web-ink: #0A0A0B; --gp-web-body: #3A3A40; --gp-web-mute: #6B6B73; --gp-web-dim: #B5B5BC; --gp-web-line: #E4E4E7; --gp-web-save: var(--gp-web-savel); --gp-web-acc: var(--gp-web-accl); }
-}
+/* the toast is a light paper surface on dark looks too: AlertSlider gives it data-gp="web" data-theme="light", so the light web tokens apply inside it */
 /* the chart reads left to right in Arabic too; only its hint follows the page */
 :global(html[dir="rtl"]) .chart { direction: ltr; }
 :global(html[dir="rtl"]) .hint { direction: rtl; }

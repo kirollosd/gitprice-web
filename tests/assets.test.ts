@@ -34,7 +34,7 @@ describe("self-hosted assets", () => {
     for (const m of css.matchAll(/url\("(\/[^"]+)"\)/g)) expect(existsSync(join(root, "public", m[1])), m[1]).toBe(true);
     const families = new Set([...css.matchAll(/@font-face\s*\{[^}]*?font-family:\s*"([^"]+)"/g)].map((m) => m[1]));
     for (const f of ["Outfit", "Alexandria", "JetBrains Mono"]) expect(families, f).toContain(f);
-    // ponytail: legacy GP Fustat / Noto faces stay while synced tokens.css (app block) and the OG renderers still use them.
-    expect([...families].filter((f) => f.startsWith("GP ") && f !== "GP Fustat")).toEqual([]);
+    // only the three GP-407 families (the legacy GP Fustat / Noto Sans Arabic faces are gone)
+    expect([...families].sort()).toEqual(["Alexandria", "JetBrains Mono", "Outfit"]);
   });
 });
