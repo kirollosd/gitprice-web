@@ -49,20 +49,8 @@
 .sellersRow .btn { inline-size: auto; margin-block-start: var(--gp-sp-3); }
 .plans .cardPro { border: 2px solid var(--gp-ink); } /* the featured Free card: same specificity as .plans .card, declared after it */
 .price { font-size: var(--web-fs-display); font-weight: 700; line-height: var(--web-lh-display); }
-.btn, .btnPrimary {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: 100%;
-  min-block-size: var(--gp-target);
-  padding-inline: var(--gp-sp-6);
-  border-radius: var(--gp-r-control);
-  border: 0; font: inherit; font-weight: 600; cursor: pointer;
-  text-align: center;
-}
-.btn { background: none; color: var(--gp-ink); box-shadow: inset 0 0 0 1px var(--gp-control); }
-.btnPrimary { background: var(--gp-web-fill); color: var(--gp-web-on-fill); }
-.btn:hover, .btnPrimary:hover { text-decoration: none; }
+/* plan and sellers buttons: full width; the look is the shared .gp-btn / .gp-btn-2 (globals.css) */
+.btn { inline-size: 100%; text-align: center; }
 @media (min-width: 768px) {
   .page { padding-block: calc(var(--gp-sp-16) + var(--gp-sp-8)); }
   .steps, .plans { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gp-sp-6); }

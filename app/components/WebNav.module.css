@@ -61,17 +61,10 @@
 .site .actions > button:not(.cta, :global(.gp-ctl)) { position: relative; min-inline-size: 36px; min-block-size: 36px; color: var(--gp-web-mute); }
 .site[data-dk] .actions > button:not(.cta, :global(.gp-ctl)) { color: var(--gp-web-on-dark-mute); }
 .site .actions > button:not(.cta, :global(.gp-ctl))::after { content: ""; position: absolute; inset: 50% auto auto 50%; inline-size: max(100%, calc(44px / var(--z, 1))); block-size: max(100%, calc(44px / var(--z, 1))); translate: -50% -50%; }
-.cta {
-  position: relative; display: inline-flex; align-items: center; justify-content: center; min-block-size: var(--gp-wbtn-h-sm);
-  border: 0; border-radius: var(--gp-r-control); padding: 0 var(--gp-wbtn-px-sm); cursor: pointer;
-  background: var(--gp-web-fill); color: var(--gp-web-on-fill);
-  font: 600 15px/1.2 inherit; font-family: inherit; white-space: nowrap; text-decoration: none;
-}
-/* a transparent pad keeps the 44px hit area without a taller visible pill */
+/* the header CTA is the shared compact primary (global .gp-btn .gp-btn-sm: 40 tall, coral, 44px hit area); only the
+   AR line height and the phone tightening live here (.actions raises them over the global rule) */
 :global(html[lang="ar"]) .site { line-height: 1.25; } /* the mock's AR header and buttons keep Latin-height lines */
-:global(html[lang="ar"]) .cta { line-height: 1.25; }
-.cta::after { content: ""; position: absolute; inset-inline: -3px; inset-block: 50%; block-size: max(100%, calc(44px / var(--z, 1))); translate: 0 -50%; }
-.cta:hover { text-decoration: none; }
+:global(html[lang="ar"]) .actions .cta { line-height: 1.25; }
 
 /* the hero CTA and its tag are hidden on phones (html.lp-m), so the header carries the tag there, seated beside the CTA */
 .ctaWrap { display: inline-flex; align-items: center; gap: 6px; }
@@ -85,14 +78,14 @@
   .actions { gap: 4px; }
   .top .bar, .top[data-solid] .bar { padding-block: 14px; }
   .site .actions > button:not(.cta, :global(.gp-ctl)) { min-inline-size: 34px; min-block-size: 34px; }
-  .cta { padding: 0 var(--gp-wsp-2); font-size: 14px; }
+  .actions :is(a, button).cta { padding: 0 var(--gp-wsp-2); font-size: 14px; }
 }
 
 /* Narrow phones: the launched Arabic CTA ("أضف GitPrice إلى Chrome") is the widest item; make room for it at 390. */
 @media (max-width: 419px) {
   .top .bar { padding-inline: 14px; }
   .actions { gap: 2px; }
-  .cta { padding: 0 var(--gp-wsp-1); font-size: 13px; }
+  .actions :is(a, button).cta { padding: 0 var(--gp-wsp-1); font-size: 13px; }
 }
 
 /* the header sits outside the canvas, so the canvas's own reduced-motion rule does not reach it */

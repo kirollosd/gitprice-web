@@ -12,7 +12,6 @@ import GMark from "./GMark";
 import { esc, html } from "./html";
 import { formatMoney, useMoney } from "./money";
 import { moneyTextHtml } from "./Price";
-import { useRootFlag } from "./rootFlag";
 import s from "./Dock.module.css";
 
 const K = "web.landing.dock.";
@@ -181,8 +180,6 @@ function DockBar({ locale }: { locale: Locale }) {
 
   // site pages have no hero to wait for: the dock is simply there
   const shown = !home || isOpen || (view.landed && !view.aside);
-  // the dock is the coral CTA while it is up: html[data-gp-dock-in] turns the nav, hero and footer CTAs secondary (globals.css)
-  useRootFlag("data-gp-dock-in", shown);
   const less = fmt(view.from - view.best, 2).replace(".00 ", " ");
   const line = joined ? esc(t(locale, K + "done"))
     : !home ? esc(t(locale, K + "foot"))
@@ -204,7 +201,7 @@ function DockBar({ locale }: { locale: Locale }) {
           </button>
         </div>
       ) : !joined && (
-        <button type="button" className={s.go} id="dgo" onClick={(e) => open(e.currentTarget)}>{t(locale, K + "join")}</button>
+        <button type="button" className={`${s.go} gp-btn gp-btn-sm`} id="dgo" onClick={(e) => open(e.currentTarget)}>{t(locale, K + "join")}</button>
       )}
     </div>
   );

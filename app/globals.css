@@ -299,21 +299,36 @@ h1[tabindex="-1"]:focus-visible { outline: none; }
 
 /* A closing band that ends the page sits flush on the footer. */
 main:has(> [data-gp-section="bottom_cta"]:last-child) ~ footer { margin-block-start: 0; }
-/* GP-407 round 3: the website's two buttons. Primary is coral with ink text, at most one per view (every waitlist CTA
-   included); every other action is the secondary (no fill, 1px control edge, the surrounding text colour).
-   Both 48 tall with 24 inline padding and radius 8; the nav uses .gp-btn-sm (40 / 16). `:is(a, button)` outranks the
-   landing canvas's `:where(button)` reset. */
+/* GP-407 round 3: the website's two buttons. Primary (.gp-btn) is coral with ink text and is EVERY waitlist / Add to Chrome
+   CTA on every page (nav, menu, hero, dock, dock form, footer, forms, pricing): one look in light and dark, the dock's
+   dark pill included (the fill is always --gp-web-fill, never a variant). At most one primary per section; every other
+   action is the secondary (.gp-btn-2: no fill, 1px control edge, the surrounding text colour).
+   Two sizes: 48 tall / 24 inline padding (default) and .gp-btn-sm, 40 / 16 (nav, menu, dock), with a 44px hit area.
+   Heights divide by the landing's zoom (--z) so they render at the same pixels there. `:is(a, button)` outranks the
+   landing canvas's `:where(button)` reset. Pressed: scale settles from .96 to 1 over 160 ms (DESIGN.md). */
 :is(a, button).gp-btn, :is(a, button).gp-btn-2 {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--gp-wsp-1);
-  min-block-size: var(--gp-wbtn-h); padding: 0 var(--gp-wbtn-px);
+  min-block-size: calc(var(--gp-wbtn-h) / var(--z, 1)); padding: 0 var(--gp-wbtn-px);
   border: 0; border-radius: var(--gp-r-control);
   font-family: inherit; font-size: 16px; font-weight: 600; line-height: 1.2;
   white-space: nowrap; text-decoration: none; cursor: pointer;
+  transition: background-color .15s, transform .16s ease-out;
 }
 :is(a, button).gp-btn { background: var(--gp-web-fill); color: var(--gp-web-on-fill); }
 :is(a, button).gp-btn-2 { background: none; color: inherit; box-shadow: inset 0 0 0 1px var(--gp-control); }
-:is(a, button).gp-btn-sm { min-block-size: var(--gp-wbtn-h-sm); padding: 0 var(--gp-wbtn-px-sm); }
+:is(a, button).gp-btn-sm { position: relative; min-block-size: calc(var(--gp-wbtn-h-sm) / var(--z, 1)); padding: 0 var(--gp-wbtn-px-sm); font-size: 15px; }
+.gp-btn-sm::after { content: ""; position: absolute; inset: 50% auto auto 50%; inline-size: 100%; block-size: max(100%, calc(44px / var(--z, 1))); translate: -50% -50%; }
 :is(a, button):is(.gp-btn, .gp-btn-2):hover { text-decoration: none; }
+:is(a, button).gp-btn:hover { background: color-mix(in srgb, var(--gp-web-fill) 88%, var(--gp-web-on-fill)); color: var(--gp-web-on-fill); }
+:is(a, button).gp-btn-2:hover { background: color-mix(in srgb, currentColor 7%, transparent); }
+:is(a, button):is(.gp-btn, .gp-btn-2):active { transform: scale(.96); }
+:is(a, button):is(.gp-btn, .gp-btn-2):focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
+:is(a, button):is(.gp-btn, .gp-btn-2):disabled { cursor: progress; }
+@media (prefers-reduced-motion: reduce) { :is(a, button):is(.gp-btn, .gp-btn-2) { transition: none; } :is(a, button):is(.gp-btn, .gp-btn-2):active { transform: none; } }
+
+/* A text link and its arrow (→ ↓) are one unit: the arrow is centred on the label 8px after it (the reading direction
+   flips it in RTL) and never wraps to a line of its own; a tight row wraps the whole link. */
+.gp-arrow { display: inline-flex; align-items: center; gap: var(--gp-wsp-1); white-space: nowrap; }
 
 /* GP-407: the header's small controls (language, theme) and every language link share one look: a 36px 8-radius box with a
    1px control edge, no fill, an 18px icon, a 15/500 label when there is one, and a 44px hit area (zoom-aware on the landing). */
@@ -335,10 +350,3 @@ main:has(> [data-gp-section="bottom_cta"]:last-child) ~ footer { margin-block-st
 :is(header[data-dk], footer) :is(a, button).gp-ctl:is(:active, [aria-expanded="true"]) { background: color-mix(in srgb, var(--gp-web-on-dark) 10%, transparent); }
 @media (max-width: 767px) { :is(a, button).gp-ctl { min-inline-size: 34px; min-block-size: 34px; } }
 
-/* GP-407: one coral CTA on screen. The dock (html[data-gp-dock-in], Dock.tsx) outranks the hero and footer CTAs, and either outranks the nav CTA
-   (Hero sets html[data-gp-hero-cta] while its CTA is on screen); the outranked CTA takes the secondary look at the same size.
-   CTAs: the waitlist buttons ([data-join]) and, after launch, the Add to Chrome links; the dock and the menu sheet keep theirs. */
-:is([data-join], [data-gp-cta-id="install_extension"], [data-gp-store="chrome"]):is([data-gp-placement="nav"], [data-gp-placement="hero"], [data-gp-placement="bottom"]) { transition: background-color .25s, color .25s, box-shadow .25s; }
-html[data-gp-dock-in] :is([data-join], [data-gp-cta-id="install_extension"], [data-gp-store="chrome"]):is([data-gp-placement="nav"], [data-gp-placement="hero"], [data-gp-placement="bottom"]),
-html[data-gp-hero-cta] :is([data-join], [data-gp-cta-id="install_extension"], [data-gp-store="chrome"])[data-gp-placement="nav"] { background: none; color: inherit; box-shadow: inset 0 0 0 1px var(--gp-control); }
-@media (prefers-reduced-motion: reduce) { [data-gp-placement] { transition: none; } }

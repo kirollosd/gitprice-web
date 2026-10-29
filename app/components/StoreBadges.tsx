@@ -13,7 +13,7 @@ export const MOBILE_APPS_ENABLED = false;
 export default function StoreBadges({ locale, placement }: { locale: Locale; placement: "hero" | "bottom" | "dock" }) {
   return (
     <div className={styles.root}>
-      <a className={styles.chrome} href={env.chromeStoreUrl} data-gp-track="store_click" data-gp-store="chrome" data-gp-placement={placement}>{t(locale, B + "button.addToChrome.label")}</a>
+      <a className={`${styles.chrome} gp-btn${placement === "dock" ? " gp-btn-sm" : ""}`} href={env.chromeStoreUrl} data-gp-track="store_click" data-gp-store="chrome" data-gp-placement={placement}>{t(locale, B + "button.addToChrome.label")}</a>
       {MOBILE_APPS_ENABLED && (
         <div className={styles.mobile}>
           <a className={styles.badge} href={env.appStoreUrl} data-gp-track="store_click" data-gp-store="app_store" data-gp-placement={placement}>

@@ -99,10 +99,10 @@ export default function WebMenu({ locale }: { locale: Locale }) {
           </ul>
           </nav>
           {cta.href ? (
-            <Link href={cta.href} className={styles.cta} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id={cta.ctaId} data-gp-placement="menu">{cta.label}</Link>
+            <Link href={cta.href} className={`${styles.cta} gp-btn`} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id={cta.ctaId} data-gp-placement="menu">{cta.label}</Link>
           ) : (
             // the sheet unmounts as the form opens, so focus returns to the menu button
-            <JoinCta label={cta.label} className={styles.cta} placement="menu" ctaId={cta.ctaId} opener={() => button.current} onOpen={() => setOpen(false)} />
+            <JoinCta label={cta.label} className={`${styles.cta} gp-btn`} placement="menu" ctaId={cta.ctaId} opener={() => button.current} onOpen={() => setOpen(false)} />
           )}
         </div>
       )}

@@ -13,7 +13,7 @@
 .cap s { --strike-c: var(--gp-web-fill); --strike-h: 3px; }
 
 .hcta { display: flex; gap: 18px; align-items: center; justify-content: flex-end; margin-top: 18px; }
-.hcta a { color: var(--gp-web-ink); font-weight: 600; text-decoration: none; }
+.hcta a:not(:global(.gp-btn)) { color: var(--gp-web-ink); font-weight: 600; text-decoration: none; }
 .lede { position: absolute; inset-inline-end: 56px; bottom: 130px; width: 400px; font-size: 19px; line-height: 1.45; color: var(--gp-web-body); text-align: end; }
 .lede small { display: block; margin-top: 10px; font-size: 14px; color: var(--gp-web-mute); }
 

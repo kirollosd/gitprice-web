@@ -32,23 +32,8 @@
 .input[aria-invalid="true"] { border-width: 2px; border-color: var(--gp-danger); padding-inline: calc(var(--gp-sp-4) - 1px); }
 .error { margin-block-start: var(--gp-sp-2); color: var(--gp-danger); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); }
 
-/* Button/primary-block: the one website primary (GP-407 round 3), full width, coral with ink text, 48 tall. */
-.button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: 100%;
-  min-block-size: var(--gp-wbtn-h);
-  padding-inline: var(--gp-wbtn-px);
-  border: 0;
-  border-radius: var(--gp-r-control);
-  background: var(--gp-web-fill);
-  color: var(--gp-web-on-fill);
-  font: var(--gp-fw-headline) var(--gp-fs-headline) / var(--web-lh-text) var(--gp-font);
-  cursor: pointer;
-}
-.button:focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
-.button:disabled { cursor: progress; }
+/* Button/primary-block: the shared coral primary (globals.css .gp-btn, 48 tall), full width here. */
+.button { inline-size: 100%; }
 
 .note { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); }
 /* Failed line: a 20 alert icon, 8, then the callout in danger; the icon centres on the first line. */
@@ -78,13 +63,13 @@
 .dock .field { flex: 1; min-inline-size: 0; }
 .dock .label { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .dock .input {
-  block-size: 46px; padding-inline: 18px; border: 1.5px solid color-mix(in srgb, var(--on-dock) 55%, transparent);
+  block-size: var(--gp-wbtn-h); padding-inline: 18px; border: 1.5px solid color-mix(in srgb, var(--on-dock) 55%, transparent);
   border-radius: var(--gp-r-control); background: none; color: var(--on-dock); font: 400 16px / 1.2 inherit; font-family: inherit;
 }
 .dock .input::placeholder { color: color-mix(in srgb, var(--on-dock) 65%, transparent); }
 .dock .input[aria-invalid="true"] { border-color: var(--gp-warn-edge); padding-inline: 17.5px; border-width: 1.5px; }
 .dock .input:focus-visible, .dock .button:focus-visible { outline-color: var(--ring); }
-.dock .button { inline-size: auto; min-block-size: 46px; padding-inline: var(--gp-wbtn-px); background: var(--gp-web-fill); color: var(--gp-web-on-fill); font: 600 16px / 1.2 inherit; font-family: inherit; }
+.dock .button { inline-size: auto; } /* the shared 48px primary, beside the 48px field */
 .dock .note, .dock .error, .dock .failed { flex-basis: 100%; padding-inline: 18px; font-size: 14px; line-height: 1.4; white-space: normal; }
 .dock .note { color: color-mix(in srgb, var(--on-dock) 75%, transparent); }
 .dock .error, .dock .failed { padding: 6px 12px; border-radius: var(--gp-r-control); background: var(--gp-warn-bg); color: var(--gp-warn-text); box-shadow: inset 0 0 0 1px var(--gp-warn-edge); }

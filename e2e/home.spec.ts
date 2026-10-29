@@ -372,3 +372,33 @@ for (const width of [390, 1024]) {
     }).toBe(true);
   });
 }
+
+// Owner rule (GP-407, PR #66): every waitlist CTA is the same coral primary, nav and dock included, in both themes.
+for (const colorScheme of ["light", "dark"] as const) {
+  for (const viewport of [{ width: 1440, height: 900 }, PHONE]) {
+    test(`${viewport.width} ${colorScheme}: every waitlist CTA has the same fill, text, radius and weight`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await page.emulateMedia({ colorScheme });
+      await page.goto("/");
+      await page.evaluate(() => document.getElementById("foot")!.scrollIntoView()); // the dock is up over the footer
+      await expect(page.locator("#dgo")).toBeVisible();
+      const looks = await page.locator("[data-join], #dgo").evaluateAll((els) => els.filter((e) => e.getClientRects().length > 0).map((e) => {
+        const c = getComputedStyle(e);
+        return [c.backgroundColor, c.color, c.borderRadius, c.fontWeight].join(" ");
+      }));
+      expect(looks.length).toBeGreaterThanOrEqual(3); // nav, dock, footer (and the hero on desktop)
+      expect(new Set(looks).size, looks.join("\n")).toBe(1);
+      expect(looks[0]).toBe("rgb(255, 90, 78) rgb(10, 10, 11) 8px 600");
+    });
+  }
+}
+
+test("the hero's See how it works link keeps its arrow on the label's line", async ({ page }) => {
+  for (const path of ["/", "/ar"]) {
+    await page.goto(path);
+    const link = page.locator('#num a[href="#how"]');
+    const [label, arrow] = await link.evaluate((a) => [a.getBoundingClientRect(), a.lastElementChild!.getBoundingClientRect()].map((r) => r.top + r.height / 2));
+    expect(Math.abs(label - arrow)).toBeLessThan(2);
+    expect(await link.evaluate((a) => a.getClientRects().length)).toBe(1);
+  }
+});

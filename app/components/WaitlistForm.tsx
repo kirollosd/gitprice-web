@@ -148,7 +148,7 @@ export default function WaitlistForm({
       <div className={styles.trap} aria-hidden="true">
         <input type="text" name={HONEYPOT} tabIndex={-1} autoComplete="off" defaultValue="" />
       </div>
-      <button type="submit" className={styles.button} disabled={status === "submitting"}>{submit}</button>
+      <button type="submit" className={`${styles.button} gp-btn`} disabled={status === "submitting"}>{submit}</button>
       {status === "failed" ? (
         <p role="alert" className={styles.failed}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

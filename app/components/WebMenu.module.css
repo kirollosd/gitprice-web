@@ -52,18 +52,8 @@
   font-weight: 500;
 }
 .list a:not(:global(.gp-ctl)) svg { inline-size: var(--gp-sp-6); block-size: var(--gp-sp-6); } /* the board's 24px globe */
-.cta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-block-size: var(--gp-target);
-  margin-block-start: var(--gp-sp-6);
-  background: var(--gp-web-fill);
-  color: var(--gp-web-on-fill);
-  border-radius: var(--gp-r-control);
-  border: 0; font: inherit; font-weight: 600; cursor: pointer;
-}
-.cta:hover { text-decoration: none; }
+/* the sheet's CTA: the shared coral primary (globals.css .gp-btn), full width */
+.cta { inline-size: 100%; margin-block-start: var(--gp-sp-6); }
 
 @media (max-width: 1279px) { .button { display: inline-flex; } }
 @media (min-width: 1280px) { .overlay { display: none; } }

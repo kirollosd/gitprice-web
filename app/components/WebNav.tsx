@@ -22,6 +22,8 @@ const L = "web.landing.nav.";
 /** The landing's sections, in page order. */
 const LINKS = [["how", "howItWorks"], ["film", "watchLive"], ["spot", "matchChallenge"], ["rcpt", "savings"], ["rail", "stores"]] as const;
 const IDS = LINKS.map(([id]) => id);
+/** every header CTA is the shared compact primary (globals.css .gp-btn .gp-btn-sm) */
+const CTA = `${styles.cta} gp-btn gp-btn-sm`;
 
 /**
  * Landing nav (home only), ported from combo.html: the board wordmark, the five landing links (>= 1024), the language menu, the
@@ -61,7 +63,7 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
             <NavSellers locale={locale} keys="768" className={`${styles.link} ${styles.sellers} ${site.l768}`} />
             <span className={site.wide}><LangMenu locale={locale} /></span>
             <span className={site.wide}><ThemeToggle locale={locale} /></span>
-            <NavCta locale={locale} keys="1440" className={`${styles.cta} ${site.hideSmall}`} />
+            <NavCta locale={locale} keys="1440" className={`${CTA} ${site.hideSmall}`} />
             <WebMenu locale={locale} />
           </div>
         </div>
@@ -86,9 +88,9 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
             <span className={styles.ctaWrap}>
               {/* the hero CTA (and its tag) is hidden on phones, so the tag moves here, as a corner badge so the bar keeps its width; CSS shows exactly one. Before the button in the DOM, as on screen */}
               <BetaTag locale={locale} className={styles.navBeta} />
-              <JoinButton locale={locale} placement="nav" className={styles.cta} />
+              <JoinButton locale={locale} placement="nav" className={CTA} />
             </span>
-          ) : <NavCta locale={locale} keys="1440" className={styles.cta} />}
+          ) : <NavCta locale={locale} keys="1440" className={CTA} />}
         </div>
       </div>
     </header>
