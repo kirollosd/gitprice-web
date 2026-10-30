@@ -34,7 +34,7 @@ function verdict(locale: Locale, R: Product, pick: number | null) {
 
 /**
  * 2c · spot the same one: four suspects, one is the exact product. Round one is the hero product, scrubbed by the
- * scroll (ScrollScenes) until the visitor plays it: a guess, Show me or Next lineup sets #spotpin[data-manual], so
+ * scroll (ScrollScenes) until the visitor plays it: a guess or a dot sets #spotpin[data-manual], so
  * the scrub stands down, and folds the pinned runway to the room's height. Rounds two and three are the next
  * products in the list; they deal themselves in. Card states are the classes in, picked, rev and out.
  */
@@ -74,9 +74,8 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
     if (v) { v.innerHTML = verdict(locale, R, pick); v.classList.add("on"); applyMoney(v); }
     if (h) h.innerHTML = html(locale, K + (pick === ex ? "right" : "wrong")).__html;
   };
-  const next = () => { takeOver(); setRound((r) => (r + 1) % ROUNDS); };
   const goTo = (k: number) => { if (k === round) return; takeOver(); setRound(k); };
-  // touch: a horizontal swipe on the wall flips to the neighbouring lineup (mouse users have the dots and the button)
+  // touch: a horizontal swipe on the wall flips to the neighbouring lineup (mouse users have the dots)
   const swipe = useRef<{ x: number; y: number } | null>(null), swiped = useRef(false);
   const rtl = locale === "ar";
   const onSwipeEnd = (e: PointerEvent<HTMLDivElement>) => {
@@ -155,8 +154,6 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
               <button key={k} type="button" className={k === round ? "on" : undefined} aria-label={t(locale, K + "lineupN", { n: k + 1, total: ROUNDS })} aria-current={k === round ? "true" : undefined} onClick={() => goTo(k)} />
             ))}
           </span>
-          <button type="button" className={`gp-btn-2 ${s.g}`} id="reveal" onClick={() => reveal(null)}>{t(locale, K + "show")}</button>
-          <button type="button" className={`gp-btn-2 ${s.p}`} id="next" onClick={next}>{t(locale, K + (round < ROUNDS - 1 ? "next" : "startOver"))}</button>
         </div>
       </div>
       <p className={s.hint} dangerouslySetInnerHTML={html(locale, "web.landing.spot.note", {}, { marks: marksHtml(locale) })} />
