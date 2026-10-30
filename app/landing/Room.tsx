@@ -37,7 +37,7 @@ function verdict(locale: Locale, R: Product, pick: number | null) {
 /**
  * 2c · spot the same one: four suspects, one is the exact product. Round one is the hero product, scrubbed by the
  * scroll (ScrollScenes) until the visitor plays it: a guess or a dot sets #spotpin[data-manual], so
- * the scrub stands down, and folds the pinned runway to the room's height. Rounds two and three are the next
+ * the scrub stands down. Rounds two and three are the next
  * products in the list; they deal themselves in. Card states are the classes in, picked, rev and out.
  */
 export default function Room({ locale, product: P }: { locale: Locale; product: Product }) {
@@ -51,16 +51,11 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
 
   const later = (fn: () => void, ms: number) => { timers.current.push(setTimeout(fn, reduced() ? 0 : ms)); };
   const cards = () => [...(ref.current?.querySelector("#sus")?.children ?? [])] as HTMLElement[];
-  // the scroll has nothing left to drive: the runway folds to the room, and the room stays where it was on screen
+  // the scroll has nothing left to drive: the scrub stands down. The runway keeps its height: folding it moved the page under the visitor's click
   const takeOver = () => {
     if (manual.current) return;
     manual.current = true;
-    const pin = document.getElementById("spotpin"), room = ref.current;
-    if (!pin || !room) return;
-    pin.setAttribute("data-manual", "");
-    const top = pin.getBoundingClientRect().top;
-    pin.style.height = room.offsetHeight + "px";
-    if (top < 0) scrollTo(0, scrollY + top);
+    document.getElementById("spotpin")?.setAttribute("data-manual", "");
   };
   const reveal = (pick: number | null) => {
     takeOver();
