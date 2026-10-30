@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
 import BetaTag from "../components/BetaTag";
-import { JoinButton } from "./Dock";
 import { html } from "./html";
 import { splitMoney, useMoney } from "./money";
 import { priceHtml } from "./Price";
@@ -20,10 +19,10 @@ const isFixed = (c: string) => c === "." || c === ",";
  * The board is in the visitor's currency (useMoney); #digits and #cap are rebuilt per product and currency.
  * #num's data-from / data-best (EGP) feed the dock's "elsewhere" line.
  */
-/** A text link whose copy ends in an arrow ("See how it works ↓"): label and arrow stay one unit (globals.css .gp-arrow). */
+/** A link whose copy ends in an arrow ("See how it works ↓"), drawn as the secondary button: label and arrow stay one unit (globals.css .gp-arrow). */
 function ArrowLink({ href, text }: { href: string; text: string }) {
   const m = /^(.*?)\s*([\u2190-\u2193])$/.exec(text);
-  return <a href={href} className="gp-arrow">{m ? <>{m[1]}<span aria-hidden="true">{m[2]}</span></> : text}</a>;
+  return <a href={href} className="gp-btn-2 gp-arrow">{m ? <>{m[1]}<span aria-hidden="true">{m[2]}</span></> : text}</a>;
 }
 
 export default function Hero({ locale, product: P }: { locale: Locale; product: Product }) {
@@ -63,12 +62,11 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
         </div>
         <div className={s.lede}>
           <p id="lede">{t(locale, K + "lede")}</p>
+          {/* the hero's one action is the secondary "See how it works"; the waitlist CTAs are the nav, dock and footer ones */}
           <div className={s.hcta}>
-            <JoinButton locale={locale} placement="hero" className="gp-btn" />
-            <BetaTag locale={locale} />
             <ArrowLink href="#how" text={t(locale, K + "seeHow")} />
+            <BetaTag locale={locale} />
           </div>
-          <small>{t(locale, K + "free")}</small>
         </div>
       </div>
     </section>

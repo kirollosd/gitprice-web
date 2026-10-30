@@ -267,7 +267,7 @@ describe("launch switch", () => {
     expect(document.querySelector("form")).toBeNull();
     expect(document.querySelector("[data-join]")).toBeNull();
     const chrome = [...document.querySelectorAll('a[href="https://chromewebstore.test/gitprice"]')];
-    expect(chrome.map((a) => a.getAttribute("data-gp-placement"))).toEqual(["hero", "bottom", "dock"]);
+    expect(chrome.map((a) => a.getAttribute("data-gp-placement"))).toEqual(["bottom", "dock"]); // no hero CTA: its action is See how it works
   });
 
   it("launch=0 home renders one shopper waitlist form, in the dock", async () => {

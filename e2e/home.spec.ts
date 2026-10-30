@@ -44,9 +44,9 @@ for (const colorScheme of ["light", "dark"] as const) {
   });
 }
 
-/** Opens the dock's waitlist form from the hero Join button (desktop) and returns the form. */
+/** Opens the dock's waitlist form from the header Join button and returns the form (the hero's action is See how it works). */
 async function openDock(page: Page) {
-  await page.locator('[data-join][data-gp-placement="hero"]').click();
+  await page.locator('header [data-join]').click();
   const form = page.locator("#dock form[data-waitlist]");
   await expect(form).toBeVisible();
   return form;
@@ -56,7 +56,7 @@ const submit = (page: Page) => page.locator("#dock").getByRole("button", { name:
 test.describe("Home prelaunch", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
-  test("the Beta tag sits by the hero CTA, the dock CTA and in the footer; no pricing or app-store links", async ({ page }) => {
+  test("the Beta tag sits by the hero action, the dock CTA and in the footer; no pricing or app-store links", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("#num [data-beta]")).toHaveCount(1);
     await expect(page.locator("#dock [data-beta]")).toHaveCount(1);
@@ -80,7 +80,7 @@ test.describe("Home prelaunch", () => {
     expect(tally).toEqual([]);
   });
 
-  test("hero Join opens the dock form, 201 joins, and every Join button reads joined", async ({ page }) => {
+  test("the header Join opens the dock form, 201 joins, and every Join button reads joined", async ({ page }) => {
     const bodies = await stubWaitlist(page, [201]);
     await page.goto("/");
     const form = await openDock(page);
@@ -89,7 +89,6 @@ test.describe("Home prelaunch", () => {
     await expect(page.locator("#dt")).toHaveText(L.dock.done);
     await expect(page.locator("#dt")).toBeFocused();
     await expect(page.locator("form[data-waitlist]")).toHaveCount(0);
-    await expect(page.locator('[data-join][data-gp-placement="hero"]')).toHaveText(L.dock.joined);
     await expect(page.locator('[data-join][data-gp-placement="nav"]')).toHaveText(L.dock.joined);
     expect(bodies).toEqual([{ email: "sara@example.com", audience: "shopper", locale: "en", website: "" }]);
     const events = await page.evaluate(() => ((window as unknown as { dataLayer: { event?: string; placement?: string }[] }).dataLayer)
@@ -109,11 +108,11 @@ test.describe("Home prelaunch", () => {
 
   test("Esc closes the dock form and returns focus to the Join button", async ({ page }) => {
     await page.goto("/");
-    const hero = page.locator('[data-join][data-gp-placement="hero"]');
+    const join = page.locator('header [data-join]');
     await openDock(page);
     await page.keyboard.press("Escape");
     await expect(page.locator("form[data-waitlist]")).toHaveCount(0);
-    await expect(hero).toBeFocused();
+    await expect(join).toBeFocused();
   });
 
   test("an invalid address shows the error under the field and sends nothing", async ({ page }) => {
@@ -386,17 +385,21 @@ for (const colorScheme of ["light", "dark"] as const) {
         const c = getComputedStyle(e);
         return [c.backgroundColor, c.color, c.borderRadius, c.fontWeight].join(" ");
       }));
-      expect(looks.length).toBeGreaterThanOrEqual(3); // nav, dock, footer (and the hero on desktop)
+      expect(looks.length).toBeGreaterThanOrEqual(3); // nav, dock, footer (the hero's action is the secondary See how it works)
       expect(new Set(looks).size, looks.join("\n")).toBe(1);
       expect(looks[0]).toBe("rgb(255, 90, 78) rgb(10, 10, 11) 8px 600");
     });
   }
 }
 
-test("the hero's See how it works link keeps its arrow on the label's line", async ({ page }) => {
+test("the hero has no waitlist CTA: its one action is the secondary See how it works, arrow on the label's line", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
   for (const path of ["/", "/ar"]) {
     await page.goto(path);
+    await expect(page.locator("#num [data-join], #num .gp-btn")).toHaveCount(0);
     const link = page.locator('#num a[href="#how"]');
+    await expect(link).toHaveClass(/\bgp-btn-2\b/);
+    expect(await link.evaluate((a) => a.getBoundingClientRect().height)).toBeGreaterThanOrEqual(47.9);
     const [label, arrow] = await link.evaluate((a) => [a.getBoundingClientRect(), a.lastElementChild!.getBoundingClientRect()].map((r) => r.top + r.height / 2));
     expect(Math.abs(label - arrow)).toBeLessThan(2);
     expect(await link.evaluate((a) => a.getClientRects().length)).toBe(1);

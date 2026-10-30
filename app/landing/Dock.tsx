@@ -66,7 +66,7 @@ export function JoinCta({ label, className, placement, ctaId = "join_waitlist", 
   );
 }
 
-const LABEL = { hero: "web.landing.hero.join", bottom: "web.landing.foot.join", nav: "web.landing.nav.join" } as const;
+const LABEL = { bottom: "web.landing.foot.join", nav: "web.landing.nav.join" } as const;
 
 /** Every [data-join]: opens the dock form; after launch it is the Add to Chrome link (constraints call 2). */
 export function JoinButton({ locale, placement, className }: { locale: Locale; placement: keyof typeof LABEL; className?: string }) {

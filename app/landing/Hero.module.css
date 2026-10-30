@@ -13,9 +13,8 @@
 .cap s { --strike-c: var(--gp-web-fill); --strike-h: 3px; }
 
 .hcta { display: flex; gap: 18px; align-items: center; justify-content: flex-end; margin-top: 18px; }
-.hcta a:not(:global(.gp-btn)) { color: var(--gp-web-ink); font-weight: 600; text-decoration: none; }
+.lede .hcta a { color: var(--gp-web-ink); } /* the secondary button takes ink, not the lede's body colour */
 .lede { position: absolute; inset-inline-end: 56px; bottom: 130px; width: 400px; font-size: 19px; line-height: 1.45; color: var(--gp-web-body); text-align: end; }
-.lede small { display: block; margin-top: 10px; font-size: 14px; color: var(--gp-web-mute); }
 
 .digits { position: absolute; left: 30px; top: var(--dtop); display: flex; font-weight: 500; font-variant-numeric: tabular-nums; font-size: var(--fs); letter-spacing: -.02em; line-height: 1; white-space: nowrap; }
 /* clip only top and bottom (the roll); the tight letter-spacing makes cells narrower than the glyphs */
@@ -65,7 +64,7 @@
 :global(html.lp-m) .h1 { top: 166px; inset-inline-start: 20px; width: 390px; font-size: 34px; white-space: normal; }
 :global(html.lp-m) .cap { top: 254px; inset-inline-start: 20px; width: 390px; font-size: 17px; }
 :global(html.lp-m[lang="ar"]) .cap { top: 268px; }
-:global(html.lp-m) .hcta, :global(html.lp-m) .lede small { display: none; }
+:global(html.lp-m) .hcta { display: none; }
 :global(html.lp-m) .digits { left: 16px; }
 :global(html.lp-m) .unit { margin-inline-start: 10px; font-size: 18px; }
 :global(html.lp-m) .strike { left: 16px; height: 8px; }
