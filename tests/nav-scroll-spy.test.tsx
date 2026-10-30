@@ -19,7 +19,7 @@ afterEach(() => { cleanup(); document.body.innerHTML = ""; });
 describe("header scroll-spy", () => {
   it("marks only the link of the section crossing the viewport centre, none in the hero", async () => {
     vi.stubGlobal("IntersectionObserver", FakeIO);
-    for (const id of ["how", "film", "spot", "rcpt", "rail"]) document.body.insertAdjacentHTML("beforeend", `<section id="${id}"></section>`);
+    for (const id of ["how", "film", "spot", "rcpt"]) document.body.insertAdjacentHTML("beforeend", `<section id="${id}"></section>`);
     const { default: WebNav } = await import("../app/components/WebNav");
     render(<WebNav locale="en" variant="landing" />, { container: document.body.appendChild(document.createElement("div")) });
     const current = () => [...document.querySelectorAll('nav a[aria-current="true"]')].map((a) => a.getAttribute("href"));

@@ -20,7 +20,7 @@ import WebMenu from "./WebMenu";
 const N = "web.component.webNav.";
 const L = "web.landing.nav.";
 /** The landing's sections, in page order. */
-const LINKS = [["how", "howItWorks"], ["film", "watchLive"], ["spot", "matchChallenge"], ["rcpt", "savings"], ["rail", "stores"]] as const;
+const LINKS = [["how", "howItWorks"], ["film", "watchLive"], ["spot", "matchChallenge"], ["rcpt", "savings"]] as const;
 const IDS = LINKS.map(([id]) => id);
 /** every header CTA is the shared compact primary (globals.css .gp-btn .gp-btn-sm) */
 const CTA = `${styles.cta} gp-btn gp-btn-sm`;

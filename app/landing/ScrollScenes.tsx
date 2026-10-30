@@ -31,7 +31,7 @@ function fitWord() {
 
 /**
  * The landing's scroll-driven motion, one island for the whole page (sections stay server components):
- * every scene in scenes.ts, the scroll cue, the rail's drag cursor, the receipt month and the footer price fit.
+ * every scene in scenes.ts, the scroll cue, the receipt month and the footer price fit.
  * Reduced motion: every scene renders its end state (How still steps by scroll position, without movement).
  */
 export default function ScrollScenes({ locale }: { locale: Locale }) {
@@ -94,19 +94,6 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
     const stack = new MutationObserver(() => { clearTimeout(cueT); cueT = setTimeout(cueCheck, CUE_FIRST_MS); });
     stack.observe(document.documentElement, { attributes: true, attributeFilter: ["data-gp-stack"] });
 
-    // drag rail: pointer drag on top of native scroll-snap
-    const tr = document.getElementById("track");
-    let down: { x: number; s: number } | null = null;
-    const leave = () => { down = null; tr?.classList.remove("drag"); };
-    const move = (e: PointerEvent) => { if (down && tr) tr.scrollLeft = down.s - (e.clientX - down.x); };
-    const press = (e: PointerEvent) => { if (!tr) return; down = { x: e.clientX, s: tr.scrollLeft }; tr.classList.add("drag"); };
-    const release = () => { down = null; tr?.classList.remove("drag"); };
-    tr?.addEventListener("pointerleave", leave);
-    tr?.addEventListener("pointermove", move);
-    tr?.addEventListener("pointerdown", press);
-    addEventListener("pointerup", release);
-    addEventListener("pointercancel", release);
-
     return () => {
       cancelAnimationFrame(raf);
       cancelAnimationFrame(refitRaf);
@@ -119,11 +106,6 @@ export default function ScrollScenes({ locale }: { locale: Locale }) {
       removeEventListener("scroll", onScroll);
       stack.disconnect();
       fonts?.removeEventListener("loadingdone", refit);
-      tr?.removeEventListener("pointerleave", leave);
-      tr?.removeEventListener("pointermove", move);
-      tr?.removeEventListener("pointerdown", press);
-      removeEventListener("pointerup", release);
-      removeEventListener("pointercancel", release);
     };
   }, [locale]);
 

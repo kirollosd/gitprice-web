@@ -10,7 +10,6 @@ import How from "./How";
 import Print from "./Print";
 import { ProductProvider, useProductId } from "./ProductPicker";
 import { getProduct, localize } from "./products";
-import Rail from "./Rail";
 import Rates from "./Rates";
 import Spot from "./Spot";
 
@@ -35,7 +34,6 @@ function Sections({ locale }: { locale: Locale }) {
         <Spot locale={locale} product={P} />
         <Print locale={locale} product={P} />
         <Alerts locale={locale} product={P} />
-        <Rail locale={locale} product={P} />
         <Foot locale={locale} product={P} />
       </Fragment>
     </>

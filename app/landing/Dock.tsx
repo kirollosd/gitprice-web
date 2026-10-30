@@ -86,10 +86,10 @@ export function JoinButton({ locale, placement, className }: { locale: Locale; p
 }
 
 // deepest section first: the dock names the one whose top has passed mid-screen; at the top it shows the price
-const SECTIONS = [["foot", "foot"], ["rail", "rail"], ["alerts", "alerts"], ["rcpt", "print"], ["spot", "spot"], ["film", "film"], ["how", "how"]] as const;
+const SECTIONS = [["foot", "foot"], ["alerts", "alerts"], ["rcpt", "print"], ["spot", "spot"], ["film", "film"], ["how", "how"]] as const;
 type Msg = (typeof SECTIONS)[number][1] | null;
 const MSG: Record<NonNullable<Msg>, string> = {
-  foot: K + "foot", rail: K + "rail", alerts: K + "alerts", print: K + "print", spot: K + "spot", film: K + "film",
+  foot: K + "foot", alerts: K + "alerts", print: K + "print", spot: K + "spot", film: K + "film",
   how: "web.landing.how.panelSame", // the mock's "= Same product, another store" has no key yet; closest approved copy
 };
 const rect = (el: Element | null) => el?.getBoundingClientRect();

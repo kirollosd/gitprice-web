@@ -68,7 +68,7 @@ test.describe("Home prelaunch", () => {
     const tally: string[] = [];
     page.on("request", (r) => { if (r.url().includes("tally.so")) tally.push(r.url()); });
     await page.goto("/");
-    for (const id of ["how", "film", "spot", "rcpt", "rail"]) await expect(page.locator(`#${id}`)).toHaveCount(1);
+    for (const id of ["how", "film", "spot", "rcpt"]) await expect(page.locator(`#${id}`)).toHaveCount(1);
     await expect(page.locator("form[data-waitlist]")).toHaveCount(0); // the one form lives in the dock and mounts when it opens
     const form = await openDock(page);
     await expect(page.locator("form[data-waitlist]")).toHaveCount(1);
@@ -190,7 +190,7 @@ test.describe("Home prelaunch", () => {
   test("the five header links point at the landing sections", async ({ page }) => {
     await page.goto("/");
     const nav = page.locator("header nav");
-    for (const [id, label] of [["how", L.nav.howItWorks], ["film", L.nav.watchLive], ["spot", L.nav.matchChallenge], ["rcpt", L.nav.savings], ["rail", L.nav.stores]]) {
+    for (const [id, label] of [["how", L.nav.howItWorks], ["film", L.nav.watchLive], ["spot", L.nav.matchChallenge], ["rcpt", L.nav.savings]]) {
       await expect(nav.getByRole("link", { name: label })).toHaveAttribute("href", `/#${id}`);
     }
   });
