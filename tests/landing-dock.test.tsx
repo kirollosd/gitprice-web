@@ -128,7 +128,7 @@ describe("Dock", () => {
   it("comes in once the hero board has landed and then stays, wherever the visitor is (the mock's dockIn)", async () => {
     await page();
     expect(dock().classList.contains("in")).toBe(true);
-    // over the rail and the footer it is still there
+    // over the footer it is still there
     document.getElementById("foot")!.getBoundingClientRect = () => ({ top: 10, bottom: 900 } as DOMRect);
     act(() => { dispatchEvent(new Event("scroll")); vi.advanceTimersToNextFrame(); });
     expect(dock().classList.contains("in")).toBe(true);

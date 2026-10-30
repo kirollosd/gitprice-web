@@ -144,15 +144,13 @@ test.describe("landing behaviours (parity with the preview)", () => {
 test.describe("Beta tag placement", () => {
   const visible = (page: Page, sel: string) => page.locator(sel).evaluateAll((els) => els.filter((e) => (e as HTMLElement).getClientRects().length > 0).length);
 
-  test("phone: the header carries the tag, the hidden hero action's tag does not show; desktop: the hero does, the header does not", async ({ page }) => {
-    await page.setViewportSize(PHONE);
-    await page.goto("/");
-    expect(await visible(page, "header [data-beta]")).toBe(1);
-    expect(await visible(page, "#num [data-beta]")).toBe(0);
-    await page.setViewportSize(DESKTOP);
-    await page.reload();
-    expect(await visible(page, "header [data-beta]")).toBe(0);
-    expect(await visible(page, "#num [data-beta]")).toBe(1);
+  test("the header carries the tag beside the logo at every width; the hero does not", async ({ page }) => {
+    for (const viewport of [PHONE, DESKTOP]) {
+      await page.setViewportSize(viewport);
+      await page.goto("/");
+      expect(await visible(page, "header [data-beta]")).toBe(1);
+      expect(await visible(page, "#num [data-beta]")).toBe(0);
+    }
   });
 
   for (const viewport of [DESKTOP, PHONE]) {

@@ -20,7 +20,7 @@ import WebMenu from "./WebMenu";
 const N = "web.component.webNav.";
 const L = "web.landing.nav.";
 /** The landing's sections, in page order. */
-const LINKS = [["how", "howItWorks"], ["film", "watchLive"], ["spot", "matchChallenge"], ["rcpt", "savings"], ["rail", "stores"]] as const;
+const LINKS = [["how", "howItWorks"], ["film", "watchLive"], ["spot", "matchChallenge"], ["rcpt", "savings"]] as const;
 const IDS = LINKS.map(([id]) => id);
 /** every header CTA is the shared compact primary (globals.css .gp-btn .gp-btn-sm) */
 const CTA = `${styles.cta} gp-btn gp-btn-sm`;
@@ -39,7 +39,7 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
     return (
       <header className={styles.header}>
         <div className={`${styles.bar} container`}>
-          <Logo locale={locale} href="/" />
+          <span className={styles.mark}><Logo locale={locale} href="/" /><BetaTag locale={locale} /></span>
           <LanguageSwitch locale={locale} />
         </div>
       </header>
@@ -51,7 +51,7 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
     return (
       <header className={`${styles.header} ${styles.site} ${styles.top} ${styles.page} ${site.hdr}`}>
         <div className={styles.bar}>
-          <Wordmark locale={locale} className={styles.brand} />
+          <span className={styles.mark}><Wordmark locale={locale} className={styles.brand} /><BetaTag locale={locale} /></span>
           <nav aria-label={t(locale, N + "a11y.label.primary")} className={styles.links}>
             {LINKS.map(([id, k]) => (
               <Link key={id} href={`${home}#${id}`} className={styles.link} data-gp-track="cta_click" data-gp-cta-id={`nav_${id}`} data-gp-placement="nav">{t(locale, L + k)}</Link>
@@ -73,7 +73,7 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
   return (
     <header className={`${styles.header} ${styles.site} ${styles.top} ${styles.landing}`}>
       <div className={styles.bar}>
-        <Wordmark locale={locale} className={styles.brand} />
+        <span className={styles.mark}><Wordmark locale={locale} className={styles.brand} /><BetaTag locale={locale} /></span>
         <nav aria-label={t(locale, N + "a11y.label.primary")} className={styles.links}>
           {LINKS.map(([id, k]) => (
             <Link key={id} href={`${home}#${id}`} className={styles.link} aria-current={active === id ? "true" : undefined} data-gp-track="cta_click" data-gp-cta-id={`nav_${id}`} data-gp-placement="nav">{t(locale, L + k)}</Link>
@@ -86,8 +86,6 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
           <ThemeToggle locale={locale} />
           {rest === "/" ? (
             <span className={styles.ctaWrap}>
-              {/* the hero CTA (and its tag) is hidden on phones, so the tag moves here, as a corner badge so the bar keeps its width; CSS shows exactly one. Before the button in the DOM, as on screen */}
-              <BetaTag locale={locale} className={styles.navBeta} />
               <JoinButton locale={locale} placement="nav" className={CTA} />
             </span>
           ) : <NavCta locale={locale} keys="1440" className={CTA} />}

@@ -89,34 +89,13 @@ describe("Lineup", () => {
     others.forEach((b) => expect(b.classList.contains("out")).toBe(true));
   });
 
-  it("a wrong guess names the reason; Show me reveals without a lead", async () => {
+  it("a wrong guess names the reason", async () => {
     vi.useFakeTimers();
     await spot();
     const wrong = document.querySelector("#sus > button:not([data-exact])") as HTMLElement;
     act(() => { fireEvent.click(wrong); vi.runAllTimers(); });
     expect(document.getElementById("verdict")!.textContent).toMatch(/^Not quite: /);
     expect(document.getElementById("roomh")!.textContent).toBe(R.wrong.replace(/<\/?em>/g, ""));
-    act(() => { fireEvent.click(document.getElementById("next")!); vi.runAllTimers(); });
-    act(() => { fireEvent.click(document.getElementById("reveal")!); vi.runAllTimers(); });
-    expect(document.getElementById("verdict")!.textContent).toMatch(/^The exact one/);
-  });
-
-  it("Next advances the lineup to the following products, then offers Start over", async () => {
-    vi.useFakeTimers();
-    const { products } = await import("../app/landing/products");
-    await spot();
-    const next = document.getElementById("next")!;
-    act(() => { fireEvent.click(next); vi.runAllTimers(); });
-    expect(document.getElementById("refname")!.textContent).toBe(products[1].name);
-    expect([...document.querySelectorAll("#dots button")].map((d) => d.classList.contains("on"))).toEqual([false, true, false]);
-    expect([...document.querySelectorAll("#sus > button")].every((b) => b.classList.contains("in"))).toBe(true);
-    expect(document.getElementById("verdict")!.classList.contains("on")).toBe(false);
-    act(() => { fireEvent.click(next); vi.runAllTimers(); });
-    expect(document.getElementById("refname")!.textContent).toBe(products[2].name);
-    expect(next.textContent).toBe(R.startOver);
-    act(() => { fireEvent.click(next); vi.runAllTimers(); });
-    expect(document.getElementById("refname")!.textContent).toBe(products[0].name);
-    expect(next.textContent).toBe(R.next);
   });
 
   it("the dots jump straight to a lineup", async () => {
@@ -132,7 +111,7 @@ describe("Lineup", () => {
     expect(document.getElementById("refname")!.textContent).toBe(products[0].name);
   });
 
-  it("a touch swipe on the wall flips lineups; a mouse drag or a short move does not", async () => {
+  it("a drag or swipe on the wall flips lineups (mouse or touch); a short or mostly vertical move does not", async () => {
     vi.useFakeTimers();
     const { products } = await import("../app/landing/products");
     await spot();
@@ -145,8 +124,6 @@ describe("Lineup", () => {
       });
     };
     const shown = () => document.getElementById("refname")!.textContent;
-    drag("mouse", -120);
-    expect(shown()).toBe(products[0].name);
     drag("touch", -20);
     expect(shown()).toBe(products[0].name);
     drag("touch", -120, 150);
@@ -155,5 +132,7 @@ describe("Lineup", () => {
     expect(shown()).toBe(products[1].name);
     drag("touch", 120);
     expect(shown()).toBe(products[0].name);
+    drag("mouse", -120);
+    expect(shown()).toBe(products[1].name);
   });
 });

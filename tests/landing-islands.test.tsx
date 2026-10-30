@@ -118,7 +118,7 @@ describe("WebNav (landing)", () => {
     const N = en.web.landing.nav;
     const nav = screen.getByRole("navigation");
     const links = [...nav.querySelectorAll("a")].map((a) => [a.textContent, a.getAttribute("href")]);
-    expect(links).toEqual([[N.howItWorks, "/#how"], [N.watchLive, "/#film"], [N.matchChallenge, "/#spot"], [N.savings, "/#rcpt"], [N.stores, "/#rail"]]);
+    expect(links).toEqual([[N.howItWorks, "/#how"], [N.watchLive, "/#film"], [N.matchChallenge, "/#spot"], [N.savings, "/#rcpt"]]);
     expect(screen.getByRole("link", { name: N.home }).querySelector("svg")).toBeTruthy();
     expect(screen.getByRole("button", { name: en.web.landing.lang.label })).toBeTruthy();
     expect(screen.getByRole("button", { name: en.web.landing.theme.toDark })).toBeTruthy();

@@ -129,11 +129,11 @@ describe("ProductPicker", () => {
   });
 
   it("keeps the hash on the written URL", async () => {
-    history.replaceState(null, "", "/#rail");
+    history.replaceState(null, "", "/#how");
     await home();
     act(() => { fireEvent.click(chip("iphone")); });
     history.replaceState(null, "", "/");
-    expect(replace.mock.calls[0][0]).toMatch(/\?p=iphone#rail$/);
+    expect(replace.mock.calls[0][0]).toMatch(/\?p=iphone#how$/);
   });
 
   it("ignores a late URL commit of an earlier pick, and follows the URL once the last pick lands", async () => {

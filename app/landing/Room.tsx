@@ -15,6 +15,8 @@ const K = "web.landing.room.";
 const ROUNDS = 3;
 /** Horizontal travel that counts as a swipe between lineups. */
 const SWIPE_PX = 48;
+/** Horizontal travel before the cards start following the pointer (and a click no longer counts). */
+const DRAG_START_PX = 8;
 const reduced = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** Product art is drawn, not photographed: "charger small" → the module's .art.charger.small. */
@@ -34,8 +36,8 @@ function verdict(locale: Locale, R: Product, pick: number | null) {
 
 /**
  * 2c · spot the same one: four suspects, one is the exact product. Round one is the hero product, scrubbed by the
- * scroll (ScrollScenes) until the visitor plays it: a guess, Show me or Next lineup sets #spotpin[data-manual], so
- * the scrub stands down, and folds the pinned runway to the room's height. Rounds two and three are the next
+ * scroll (ScrollScenes) until the visitor plays it: a guess or a dot sets #spotpin[data-manual], so
+ * the scrub stands down. Rounds two and three are the next
  * products in the list; they deal themselves in. Card states are the classes in, picked, rev and out.
  */
 export default function Room({ locale, product: P }: { locale: Locale; product: Product }) {
@@ -49,16 +51,11 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
 
   const later = (fn: () => void, ms: number) => { timers.current.push(setTimeout(fn, reduced() ? 0 : ms)); };
   const cards = () => [...(ref.current?.querySelector("#sus")?.children ?? [])] as HTMLElement[];
-  // the scroll has nothing left to drive: the runway folds to the room, and the room stays where it was on screen
+  // the scroll has nothing left to drive: the scrub stands down. The runway keeps its height: folding it moved the page under the visitor's click
   const takeOver = () => {
     if (manual.current) return;
     manual.current = true;
-    const pin = document.getElementById("spotpin"), room = ref.current;
-    if (!pin || !room) return;
-    pin.setAttribute("data-manual", "");
-    const top = pin.getBoundingClientRect().top;
-    pin.style.height = room.offsetHeight + "px";
-    if (top < 0) scrollTo(0, scrollY + top);
+    document.getElementById("spotpin")?.setAttribute("data-manual", "");
   };
   const reveal = (pick: number | null) => {
     takeOver();
@@ -74,18 +71,32 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
     if (v) { v.innerHTML = verdict(locale, R, pick); v.classList.add("on"); applyMoney(v); }
     if (h) h.innerHTML = html(locale, K + (pick === ex ? "right" : "wrong")).__html;
   };
-  const next = () => { takeOver(); setRound((r) => (r + 1) % ROUNDS); };
   const goTo = (k: number) => { if (k === round) return; takeOver(); setRound(k); };
-  // touch: a horizontal swipe on the wall flips to the neighbouring lineup (mouse users have the dots and the button)
-  const swipe = useRef<{ x: number; y: number } | null>(null), swiped = useRef(false);
+  // the wall is draggable (mouse, pen or touch): the cards follow the pointer, and a long enough horizontal drag flips to the neighbouring lineup
+  const swipe = useRef<{ x: number; y: number } | null>(null), swiped = useRef(false), sus = useRef<HTMLDivElement>(null);
   const rtl = locale === "ar";
+  const shift = (px: number, settle: boolean) => {
+    const el = sus.current;
+    if (!el) return;
+    el.style.transition = settle ? "transform .35s var(--out)" : "none";
+    el.style.transform = px ? `translateX(${px}px)` : "";
+  };
+  const onSwipeMove = (e: PointerEvent<HTMLDivElement>) => {
+    const from = swipe.current;
+    if (!from) return;
+    const dx = e.clientX - from.x, dy = e.clientY - from.y;
+    if (Math.abs(dx) < DRAG_START_PX || Math.abs(dx) < Math.abs(dy)) return;
+    swiped.current = true;
+    const target = round + ((rtl ? dx > 0 : dx < 0) ? 1 : -1);
+    shift(target < 0 || target >= ROUNDS ? dx * 0.3 : dx, false); // rubber band at the first and last lineup
+  };
   const onSwipeEnd = (e: PointerEvent<HTMLDivElement>) => {
     const from = swipe.current;
     swipe.current = null;
+    shift(0, true);
     if (!from) return;
     const dx = e.clientX - from.x, dy = e.clientY - from.y;
     if (Math.abs(dx) < SWIPE_PX || Math.abs(dx) < Math.abs(dy) * 1.5) return;
-    swiped.current = true;
     const forward = rtl ? dx > 0 : dx < 0;
     goTo(Math.min(ROUNDS - 1, Math.max(0, round + (forward ? 1 : -1))));
   };
@@ -126,12 +137,14 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
       </div>
       <div
         className={s.wall}
-        onPointerDown={(e) => { swipe.current = e.pointerType === "mouse" ? null : { x: e.clientX, y: e.clientY }; swiped.current = false; }}
+        onPointerDown={(e) => { swipe.current = { x: e.clientX, y: e.clientY }; swiped.current = false; }}
+        onPointerMove={onSwipeMove}
         onPointerUp={onSwipeEnd}
-        onPointerCancel={() => { swipe.current = null; }}
+        onPointerLeave={() => { if (swipe.current) { swipe.current = null; shift(0, true); } }}
+        onPointerCancel={() => { swipe.current = null; shift(0, true); }}
         onClickCapture={(e) => { if (swiped.current) { swiped.current = false; e.stopPropagation(); e.preventDefault(); } }}
       >
-        <div className={s.sus} id="sus">
+        <div className={s.sus} id="sus" ref={sus}>
           {R.lineup.map(([store, name, price, art, exact, why], k) => (
             <button key={`${R.id}-${k}`} type="button" className={s.s} data-k={k} data-exact={exact === 1 ? "" : undefined} onClick={() => reveal(k)}>
               <div className={s.img}><Art c={art} /></div>
@@ -148,16 +161,14 @@ export default function Room({ locale, product: P }: { locale: Locale; product: 
         </div>
       </div>
       <div className={s.lbar}>
-        <p className={s.verdict} id="verdict" aria-live="polite" data-done={scrubDone} />
         <div className={s.ctl}>
           <span className={s.dots} id="dots">
             {[0, 1, 2].map((k) => (
               <button key={k} type="button" className={k === round ? "on" : undefined} aria-label={t(locale, K + "lineupN", { n: k + 1, total: ROUNDS })} aria-current={k === round ? "true" : undefined} onClick={() => goTo(k)} />
             ))}
           </span>
-          <button type="button" className={`gp-btn-2 ${s.g}`} id="reveal" onClick={() => reveal(null)}>{t(locale, K + "show")}</button>
-          <button type="button" className={`gp-btn-2 ${s.p}`} id="next" onClick={next}>{t(locale, K + (round < ROUNDS - 1 ? "next" : "startOver"))}</button>
         </div>
+        <p className={s.verdict} id="verdict" aria-live="polite" data-done={scrubDone} />
       </div>
       <p className={s.hint} dangerouslySetInnerHTML={html(locale, "web.landing.spot.note", {}, { marks: marksHtml(locale) })} />
     </section>

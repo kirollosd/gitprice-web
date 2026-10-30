@@ -29,7 +29,7 @@ afterEach(() => {
 });
 
 const L = { en: en.web.landing, ar: ar.web.landing };
-const IDS = ["num", "how", "film", "spot", "rcpt", "rail", "foot"];
+const IDS = ["num", "how", "film", "spot", "rcpt", "foot"];
 const BANNED = ["Amazon", "Noon", "Jumia", "Egypt", "مصر", "ج.م"];
 // The launch date, not any month name: a receipt dated November is fine.
 const LAUNCH = /\b(13\s*Nov|Nov(ember)?\s*13|6\s*Nov|Nov(ember)?\s*6)\b|(13|6)\s*نوفمبر|نوفمبر\s*(13|6)/i;

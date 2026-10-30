@@ -1,7 +1,6 @@
 import type { CSSProperties } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
-import BetaTag from "../components/BetaTag";
 import { html } from "./html";
 import { splitMoney, useMoney } from "./money";
 import { priceHtml } from "./Price";
@@ -65,7 +64,6 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
           {/* the hero's one action is the secondary "See how it works"; the waitlist CTAs are the nav, dock and footer ones */}
           <div className={s.hcta}>
             <ArrowLink href="#how" text={t(locale, K + "seeHow")} />
-            <BetaTag locale={locale} />
           </div>
         </div>
       </div>
