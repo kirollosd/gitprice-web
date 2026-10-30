@@ -1,0 +1,14 @@
+{
+  "_doc": "Exceptions to the GP-407 8px spacing rule (scripts/spacing-grid.mjs). Each entry matches {file, prop, value}; every entry needs a reason, and an entry that no longer matches fails the test.",
+  "entries": [
+    { "file": "app/components/WebMenu.module.css", "prop": "top", "value": "-6px", "reason": "icon geometry: the hamburger glyph's top bar, drawn 6px above the middle bar (not layout spacing)" },
+    { "file": "app/components/WebMenu.module.css", "prop": "top", "value": "6px", "reason": "icon geometry: the hamburger glyph's bottom bar, 6px below the middle bar" },
+    { "file": "app/components/WebMenu.module.css", "prop": "transform", "value": "6px", "reason": "icon geometry: the open state folds the top bar onto the middle bar (must equal the bar offset)" },
+    { "file": "app/components/WebMenu.module.css", "prop": "transform", "value": "-6px", "reason": "icon geometry: the open state folds the bottom bar onto the middle bar (must equal the bar offset)" },
+    { "file": "app/landing/Alerts.module.css", "prop": "transform", "value": "-4px", "reason": "motion: the toast's 4px pop nudge while a new alert lands, not a spacing offset" },
+    { "file": "app/landing/ScrollScenes.module.css", "prop": "transform", "value": "-3px", "reason": "motion: the scroll cue arrow's bounce keyframe" },
+    { "file": "app/landing/ScrollScenes.module.css", "prop": "transform", "value": "3px", "reason": "motion: the scroll cue arrow's bounce keyframes (60% and 100%)" },
+    { "file": "app/landing/Wordmark.module.css", "prop": "transform", "value": "420px", "reason": "SVG user units (transform-box: view-box): the logo letters start one glyph height below the 420-unit viewBox (entry animation)" },
+    { "file": "app/landing/Wordmark.module.css", "prop": "transform", "value": "-18px", "reason": "SVG user units: the board-flip overshoot keyframe of the logo letters" }
+  ]
+}

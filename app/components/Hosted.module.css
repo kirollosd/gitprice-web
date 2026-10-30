@@ -1,20 +1,20 @@
 /* Shared look of the hosted pages (reset password, checkout): a grey band with one white card, as on the boards. */
-.band { background: var(--gp-surface-raised); padding-block: calc(var(--gp-sp-16) + var(--gp-sp-8)); }
+.band { background: var(--gp-surface-raised); padding-block: var(--gp-wsec); }
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--gp-sp-6);
+  gap: var(--gp-wsp-3);
   inline-size: 100%;
   max-inline-size: 480px;
   margin-inline: auto;
   min-inline-size: 0;
-  padding: var(--gp-sp-10);
+  padding: var(--gp-wsp-3);
   background: var(--gp-surface);
   border: 1px solid var(--gp-hairline);
   border-radius: var(--gp-r-card);
 }
-.head { display: flex; flex-direction: column; gap: var(--gp-sp-3); }
-.icon { color: var(--gp-ink); line-height: 0; margin-block-end: var(--gp-sp-3); }
+.head { display: flex; flex-direction: column; gap: var(--gp-wsp-2); }
+.icon { color: var(--gp-ink); line-height: 0; margin-block-end: var(--gp-wsp-2); }
 .iconOk { color: var(--gp-accent); }
 .iconBad { color: var(--gp-danger); }
 .h1 { font-size: var(--web-fs-title); line-height: var(--gp-lh-tight); overflow-wrap: anywhere; }
@@ -24,7 +24,7 @@
   align-items: center;
   justify-content: center;
   min-block-size: var(--gp-target);
-  padding-inline: var(--gp-sp-6);
+  padding-inline: var(--gp-wsp-3);
   border-radius: var(--gp-r-control);
   background: var(--gp-web-fill);
   color: var(--gp-web-on-fill);
@@ -39,7 +39,7 @@
 .spinner {
   inline-size: var(--gp-sp-8);
   block-size: var(--gp-sp-8);
-  margin-block-end: var(--gp-sp-3);
+  margin-block-end: var(--gp-wsp-2);
   border: 2px solid var(--gp-hairline);
   border-block-start-color: var(--gp-accent);
   border-radius: var(--gp-r-round);
@@ -48,6 +48,5 @@
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
 @media (max-width: 767px) {
-  .band { padding-block: var(--gp-sp-12); }
-  .card { padding: var(--gp-sp-6); }
+  .band { padding-block: var(--gp-wsec-m); }
 }

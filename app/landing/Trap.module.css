@@ -1,30 +1,30 @@
 /* after the game: the cheapest look-alike shouldn't win */
-.trap { background: var(--gp-web-dark); color: var(--gp-web-on-dark); padding: 140px 48px 130px; display: grid; grid-template-columns: 1fr 560px; gap: 80px; align-items: center; --ring: var(--gp-web-on-dark); --cur-c: var(--gp-web-on-dark-mute);
+.trap { background: var(--gp-web-dark); color: var(--gp-web-on-dark); padding: var(--gp-wsec) var(--gp-wsp-6); display: grid; grid-template-columns: 1fr 560px; gap: var(--gp-wsp-10); align-items: center; --ring: var(--gp-web-on-dark); --cur-c: var(--gp-web-on-dark-mute);
   --seg-bg: var(--gp-web-dark-3); --seg-text: var(--gp-web-on-dark-mute); --seg-on: var(--gp-web-on-dark); --seg-on-text: var(--gp-web-dark);
   --chip-bg: var(--gp-web-dark-3); --chip-edge: var(--gp-web-dark-line); --chip-ink: var(--gp-web-on-dark); }
 .trap h2 { font-weight: 300; font-size: 80px; line-height: .98; letter-spacing: -.04em; }
-.trap p { font-size: 19px; line-height: 1.5; color: var(--gp-web-on-dark-mute); margin-top: 22px; max-width: 560px; }
+.trap p { font-size: 19px; line-height: 1.5; color: var(--gp-web-on-dark-mute); margin-top: var(--gp-wsp-3); max-width: 560px; }
 .trap p bdi { white-space: nowrap; }
-.rank { background: var(--gp-web-dark-2); border-radius: var(--gp-r-card); padding: 22px 24px; }
-.r { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-top: 1px solid var(--gp-web-dark-line); font-size: 17px; transition: transform .7s var(--spring), opacity .4s; }
+.rank { background: var(--gp-web-dark-2); border-radius: var(--gp-r-card); padding: var(--gp-wsp-3); }
+.r { display: flex; justify-content: space-between; align-items: center; padding: var(--gp-wsp-2) 0; border-top: 1px solid var(--gp-web-dark-line); font-size: 17px; transition: transform .7s var(--spring), opacity .4s; }
 .r:global(.first) { border-top-color: transparent; }
-.r > span { flex: 1; min-width: 0; margin-inline-end: 16px; line-height: 1.4; }
-.r b { flex: none; font-family: var(--f-mono); font-weight: 500; font-size: 19px; padding: 2px 10px; border-radius: var(--gp-r-xs); }
+.r > span { flex: 1; min-width: 0; margin-inline-end: var(--gp-wsp-2); line-height: 1.4; }
+.r b { flex: none; font-family: var(--f-mono); font-weight: 500; font-size: 19px; padding: 2px var(--gp-wsp-1); border-radius: var(--gp-r-xs); }
 /* the winner: contrast ink, never a coral number (GP-407 round 3) */
 .r:global(.w) b { background: var(--gp-web-on-dark); color: var(--gp-web-dark); --cur-c: currentColor; }
 .r:global(.x) { color: var(--gp-web-on-dark-mute); }
-.r em { font-style: normal; margin-inline-start: 8px; }
+.r em { font-style: normal; margin-inline-start: var(--gp-wsp-1); }
 /* the shared segmented toggle (base .seg, same as the receipt's With / Without) */
-.tg { margin-bottom: 12px; }
+.tg { margin-bottom: var(--gp-wsp-2); }
 
 :global(html[dir="rtl"]) .r em, :global(html[dir="rtl"]) .r bdi { unicode-bidi: isolate; }
 
 /* phone canvas */
-:global(html.lp-m) .trap { grid-template-columns: 1fr; gap: 30px; padding: 56px 20px; }
+:global(html.lp-m) .trap { grid-template-columns: 1fr; gap: var(--gp-wsp-4); padding: var(--gp-wsec-m) var(--gp-wsp-3); }
 :global(html.lp-m) .trap h2 { font-size: 40px; }
 :global(html.lp-m) .trap p { font-size: 16px; }
-:global(html.lp-m) .rank { padding: 14px 16px; }
-:global(html.lp-m) .r { font-size: max(14px, var(--fl, 0px)); padding: 10px 0; }
+:global(html.lp-m) .rank { padding: var(--gp-wsp-3); }
+:global(html.lp-m) .r { font-size: max(14px, var(--fl, 0px)); padding: var(--gp-wsp-1) 0; }
 :global(html.lp-m) .r b { font-size: 15px; }
-:global(html.lp-m) .r > span { display: block; margin-inline-end: 10px; }
-:global(html.lp-m) .r em { display: flex; width: fit-content; margin: 4px 0 0; }
+:global(html.lp-m) .r > span { display: block; margin-inline-end: var(--gp-wsp-1); }
+:global(html.lp-m) .r em { display: flex; width: fit-content; margin: var(--gp-wsp-1) 0 0; }

@@ -165,7 +165,7 @@ export default function AlertSlider({ locale, product: P }: { locale: Locale; pr
           ))}
         </svg>
         {line && (
-          <div className="th-label" aria-hidden="true" style={{ position: "absolute", left: 34, top: 26 + cy(th) - 34, background: "var(--gp-web-fill)", color: "var(--gp-web-on-fill)", padding: "4px 10px", borderRadius: 8, pointerEvents: "none" }}>
+          <div className="th-label" aria-hidden="true" style={{ position: "absolute", left: 32, top: 24 + cy(th) - 32, background: "var(--gp-web-fill)", color: "var(--gp-web-on-fill)", padding: "0 8px", lineHeight: "24px", borderRadius: 8, pointerEvents: "none" }}>
             <bdi dir="ltr">{(rule === "to" ? "≤ " : "≥ ") + fmt(th, 2)}</bdi>
           </div>
         )}

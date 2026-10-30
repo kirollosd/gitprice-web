@@ -2,33 +2,33 @@
 .num { height: 100vh; }
 /* board size (the mock sizes it in JS): fits the window height, and long prices fit the canvas width */
 .num > div {
-  --dtop: 290px;
+  --dtop: 288px;
   --fs: min(clamp(200px, calc(100vh / var(--z, 1) - 500px), 320px), calc((var(--cw, 1440px) - 90px) / (var(--len, 3) * .56)));
 }
-.kick { position: absolute; inset-inline-start: 48px; top: 132px; }
-.h1 { position: absolute; inset-inline-start: 48px; top: 176px; margin: 0; font-size: 54px; font-weight: 400; letter-spacing: -.03em; line-height: 1.05; white-space: nowrap; }
-.cap { position: absolute; inset-inline-start: 48px; top: 246px; font-size: 20px; line-height: 1.35; width: 900px; font-weight: 300; }
+.kick { position: absolute; inset-inline-start: var(--gp-wsp-6); top: 136px; }
+.h1 { position: absolute; inset-inline-start: var(--gp-wsp-6); top: 176px; margin: 0; font-size: 54px; font-weight: 400; letter-spacing: -.03em; line-height: 1.05; white-space: nowrap; }
+.cap { position: absolute; inset-inline-start: var(--gp-wsp-6); top: 248px; font-size: 20px; line-height: 1.35; width: 900px; font-weight: 300; }
 .cap b { font-weight: 600; }
 /* the caption's struck price is the board's Coral bar (Price.module.css draws it) */
 .cap s { --strike-c: var(--gp-web-fill); --strike-h: 3px; }
 
-.hcta { display: flex; gap: 18px; align-items: center; justify-content: flex-end; margin-top: 18px; }
+.hcta { display: flex; gap: var(--gp-wsp-2); align-items: center; justify-content: flex-end; margin-top: var(--gp-wsp-2); }
 .lede .hcta a { color: var(--gp-web-ink); } /* the secondary button takes ink, not the lede's body colour */
-.lede { position: absolute; inset-inline-end: 56px; bottom: 130px; width: 400px; font-size: 19px; line-height: 1.45; color: var(--gp-web-body); text-align: end; }
+.lede { position: absolute; inset-inline-end: var(--gp-wsp-6); bottom: var(--gp-wsp-16); width: 400px; font-size: 19px; line-height: 1.45; color: var(--gp-web-body); text-align: end; }
 
-.digits { position: absolute; left: 30px; top: var(--dtop); display: flex; font-weight: 500; font-variant-numeric: tabular-nums; font-size: var(--fs); letter-spacing: -.02em; line-height: 1; white-space: nowrap; }
+.digits { position: absolute; left: var(--gp-wsp-4); top: var(--dtop); display: flex; font-weight: 500; font-variant-numeric: tabular-nums; font-size: var(--fs); letter-spacing: -.02em; line-height: 1; white-space: nowrap; }
 /* clip only top and bottom (the roll); the tight letter-spacing makes cells narrower than the glyphs */
 .dg { display: inline-block; height: 1em; clip-path: inset(0 -.25em); }
 .dg i { display: block; font-style: normal; }
 .dg i span { display: block; height: 1em; }
 .dg.dot { font-variant-numeric: normal; text-align: center; overflow: visible; }
-.strike { position: absolute; left: 30px; top: calc(var(--dtop) + var(--fs) * .686); height: 14px; width: 1380px; background: var(--gp-web-fill); transform-origin: 0 50%; transform: scaleX(0); border-radius: var(--gp-r-xs); }
+.strike { position: absolute; left: var(--gp-wsp-4); top: calc(var(--dtop) + var(--fs) * .686); height: 14px; width: 1380px; background: var(--gp-web-fill); transform-origin: 0 50%; transform: scaleX(0); border-radius: var(--gp-r-xs); }
 /* the board's currency code (owner, 2026-10-27): muted, in the text family with tabular figures (GP-407 round 3 .gp-cur), on the digits' cap line (Outfit cap top is .17em) right after
    the last digit, so it reads as part of the number. The strike stops at the digits: a bar as thick as the code is tall would blank it out. */
-.unit { position: absolute; inset-inline-start: 100%; top: calc(var(--fs) * .17); margin-inline-start: 18px; font-size: 30px; line-height: 1; letter-spacing: 0; font-family: var(--gp-font); font-variant-numeric: tabular-nums; font-weight: 400; color: var(--gp-web-mute); }
+.unit { position: absolute; inset-inline-start: 100%; top: calc(var(--fs) * .17); margin-inline-start: var(--gp-wsp-2); font-size: 30px; line-height: 1; letter-spacing: 0; font-family: var(--gp-font); font-variant-numeric: tabular-nums; font-weight: 400; color: var(--gp-web-mute); }
 
-.pick { position: absolute; inset-inline-end: 56px; top: 124px; z-index: 2; display: flex; gap: 8px; align-items: center; }
-.pick small { font-size: 15px; color: var(--gp-web-mute); margin-inline-end: 4px; }
+.pick { position: absolute; inset-inline-end: var(--gp-wsp-6); top: var(--gp-wsp-16); z-index: 2; display: flex; gap: var(--gp-wsp-1); align-items: center; }
+.pick small { font-size: 15px; color: var(--gp-web-mute); margin-inline-end: var(--gp-wsp-1); }
 /* the unified chip (base .chip) stays 28px; an invisible ::after pad (as .gp-ctl) brings the tap area to 44px, phones included */
 .pick button { position: relative; font-family: var(--f-sans); cursor: pointer; transition: background .2s, color .2s, transform .3s var(--spring); }
 .pick button::after { content: ""; position: absolute; inset: 50% auto auto 50%; inline-size: calc(100% + 4px); block-size: calc(44px / var(--z, 1)); translate: -50% -50%; }
@@ -36,42 +36,42 @@
 .pick button:hover { transform: translateY(-2px); }
 
 /* spec chips (base .chip), then the store as a plain ink label, never the coral primary (GP-407 round 3) */
-.tags { position: absolute; inset-inline-start: 48px; bottom: 140px; display: flex; align-items: center; gap: 8px; }
-.tags span { opacity: 0; transform: translateY(16px); transition: opacity .4s, transform .6s var(--spring); }
+.tags { position: absolute; inset-inline-start: var(--gp-wsp-6); bottom: 144px; display: flex; align-items: center; gap: var(--gp-wsp-1); }
+.tags span { opacity: 0; transform: translateY(var(--gp-wsp-2)); transition: opacity .4s, transform .6s var(--spring); }
 .tags span:global(.on) { opacity: 1; transform: none; }
-.tags span.w { display: inline-flex; align-items: center; margin-inline-start: 8px; font-size: 15px; font-weight: 600; color: var(--gp-web-ink); white-space: nowrap; }
+.tags span.w { display: inline-flex; align-items: center; margin-inline-start: var(--gp-wsp-1); font-size: 15px; font-weight: 600; color: var(--gp-web-ink); white-space: nowrap; }
 
 :global(html.lp-short) .lede p { display: none; }
-:global(html[lang="ar"]) .cap { top: 262px; }
-:global(html[dir="rtl"]) .digits { direction: ltr; left: auto; right: 30px; }
+:global(html[lang="ar"]) .cap { top: 264px; }
+:global(html[dir="rtl"]) .digits { direction: ltr; left: auto; right: var(--gp-wsp-4); }
 /* the digits are laid out left-to-right in Arabic too, so the code goes on their left (the number first, as Price reads) */
-:global(html[dir="rtl"]) .unit { inset-inline-start: auto; right: 100%; margin-inline-start: 0; margin-right: 18px; }
-:global(html.lp-m[dir="rtl"]) .unit { margin-right: 10px; }
-:global(html[dir="rtl"]) .strike { left: auto; right: 30px; transform-origin: 100% 50%; }
+:global(html[dir="rtl"]) .unit { inset-inline-start: auto; right: 100%; margin-inline-start: 0; margin-right: var(--gp-wsp-2); }
+:global(html.lp-m[dir="rtl"]) .unit { margin-right: var(--gp-wsp-1); }
+:global(html[dir="rtl"]) .strike { left: auto; right: var(--gp-wsp-4); transform-origin: 100% 50%; }
 
 /* phone canvas */
-:global(html.lp-m) .num > div { --dtop: max(calc(42vh / var(--z)), 330px); --fs: min(130px, calc((var(--cw, 430px) - 40px) / (var(--len, 3) * .56))); }
+:global(html.lp-m) .num > div { --dtop: max(calc(42vh / var(--z)), 328px); --fs: min(130px, calc((var(--cw, 430px) - 40px) / (var(--len, 3) * .56))); }
 :global(html.lp-m[dir="rtl"]) .num > div { --fs: min(130px, calc((var(--cw, 430px) - 40px - 60px) / (var(--len, 3) * .56))); } /* the code sits left of the digits here, so it needs room too */
 /* the scroller clips its overflow: 8px of block padding keeps the chips' 44px pads inside it, and the chips stay at 70px */
-:global(html.lp-m) .pick { inset-inline-start: 0; inset-inline-end: 0; top: calc(70px - 8px / var(--z, 1)); padding: calc(8px / var(--z, 1)) 20px; gap: 6px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 84%, transparent); mask-image: linear-gradient(to right, #000 84%, transparent); }
+:global(html.lp-m) .pick { inset-inline-start: 0; inset-inline-end: 0; top: calc(var(--gp-wsp-8) - var(--gp-wsp-1) / var(--z, 1)); padding: calc(var(--gp-wsp-1) / var(--z, 1)) var(--gp-wsp-3); gap: var(--gp-wsp-1); overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 84%, transparent); mask-image: linear-gradient(to right, #000 84%, transparent); }
 :global(html.lp-m[dir="rtl"]) .pick { -webkit-mask-image: linear-gradient(to left, #000 84%, transparent); mask-image: linear-gradient(to left, #000 84%, transparent); }
 :global(html.lp-m) .pick::-webkit-scrollbar { display: none; }
 :global(html.lp-m) .pick::after { content: ""; flex: 0 0 14px; }
 :global(html.lp-m) .pick > * { flex-shrink: 0; white-space: nowrap; }
 :global(html.lp-m) .pick button:hover { transform: none; } /* the row scrolls sideways only: no lift to clip or nudge it */
 :global(html.lp-m) .pick small { font-size: max(14px, var(--fl, 0px)); }
-:global(html.lp-m) .kick { top: 122px; inset-inline-start: 20px; font-size: max(14px, var(--fl, 0px)); }
-:global(html.lp-m) .h1 { top: 166px; inset-inline-start: 20px; width: 390px; font-size: 34px; white-space: normal; }
-:global(html.lp-m) .cap { top: 254px; inset-inline-start: 20px; width: 390px; font-size: 17px; }
-:global(html.lp-m[lang="ar"]) .cap { top: 268px; }
+:global(html.lp-m) .kick { top: var(--gp-wsp-16); inset-inline-start: var(--gp-wsp-3); font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .h1 { top: 168px; inset-inline-start: var(--gp-wsp-3); width: 390px; font-size: 34px; white-space: normal; }
+:global(html.lp-m) .cap { top: 256px; inset-inline-start: var(--gp-wsp-3); width: 390px; font-size: 17px; }
+:global(html.lp-m[lang="ar"]) .cap { top: 272px; }
 :global(html.lp-m) .hcta { display: none; }
-:global(html.lp-m) .digits { left: 16px; }
-:global(html.lp-m) .unit { margin-inline-start: 10px; font-size: 18px; }
-:global(html.lp-m) .strike { left: 16px; height: 8px; }
-:global(html.lp-m[dir="rtl"]) .strike { left: auto; right: 16px; }
-:global(html.lp-m[dir="rtl"]) .digits { left: auto; right: 16px; }
-:global(html.lp-m) .lede { inset-inline-start: 20px; inset-inline-end: 20px; top: calc(var(--dtop, 330px) + 150px); bottom: auto; width: auto; font-size: 16px; text-align: start; }
-:global(html.lp-m) .tags { inset-inline-start: 20px; inset-inline-end: 20px; bottom: 110px; flex-wrap: wrap; gap: 6px; }
+:global(html.lp-m) .digits { left: var(--gp-wsp-2); }
+:global(html.lp-m) .unit { margin-inline-start: var(--gp-wsp-1); font-size: 18px; }
+:global(html.lp-m) .strike { left: var(--gp-wsp-2); height: 8px; }
+:global(html.lp-m[dir="rtl"]) .strike { left: auto; right: var(--gp-wsp-2); }
+:global(html.lp-m[dir="rtl"]) .digits { left: auto; right: var(--gp-wsp-2); }
+:global(html.lp-m) .lede { inset-inline-start: var(--gp-wsp-3); inset-inline-end: var(--gp-wsp-3); top: calc(var(--dtop, 328px) + 152px); bottom: auto; width: auto; font-size: 16px; text-align: start; }
+:global(html.lp-m) .tags { inset-inline-start: var(--gp-wsp-3); inset-inline-end: var(--gp-wsp-3); bottom: var(--gp-wsp-12); flex-wrap: wrap; gap: var(--gp-wsp-1); }
 
 /* short phone windows (an in-app browser with its translate bar and toolbars): no room for the lede between the board and the chips */
 @media (max-height: 740px) { :global(html.lp-m) .lede { display: none; } }

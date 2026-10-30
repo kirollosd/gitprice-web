@@ -1,7 +1,7 @@
 /* 2b · the film: a tilted inset card grows to full-bleed, then plays; chapters seek */
 .film { height: 135vh; background: var(--gp-web-ground); }
-.h2 { position: absolute; inset-inline-start: 48px; top: 120px; font-size: 96px; z-index: 2; width: 900px; }
-.lede2 { position: absolute; inset-inline-end: 56px; top: 150px; width: 360px; font-size: 19px; line-height: 1.45; color: var(--gp-web-body); z-index: 2; }
+.h2 { position: absolute; inset-inline-start: var(--gp-wsp-6); top: var(--gp-wsp-16); font-size: 96px; z-index: 2; width: 900px; }
+.lede2 { position: absolute; inset-inline-end: var(--gp-wsp-6); top: 152px; width: 360px; font-size: 19px; line-height: 1.45; color: var(--gp-web-body); z-index: 2; }
 /* first state of the grow (the mock sets it in JS at progress 0): a 600px 16:9 card, centred, tilted */
 .fframe {
   position: absolute; overflow: hidden; will-change: left, top;
@@ -14,23 +14,23 @@
 .fframe video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 /* the slab backdrop above shows the same frame edge as the preview; no overdraw needed */
 
-.chap { position: absolute; left: 50%; bottom: 112px; transform: translateX(-50%) translateY(30px); display: flex; gap: 8px; z-index: 3; opacity: 0; pointer-events: none; visibility: hidden; transition: opacity .4s, transform .6s var(--spring), visibility 0s .4s; --ring: var(--gp-web-on-dark); }
+.chap { position: absolute; left: 50%; bottom: var(--gp-wsp-12); transform: translateX(-50%) translateY(var(--gp-wsp-4)); display: flex; gap: var(--gp-wsp-1); z-index: 3; opacity: 0; pointer-events: none; visibility: hidden; transition: opacity .4s, transform .6s var(--spring), visibility 0s .4s; --ring: var(--gp-web-on-dark); }
 .chap:global(.on) { opacity: 1; transform: translateX(-50%); pointer-events: auto; visibility: visible; transition-delay: 0s; }
-.chap button { position: relative; overflow: hidden; border: 0; border-radius: var(--gp-r-control); padding: 12px 20px; font: 600 15px var(--f-sans); background: var(--gp-web-dock); color: var(--gp-web-on-dock); cursor: pointer; opacity: .75; transition: opacity .2s, scale .3s var(--spring); }
+.chap button { position: relative; overflow: hidden; border: 0; border-radius: var(--gp-r-control); padding: var(--gp-wsp-2) var(--gp-wsp-3); font: 600 15px var(--f-sans); background: var(--gp-web-dock); color: var(--gp-web-on-dock); cursor: pointer; opacity: .75; transition: opacity .2s, scale .3s var(--spring); }
 .chap button:hover { scale: 1.06; }
 .chap button:global(.on) { opacity: 1; }
-.chap .pp { display: grid; place-items: center; padding-inline: 16px; }
+.chap .pp { display: grid; place-items: center; padding-inline: var(--gp-wsp-2); }
 /* tap targets: >= 44 rendered px after the canvas zoom */
 .chap button { min-height: calc(44px / var(--z, 1)); }
 .chap button i { position: absolute; inset-inline-start: 0; bottom: 0; height: 3px; width: 0; background: var(--gp-web-fill); }
 
 /* phone canvas: a 4:5 cut */
-:global(html.lp-m) .h2 { inset-inline-start: 20px; top: 90px; width: 390px; font-size: 44px; }
-:global(html.lp-m) .lede2 { inset-inline-start: 20px; inset-inline-end: 20px; top: 200px; width: auto; font-size: 16px; }
-:global(html.lp-m[lang="ar"]) .lede2 { top: 214px; }
-:global(html.lp-m) .fframe { width: 300px; height: 375px; left: calc((var(--cw, 430px) - 300px) / 2); top: 360px; background-image: var(--pml, none); }
+:global(html.lp-m) .h2 { inset-inline-start: var(--gp-wsp-3); top: var(--gp-wsp-12); width: 390px; font-size: 44px; }
+:global(html.lp-m) .lede2 { inset-inline-start: var(--gp-wsp-3); inset-inline-end: var(--gp-wsp-3); top: 200px; width: auto; font-size: 16px; }
+:global(html.lp-m[lang="ar"]) .lede2 { top: 216px; }
+:global(html.lp-m) .fframe { width: 300px; height: 375px; left: calc((var(--cw, 430px) - 304px) / 2); top: 360px; background-image: var(--pml, none); }
 :global(html.lp-m[data-theme="dark"]) .fframe { background-image: var(--pmd, none); }
 @media (prefers-color-scheme: dark) { :global(html.lp-m:not([data-theme="light"])) .fframe { background-image: var(--pmd, none); } }
-:global(html.lp-m) .chap { bottom: 84px; gap: 6px; }
-:global(html.lp-m) .chap button { padding: 15px 13px; font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .chap { bottom: var(--gp-wsp-10); gap: var(--gp-wsp-1); }
+:global(html.lp-m) .chap button { padding: var(--gp-wsp-2) var(--gp-wsp-2); font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .chap .pp { min-width: max(46px, calc(44px / var(--z, 1))); }

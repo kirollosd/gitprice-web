@@ -194,8 +194,8 @@ html {
   -webkit-text-size-adjust: 100% !important;
   text-size-adjust: 100% !important;
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--nav-h, 72px) + 8px); /* the sticky or fixed header must not cover a focused or anchored element */
-  scroll-padding-bottom: calc(7rem + var(--gp-stack-h, 0px)); /* the fixed waitlist dock, and the notice it sits above, must not cover a focused or anchored element */
+  scroll-padding-top: calc(var(--nav-h, 72px) + var(--gp-wsp-1)); /* the sticky or fixed header must not cover a focused or anchored element */
+  scroll-padding-bottom: calc(var(--gp-wsp-16) + var(--gp-stack-h, 0px)); /* the fixed waitlist dock, and the notice it sits above, must not cover a focused or anchored element */
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
@@ -250,8 +250,8 @@ h1[tabindex="-1"]:focus-visible { outline: none; }
 
 /* Off-screen until focused, then pinned above the sticky header (z 50) and the floating stack (z 60). */
 .skip-link {
-  position: absolute; inset-block-start: var(--gp-sp-2); inset-inline-start: var(--gp-sp-2); z-index: 70;
-  padding: var(--gp-sp-2) var(--gp-sp-4); background: var(--gp-surface); color: var(--gp-accent);
+  position: absolute; inset-block-start: var(--gp-wsp-1); inset-inline-start: var(--gp-wsp-1); z-index: 70;
+  padding: var(--gp-wsp-1) var(--gp-wsp-2); background: var(--gp-surface); color: var(--gp-accent);
   border-radius: var(--gp-r-xs); transform: translateY(-200%);
 }
 .skip-link:focus-visible { transform: none; }
@@ -266,10 +266,10 @@ h1[tabindex="-1"]:focus-visible { outline: none; }
   width: 100%;
   max-width: calc(1200px + 2 * var(--gp-sp-12));
   margin-inline: auto;
-  padding-inline: var(--gp-sp-4);
+  padding-inline: var(--gp-wsp-2);
 }
-@media (min-width: 768px) { .container { padding-inline: var(--gp-sp-8); } }
-@media (min-width: 1024px) { .container { padding-inline: var(--gp-sp-12); } }
+@media (min-width: 768px) { .container { padding-inline: var(--gp-wsp-4); } }
+@media (min-width: 1024px) { .container { padding-inline: var(--gp-wsp-6); } }
 
 /* Web type scale: the boards use the phone scale (design-map.md typeMobile) plus the web hero role.
    tokens.css only carries the desktop scale (--gp-fs-*), so these are local to the site.
@@ -339,7 +339,7 @@ main:has(> [data-gp-section="bottom_cta"]:last-child) ~ footer { margin-block-st
   color: var(--gp-web-mute); font-family: inherit; font-size: 15px; font-weight: 500; line-height: 1.2;
   white-space: nowrap; text-decoration: none; cursor: pointer; transition: color .2s, background .2s;
 }
-:is(a, button).gp-ctl:has(> span) { padding-inline: 12px; }
+:is(a, button).gp-ctl:has(> span) { padding-inline: var(--gp-wsp-2); }
 .gp-ctl > svg { inline-size: 18px; block-size: 18px; flex: none; }
 .gp-ctl::after { content: ""; position: absolute; inset: 50% auto auto 50%; inline-size: max(100%, calc(44px / var(--z, 1))); block-size: max(100%, calc(44px / var(--z, 1))); translate: -50% -50%; }
 :is(a, button).gp-ctl:hover { color: var(--gp-web-ink); text-decoration: none; }

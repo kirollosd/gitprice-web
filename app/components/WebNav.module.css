@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gp-sp-6);
+  gap: var(--gp-wsp-3);
   min-height: var(--nav-h);
 }
 @media (min-width: 768px) { .header { --nav-h: calc(var(--gp-sp-16) + var(--gp-sp-2)); } }
@@ -28,33 +28,33 @@
 .landing { position: fixed; inset-inline: 0; top: 0; zoom: var(--z, 1); }
 /* every other page: the same bar, in flow (sticky), so it keeps the landing's paddings, brand, links and actions */
 .page { position: sticky; top: 0; }
-.top .bar { padding: 26px 48px; }
-.top[data-solid] .bar { padding-block: 16px; }
+.top .bar { padding: var(--gp-wsp-3) var(--gp-wsp-6); }
+.top[data-solid] .bar { padding-block: var(--gp-wsp-2); }
 .brand { color: var(--gp-web-logo); min-block-size: 30px; position: relative; }
 .brand::after { content: ""; position: absolute; inset-inline: 0; inset-block: 50%; block-size: max(100%, calc(44px / var(--z, 1))); translate: 0 -50%; }
 .site[data-dk] .brand { color: inherit; }
 .brand svg { inline-size: 104px; block-size: 30px; }
-.links { display: none; align-items: center; gap: 28px; margin-inline-start: auto; margin-inline-end: 28px; color: var(--gp-web-mute); }
+.links { display: none; align-items: center; gap: var(--gp-wsp-4); margin-inline-start: auto; margin-inline-end: var(--gp-wsp-4); color: var(--gp-web-mute); }
 .site[data-dk] .links { color: var(--gp-web-on-dark-mute); }
 .link { color: inherit; text-decoration: none; white-space: nowrap; }
 .link:hover { color: var(--gp-web-ink); text-decoration: none; }
 .site[data-dk] .link:hover { color: var(--gp-web-on-dark); }
 /* scroll-spy (useActiveSection): the link of the section in view gets a 2px ink rule 6px under the label, grown from the line's start (the right in RTL) */
 .link { position: relative; }
-.link::before { content: ""; position: absolute; inset-inline-start: 0; inset-block-start: calc(100% + 6px); inline-size: 0; block-size: 2px; border-radius: 1px; background: var(--gp-web-ink); opacity: 0; transition: inline-size .3s ease, opacity .2s; pointer-events: none; }
+.link::before { content: ""; position: absolute; inset-inline-start: 0; inset-block-start: calc(100% + var(--gp-wsp-1)); inline-size: 0; block-size: 2px; border-radius: 1px; background: var(--gp-web-ink); opacity: 0; transition: inline-size .3s ease, opacity .2s; pointer-events: none; }
 .link[aria-current="true"] { color: var(--gp-web-ink); }
 .link[aria-current="true"]::before { inline-size: 100%; opacity: 1; }
 .site[data-dk] .link[aria-current="true"] { color: var(--gp-web-on-dark); }
 .site[data-dk] .link::before { background: var(--gp-web-on-dark); }
 @media (prefers-reduced-motion: reduce) { .link::before { transition: none; } }
-.sellers { border: 1px solid var(--gp-control); border-radius: var(--gp-r-control); padding: 5px 12px; }
+.sellers { border: 1px solid var(--gp-control); border-radius: var(--gp-r-control); padding: var(--gp-wsp-1) var(--gp-wsp-2); }
 /* The sellers pill only fits from 1280 (short label) and 1440 (long label); 1024-1279 tightens the bar instead. */
 .sellersShort, .sellersLong { display: none; }
 @media (min-width: 1280px) { .sellersShort { display: inline-flex; } }
 @media (min-width: 1440px) { .sellersShort { display: none; } .sellersLong { display: inline-flex; } }
-@media (min-width: 1024px) and (max-width: 1279px) { .top .bar { padding-inline: 32px; } .links { gap: 20px; margin-inline-end: 20px; } }
-.actions { display: flex; align-items: center; gap: 12px; margin-inline-start: auto; }
-.site .actions { gap: 8px; }
+@media (min-width: 1024px) and (max-width: 1279px) { .top .bar { padding-inline: var(--gp-wsp-4); } .links { gap: var(--gp-wsp-3); margin-inline-end: var(--gp-wsp-3); } }
+.actions { display: flex; align-items: center; gap: var(--gp-wsp-2); margin-inline-start: auto; }
+.site .actions { gap: var(--gp-wsp-1); }
 @media (min-width: 1024px) { .landing .links { display: flex; } .landing .actions { margin-inline-start: 0; } }
 /* site pages are not zoomed to the 1280 canvas, so the full bar starts at 1280 (the menu button covers below) */
 @media (min-width: 1280px) { .page .links { display: flex; } .page .actions { margin-inline-start: 0; } }
@@ -67,23 +67,23 @@
 :global(html[lang="ar"]) .actions .cta { line-height: 1.25; }
 
 /* the hero CTA and its tag are hidden on phones (html.lp-m), so the header carries the tag there, seated beside the CTA */
-.ctaWrap { display: inline-flex; align-items: center; gap: 6px; }
+.ctaWrap { display: inline-flex; align-items: center; gap: var(--gp-wsp-1); }
 .site .navBeta { display: none; }
 :global(html.lp-m) .site .navBeta { display: inline-flex; padding-block: 0; font-size: max(13px, calc(13px / var(--z, 1))); } /* 13 rendered px, the caption floor: the landing header is zoomed by --z */
 
 /* phones */
 @media (max-width: 767px) {
-  .top .bar { padding-inline: 20px; }
+  .top .bar { padding-inline: var(--gp-wsp-3); }
   .brand svg { inline-size: 84px; block-size: 24px; }
-  .actions { gap: 4px; }
-  .top .bar, .top[data-solid] .bar { padding-block: 14px; }
+  .actions { gap: var(--gp-wsp-1); }
+  .top .bar, .top[data-solid] .bar { padding-block: var(--gp-wsp-2); }
   .site .actions > button:not(.cta, :global(.gp-ctl)) { min-inline-size: 34px; min-block-size: 34px; }
   .actions :is(a, button).cta { padding: 0 var(--gp-wsp-2); font-size: 14px; }
 }
 
 /* Narrow phones: the launched Arabic CTA ("أضف GitPrice إلى Chrome") is the widest item; make room for it at 390. */
 @media (max-width: 419px) {
-  .top .bar { padding-inline: 14px; }
+  .top .bar { padding-inline: var(--gp-wsp-2); }
   .actions { gap: 2px; }
   .actions :is(a, button).cta { padding: 0 var(--gp-wsp-1); font-size: 13px; }
 }

@@ -1,7 +1,7 @@
 /* Home and Sellers, laid out from the screen/<theme>/<dir>/<width>/{Home,Sellers}/* boards.
    Type comes from the local --web-* scale (globals.css), spacing from the token scale. Sections sit 56 apart on phones
    and 96 from 1024 (--section). The product art lives in BoardArt. */
-.hero, .section, .stepsBand, .band { --section: calc(var(--gp-sp-12) + var(--gp-sp-2)); }
+.hero, .section, .stepsBand, .band { --section: var(--gp-wsec-m); }
 /* Off-scale measures from the boards, named once. */
 .hero, .section, .stepsBand, .band, .bandCard, .backRow {
   --web-w-sub: 30rem;          /* hero sub and feature text column: 480 */
@@ -17,66 +17,66 @@
 }
 
 /* ---------- hero ---------- */
-.hero { padding-block: var(--gp-sp-8) var(--gp-sp-16); }
-.heroGrid { display: grid; gap: var(--gp-sp-8); }
+.hero { padding-block: var(--gp-wsp-4) var(--gp-wsp-8); }
+.heroGrid { display: grid; gap: var(--gp-wsp-4); }
 .heroText { display: flex; flex-direction: column; align-items: flex-start; min-inline-size: 0; }
 .h1 {
   font-size: var(--web-fs-hero);
   line-height: var(--web-lh-display);
   overflow-wrap: anywhere;
-  margin-block-end: var(--gp-sp-4);
+  margin-block-end: var(--gp-wsp-2);
 }
-.sub { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-text); max-inline-size: var(--web-w-sub); margin-block-end: var(--gp-sp-6); }
-.sub:has(+ .micro) { margin-block-end: var(--gp-sp-3); }
-.micro { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); margin-block-end: var(--gp-sp-6); }
-.action { inline-size: 100%; scroll-margin-block-start: calc(var(--gp-sp-16) + var(--gp-sp-4)); }
+.sub { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-text); max-inline-size: var(--web-w-sub); margin-block-end: var(--gp-wsp-3); }
+.sub:has(+ .micro) { margin-block-end: var(--gp-wsp-2); }
+.micro { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); margin-block-end: var(--gp-wsp-3); }
+.action { inline-size: 100%; scroll-margin-block-start: var(--gp-wsp-10); }
 .muted { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-text); }
 
 /* Sellers hero: no chip, the rival art sits a little higher than the headline. */
 .sellersHero { padding-block: var(--section) 0; }
-.sellersHero .heroGrid { gap: var(--gp-sp-10); }
+.sellersHero .heroGrid { gap: var(--gp-wsp-5); }
 
 /* ---------- sections ---------- */
-.section { padding-block-start: var(--section); scroll-margin-block-start: var(--gp-sp-16); }
-.h2 { font-size: var(--web-fs-h2); line-height: var(--web-lh-text); font-weight: 700; margin-block-end: var(--gp-sp-6); }
+.section { padding-block-start: var(--section); scroll-margin-block-start: var(--gp-wsp-8); }
+.h2 { font-size: var(--web-fs-h2); line-height: var(--web-lh-text); font-weight: 700; margin-block-end: var(--gp-wsp-3); }
 
-.itemBody { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-text); max-inline-size: var(--web-w-item); margin-block-start: var(--gp-sp-1); }
-.note { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); margin-block-start: var(--gp-sp-1); }
+.itemBody { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-text); max-inline-size: var(--web-w-item); margin-block-start: var(--gp-wsp-1); }
+.note { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); line-height: var(--web-lh-caption); margin-block-start: var(--gp-wsp-1); }
 
 /* Sellers feature list: two columns from 1024, a rule above each item. */
 .sellerItems { list-style: none; display: grid; }
-.sellerItem { border-block-start: 1px solid var(--gp-hairline); padding-block: var(--gp-sp-5) var(--gp-sp-10); }
+.sellerItem { border-block-start: 1px solid var(--gp-hairline); padding-block: var(--gp-wsp-3) var(--gp-wsp-5); }
 .sellerItem:last-child { padding-block-end: 0; }
 .sellerTitle { font-size: var(--web-fs-title); line-height: var(--web-lh-text); font-weight: 600; }
-.sellerItem .itemBody { margin-block-start: var(--gp-sp-2); }
-.section:has(.sellerItems) .h2 { margin-block-end: var(--gp-sp-8); }
+.sellerItem .itemBody { margin-block-start: var(--gp-wsp-1); }
+.section:has(.sellerItems) .h2 { margin-block-end: var(--gp-wsp-4); }
 
 /* ---------- how it works (raised band) ---------- */
 .stepsBand {
   background: var(--gp-surface-raised);
   margin-block-start: var(--section);
-  padding-block: var(--gp-sp-12) calc(var(--gp-sp-16) + var(--gp-sp-4));
-  scroll-margin-block-start: var(--gp-sp-16);
+  padding-block: var(--gp-wsp-6) var(--gp-wsp-10);
+  scroll-margin-block-start: var(--gp-wsp-8);
 }
-.stepsBand .h2 { margin-block-end: var(--gp-sp-8); }
-.steps { list-style: none; display: grid; gap: var(--gp-sp-12); }
-.step { display: grid; grid-template-columns: var(--gp-target) minmax(0, 1fr); column-gap: var(--gp-sp-3); align-content: start; }
+.stepsBand .h2 { margin-block-end: var(--gp-wsp-4); }
+.steps { list-style: none; display: grid; gap: var(--gp-wsp-6); }
+.step { display: grid; grid-template-columns: var(--gp-target) minmax(0, 1fr); column-gap: var(--gp-wsp-2); align-content: start; }
 .num { grid-row: span 2; font-size: var(--web-fs-display); line-height: var(--web-lh-display); font-weight: 700; }
-.stepTitle { font-size: var(--web-fs-title); line-height: var(--web-lh-text); font-weight: 600; margin-block-start: var(--gp-sp-1); }
+.stepTitle { font-size: var(--web-fs-title); line-height: var(--web-lh-text); font-weight: 600; margin-block-start: var(--gp-wsp-1); }
 
 /* ---------- closing band ---------- */
-.band { background: var(--gp-web-dark); color: var(--gp-web-on-dark); border-block-start: 1px solid var(--gp-web-dark-line); margin-block-start: var(--section); padding-block: calc(var(--gp-sp-16) + var(--gp-sp-2)); }
-.bandInner { display: flex; flex-direction: column; align-items: center; gap: var(--gp-sp-8); text-align: center; }
+.band { background: var(--gp-web-dark); color: var(--gp-web-on-dark); border-block-start: 1px solid var(--gp-web-dark-line); margin-block-start: var(--section); padding-block: var(--section); }
+.bandInner { display: flex; flex-direction: column; align-items: center; gap: var(--gp-wsp-4); text-align: center; }
 .bandTitle { color: var(--gp-web-on-dark); font-size: var(--web-fs-h2); line-height: var(--web-lh-text); }
-.bandLine { color: var(--gp-web-on-dark); font-size: var(--web-fs-body); line-height: var(--web-lh-text); margin-block-start: var(--gp-sp-4); }
+.bandLine { color: var(--gp-web-on-dark); font-size: var(--web-fs-body); line-height: var(--web-lh-text); margin-block-start: var(--gp-wsp-2); }
 /* The card hugs its content: store badges 312, seller access button 280, waitlist form 400. */
-.bandCard { background: var(--gp-surface); color: var(--gp-ink); border-radius: var(--gp-r-card); border: 1px solid var(--gp-hairline); padding: var(--gp-sp-4); inline-size: 100%; max-inline-size: calc(var(--web-w-badges) + 2 * var(--gp-sp-4)); text-align: start; }
-.bandCard:has(.accessBtn) { max-inline-size: calc(var(--web-w-access) + 2 * var(--gp-sp-4)); }
-.bandCard:has([data-waitlist]) { max-inline-size: calc(var(--web-w-form) + 2 * var(--gp-sp-4)); }
+.bandCard { background: var(--gp-surface); color: var(--gp-ink); border-radius: var(--gp-r-card); border: 1px solid var(--gp-hairline); padding: var(--gp-wsp-3); inline-size: 100%; max-inline-size: calc(var(--web-w-badges) + 2 * var(--gp-sp-4)); text-align: start; }
+.bandCard:has(.accessBtn) { max-inline-size: calc(var(--web-w-access) + 2 * var(--gp-wsp-3)); }
+.bandCard:has([data-waitlist]) { max-inline-size: calc(var(--web-w-form) + 2 * var(--gp-wsp-3)); }
 
 .who { font-size: var(--web-fs-h2); line-height: var(--web-lh-text); font-weight: 600; max-inline-size: var(--web-w-who); }
 .back { display: inline-flex; align-items: center; min-block-size: var(--gp-target); color: var(--gp-ink); text-decoration: underline; font-size: var(--web-fs-body); }
-.backRow { margin-block-start: var(--gp-sp-8); }
+.backRow { margin-block-start: var(--gp-wsp-4); }
 
 /* Button/primary-block: 280 wide, full width on phones. */
 .accessBtn {
@@ -85,7 +85,7 @@
   justify-content: center;
   inline-size: 100%;
   min-block-size: var(--gp-target);
-  padding-inline: var(--gp-sp-6);
+  padding-inline: var(--gp-wsp-3);
   border-radius: var(--gp-r-control);
   background: var(--gp-web-fill);
   color: var(--gp-web-on-fill);
@@ -103,29 +103,29 @@
   }
   .h1 { line-height: var(--web-lh-hero); max-inline-size: var(--web-w-hero); }
   .h2, .bandTitle { line-height: var(--web-lh-display); }
-  .sellerItems { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gp-sp-12); }
+  .sellerItems { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gp-wsp-6); }
 }
 
 @media (min-width: 1024px) {
-  .hero, .section, .stepsBand, .band { --section: calc(var(--gp-sp-16) + var(--gp-sp-8)); }
-  .hero { padding-block: calc(var(--gp-sp-16) + var(--gp-sp-12)); }
+  .hero, .section, .stepsBand, .band { --section: var(--gp-wsec); }
+  .hero { padding-block: var(--section); }
   .heroGrid { grid-template-columns: minmax(0, 7fr) minmax(0, 8fr); gap: 0; align-items: start; }
-  .h1 { margin-block-end: var(--gp-sp-6); }
-  .sub { margin-block-end: var(--gp-sp-8); }
-  .micro { margin-block-end: var(--gp-sp-8); }
+  .h1 { margin-block-end: var(--gp-wsp-3); }
+  .sub { margin-block-end: var(--gp-wsp-4); }
+  .micro { margin-block-end: var(--gp-wsp-4); }
   .accessBtn { inline-size: var(--web-w-access); }
 
   .sellersHero { padding-block: var(--section) 0; }
-  .sellersHero .heroGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: calc(var(--gp-sp-16) + var(--gp-sp-4)); }
-  .sellersHero .heroText { padding-block-start: var(--gp-sp-4); }
+  .sellersHero .heroGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gp-wsp-10); }
+  .sellersHero .heroText { padding-block-start: var(--gp-wsp-2); }
 
-  .h2 { margin-block-end: var(--gp-sp-10); }
+  .h2 { margin-block-end: var(--gp-wsp-4); }
 
-  .stepsBand { padding-block: calc(var(--gp-sp-16) + var(--gp-sp-2)) var(--gp-sp-12); }
-  .stepsBand .h2 { margin-block-end: var(--gp-sp-12); }
-  .steps { grid-template-columns: repeat(3, minmax(0, var(--web-w-step))); column-gap: var(--gp-sp-12); }
+  .stepsBand { padding-block: var(--section); }
+  .stepsBand .h2 { margin-block-end: var(--gp-wsp-4); }
+  .steps { grid-template-columns: repeat(3, minmax(0, var(--web-w-step))); column-gap: var(--gp-wsp-6); }
   .step { display: block; }
-  .num { display: block; font-size: var(--web-fs-hero); line-height: var(--web-lh-hero); margin-block-end: var(--gp-sp-8); }
+  .num { display: block; font-size: var(--web-fs-hero); line-height: var(--web-lh-hero); margin-block-end: var(--gp-wsp-4); }
   .stepTitle { margin-block-start: 0; }
 
 }

@@ -1,52 +1,52 @@
 /* 3 · the receipt: one long pinned scene, copy on the left, a receipt printing out of a slot on the right */
 .rcpt { --paper: #F4F4F5; }
 .print { position: relative; height: 200vh; }
-.stage { position: sticky; top: 0; height: calc(100vh / var(--z, 1)); display: grid; grid-template-columns: 1fr 560px; gap: 80px; padding-inline: 48px 120px; overflow: hidden; clip-path: inset(80px 0 0 0); }
+.stage { position: sticky; top: 0; height: calc(100vh / var(--z, 1)); display: grid; grid-template-columns: 1fr 560px; gap: var(--gp-wsp-10); padding-inline: var(--gp-wsp-6) var(--gp-wsp-16); overflow: hidden; clip-path: inset(80px 0 0 0); }
 .eq { flex: none; display: inline-grid; place-items: center; border-radius: 50%; background: var(--gp-web-fill); color: var(--gp-web-on-fill); font-weight: 800; line-height: 1; }
 
 /* the copy stacks: every point stays on screen, upcoming ones dimmed, each lights up as the receipt reaches it */
-.copy { align-self: start; position: relative; display: flex; flex-direction: column; gap: 18px; margin-top: 244px; }
+.copy { align-self: start; position: relative; display: flex; flex-direction: column; gap: var(--gp-wsp-2); margin-top: 248px; }
 .c { opacity: .75; transition: opacity .5s; }
 .c:global(.on) { opacity: 1; }
-.c + .c { position: relative; padding-inline-start: 20px; }
+.c + .c { position: relative; padding-inline-start: var(--gp-wsp-3); }
 .c + .c::before { content: ""; position: absolute; inset-inline-start: 0; top: 0; bottom: 0; width: 3px; border-radius: 2px; background: linear-gradient(var(--gp-web-fill) calc(var(--f, 0) * 100%), var(--gp-web-line) 0); }
 .copy h2 { font-weight: 300; font-size: 52px; line-height: .98; letter-spacing: -.04em; }
-.copy p { font-size: 17px; line-height: 1.45; color: var(--gp-web-body); margin-top: 10px; max-width: 560px; }
+.copy p { font-size: 17px; line-height: 1.45; color: var(--gp-web-body); margin-top: var(--gp-wsp-1); max-width: 560px; }
 .c + .c h2 { font-size: 24px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; }
-.c + .c p { font-size: 15px; margin-top: 4px; }
+.c + .c p { font-size: 15px; margin-top: var(--gp-wsp-1); }
 .copy p b { color: var(--gp-web-ink); font-weight: 600; }
 /* the shared segmented toggle (base .seg); only its place in the copy is set here */
-.tog { margin-top: 34px; }
+.tog { margin-top: var(--gp-wsp-4); }
 
-.slotwrap { position: relative; padding-top: 96px; }
+.slotwrap { position: relative; padding-top: var(--gp-wsp-12); }
 .slot { position: relative; z-index: 3; height: 30px; border-radius: var(--gp-r-control); background: var(--gp-web-ink); box-shadow: 0 14px 24px -12px rgb(10 10 11 / .6); }
-.slot::after { content: ""; position: absolute; inset-inline-start: 30px; inset-inline-end: 30px; top: 13px; height: 4px; border-radius: 2px; background: var(--gp-web-dark); }
+.slot::after { content: ""; position: absolute; inset-inline-start: var(--gp-wsp-4); inset-inline-end: var(--gp-wsp-4); top: var(--gp-wsp-2); height: 4px; border-radius: 2px; background: var(--gp-web-dark); }
 /* the one monospace surface; first state: nothing fed yet */
-.paper { --f-mono: var(--f-rcpt); position: relative; z-index: 2; margin: -12px 26px 0; background: var(--paper); padding: 34px 34px 0; font-family: var(--f-mono); font-size: 15px; color: var(--gp-web-ink); box-shadow: inset 0 0 0 1px #DCDCE0, 0 30px 50px -30px rgb(10 10 11 / .45); clip-path: inset(var(--cut, 0px) 0 calc(100% - var(--fed, 0px)) 0); will-change: clip-path, transform; }
-.paper::after { content: ""; position: absolute; inset-inline-start: 0; inset-inline-end: 0; bottom: -12px; height: 12px; background: radial-gradient(circle at 8px 0, transparent 8px, var(--paper) 8.5px) 0 0 / 16px 12px repeat-x; }
-.hd { text-align: center; padding-bottom: 18px; border-bottom: 2px dashed var(--gp-web-dim); }
+.paper { --f-mono: var(--f-rcpt); position: relative; z-index: 2; margin: calc(-1 * var(--gp-wsp-2)) var(--gp-wsp-3) 0; background: var(--paper); padding: var(--gp-wsp-4) var(--gp-wsp-4) 0; font-family: var(--f-mono); font-size: 15px; color: var(--gp-web-ink); box-shadow: inset 0 0 0 1px #DCDCE0, 0 30px 50px -30px rgb(10 10 11 / .45); clip-path: inset(var(--cut, 0px) 0 calc(100% - var(--fed, 0px)) 0); will-change: clip-path, transform; }
+.paper::after { content: ""; position: absolute; inset-inline-start: 0; inset-inline-end: 0; bottom: calc(-1 * var(--gp-wsp-2)); height: 12px; background: radial-gradient(circle at 8px 0, transparent 8px, var(--paper) 8.5px) 0 0 / 16px 12px repeat-x; }
+.hd { text-align: center; padding-bottom: var(--gp-wsp-2); border-bottom: 2px dashed var(--gp-web-dim); }
 .logo { display: block; height: 30px; width: 104px; margin: 0 auto; background-color: currentColor; mask: url("/logo_wordmark.svg") center / contain no-repeat; }
 .hd > span:last-child { font-size: 13px; color: var(--gp-web-mute); }
-.it { padding: 16px 0; border-bottom: 1px dashed var(--gp-web-dim); }
+.it { padding: var(--gp-wsp-2) 0; border-bottom: 1px dashed var(--gp-web-dim); }
 .n { font-weight: 700; font-size: 15px; }
-.it .ln { display: flex; justify-content: space-between; align-items: center; margin-top: 7px; font-size: 14px; color: var(--gp-web-body); }
+.it .ln { display: flex; justify-content: space-between; align-items: center; margin-top: var(--gp-wsp-1); font-size: 14px; color: var(--gp-web-body); }
 .it .ln s { color: var(--gp-web-mute); }
-.ok { display: inline-flex; align-items: center; gap: 6px; color: var(--gp-web-save); }
+.ok { display: inline-flex; align-items: center; gap: var(--gp-wsp-0); color: var(--gp-web-save); }
 .ok .eq { width: 18px; height: 18px; font-size: 11px; background: var(--gp-web-save); color: #F4F4F5; }
-.no { display: inline-flex; align-items: center; gap: 6px; color: var(--gp-web-mute); }
+.no { display: inline-flex; align-items: center; gap: var(--gp-wsp-0); color: var(--gp-web-mute); }
 .no .eq { width: 18px; height: 18px; font-size: 11px; background: var(--gp-web-mute); color: #F4F4F5; }
 .it .ln b { font-weight: 700; color: var(--gp-web-ink); font-size: 15px; }
-.tot { padding: 20px 0 30px; }
-.tot .ln { display: flex; justify-content: space-between; font-size: 15px; margin-top: 6px; color: var(--gp-web-body); }
-.tot .big { font-size: 24px; font-weight: 700; letter-spacing: -.045em; line-height: .94; color: var(--gp-web-ink); margin-top: 12px; } /* the mock's global .big */
+.tot { padding: var(--gp-wsp-3) 0 var(--gp-wsp-4); }
+.tot .ln { display: flex; justify-content: space-between; font-size: 15px; margin-top: var(--gp-wsp-1); color: var(--gp-web-body); }
+.tot .big { font-size: 24px; font-weight: 700; letter-spacing: -.045em; line-height: .94; color: var(--gp-web-ink); margin-top: var(--gp-wsp-2); } /* the mock's global .big */
 .tot .big span:last-child { color: var(--gp-web-save); }
-.tot small { display: block; text-align: center; margin-top: 20px; color: var(--gp-web-mute); font-size: 12px; }
+.tot small { display: block; text-align: center; margin-top: var(--gp-wsp-3); color: var(--gp-web-mute); font-size: 12px; }
 .paper:global(.raw) .alt { visibility: hidden; }
 .paper:global(.raw) s { text-decoration: none; color: var(--gp-web-ink); font-weight: 700; --strike-h: 0px; }
 .paper:global(.raw) .tot .big span:last-child { color: var(--gp-web-mute); }
 
 /* running tally, pinned top-left of the stage */
-.tally { position: absolute; inset-inline-start: 48px; top: 120px; display: flex; align-items: baseline; gap: 14px; }
+.tally { position: absolute; inset-inline-start: var(--gp-wsp-6); top: var(--gp-wsp-16); display: flex; align-items: baseline; gap: var(--gp-wsp-2); }
 .tally small { font-size: 16px; color: var(--gp-web-mute); }
 .tally b { font-family: var(--f-mono); font-weight: 700; font-size: 56px; letter-spacing: -.03em; color: var(--gp-web-save); font-variant-numeric: tabular-nums; transition: color .3s; }
 .tally:global(.raw) b { color: var(--gp-web-mute); }
@@ -59,26 +59,26 @@
 /* mono has no Arabic glyphs, so pull in the wide space; Latin item names stay left-to-right on the right edge */
 :global(html[lang="ar"]) .paper { word-spacing: -.3em; }
 :global(html[dir="rtl"]) .n { unicode-bidi: plaintext; text-align: right; }
-:global(html.lp-short) .copy { margin-top: 210px; }
+:global(html.lp-short) .copy { margin-top: 208px; }
 :global(html.lp-short) .copy h2 { font-size: 46px; }
 :global(html.lp-short) .c + .c p { display: none; }
 
 /* phone canvas: copy and tally pinned on top, the receipt prints under them */
-:global(html.lp-m) .stage { display: block; padding: 0 20px; }
+:global(html.lp-m) .stage { display: block; padding: 0 var(--gp-wsp-3); }
 :global(html.lp-m) .stage::before { content: ""; position: absolute; inset-inline-start: 0; inset-inline-end: 0; top: 0; height: 92px; background: var(--gp-web-ground); z-index: 4; }
-:global(html.lp-m) .copy { position: absolute; inset-inline-start: 20px; inset-inline-end: 20px; top: 92px; height: 200px; z-index: 4; background: var(--gp-web-ground); gap: 8px; margin-top: 0; }
+:global(html.lp-m) .copy { position: absolute; inset-inline-start: var(--gp-wsp-3); inset-inline-end: var(--gp-wsp-3); top: var(--gp-wsp-12); height: 200px; z-index: 4; background: var(--gp-web-ground); gap: var(--gp-wsp-1); margin-top: 0; }
 :global(html.lp-m) .copy h2 { font-size: 26px; }
-:global(html.lp-m) .copy p { font-size: max(14px, var(--fl, 0px)); margin-top: 6px; display: none; }
-:global(html.lp-m) .c + .c p { font-size: 15px; margin-top: 4px; }
-:global(html.lp-m) .c + .c { padding-inline-start: 12px; }
+:global(html.lp-m) .copy p { font-size: max(14px, var(--fl, 0px)); margin-top: var(--gp-wsp-1); display: none; }
+:global(html.lp-m) .c + .c p { font-size: 15px; margin-top: var(--gp-wsp-1); }
+:global(html.lp-m) .c + .c { padding-inline-start: var(--gp-wsp-2); }
 :global(html.lp-m) .c + .c h2 { font-size: 15px; }
-:global(html.lp-m) .tog { margin-top: 12px; }
-:global(html.lp-m) .tally { inset-inline-start: 0; inset-inline-end: 0; top: 292px; padding: 0 20px 8px; z-index: 5; gap: 8px; background: var(--gp-web-ground); }
+:global(html.lp-m) .tog { margin-top: var(--gp-wsp-2); }
+:global(html.lp-m) .tally { inset-inline-start: 0; inset-inline-end: 0; top: 296px; padding: 0 var(--gp-wsp-3) var(--gp-wsp-1); z-index: 5; gap: var(--gp-wsp-1); background: var(--gp-web-ground); }
 :global(html.lp-m) .tally small { font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .tally b { font-size: 28px; }
-:global(html.lp-m) .slotwrap { padding-top: 350px; }
+:global(html.lp-m) .slotwrap { padding-top: 352px; }
 :global(html.lp-m) .slot { height: 22px; }
-:global(html.lp-m) .paper { margin: -10px 10px 0; padding: 20px 18px 0; font-size: max(12px, var(--fl, 0px)); }
+:global(html.lp-m) .paper { margin: calc(-1 * var(--gp-wsp-1)) var(--gp-wsp-1) 0; padding: var(--gp-wsp-3) var(--gp-wsp-2) 0; font-size: max(12px, var(--fl, 0px)); }
 :global(html.lp-m) .logo { height: 24px; width: 83px; }
 :global(html.lp-m) .n { font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .it .ln { font-size: max(12px, var(--fl, 0px)); }
