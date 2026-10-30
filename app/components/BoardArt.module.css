@@ -4,12 +4,12 @@
 /* Off-scale measures, named once. */
 .card { --art-mark-w: 2px; /* RivalCard alert mark stroke */ }
 
-.tick { flex: none; color: var(--gp-savings); margin-block-start: var(--gp-sp-2); }
+.tick { flex: none; color: var(--gp-savings); margin-block-start: var(--gp-wsp-1); }
 .tickSmall { flex: none; inline-size: var(--gp-sp-2); color: var(--gp-ink); }
 
 /* text helpers for the mockups */
 .caption { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); }
-.between { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gp-sp-3); }
+.between { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gp-wsp-2); }
 
 /* ---------- feature art card (visual/card): 560x400 on the boards, so 7:5 ---------- */
 .card {
@@ -17,27 +17,27 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--gp-sp-3);
+  gap: var(--gp-wsp-2);
   aspect-ratio: 7 / 5;
-  padding: var(--gp-sp-6) var(--gp-sp-4);
+  padding: var(--gp-wsp-3) var(--gp-wsp-2);
   background: var(--gp-surface-raised);
   border-radius: var(--gp-r-card);
   min-inline-size: 0;
 }
 
 /* ---------- sellers: rival cards ---------- */
-.rivals { list-style: none; display: flex; flex-direction: column; gap: var(--gp-sp-4); inline-size: 100%; max-inline-size: var(--gp-panel-width-popup); }
+.rivals { list-style: none; display: flex; flex-direction: column; gap: var(--gp-wsp-2); inline-size: 100%; max-inline-size: var(--gp-panel-width-popup); }
 .rival {
   display: flex;
   flex-direction: column;
-  padding: var(--gp-sp-4);
+  padding: var(--gp-wsp-2);
   background: var(--gp-surface);
   border: 1px solid var(--gp-hairline);
   border-radius: var(--gp-r-md);
 }
 .rivalName { font-size: var(--web-fs-body); font-weight: 600; }
 .rivalStores { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); }
-.rivalCount { display: flex; align-items: center; gap: var(--gp-sp-2); margin-block-start: var(--gp-sp-2); font-size: var(--gp-fs-body); }
+.rivalCount { display: flex; align-items: center; gap: var(--gp-wsp-1); margin-block-start: var(--gp-wsp-1); font-size: var(--gp-fs-body); }
 /* Alert mark: a short danger bar over a dot, as drawn on RivalCard. */
 .mark {
   flex: none;
@@ -48,7 +48,7 @@
 
 /* ---------- Welcome step art (screen/<theme>/Welcome/default boards) ---------- */
 .mark16 { flex: none; color: var(--gp-ink); }
-.welcomeIcons { display: flex; align-items: center; gap: var(--gp-sp-3); margin-block-start: var(--gp-sp-3); }
+.welcomeIcons { display: flex; align-items: center; gap: var(--gp-wsp-2); margin-block-start: var(--gp-wsp-2); }
 .puzzle { color: var(--gp-ink-muted); }
 .pin { color: var(--gp-accent); }
 .toolbarIcon {
@@ -76,10 +76,10 @@
 .readyBadge {
   display: inline-flex;
   align-items: center;
-  gap: var(--gp-sp-2);
+  gap: var(--gp-wsp-1);
   min-block-size: var(--gp-sp-8);
-  margin-block-start: var(--gp-sp-3);
-  padding-inline: var(--gp-sp-4) var(--gp-sp-3);
+  margin-block-start: var(--gp-wsp-2);
+  padding-inline: var(--gp-wsp-2) var(--gp-wsp-2);
   background: var(--gp-surface);
   border: 1px solid var(--gp-hairline);
   border-radius: var(--gp-r-control);

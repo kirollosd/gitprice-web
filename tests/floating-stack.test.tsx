@@ -22,7 +22,7 @@ describe("FloatingStack", () => {
     expect(dock).not.toMatch(/--gp-stack/);
     expect(dock).not.toMatch(/data-gp-stack/);
     const stack = fs.readFileSync("app/components/FloatingStack.module.css", "utf8");
-    expect(stack).toMatch(/html:has\(#dock\.in\)\) \.stack \{ inset-block-end: calc\(var\(--gp-dock-h, 0px\) \+ 28px\)/);
+    expect(stack).toMatch(/html:has\(#dock\.in\)\) \.stack \{ inset-block-end: calc\(var\(--gp-dock-h, 0px\) \+ var\(--gp-wsp-4\)\)/);
   });
 
   it("flags html[data-gp-stack] while a notice shows, and clears it when empty or unmounted", async () => {

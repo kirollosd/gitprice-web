@@ -5,8 +5,8 @@
   z-index: 60;
   display: flex;
   flex-direction: column;
-  gap: var(--gp-sp-3);
-  padding: var(--gp-sp-4);
+  gap: var(--gp-wsp-2);
+  padding: var(--gp-wsp-2);
   max-block-size: calc(100dvh - var(--gp-sp-16));
   overflow-y: auto;
   pointer-events: none;
@@ -16,5 +16,5 @@
 .stack:empty { display: none; }
 /* The landing's dock stays put; while it shows, the stack rises above it (the dock's height is --gp-dock-h, its offset from the bottom 32px, less the stack's own padding). */
 .stack { transition: inset-block-end .25s ease; }
-:global(html:has(#dock.in)) .stack { inset-block-end: calc(var(--gp-dock-h, 0px) + 28px); }
+:global(html:has(#dock.in)) .stack { inset-block-end: calc(var(--gp-dock-h, 0px) + var(--gp-wsp-4)); }
 @media (prefers-reduced-motion: reduce) { .stack { transition: none; } }

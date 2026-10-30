@@ -3,11 +3,11 @@
   --dock: var(--gp-web-dock); --on-dock: var(--gp-web-on-dock); --dock-save: var(--gp-web-dock-save);
   --fill-d: var(--gp-web-fd); --on-fill-d: var(--gp-web-onfd); --ring: var(--gp-web-on-dock); --cur-c: currentColor;
   --z: 1; /* not zoomed: the shared buttons (.gp-btn) divide by --z, so they keep screen px here */
-  position: fixed; z-index: 30; left: 50%; bottom: 32px;
-  transform: translateX(-50%) translateY(140px);
+  position: fixed; z-index: 30; left: 50%; bottom: var(--gp-wsp-4);
+  transform: translateX(-50%) translateY(144px);
   display: flex; align-items: center;
   background: var(--dock); color: var(--on-dock);
-  border-radius: var(--gp-r-card); padding: 8px;
+  border-radius: var(--gp-r-card); padding: var(--gp-wsp-1);
   box-shadow: 0 18px 40px -12px rgb(10 10 11 / .45);
   white-space: nowrap; visibility: hidden;
   font-family: "Outfit", "Alexandria", system-ui, sans-serif;
@@ -27,10 +27,10 @@
 :global(html[lang="ar"]) .dock button { line-height: 1.25; }
 
 .eq { flex: none; width: 46px; height: 46px; border-radius: var(--gp-r-control); background: var(--fill-d); color: var(--on-fill-d); display: grid; place-items: center; }
-.t { padding: 0 16px; font-size: 1.0625rem; }
-.dock > [data-beta] { margin-inline: 8px 12px; align-self: center; } /* 8px off the mark, 12px before the button */
+.t { padding: 0 var(--gp-wsp-2); font-size: 1.0625rem; }
+.dock > [data-beta] { margin-inline: var(--gp-wsp-1) var(--gp-wsp-2); align-self: center; } /* 8px off the mark, 12px before the button */
 /* the tag is dir=ltr (an English run), so its logical margin points the wrong way on an RTL page: put the gap on the button side */
-:global(html[dir="rtl"]) .dock > [data-beta] { margin-inline: 12px 8px; }
+:global(html[dir="rtl"]) .dock > [data-beta] { margin-inline: var(--gp-wsp-2) var(--gp-wsp-1); }
 .t:focus { outline: none; }
 .t b { font-family: "JetBrains Mono", monospace; font-weight: 500; }
 /* the currency code inside follows the text family (Price .cur) */
@@ -41,31 +41,31 @@
 /* the waitlist: the dock opens into an email field, then confirms */
 .dock:global(.join) { flex-wrap: wrap; min-width: 560px; border-radius: var(--gp-r-card); align-items: flex-start; }
 /* open form (desktop): the row is the 48px field/button, the note wraps below it, so the tag centres on that row, not the whole dock (its height is 1.4em + 4px) */
-:global(html:not(.lp-m)) .dock:global(.join) > [data-beta] { align-self: flex-start; margin-block-start: calc(24px - 0.7em); }
-.wl { display: flex; flex: 1; align-items: flex-start; gap: 8px; padding-inline-start: 8px; }
+:global(html:not(.lp-m)) .dock:global(.join) > [data-beta] { align-self: flex-start; margin-block-start: calc(var(--gp-wsp-3) - 0.7em); }
+.wl { display: flex; flex: 1; align-items: flex-start; gap: var(--gp-wsp-1); padding-inline-start: var(--gp-wsp-1); }
 .x { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: var(--gp-r-control); background: none; color: var(--on-dock); cursor: pointer; }
 /* launched: only the Chrome link fits the dock */
 .dock [data-gp-store]:not([data-gp-store="chrome"]) { display: none; }
 
 /* phones: the landing sets html.lp-m (also portrait tablets); every other page, and any narrow or zoomed window, takes the same rules from the viewport width,
    so the dock never runs wider than the screen (WCAG 1.4.10) */
-:global(html.lp-m) .dock { left: 12px; right: 12px; bottom: 16px; transform: translateY(140px); }
+:global(html.lp-m) .dock { left: var(--gp-wsp-2); right: var(--gp-wsp-2); bottom: var(--gp-wsp-2); transform: translateY(144px); }
 :global(html.lp-m) .dock:global(.in) { transform: none; }
 :global(html.lp-m) .dock:global(.join) { min-width: 0; align-items: center; }
 /* the Beta tag shares the first row with the mark; the form takes the full row below so the email field keeps its width */
-:global(html.lp-m) .dock:global(.join) .wl { flex-basis: 100%; padding-inline-start: 0; margin-top: 6px; }
+:global(html.lp-m) .dock:global(.join) .wl { flex-basis: 100%; padding-inline-start: 0; margin-top: var(--gp-wsp-1); }
 :global(html.lp-m) .eq { width: 38px; height: 38px; }
-:global(html.lp-m) .t { flex: 1; min-width: 0; padding: 0 10px; font-size: .875rem; line-height: 1.3; white-space: normal; /* no clamp: longer copy, larger text or text spacing grow the dock instead of clipping (WCAG 1.4.4, 1.4.12) */ }
+:global(html.lp-m) .t { flex: 1; min-width: 0; padding: 0 var(--gp-wsp-1); font-size: .875rem; line-height: 1.3; white-space: normal; /* no clamp: longer copy, larger text or text spacing grow the dock instead of clipping (WCAG 1.4.4, 1.4.12) */ }
 /* phones: the Beta tag lives in the header only, so the dock line keeps one row */
 :global(html.lp-m) .dock:not(:global(.join)) > [data-beta] { display: none; }
 @media (max-width: 759px) {
-  :global(html[lang]) .dock { left: 12px; right: 12px; bottom: 16px; transform: translateY(140px); }
+  :global(html[lang]) .dock { left: var(--gp-wsp-2); right: var(--gp-wsp-2); bottom: var(--gp-wsp-2); transform: translateY(144px); }
     :global(html[lang]) .dock:global(.in) { transform: none; }
   :global(html[lang]) .dock:global(.join) { min-width: 0; align-items: center; }
   /* the Beta tag shares the first row with the mark; the form takes the full row below so the email field keeps its width */
-  :global(html[lang]) .dock:global(.join) .wl { flex-basis: 100%; padding-inline-start: 0; margin-top: 6px; }
+  :global(html[lang]) .dock:global(.join) .wl { flex-basis: 100%; padding-inline-start: 0; margin-top: var(--gp-wsp-1); }
   :global(html[lang]) .eq { width: 38px; height: 38px; }
-  :global(html[lang]) .t { flex: 1; min-width: 0; padding: 0 10px; font-size: .875rem; line-height: 1.3; white-space: normal; /* no clamp: longer copy, larger text or text spacing grow the dock instead of clipping (WCAG 1.4.4, 1.4.12) */ }
+  :global(html[lang]) .t { flex: 1; min-width: 0; padding: 0 var(--gp-wsp-1); font-size: .875rem; line-height: 1.3; white-space: normal; /* no clamp: longer copy, larger text or text spacing grow the dock instead of clipping (WCAG 1.4.4, 1.4.12) */ }
   /* phones: the Beta tag lives in the header only, so the dock line keeps one row */
   :global(html[lang]) .dock:not(:global(.join)) > [data-beta] { display: none; }
 }

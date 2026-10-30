@@ -2,23 +2,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--gp-sp-4);
-  padding-block: calc(var(--gp-sp-16) + var(--gp-sp-8)) 0;
+  gap: var(--gp-wsp-2);
+  padding-block: var(--gp-wsec-m) 0;
   text-align: center;
 }
 .title { font-size: var(--web-fs-hero); line-height: var(--web-lh-hero); }
-.body { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-body); margin-block-end: var(--gp-sp-4); }
+.body { color: var(--gp-ink-muted); font-size: var(--web-fs-body); line-height: var(--web-lh-body); margin-block-end: var(--gp-wsp-2); }
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-inline-size: 200px;
   min-block-size: var(--gp-target);
-  padding-inline: var(--gp-sp-6);
+  padding-inline: var(--gp-wsp-3);
   border-radius: var(--gp-r-control);
   background: var(--gp-web-fill);
   color: var(--gp-web-on-fill);
   font-weight: 600;
 }
 .button:hover { text-decoration: none; }
-@media (min-width: 768px) { .root { padding-block-start: calc(var(--gp-sp-16) * 2 + var(--gp-sp-8)); } }
+@media (min-width: 768px) { .root { padding-block-start: var(--gp-wsec); } }

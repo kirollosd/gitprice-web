@@ -2,10 +2,10 @@
 .banner {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gp-sp-4);
+  gap: var(--gp-wsp-2);
   align-items: center;
   justify-content: center;
-  padding: var(--gp-sp-3) var(--gp-sp-4);
+  padding: var(--gp-wsp-2) var(--gp-wsp-2);
   background: var(--gp-surface-raised);
   border: 1px solid var(--gp-hairline);
   border-radius: var(--gp-r-md);

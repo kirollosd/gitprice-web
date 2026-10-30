@@ -1,14 +1,14 @@
-.root { display: flex; flex-direction: column; gap: var(--gp-sp-3); inline-size: 100%; max-inline-size: 312px; }
+.root { display: flex; flex-direction: column; gap: var(--gp-wsp-2); inline-size: 100%; max-inline-size: 312px; }
 /* Add to Chrome is the shared coral primary (globals.css .gp-btn; .gp-btn-sm in the dock) */
 .chrome { text-align: center; }
-.mobile { display: flex; gap: var(--gp-sp-3); }
+.mobile { display: flex; gap: var(--gp-wsp-2); }
 .badge {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-block-size: var(--gp-target);
-  padding-inline: var(--gp-sp-3);
+  padding-inline: var(--gp-wsp-2);
   border-radius: var(--gp-r-sm);
   background: var(--gp-ink);
   color: var(--gp-surface);

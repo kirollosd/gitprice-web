@@ -11,7 +11,7 @@ export default function FaqPage({ locale }: { locale: Locale }) {
         <h1 className={styles.title}>{t(locale, "web.faq.title")}</h1>
       </header>
       <p className={styles.intro}>{t(locale, "web.faq.intro")}</p>
-      <article className={styles.article} style={{ marginBlockStart: "var(--gp-sp-8)" }}>
+      <article className={styles.article} style={{ marginBlockStart: "var(--gp-wsp-4)" }}>
         {Array.from({ length: COUNT }, (_, i) => (
           <section key={i} className={styles.section} aria-labelledby={`faq-${i + 1}`}>
             <h2 id={`faq-${i + 1}`} className={styles.sectionTitle}>{t(locale, `web.home.faq.${i + 1}.q`)}</h2>

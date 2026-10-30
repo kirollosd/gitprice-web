@@ -1,7 +1,7 @@
 /* scroll cue: a frosted pill near the bottom; ScrollScenes.tsx toggles `on` */
 .cue {
-  position: fixed; z-index: 29; left: 50%; bottom: 112px; transform: translate(-50%, 10px);
-  display: flex; align-items: center; gap: 8px; padding-block: 8px; padding-inline: 12px 16px; border-radius: var(--gp-r-control);
+  position: fixed; z-index: 29; left: 50%; bottom: var(--gp-wsp-12); transform: translate(-50%, var(--gp-wsp-1));
+  display: flex; align-items: center; gap: var(--gp-wsp-1); padding-block: var(--gp-wsp-1); padding-inline: var(--gp-wsp-2) var(--gp-wsp-2); border-radius: var(--gp-r-control);
   background: color-mix(in srgb, var(--gp-web-raised) 70%, transparent);
   -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
   color: var(--gp-web-ink); font-size: 15px; font-weight: 600;
@@ -13,6 +13,6 @@
 :global(html[data-gp-join]) .cue:global(.on) { opacity: 0; visibility: hidden; }
 .cue:global(.on) svg { animation: cue 1.6s var(--spring) infinite; }
 @keyframes cue { 0% { transform: translateY(-3px); opacity: .4; } 60% { transform: translateY(3px); opacity: 1; } 100% { transform: translateY(3px); opacity: 0; } }
-:global(html.lp-m) .cue { bottom: 96px; }
+:global(html.lp-m) .cue { bottom: var(--gp-wsp-12); }
 
 @media (prefers-reduced-motion: reduce) { .cue:global(.on) svg { animation: none; } }

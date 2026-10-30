@@ -32,6 +32,8 @@ gitprice-web/
 
 ## Design System
 
+UI work must follow .claude/skills/gitprice-ui-rules; source of truth is the monorepo copy, re-sync after changes. Spacing is guarded: `node scripts/spacing-grid.mjs` / `tests/spacing-grid.test.ts`, exceptions with a reason in `scripts/spacing-allowlist.json`.
+
 - **Source of truth:** the gitprice monorepo (`design-system/`). Run `npm run sync -- <monorepoPath>` to refresh tokens and copy.
 - **Fonts:** Fustat (Latin) + Noto Sans Arabic, self-hosted. Light/dark follows `prefers-color-scheme` via `data-gp="app"`.
 - **Copy:** pages read strings only through `t()`; Arabic comes from the synced `ar.json`.

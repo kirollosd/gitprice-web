@@ -33,7 +33,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 0 var(--gp-sp-4) var(--gp-sp-6);
+  padding: 0 var(--gp-wsp-2) var(--gp-wsp-3);
   background: var(--gp-surface);
   box-shadow: inset 0 1px 0 var(--gp-hairline); /* the header divider, drawn without moving the rows */
   overflow-y: auto;
@@ -45,7 +45,7 @@
   flex: 1;
   display: flex;
   align-items: center;
-  gap: var(--gp-sp-3);
+  gap: var(--gp-wsp-2);
   min-block-size: var(--gp-target);
   color: var(--gp-ink);
   font-size: var(--web-fs-body);
@@ -53,7 +53,7 @@
 }
 .list a:not(:global(.gp-ctl)) svg { inline-size: var(--gp-sp-6); block-size: var(--gp-sp-6); } /* the board's 24px globe */
 /* the sheet's CTA: the shared coral primary (globals.css .gp-btn), full width */
-.cta { inline-size: 100%; margin-block-start: var(--gp-sp-6); }
+.cta { inline-size: 100%; margin-block-start: var(--gp-wsp-3); }
 
 @media (max-width: 1279px) { .button { display: inline-flex; } }
 @media (min-width: 1280px) { .overlay { display: none; } }

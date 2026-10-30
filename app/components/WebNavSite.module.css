@@ -9,4 +9,4 @@
 .hdr:has(button[aria-controls="web-menu"][aria-expanded="true"]) .hideSmall { visibility: hidden; }
 /* The sheet starts under the bar (WebMenu --nav-h): with it open the bar is a fixed 14 + 44 + 14 = 72px at every width, whatever the scroll state. */
 .hdr { --nav-h: 72px; }
-.hdr:has(button[aria-controls="web-menu"][aria-expanded="true"]) > div { padding-block: 14px; }
+.hdr:has(button[aria-controls="web-menu"][aria-expanded="true"]) > div { padding-block: var(--gp-wsp-2); }
