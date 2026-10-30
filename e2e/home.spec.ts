@@ -58,7 +58,7 @@ test.describe("Home prelaunch", () => {
 
   test("the Beta tag sits by the hero action, the dock CTA and in the footer; no pricing or app-store links", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("#num [data-beta]")).toHaveCount(1);
+    await expect(page.locator("#num [data-beta]")).toHaveCount(0);
     await expect(page.locator("#dock [data-beta]")).toHaveCount(1);
     await expect(page.locator("footer [data-beta]")).toHaveCount(1);
     await expect(page.locator('a[href*="pricing"], a[data-gp-store="app_store"], a[data-gp-store="play"]')).toHaveCount(0);

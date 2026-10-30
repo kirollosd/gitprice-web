@@ -35,7 +35,7 @@ test.describe("launch mode", () => {
   test("the Beta tag sits by the hero action, the dock CTA and in the footer", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/");
-    await expect(page.locator("#num [data-beta]")).toHaveCount(1);
+    await expect(page.locator("#num [data-beta]")).toHaveCount(0);
     await expect(page.locator("#dock [data-beta]")).toHaveCount(1);
     await expect(page.locator("footer [data-beta]")).toHaveCount(1);
   });

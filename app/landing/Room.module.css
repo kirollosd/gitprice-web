@@ -13,7 +13,7 @@
 .ref div div { font-size: 17px; font-weight: 600; line-height: 1.25; margin-top: 2px; }
 .ref .pr { font-size: 18px; margin-top: var(--gp-wsp-1); }
 
-.wall { touch-action: pan-y; position: relative; margin-top: var(--gp-wsp-3); height: clamp(340px, calc(100vh / var(--z, 1) - 520px), 460px); border-radius: var(--gp-r-card); background: var(--gp-web-slab); overflow: hidden; padding: 0 var(--gp-wsp-5); }
+.wall { touch-action: pan-y; cursor: grab; user-select: none; position: relative; margin-top: var(--gp-wsp-3); height: clamp(340px, calc(100vh / var(--z, 1) - 520px), 460px); border-radius: var(--gp-r-card); background: var(--gp-web-slab); overflow: hidden; padding: 0 var(--gp-wsp-5); }
 
 .sus { position: absolute; inset: var(--gp-wsp-5) var(--gp-wsp-8) var(--gp-wsp-4); display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: minmax(0, 1fr); gap: var(--gp-wsp-3); }
 .s { all: unset; position: relative; cursor: pointer; display: flex; flex-direction: column; background: var(--gp-web-ground); border-radius: var(--gp-r-card); padding: var(--gp-wsp-2); box-shadow: 0 24px 40px -28px rgb(10 10 11 / .5); transform: translateY(var(--gp-wsp-8)); opacity: 0; transition: transform .8s var(--spring), opacity .4s, filter .4s, box-shadow .3s; }

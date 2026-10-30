@@ -111,7 +111,7 @@ describe("Lineup", () => {
     expect(document.getElementById("refname")!.textContent).toBe(products[0].name);
   });
 
-  it("a touch swipe on the wall flips lineups; a mouse drag or a short move does not", async () => {
+  it("a drag or swipe on the wall flips lineups (mouse or touch); a short or mostly vertical move does not", async () => {
     vi.useFakeTimers();
     const { products } = await import("../app/landing/products");
     await spot();
@@ -124,8 +124,6 @@ describe("Lineup", () => {
       });
     };
     const shown = () => document.getElementById("refname")!.textContent;
-    drag("mouse", -120);
-    expect(shown()).toBe(products[0].name);
     drag("touch", -20);
     expect(shown()).toBe(products[0].name);
     drag("touch", -120, 150);
@@ -134,5 +132,7 @@ describe("Lineup", () => {
     expect(shown()).toBe(products[1].name);
     drag("touch", 120);
     expect(shown()).toBe(products[0].name);
+    drag("mouse", -120);
+    expect(shown()).toBe(products[1].name);
   });
 });

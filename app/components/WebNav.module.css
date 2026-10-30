@@ -30,6 +30,8 @@
 .page { position: sticky; top: 0; }
 .top .bar { padding: var(--gp-wsp-3) var(--gp-wsp-6); }
 .top[data-solid] .bar { padding-block: var(--gp-wsp-2); }
+.mark { display: flex; align-items: center; gap: var(--gp-wsp-1); }
+:global(html.lp-m) .mark [data-beta] { padding-block: 0; font-size: max(13px, calc(13px / var(--z, 1))); } /* 13 rendered px, the caption floor: the landing header is zoomed by --z */
 .brand { color: var(--gp-web-logo); min-block-size: 30px; position: relative; }
 .brand::after { content: ""; position: absolute; inset-inline: 0; inset-block: 50%; block-size: max(100%, calc(44px / var(--z, 1))); translate: 0 -50%; }
 .site[data-dk] .brand { color: inherit; }
@@ -68,9 +70,7 @@
 
 /* the hero CTA and its tag are hidden on phones (html.lp-m), so the header carries the tag there, seated beside the CTA */
 .ctaWrap { display: inline-flex; align-items: center; gap: var(--gp-wsp-1); }
-.site .navBeta { display: none; }
-:global(html.lp-m) .site .navBeta { display: inline-flex; padding-block: 0; font-size: max(13px, calc(13px / var(--z, 1))); } /* 13 rendered px, the caption floor: the landing header is zoomed by --z */
-
+:global(html.lp-m) 
 /* phones */
 @media (max-width: 767px) {
   .top .bar { padding-inline: var(--gp-wsp-3); }
