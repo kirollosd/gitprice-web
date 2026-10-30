@@ -41,7 +41,7 @@
 /* 56-tall rows with a hairline between, as on the board; each link fills its row so the whole row is the target. */
 .list { list-style: none; display: flex; flex-direction: column; }
 .list li { display: flex; min-block-size: calc(var(--gp-sp-12) + var(--gp-sp-2)); border-block-end: 1px solid var(--gp-hairline); }
-.list a {
+.list a:not(:global(.gp-ctl)) {
   flex: 1;
   display: flex;
   align-items: center;
@@ -51,19 +51,9 @@
   font-size: var(--web-fs-body);
   font-weight: 500;
 }
-.list svg { inline-size: var(--gp-sp-6); block-size: var(--gp-sp-6); } /* the board's 24px globe */
-.cta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-block-size: var(--gp-target);
-  margin-block-start: var(--gp-sp-6);
-  background: var(--gp-ink);
-  color: var(--gp-surface);
-  border-radius: var(--gp-r-pill);
-  border: 0; font: inherit; font-weight: 600; cursor: pointer;
-}
-.cta:hover { text-decoration: none; }
+.list a:not(:global(.gp-ctl)) svg { inline-size: var(--gp-sp-6); block-size: var(--gp-sp-6); } /* the board's 24px globe */
+/* the sheet's CTA: the shared coral primary (globals.css .gp-btn), full width */
+.cta { inline-size: 100%; margin-block-start: var(--gp-sp-6); }
 
 @media (max-width: 1279px) { .button { display: inline-flex; } }
 @media (min-width: 1280px) { .overlay { display: none; } }

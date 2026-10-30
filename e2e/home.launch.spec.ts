@@ -4,19 +4,20 @@ import { expect, test } from "./fixtures";
 const CHROME = "https://chromewebstore.example/gitprice";
 
 test.describe("launch mode", () => {
-  test("Home offers Add to Chrome in the hero, the dock and the foot, and no waitlist form", async ({ page }) => {
+  test("Home offers Add to Chrome in the header, the dock and the foot, and no waitlist form", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/");
     await expect(page.locator("iframe")).toHaveCount(0);
     await expect(page.locator("form[data-waitlist]")).toHaveCount(0);
     await expect(page.locator("[data-join]")).toHaveCount(0);
-    for (const where of ["#num", "#dock", "#foot"]) {
+    await expect(page.locator('#num a[data-gp-store="chrome"]')).toHaveCount(0); // the hero's action is See how it works
+    for (const where of ["#dock", "#foot"]) {
       const link = page.locator(`${where} a[data-gp-store="chrome"]`); // the dock is visibility:hidden until it shows, so no role query
       await expect(link, where).toHaveCount(1);
       await expect(link, where).toHaveAttribute("href", CHROME);
     }
     const links = page.locator('a[data-gp-store="chrome"]');
-    expect(await links.count()).toBeGreaterThanOrEqual(4); // header, hero, dock, foot
+    expect(await links.count()).toBeGreaterThanOrEqual(3); // header, dock, foot
     for (const href of await links.evaluateAll((els) => els.map((e) => e.getAttribute("href")))) expect(href).toBe(CHROME);
   });
 
@@ -31,7 +32,7 @@ test.describe("launch mode", () => {
     }
   });
 
-  test("the Beta tag sits by the hero CTA, the dock CTA and in the footer", async ({ page }) => {
+  test("the Beta tag sits by the hero action, the dock CTA and in the footer", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/");
     await expect(page.locator("#num [data-beta]")).toHaveCount(1);

@@ -13,10 +13,8 @@
 .cap s { --strike-c: var(--gp-web-fill); --strike-h: 3px; }
 
 .hcta { display: flex; gap: 18px; align-items: center; justify-content: flex-end; margin-top: 18px; }
-.hcta .p { border: 0; font-family: inherit; cursor: pointer; background: var(--gp-web-fill); color: var(--gp-web-on-fill); border-radius: 999px; padding: 13px 22px; font-weight: 600; font-size: 16px; }
-.hcta a { color: var(--gp-web-ink); font-weight: 600; text-decoration: none; }
+.lede .hcta a { color: var(--gp-web-ink); } /* the secondary button takes ink, not the lede's body colour */
 .lede { position: absolute; inset-inline-end: 56px; bottom: 130px; width: 400px; font-size: 19px; line-height: 1.45; color: var(--gp-web-body); text-align: end; }
-.lede small { display: block; margin-top: 10px; font-size: 14px; color: var(--gp-web-mute); }
 
 .digits { position: absolute; left: 30px; top: var(--dtop); display: flex; font-weight: 500; font-variant-numeric: tabular-nums; font-size: var(--fs); letter-spacing: -.02em; line-height: 1; white-space: nowrap; }
 /* clip only top and bottom (the roll); the tight letter-spacing makes cells narrower than the glyphs */
@@ -24,23 +22,24 @@
 .dg i { display: block; font-style: normal; }
 .dg i span { display: block; height: 1em; }
 .dg.dot { font-variant-numeric: normal; text-align: center; overflow: visible; }
-.strike { position: absolute; left: 30px; top: calc(var(--dtop) + var(--fs) * .686); height: 14px; width: 1380px; background: var(--gp-web-fill); transform-origin: 0 50%; transform: scaleX(0); border-radius: 7px; }
-/* the board's currency code (owner, 2026-10-27): mono, muted, on the digits' cap line (Outfit cap top is .17em) right after
+.strike { position: absolute; left: 30px; top: calc(var(--dtop) + var(--fs) * .686); height: 14px; width: 1380px; background: var(--gp-web-fill); transform-origin: 0 50%; transform: scaleX(0); border-radius: var(--gp-r-xs); }
+/* the board's currency code (owner, 2026-10-27): muted, in the text family with tabular figures (GP-407 round 3 .gp-cur), on the digits' cap line (Outfit cap top is .17em) right after
    the last digit, so it reads as part of the number. The strike stops at the digits: a bar as thick as the code is tall would blank it out. */
-.unit { position: absolute; inset-inline-start: 100%; top: calc(var(--fs) * .17); margin-inline-start: 18px; font-size: 30px; line-height: 1; letter-spacing: 0; font-family: "JetBrains Mono", monospace; font-weight: 400; color: var(--gp-web-mute); }
+.unit { position: absolute; inset-inline-start: 100%; top: calc(var(--fs) * .17); margin-inline-start: 18px; font-size: 30px; line-height: 1; letter-spacing: 0; font-family: var(--gp-font); font-variant-numeric: tabular-nums; font-weight: 400; color: var(--gp-web-mute); }
 
 .pick { position: absolute; inset-inline-end: 56px; top: 124px; z-index: 2; display: flex; gap: 8px; align-items: center; }
 .pick small { font-size: 15px; color: var(--gp-web-mute); margin-inline-end: 4px; }
-.pick button { border: 1.5px solid var(--gp-web-ink); background: transparent; border-radius: 999px; padding: 9px 15px; font: 600 15px var(--f-sans); color: var(--gp-web-ink); cursor: pointer; transition: background .2s, color .2s, transform .3s var(--spring); }
+/* the unified chip (base .chip) stays 28px; an invisible ::after pad (as .gp-ctl) brings the tap area to 44px, phones included */
+.pick button { position: relative; font-family: var(--f-sans); cursor: pointer; transition: background .2s, color .2s, transform .3s var(--spring); }
+.pick button::after { content: ""; position: absolute; inset: 50% auto auto 50%; inline-size: calc(100% + 4px); block-size: calc(44px / var(--z, 1)); translate: -50% -50%; }
 :global(html[lang="ar"]) .pick button { line-height: 1.25; } /* the mock's html[lang=ar] button rule outranks .pick button */
 .pick button:hover { transform: translateY(-2px); }
-.pick button:global(.on) { background: var(--gp-web-ink); color: var(--gp-web-ground); }
 
-/* spec chips: never wrap inside a chip (ship critique) */
-.tags { position: absolute; inset-inline-start: 48px; bottom: 140px; display: flex; gap: 10px; }
-.tags span { border: 1.5px solid var(--gp-web-ink); border-radius: 999px; padding: 10px 18px; font-size: 17px; white-space: nowrap; opacity: 0; transform: translateY(16px); transition: opacity .4s, transform .6s var(--spring); }
+/* spec chips (base .chip), then the store as a plain ink label, never the coral primary (GP-407 round 3) */
+.tags { position: absolute; inset-inline-start: 48px; bottom: 140px; display: flex; align-items: center; gap: 8px; }
+.tags span { opacity: 0; transform: translateY(16px); transition: opacity .4s, transform .6s var(--spring); }
 .tags span:global(.on) { opacity: 1; transform: none; }
-.tags span.w { background: var(--gp-web-fill); border-color: var(--gp-web-fill); color: var(--gp-web-on-fill); }
+.tags span.w { display: inline-flex; align-items: center; margin-inline-start: 8px; font-size: 15px; font-weight: 600; color: var(--gp-web-ink); white-space: nowrap; }
 
 :global(html.lp-short) .lede p { display: none; }
 :global(html[lang="ar"]) .cap { top: 262px; }
@@ -53,21 +52,19 @@
 /* phone canvas */
 :global(html.lp-m) .num > div { --dtop: max(calc(42vh / var(--z)), 330px); --fs: min(130px, calc((var(--cw, 430px) - 40px) / (var(--len, 3) * .56))); }
 :global(html.lp-m[dir="rtl"]) .num > div { --fs: min(130px, calc((var(--cw, 430px) - 40px - 60px) / (var(--len, 3) * .56))); } /* the code sits left of the digits here, so it needs room too */
-:global(html.lp-m) .pick { inset-inline-start: 0; inset-inline-end: 0; top: 70px; padding: 0 20px 4px; gap: 6px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 84%, transparent); mask-image: linear-gradient(to right, #000 84%, transparent); }
+/* the scroller clips its overflow: 8px of block padding keeps the chips' 44px pads inside it, and the chips stay at 70px */
+:global(html.lp-m) .pick { inset-inline-start: 0; inset-inline-end: 0; top: calc(70px - 8px / var(--z, 1)); padding: calc(8px / var(--z, 1)) 20px; gap: 6px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 84%, transparent); mask-image: linear-gradient(to right, #000 84%, transparent); }
 :global(html.lp-m[dir="rtl"]) .pick { -webkit-mask-image: linear-gradient(to left, #000 84%, transparent); mask-image: linear-gradient(to left, #000 84%, transparent); }
 :global(html.lp-m) .pick::-webkit-scrollbar { display: none; }
 :global(html.lp-m) .pick::after { content: ""; flex: 0 0 14px; }
 :global(html.lp-m) .pick > * { flex-shrink: 0; white-space: nowrap; }
 :global(html.lp-m) .pick button:hover { transform: none; } /* the row scrolls sideways only: no lift to clip or nudge it */
 :global(html.lp-m) .pick small { font-size: max(14px, var(--fl, 0px)); }
-/* compact chips keep their look; an invisible pad brings the tap area to 44px */
-:global(html.lp-m) .pick button { position: relative; padding: 7px 12px; font-size: max(14px, var(--fl, 0px)); min-height: calc(44px / var(--z, 1)); }
-:global(html.lp-m) .pick button::before { content: ""; position: absolute; inset: -7px -4px; min-height: 44px; }
 :global(html.lp-m) .kick { top: 122px; inset-inline-start: 20px; font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .h1 { top: 166px; inset-inline-start: 20px; width: 390px; font-size: 34px; white-space: normal; }
 :global(html.lp-m) .cap { top: 254px; inset-inline-start: 20px; width: 390px; font-size: 17px; }
 :global(html.lp-m[lang="ar"]) .cap { top: 268px; }
-:global(html.lp-m) .hcta, :global(html.lp-m) .lede small { display: none; }
+:global(html.lp-m) .hcta { display: none; }
 :global(html.lp-m) .digits { left: 16px; }
 :global(html.lp-m) .unit { margin-inline-start: 10px; font-size: 18px; }
 :global(html.lp-m) .strike { left: 16px; height: 8px; }
@@ -75,7 +72,6 @@
 :global(html.lp-m[dir="rtl"]) .digits { left: auto; right: 16px; }
 :global(html.lp-m) .lede { inset-inline-start: 20px; inset-inline-end: 20px; top: calc(var(--dtop, 330px) + 150px); bottom: auto; width: auto; font-size: 16px; text-align: start; }
 :global(html.lp-m) .tags { inset-inline-start: 20px; inset-inline-end: 20px; bottom: 110px; flex-wrap: wrap; gap: 6px; }
-:global(html.lp-m) .tags span { padding: 7px 12px; font-size: max(14px, var(--fl, 0px)); }
 
 /* short phone windows (an in-app browser with its translate bar and toolbars): no room for the lede between the board and the chips */
 @media (max-height: 740px) { :global(html.lp-m) .lede { display: none; } }

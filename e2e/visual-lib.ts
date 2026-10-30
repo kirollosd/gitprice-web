@@ -30,6 +30,8 @@ export async function shoot(page: Page, name: string, { fullPage = false }: Opti
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
   if (fullPage) await settleLazy(page);
+  // The scroll cue comes back 1.5 s after a scroll (ScrollScenes.tsx); the capture's resize counts as one, so it is live in a full page.
+  if (fullPage) await page.addStyleTag({ content: "#cue { visibility: hidden !important; }" });
   await expect(page).toHaveScreenshot(`${name}.png`, {
     fullPage,
     // Viewport shots (dock, menu) guard small details: 0.2%. Full pages 0.5%, tight enough that a whole component moving or vanishing fails (the config's 2% default is for the parity specs).

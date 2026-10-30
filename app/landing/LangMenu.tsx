@@ -71,7 +71,7 @@ export default function LangMenu({ locale }: { locale: Locale }) {
       <button
         ref={btn}
         type="button"
-        className={s.lng}
+        className="gp-ctl"
         id="lng"
         aria-expanded={open}
         aria-controls="lmenu"

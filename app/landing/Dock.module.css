@@ -1,15 +1,14 @@
 /* The fixed dock, ported from combo.html. It sits outside the zoomed canvas, so its sizes are screen px. */
 .dock {
   --dock: var(--gp-web-dock); --on-dock: var(--gp-web-on-dock); --dock-save: var(--gp-web-dock-save);
-  --fill-d: var(--gp-web-fd); --on-fill-d: var(--gp-web-onfd); --ring: var(--gp-web-on-dock);
-  /* error text: amber on the dark dock, the light-mode accent on a light one (ship critique, >= 4.5:1 both) */
-  --dock-err: #E8B45E;
+  --fill-d: var(--gp-web-fd); --on-fill-d: var(--gp-web-onfd); --ring: var(--gp-web-on-dock); --cur-c: currentColor;
+  --z: 1; /* not zoomed: the shared buttons (.gp-btn) divide by --z, so they keep screen px here */
   position: fixed; z-index: 30; left: 50%; bottom: 32px;
   transform: translateX(-50%) translateY(140px);
   display: flex; align-items: center;
   background: var(--dock); color: var(--on-dock);
-  border-radius: 999px; padding: 7px;
-  box-shadow: 0 18px 40px -12px rgba(22, 19, 20, .45);
+  border-radius: var(--gp-r-card); padding: 8px;
+  box-shadow: 0 18px 40px -12px rgb(10 10 11 / .45);
   white-space: nowrap; visibility: hidden;
   font-family: "Outfit", "Alexandria", system-ui, sans-serif;
   line-height: normal;
@@ -21,33 +20,32 @@
 :global(html[data-theme="dark"]) .dock:global(.dk) { --on-dock: var(--gp-web-dark); --dock-save: var(--gp-web-savel); --ring: var(--gp-web-dark); --on-fill-d: var(--gp-web-dark); }
 @media (prefers-color-scheme: dark) {
   :global(html:not([data-theme="light"])) .dock:global(.dk) { --on-dock: var(--gp-web-dark); --dock-save: var(--gp-web-savel); --ring: var(--gp-web-dark); --on-fill-d: var(--gp-web-dark); }
-  :global(html:not([data-theme="light"])) .dock { --dock-err: var(--gp-web-accl); }
 }
-:global(html[data-theme="dark"]) .dock, .dock:global(.dk) { --dock-err: var(--gp-web-accl); }
 .dock :focus-visible { outline-color: var(--ring); }
 /* Arabic: Alexandria first, and buttons keep the mock's 1.25 lines */
 :global(html[lang="ar"]) .dock { font-family: "Alexandria", "Outfit", system-ui, sans-serif; }
 :global(html[lang="ar"]) .dock button { line-height: 1.25; }
 
-.eq { flex: none; width: 46px; height: 46px; border-radius: 50%; background: var(--fill-d); color: var(--on-fill-d); display: grid; place-items: center; }
+.eq { flex: none; width: 46px; height: 46px; border-radius: var(--gp-r-control); background: var(--fill-d); color: var(--on-fill-d); display: grid; place-items: center; }
 .t { padding: 0 16px; font-size: 1.0625rem; }
 .dock > [data-beta] { margin-inline: 8px 12px; align-self: center; } /* 8px off the mark, 12px before the button */
 /* the tag is dir=ltr (an English run), so its logical margin points the wrong way on an RTL page: put the gap on the button side */
 :global(html[dir="rtl"]) .dock > [data-beta] { margin-inline: 12px 8px; }
 .t:focus { outline: none; }
 .t b { font-family: "JetBrains Mono", monospace; font-weight: 500; }
+/* the currency code inside follows the text family (Price .cur) */
 .t :global(.save) { color: var(--dock-save); }
-.go { border: 0; font-family: inherit; cursor: pointer; background: var(--on-dock); color: var(--dock); border-radius: 999px; padding: 13px 20px; min-height: 44px; font-weight: 600; font-size: 1rem; }
+/* the waitlist CTA is the shared compact coral primary (globals.css .gp-btn .gp-btn-sm), the same token fill on the dark pill */
+.go { flex: none; }
 
 /* the waitlist: the dock opens into an email field, then confirms */
-.dock:global(.join) { flex-wrap: wrap; min-width: 560px; border-radius: 30px; align-items: flex-start; }
-/* open form (desktop): the row is the 46px mark/field/button, the note wraps below it, so the tag centres on that row, not the whole dock (its height is 1.4em + 4px) */
-:global(html:not(.lp-m)) .dock:global(.join) > [data-beta] { align-self: flex-start; margin-block-start: calc(21px - 0.7em); }
+.dock:global(.join) { flex-wrap: wrap; min-width: 560px; border-radius: var(--gp-r-card); align-items: flex-start; }
+/* open form (desktop): the row is the 48px field/button, the note wraps below it, so the tag centres on that row, not the whole dock (its height is 1.4em + 4px) */
+:global(html:not(.lp-m)) .dock:global(.join) > [data-beta] { align-self: flex-start; margin-block-start: calc(24px - 0.7em); }
 .wl { display: flex; flex: 1; align-items: flex-start; gap: 8px; padding-inline-start: 8px; }
-.x { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: none; color: var(--on-dock); cursor: pointer; }
+.x { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: var(--gp-r-control); background: none; color: var(--on-dock); cursor: pointer; }
 /* launched: only the Chrome link fits the dock */
 .dock [data-gp-store]:not([data-gp-store="chrome"]) { display: none; }
-.dock [data-gp-store="chrome"] { background: var(--on-dock); color: var(--dock); min-height: 44px; }
 
 /* phones: the landing sets html.lp-m (also portrait tablets); every other page, and any narrow or zoomed window, takes the same rules from the viewport width,
    so the dock never runs wider than the screen (WCAG 1.4.10) */
@@ -60,7 +58,6 @@
 :global(html.lp-m) .t { flex: 1; min-width: 0; padding: 0 10px; font-size: .875rem; line-height: 1.3; white-space: normal; /* no clamp: longer copy, larger text or text spacing grow the dock instead of clipping (WCAG 1.4.4, 1.4.12) */ }
 /* phones: the Beta tag lives in the header only, so the dock line keeps one row */
 :global(html.lp-m) .dock:not(:global(.join)) > [data-beta] { display: none; }
-:global(html.lp-m) .go { padding: 10px 14px; font-size: .875rem; white-space: nowrap; }
 @media (max-width: 759px) {
   :global(html[lang]) .dock { left: 12px; right: 12px; bottom: 16px; transform: translateY(140px); }
     :global(html[lang]) .dock:global(.in) { transform: none; }
@@ -71,6 +68,5 @@
   :global(html[lang]) .t { flex: 1; min-width: 0; padding: 0 10px; font-size: .875rem; line-height: 1.3; white-space: normal; /* no clamp: longer copy, larger text or text spacing grow the dock instead of clipping (WCAG 1.4.4, 1.4.12) */ }
   /* phones: the Beta tag lives in the header only, so the dock line keeps one row */
   :global(html[lang]) .dock:not(:global(.join)) > [data-beta] { display: none; }
-  :global(html[lang]) .go { padding: 10px 14px; font-size: .875rem; white-space: nowrap; }
 }
 @media (prefers-reduced-motion: reduce) { .dock { transition: visibility 0s; } }

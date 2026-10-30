@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { createContext, Suspense, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import { products } from "./products";
+import b from "./base.module.css";
 import s from "./Hero.module.css";
 
 type Ctx = { id: string; pick: (id: string) => void };
@@ -76,7 +77,7 @@ export default function ProductPicker({ locale }: { locale: Locale }) {
     <div className={s.pick} id="pick" role="group" aria-labelledby="pickl">
       <small id="pickl">{t(locale, "web.landing.hero.pick")}</small>
       {products.map((x) => (
-        <button key={x.id} type="button" data-id={x.id} aria-pressed={x.id === id} className={x.id === id ? "on" : undefined} onClick={() => pick(x.id)}>
+        <button key={x.id} type="button" data-id={x.id} aria-pressed={x.id === id} className={x.id === id ? `${b.chip} on` : b.chip} onClick={() => pick(x.id)}>
           {locale === "ar" ? x.ar.chip : x.chip}
         </button>
       ))}

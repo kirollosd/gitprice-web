@@ -12,6 +12,7 @@ import BetaTag from "./BetaTag";
 import Logo from "./Logo";
 import { NavCta, NavSellers } from "./NavLinks";
 import ThemeToggle from "./ThemeToggle";
+import { useActiveSection } from "./useActiveSection";
 import styles from "./WebNav.module.css";
 import site from "./WebNavSite.module.css";
 import WebMenu from "./WebMenu";
@@ -20,6 +21,9 @@ const N = "web.component.webNav.";
 const L = "web.landing.nav.";
 /** The landing's sections, in page order. */
 const LINKS = [["how", "howItWorks"], ["film", "watchLive"], ["spot", "matchChallenge"], ["rcpt", "savings"], ["rail", "stores"]] as const;
+const IDS = LINKS.map(([id]) => id);
+/** every header CTA is the shared compact primary (globals.css .gp-btn .gp-btn-sm) */
+const CTA = `${styles.cta} gp-btn gp-btn-sm`;
 
 /**
  * Landing nav (home only), ported from combo.html: the board wordmark, the five landing links (>= 1024), the language menu, the
@@ -30,6 +34,7 @@ const LINKS = [["how", "howItWorks"], ["film", "watchLive"], ["spot", "matchChal
 export default function WebNav({ locale, variant }: { locale: Locale; variant?: "landing" | "site" | "hosted" }) {
   const { rest } = localeFromPath(usePathname() ?? "/");
   const kind = variant ?? (hasMinimalNav(rest) ? "hosted" : rest === "/" ? "landing" : "site");
+  const active = useActiveSection(IDS);
   if (kind === "hosted") {
     return (
       <header className={styles.header}>
@@ -58,7 +63,7 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
             <NavSellers locale={locale} keys="768" className={`${styles.link} ${styles.sellers} ${site.l768}`} />
             <span className={site.wide}><LangMenu locale={locale} /></span>
             <span className={site.wide}><ThemeToggle locale={locale} /></span>
-            <NavCta locale={locale} keys="1440" className={`${styles.cta} ${site.hideSmall}`} />
+            <NavCta locale={locale} keys="1440" className={`${CTA} ${site.hideSmall}`} />
             <WebMenu locale={locale} />
           </div>
         </div>
@@ -71,7 +76,7 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
         <Wordmark locale={locale} className={styles.brand} />
         <nav aria-label={t(locale, N + "a11y.label.primary")} className={styles.links}>
           {LINKS.map(([id, k]) => (
-            <Link key={id} href={`${home}#${id}`} className={styles.link} data-gp-track="cta_click" data-gp-cta-id={`nav_${id}`} data-gp-placement="nav">{t(locale, L + k)}</Link>
+            <Link key={id} href={`${home}#${id}`} className={styles.link} aria-current={active === id ? "true" : undefined} data-gp-track="cta_click" data-gp-cta-id={`nav_${id}`} data-gp-placement="nav">{t(locale, L + k)}</Link>
           ))}
           <NavSellers locale={locale} keys="1024" className={`${styles.link} ${styles.sellers} ${styles.sellersShort}`} />
           <NavSellers locale={locale} keys="1440" className={`${styles.link} ${styles.sellers} ${styles.sellersLong}`} />
@@ -83,9 +88,9 @@ export default function WebNav({ locale, variant }: { locale: Locale; variant?: 
             <span className={styles.ctaWrap}>
               {/* the hero CTA (and its tag) is hidden on phones, so the tag moves here, as a corner badge so the bar keeps its width; CSS shows exactly one. Before the button in the DOM, as on screen */}
               <BetaTag locale={locale} className={styles.navBeta} />
-              <JoinButton locale={locale} placement="nav" className={styles.cta} />
+              <JoinButton locale={locale} placement="nav" className={CTA} />
             </span>
-          ) : <NavCta locale={locale} keys="1440" className={styles.cta} />}
+          ) : <NavCta locale={locale} keys="1440" className={CTA} />}
         </div>
       </div>
     </header>

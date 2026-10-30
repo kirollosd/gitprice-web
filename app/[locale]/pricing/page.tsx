@@ -21,11 +21,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PricingPage({ params }: Props) {
   const { locale } = await params;
-  // Checkout starts in the apps: launched sends people to the stores, prelaunch to the waitlist.
-  const cta = (label: string, primary: boolean) => env.launch ? (
-    <Link href={env.chromeStoreUrl!} className={primary ? styles.btnPrimary : styles.btn}>{label}</Link>
+  // Checkout starts in the apps: launched sends people to the stores, prelaunch to the waitlist. Every waitlist CTA is the
+  // shared coral primary (globals.css .gp-btn), one per plan card.
+  const cta = (label: string) => env.launch ? (
+    <Link href={env.chromeStoreUrl!} className={`${styles.btn} gp-btn`}>{label}</Link>
   ) : (
-    <JoinCta label={label} className={primary ? styles.btnPrimary : styles.btn} placement="pricing" />
+    <JoinCta label={label} className={`${styles.btn} gp-btn`} placement="pricing" />
   );
   return (
     <section className={`container ${styles.page} ${styles.center}`}>
@@ -36,18 +37,18 @@ export default async function PricingPage({ params }: Props) {
           <h2 className={styles.h2}>{t(locale, P + "plan.free.plan")}</h2>
           <p className={styles.price}><bdi dir="ltr">{FREE_PRICE}</bdi></p>
           <p className={styles.period}>{t(locale, P + "plan.free.period")}</p>
-          {cta(t(locale, P + "plan.free.label"), true)}
+          {cta(t(locale, P + "plan.free.label"))}
         </article>
         <article className={styles.card}>
           <h2 className={styles.h2}>{t(locale, P + "plan.pro.plan")}</h2>
           <p className={styles.price}>{t(locale, P + "plan.pro.price")}</p>
-          {env.launch ? <StoreBadges locale={locale} placement="bottom" /> : cta(t(locale, P + "plan.pro.label"), false)}
+          {env.launch ? <StoreBadges locale={locale} placement="bottom" /> : cta(t(locale, P + "plan.pro.label"))}
         </article>
       </div>
       <aside className={styles.sellersRow}>
         <h2 className={styles.sellersTitle}>{t(locale, S + "title")}</h2>
         <p className={styles.muted}>{t(locale, S + "body")}</p>
-        <Link href={pathFor(locale, "/sellers")} className={styles.btn}>{t(locale, S + "cta.label")}</Link>
+        <Link href={pathFor(locale, "/sellers")} className={`${styles.btn} gp-btn-2`}>{t(locale, S + "cta.label")}</Link>
       </aside>
     </section>
   );

@@ -7,68 +7,6 @@
    downloads the small file and the full one only loads for a character the copy does not use yet.
    ============================================================ */
 @font-face {
-  font-family: "GP Fustat";
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/fustat-latin-400-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "GP Fustat";
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/fustat-latin-600-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "GP Fustat";
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/fustat-latin-700-normal.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Noto Sans Arabic";
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/noto-sans-arabic-arabic-400-normal.woff2") format("woff2");
-  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
-}
-@font-face {
-  font-family: "Noto Sans Arabic";
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/noto-sans-arabic-arabic-600-normal.woff2") format("woff2");
-  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
-}
-@font-face {
-  font-family: "Noto Sans Arabic";
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/noto-sans-arabic-arabic-700-normal.woff2") format("woff2");
-  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
-}
-@font-face {
-  font-family: "Noto Sans Arabic";
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/noto-sans-arabic-latin-400-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: "Noto Sans Arabic";
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/noto-sans-arabic-latin-600-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: "Noto Sans Arabic";
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/noto-sans-arabic-latin-700-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
   font-family: "Outfit";
   font-weight: 300;
   font-display: swap;
@@ -361,3 +299,54 @@ h1[tabindex="-1"]:focus-visible { outline: none; }
 
 /* A closing band that ends the page sits flush on the footer. */
 main:has(> [data-gp-section="bottom_cta"]:last-child) ~ footer { margin-block-start: 0; }
+/* GP-407 round 3: the website's two buttons. Primary (.gp-btn) is coral with ink text and is EVERY waitlist / Add to Chrome
+   CTA on every page (nav, menu, hero, dock, dock form, footer, forms, pricing): one look in light and dark, the dock's
+   dark pill included (the fill is always --gp-web-fill, never a variant). At most one primary per section; every other
+   action is the secondary (.gp-btn-2: no fill, 1px control edge, the surrounding text colour).
+   Two sizes: 48 tall / 24 inline padding (default) and .gp-btn-sm, 40 / 16 (nav, menu, dock), with a 44px hit area.
+   Heights divide by the landing's zoom (--z) so they render at the same pixels there. `:is(a, button)` outranks the
+   landing canvas's `:where(button)` reset. Pressed: scale settles from .96 to 1 over 160 ms (DESIGN.md). */
+:is(a, button).gp-btn, :is(a, button).gp-btn-2 {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--gp-wsp-1);
+  min-block-size: calc(var(--gp-wbtn-h) / var(--z, 1)); padding: 0 var(--gp-wbtn-px);
+  border: 0; border-radius: var(--gp-r-control);
+  font-family: inherit; font-size: 16px; font-weight: 600; line-height: 1.2;
+  white-space: nowrap; text-decoration: none; cursor: pointer;
+  transition: background-color .15s, transform .16s ease-out;
+}
+:is(a, button).gp-btn { background: var(--gp-web-fill); color: var(--gp-web-on-fill); }
+:is(a, button).gp-btn-2 { background: none; color: inherit; box-shadow: inset 0 0 0 1px var(--gp-control); }
+:is(a, button).gp-btn-sm { position: relative; min-block-size: calc(var(--gp-wbtn-h-sm) / var(--z, 1)); padding: 0 var(--gp-wbtn-px-sm); font-size: 15px; }
+.gp-btn-sm::after { content: ""; position: absolute; inset: 50% auto auto 50%; inline-size: 100%; block-size: max(100%, calc(44px / var(--z, 1))); translate: -50% -50%; }
+:is(a, button):is(.gp-btn, .gp-btn-2):hover { text-decoration: none; }
+:is(a, button).gp-btn:hover { background: color-mix(in srgb, var(--gp-web-fill) 88%, var(--gp-web-on-fill)); color: var(--gp-web-on-fill); }
+:is(a, button).gp-btn-2:hover { background: color-mix(in srgb, currentColor 7%, transparent); }
+:is(a, button):is(.gp-btn, .gp-btn-2):active { transform: scale(.96); }
+:is(a, button):is(.gp-btn, .gp-btn-2):focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
+:is(a, button):is(.gp-btn, .gp-btn-2):disabled { cursor: progress; }
+@media (prefers-reduced-motion: reduce) { :is(a, button):is(.gp-btn, .gp-btn-2) { transition: none; } :is(a, button):is(.gp-btn, .gp-btn-2):active { transform: none; } }
+
+/* A text link and its arrow (→ ↓) are one unit: the arrow is centred on the label 8px after it (the reading direction
+   flips it in RTL) and never wraps to a line of its own; a tight row wraps the whole link. */
+.gp-arrow { display: inline-flex; align-items: center; gap: var(--gp-wsp-1); white-space: nowrap; }
+
+/* GP-407: the header's small controls (language, theme) and every language link share one look: a 36px 8-radius box with a
+   1px control edge, no fill, an 18px icon, a 15/500 label when there is one, and a 44px hit area (zoom-aware on the landing). */
+:is(a, button).gp-ctl {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--gp-wsp-1);
+  min-inline-size: 36px; min-block-size: 36px; padding: 0; flex: none; align-self: center;
+  border: 1px solid var(--gp-control); border-radius: var(--gp-r-control); background: none;
+  color: var(--gp-web-mute); font-family: inherit; font-size: 15px; font-weight: 500; line-height: 1.2;
+  white-space: nowrap; text-decoration: none; cursor: pointer; transition: color .2s, background .2s;
+}
+:is(a, button).gp-ctl:has(> span) { padding-inline: 12px; }
+.gp-ctl > svg { inline-size: 18px; block-size: 18px; flex: none; }
+.gp-ctl::after { content: ""; position: absolute; inset: 50% auto auto 50%; inline-size: max(100%, calc(44px / var(--z, 1))); block-size: max(100%, calc(44px / var(--z, 1))); translate: -50% -50%; }
+:is(a, button).gp-ctl:hover { color: var(--gp-web-ink); text-decoration: none; }
+:is(a, button).gp-ctl:is(:active, [aria-expanded="true"]) { background: color-mix(in srgb, var(--gp-web-ink) 7%, transparent); color: var(--gp-web-ink); }
+.gp-ctl:focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
+:is(header[data-dk], footer) :is(a, button).gp-ctl { color: var(--gp-web-on-dark-mute); }
+:is(header[data-dk], footer) :is(a, button).gp-ctl:is(:hover, :active, [aria-expanded="true"]) { color: var(--gp-web-on-dark); }
+:is(header[data-dk], footer) :is(a, button).gp-ctl:is(:active, [aria-expanded="true"]) { background: color-mix(in srgb, var(--gp-web-on-dark) 10%, transparent); }
+@media (max-width: 767px) { :is(a, button).gp-ctl { min-inline-size: 34px; min-block-size: 34px; } }
+

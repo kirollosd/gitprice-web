@@ -1,16 +1,6 @@
 .root { display: flex; flex-direction: column; gap: var(--gp-sp-3); inline-size: 100%; max-inline-size: 312px; }
-.chrome {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-block-size: var(--gp-target);
-  padding-inline: var(--gp-sp-6);
-  border-radius: var(--gp-r-pill);
-  background: var(--gp-ink);
-  color: var(--gp-surface);
-  font-weight: 600;
-  text-align: center;
-}
+/* Add to Chrome is the shared coral primary (globals.css .gp-btn; .gp-btn-sm in the dock) */
+.chrome { text-align: center; }
 .mobile { display: flex; gap: var(--gp-sp-3); }
 .badge {
   flex: 1;

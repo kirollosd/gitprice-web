@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import { t, type Locale } from "../../lib/i18n";
 import b from "./base.module.css";
 import BetaTag from "../components/BetaTag";
-import { JoinButton } from "./Dock";
 import { html } from "./html";
 import { splitMoney, useMoney } from "./money";
 import { priceHtml } from "./Price";
@@ -20,6 +19,12 @@ const isFixed = (c: string) => c === "." || c === ",";
  * The board is in the visitor's currency (useMoney); #digits and #cap are rebuilt per product and currency.
  * #num's data-from / data-best (EGP) feed the dock's "elsewhere" line.
  */
+/** A link whose copy ends in an arrow ("See how it works ↓"), drawn as the secondary button: label and arrow stay one unit (globals.css .gp-arrow). */
+function ArrowLink({ href, text }: { href: string; text: string }) {
+  const m = /^(.*?)\s*([\u2190-\u2193])$/.exec(text);
+  return <a href={href} className="gp-btn-2 gp-arrow">{m ? <>{m[1]}<span aria-hidden="true">{m[2]}</span></> : text}</a>;
+}
+
 export default function Hero({ locale, product: P }: { locale: Locale; product: Product }) {
   const f = useMoney();
   const [from, code] = splitMoney(f(P.from, 0));
@@ -52,17 +57,16 @@ export default function Hero({ locale, product: P }: { locale: Locale; product: 
         <div className={s.strike} id="strike" aria-hidden="true" />
         <p className={b.sr} id="numsr">{t(locale, K + "srPrices", { from: `${from} ${code}`, to: `${to} ${code}` })}</p>
         <div key={`tags:${P.id}`} className={s.tags} id="tags">
-          {P.tags.map((x) => <span key={x}>{x}</span>)}
+          {P.tags.map((x) => <span key={x} className={b.chip}>{x}</span>)}
           <span className={s.w}><StoreText label={P.best.store} locale={locale} /></span>
         </div>
         <div className={s.lede}>
           <p id="lede">{t(locale, K + "lede")}</p>
+          {/* the hero's one action is the secondary "See how it works"; the waitlist CTAs are the nav, dock and footer ones */}
           <div className={s.hcta}>
-            <JoinButton locale={locale} placement="hero" className={s.p} />
+            <ArrowLink href="#how" text={t(locale, K + "seeHow")} />
             <BetaTag locale={locale} />
-            <a href="#how">{t(locale, K + "seeHow")}</a>
           </div>
-          <small>{t(locale, K + "free")}</small>
         </div>
       </div>
     </section>

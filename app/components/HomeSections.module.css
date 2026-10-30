@@ -65,12 +65,12 @@
 .stepTitle { font-size: var(--web-fs-title); line-height: var(--web-lh-text); font-weight: 600; margin-block-start: var(--gp-sp-1); }
 
 /* ---------- closing band ---------- */
-.band { background: var(--gp-web-dark); color: var(--gp-web-on-dark, #F4F4F5); border-block-start: 1px solid var(--gp-web-dark-line); margin-block-start: var(--section); padding-block: calc(var(--gp-sp-16) + var(--gp-sp-2)); }
+.band { background: var(--gp-web-dark); color: var(--gp-web-on-dark); border-block-start: 1px solid var(--gp-web-dark-line); margin-block-start: var(--section); padding-block: calc(var(--gp-sp-16) + var(--gp-sp-2)); }
 .bandInner { display: flex; flex-direction: column; align-items: center; gap: var(--gp-sp-8); text-align: center; }
-.bandTitle { color: var(--gp-web-on-dark, #F4F4F5); font-size: var(--web-fs-h2); line-height: var(--web-lh-text); }
-.bandLine { color: var(--gp-web-on-dark, #F4F4F5); font-size: var(--web-fs-body); line-height: var(--web-lh-text); margin-block-start: var(--gp-sp-4); }
+.bandTitle { color: var(--gp-web-on-dark); font-size: var(--web-fs-h2); line-height: var(--web-lh-text); }
+.bandLine { color: var(--gp-web-on-dark); font-size: var(--web-fs-body); line-height: var(--web-lh-text); margin-block-start: var(--gp-sp-4); }
 /* The card hugs its content: store badges 312, seller access button 280, waitlist form 400. */
-.bandCard { background: var(--gp-surface); color: var(--gp-ink); border-radius: var(--gp-r-lg); border: 1px solid var(--gp-hairline); padding: var(--gp-sp-4); inline-size: 100%; max-inline-size: calc(var(--web-w-badges) + 2 * var(--gp-sp-4)); text-align: start; }
+.bandCard { background: var(--gp-surface); color: var(--gp-ink); border-radius: var(--gp-r-card); border: 1px solid var(--gp-hairline); padding: var(--gp-sp-4); inline-size: 100%; max-inline-size: calc(var(--web-w-badges) + 2 * var(--gp-sp-4)); text-align: start; }
 .bandCard:has(.accessBtn) { max-inline-size: calc(var(--web-w-access) + 2 * var(--gp-sp-4)); }
 .bandCard:has([data-waitlist]) { max-inline-size: calc(var(--web-w-form) + 2 * var(--gp-sp-4)); }
 
@@ -86,9 +86,9 @@
   inline-size: 100%;
   min-block-size: var(--gp-target);
   padding-inline: var(--gp-sp-6);
-  border-radius: var(--gp-r-pill);
-  background: var(--gp-ink);
-  color: var(--gp-surface);
+  border-radius: var(--gp-r-control);
+  background: var(--gp-web-fill);
+  color: var(--gp-web-on-fill);
   font-weight: 600;
 }
 .accessBtn:hover { text-decoration: none; }

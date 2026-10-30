@@ -27,8 +27,8 @@ export default function Foot({ locale, product: P }: { locale: Locale; product: 
         <div className={b.kick}>{t(locale, K + "eyebrow")}</div>
         <h2 className={b.big} dangerouslySetInnerHTML={html(locale, K + "title")} />
         <div className={s.btns}>
-          <JoinButton locale={locale} placement="bottom" className={s.p} />
-          <a className={s.s} href="#how">{t(locale, K + "howItWorks")}</a>
+          <JoinButton locale={locale} placement="bottom" className="gp-btn" />
+          <a className="gp-btn-2" href="#how">{t(locale, K + "howItWorks")}</a>
         </div>
       </div>
       {/* facts and the legal row share one column, so the legal row follows the facts however long they run */}

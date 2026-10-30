@@ -43,7 +43,8 @@ async function page(launch = false) {
   );
 }
 const dock = () => document.getElementById("dock")!;
-const heroJoin = () => document.querySelector('[data-join][data-gp-placement="hero"]') as HTMLElement;
+// the hero has no Join button (its action is See how it works): the footer's opens the dock like every other
+const pageJoin = () => document.querySelector('[data-join][data-gp-placement="bottom"]') as HTMLElement;
 
 describe("Dock", () => {
   it("with motion on, the dock stays hidden until the board has landed (but opens with the form)", async () => {
@@ -51,13 +52,13 @@ describe("Dock", () => {
     await page();
     expect(document.getElementById("num")!.hasAttribute("data-landed")).toBe(false);
     expect(dock().classList.contains("in")).toBe(false);
-    act(() => { fireEvent.click(heroJoin()); });
+    act(() => { fireEvent.click(pageJoin()); });
     expect(dock().classList.contains("in")).toBe(true);
   });
 
-  it("a hero Join the waitlist focuses the dock's email field and hides the scroll cue", async () => {
+  it("a page Join the waitlist focuses the dock's email field and hides the scroll cue", async () => {
     await page();
-    act(() => { fireEvent.click(heroJoin()); });
+    act(() => { fireEvent.click(pageJoin()); });
     const input = dock().querySelector('input[type="email"]');
     expect(input).toBeTruthy();
     expect(document.activeElement).toBe(input);
@@ -68,7 +69,7 @@ describe("Dock", () => {
   it("the Beta tag stays in the dock while its form is open", async () => {
     await page();
     expect(dock().querySelector("[data-beta]")).toBeTruthy();
-    act(() => { fireEvent.click(heroJoin()); });
+    act(() => { fireEvent.click(pageJoin()); });
     expect(dock().querySelector('input[type="email"]')).toBeTruthy();
     expect(dock().querySelectorAll("[data-beta]")).toHaveLength(1);
   });
@@ -82,17 +83,17 @@ describe("Dock", () => {
 
   it("Escape closes the form and returns focus to the button that opened it", async () => {
     await page();
-    act(() => { fireEvent.click(heroJoin()); });
+    act(() => { fireEvent.click(pageJoin()); });
     act(() => { fireEvent.keyDown(dock(), { key: "Escape" }); });
     expect(dock().querySelector('input[type="email"]')).toBeNull();
-    expect(document.activeElement).toBe(heroJoin());
+    expect(document.activeElement).toBe(pageJoin());
     expect(document.documentElement.dataset.gpJoin).toBeUndefined();
   });
 
   it("Escape closes the open form from anywhere on the page, and the open dock is a named group", async () => {
     await page();
     expect(dock().getAttribute("role")).toBeNull();
-    act(() => { fireEvent.click(heroJoin()); });
+    act(() => { fireEvent.click(pageJoin()); });
     expect(dock().getAttribute("role")).toBe("group");
     expect(dock().getAttribute("aria-label")).toBe(en.web.landing.dock.join);
     act(() => { fireEvent.keyDown(document.body, { key: "Escape" }); });
@@ -102,7 +103,7 @@ describe("Dock", () => {
 
   it("an Escape another popup already handled does not also close the form", async () => {
     await page();
-    act(() => { fireEvent.click(heroJoin()); });
+    act(() => { fireEvent.click(pageJoin()); });
     const stop = (e: Event) => e.preventDefault();
     document.addEventListener("keydown", stop, true);
     act(() => { fireEvent.keyDown(document.body, { key: "Escape" }); });
@@ -114,13 +115,13 @@ describe("Dock", () => {
     await page();
     vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ data: { status: "created" } }), { status: 201, headers: { "content-type": "application/json" } })));
     vi.useRealTimers();
-    act(() => { fireEvent.click(heroJoin()); });
+    act(() => { fireEvent.click(pageJoin()); });
     const input = dock().querySelector('input[type="email"]') as HTMLInputElement;
     act(() => { fireEvent.change(input, { target: { value: "a@b.co" } }); });
     await act(async () => { fireEvent.submit(input.closest("form")!); });
     await vi.waitFor(() => expect(document.getElementById("dt")?.getAttribute("aria-live")).toBe("polite"));
     (document.activeElement as HTMLElement)?.blur();
-    act(() => { fireEvent.click(heroJoin()); });
+    act(() => { fireEvent.click(pageJoin()); });
     expect(document.activeElement).toBe(document.getElementById("dt"));
   });
 
@@ -147,7 +148,7 @@ describe("Dock", () => {
     expect(document.querySelector("[data-join]")).toBeNull();
     expect(dock().querySelector(`a[href="${CHROME}"]`)).toBeTruthy();
     const hero = document.querySelector(`#num a[href="${CHROME}"]`), foot = document.querySelector(`#foot a[href="${CHROME}"]`);
-    expect(hero?.getAttribute("data-gp-placement")).toBe("hero");
+    expect(hero).toBeNull(); // the hero's action is See how it works
     expect(foot?.getAttribute("data-gp-placement")).toBe("bottom");
   });
 

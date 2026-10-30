@@ -73,9 +73,10 @@ describe("Coral landing sections", () => {
       expect(guardHits(container)).toEqual([]);
     });
 
-    it(`shows the free line from the ship critique (${locale})`, async () => {
+    it(`the hero has no waitlist CTA, so it drops the CTA's free line (${locale})`, async () => {
       await renderHome(locale);
-      expect(screen.getByText(L[locale].hero.free)).toBeTruthy();
+      expect(screen.queryByText(L[locale].hero.free)).toBeNull();
+      expect(document.querySelector("#num [data-join]")).toBeNull();
     });
   }
 
@@ -132,7 +133,7 @@ describe("Coral landing sections", () => {
   it("gives every join button a data-join hook", async () => {
     await renderHome("en");
     const join = [...document.querySelectorAll("button[data-join]")];
-    expect(join.length).toBe(2);
+    expect(join.length).toBe(1); // the footer's (the hero's action is See how it works; nav and dock live outside HomeContent)
     join.forEach((b) => expect(b.getAttribute("type")).toBe("button"));
   });
 });

@@ -144,7 +144,7 @@ test.describe("landing behaviours (parity with the preview)", () => {
 test.describe("Beta tag placement", () => {
   const visible = (page: Page, sel: string) => page.locator(sel).evaluateAll((els) => els.filter((e) => (e as HTMLElement).getClientRects().length > 0).length);
 
-  test("phone: the header carries the tag, the hidden hero CTA's tag does not show; desktop: the hero does, the header does not", async ({ page }) => {
+  test("phone: the header carries the tag, the hidden hero action's tag does not show; desktop: the hero does, the header does not", async ({ page }) => {
     await page.setViewportSize(PHONE);
     await page.goto("/");
     expect(await visible(page, "header [data-beta]")).toBe(1);

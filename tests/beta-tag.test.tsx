@@ -24,13 +24,13 @@ async function home(launch: boolean, locale: "en" | "ar") {
 
 describe.each([[false], [true]])("Beta tag (launch=%s)", (launch) => {
   for (const locale of ["en", "ar"] as const) {
-    it(`${locale}: sits by the hero CTA and the dock CTA, and in the footer`, async () => {
+    it(`${locale}: sits by the hero action (See how it works) and the dock CTA, and in the footer`, async () => {
       await home(launch, locale);
       expect(label("en")).toBe("Beta");
       // the owner's ruling: "Beta" in every locale, never translated
       expect(tags().map((b) => b.textContent)).toEqual(["Beta", "Beta", "Beta"]);
       const [hero, foot, dock] = tags();
-      expect(near(hero, '[data-gp-placement="hero"]')).toBe(true);
+      expect(near(hero, 'a[href="#how"]')).toBe(true);
       expect(hero.closest("#num")).toBeTruthy();
       expect(dock.closest("#dock")).toBeTruthy();
       expect(foot.closest("footer#foot")).toBeTruthy();

@@ -11,6 +11,7 @@ import WaitlistForm from "../components/WaitlistForm";
 import GMark from "./GMark";
 import { esc, html } from "./html";
 import { formatMoney, useMoney } from "./money";
+import { moneyTextHtml } from "./Price";
 import s from "./Dock.module.css";
 
 const K = "web.landing.dock.";
@@ -65,7 +66,7 @@ export function JoinCta({ label, className, placement, ctaId = "join_waitlist", 
   );
 }
 
-const LABEL = { hero: "web.landing.hero.join", bottom: "web.landing.foot.join", nav: "web.landing.nav.join" } as const;
+const LABEL = { bottom: "web.landing.foot.join", nav: "web.landing.nav.join" } as const;
 
 /** Every [data-join]: opens the dock form; after launch it is the Add to Chrome link (constraints call 2). */
 export function JoinButton({ locale, placement, className }: { locale: Locale; placement: keyof typeof LABEL; className?: string }) {
@@ -183,7 +184,7 @@ function DockBar({ locale }: { locale: Locale }) {
   const line = joined ? esc(t(locale, K + "done"))
     : !home ? esc(t(locale, K + "foot"))
     : view.msg ? esc(t(locale, MSG[view.msg]))
-    : html(locale, K + "elsewhere", {}, { price: `<bdi dir="ltr">${esc(formatMoney(view.best))}</bdi>`, less: `<bdi dir="ltr">${esc(less)}</bdi>` }).__html;
+    : html(locale, K + "elsewhere", {}, { price: `<bdi dir="ltr">${moneyTextHtml(formatMoney(view.best))}</bdi>`, less: `<bdi dir="ltr">${moneyTextHtml(less)}</bdi>` }).__html;
   const cls = [s.dock, shown && "in", view.dk && "dk", isOpen && "join", joined && "done"].filter(Boolean).join(" ");
   return (
     <div ref={ref} className={cls} id="dock" {...(isOpen && { role: "group", "aria-label": t(locale, K + "join") })}>
@@ -200,7 +201,7 @@ function DockBar({ locale }: { locale: Locale }) {
           </button>
         </div>
       ) : !joined && (
-        <button type="button" className={s.go} id="dgo" onClick={(e) => open(e.currentTarget)}>{t(locale, K + "join")}</button>
+        <button type="button" className={`${s.go} gp-btn gp-btn-sm`} id="dgo" onClick={(e) => open(e.currentTarget)}>{t(locale, K + "join")}</button>
       )}
     </div>
   );

@@ -1,2 +1,2 @@
-/* currentColor keeps it legible on light, dark and the dock's flipping band */
-.beta { unicode-bidi: isolate; display: inline-flex; align-items: center; padding: 1px var(--gp-sp-2); border: 1px solid currentColor; border-radius: var(--gp-r-pill); font-size: max(var(--gp-fs-caption), var(--fl, 0px)); font-weight: 600; line-height: 1.4; letter-spacing: .02em; white-space: nowrap; }
+/* the unified tag: an 8px rounded rectangle, 24px tall so the radius never reads as a pill (GP-407 round 3); currentColor keeps it legible on light, dark and the dock's flipping band */
+.beta { unicode-bidi: isolate; display: inline-flex; align-items: center; min-block-size: 24px; padding: 0 var(--gp-sp-2); border: 1px solid currentColor; border-radius: var(--gp-r-control); font-size: max(var(--gp-fs-caption), var(--fl, 0px)); font-weight: 600; line-height: 1.4; letter-spacing: .02em; white-space: nowrap; }
