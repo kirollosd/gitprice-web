@@ -26,7 +26,7 @@ function fitWord() {
   const fs = parseFloat(getComputedStyle(wd).fontSize), room = foot.clientWidth - 40;
   if (wd.offsetWidth > room) wd.style.fontSize = (fs * room) / wd.offsetWidth + "px";
   const now = parseFloat(getComputedStyle(wd).fontSize);
-  wd.style.bottom = now && !document.documentElement.classList.contains("lp-m") ? -now * 0.29 + "px" : "";
+  if (now) wd.style.bottom = -now * 0.29 + "px";
 }
 
 /**
