@@ -53,7 +53,7 @@
 :global(html.lp-m) .num > div { --dtop: max(calc(42vh / var(--z)), 328px); --fs: min(130px, calc((var(--cw, 430px) - 40px) / (var(--len, 3) * .56))); }
 :global(html.lp-m[dir="rtl"]) .num > div { --fs: min(130px, calc((var(--cw, 430px) - 40px - 60px) / (var(--len, 3) * .56))); } /* the code sits left of the digits here, so it needs room too */
 /* the scroller clips its overflow: 8px of block padding keeps the chips' 44px pads inside it, and the chips stay at 70px */
-:global(html.lp-m) .pick { inset-inline-start: 0; inset-inline-end: 0; top: calc(var(--gp-wsp-8) - var(--gp-wsp-1) / var(--z, 1)); padding: calc(var(--gp-wsp-1) / var(--z, 1)) var(--gp-wsp-3); gap: var(--gp-wsp-1); overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 84%, transparent); mask-image: linear-gradient(to right, #000 84%, transparent); }
+:global(html.lp-m) .pick { inset-inline-start: 0; inset-inline-end: 0; top: var(--gp-wsp-8); padding: calc(var(--gp-wsp-2) / var(--z, 1)) var(--gp-wsp-3) calc(var(--gp-wsp-1) / var(--z, 1)); gap: var(--gp-wsp-1); overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 84%, transparent); mask-image: linear-gradient(to right, #000 84%, transparent); }
 :global(html.lp-m[dir="rtl"]) .pick { -webkit-mask-image: linear-gradient(to left, #000 84%, transparent); mask-image: linear-gradient(to left, #000 84%, transparent); }
 :global(html.lp-m) .pick::-webkit-scrollbar { display: none; }
 :global(html.lp-m) .pick::after { content: ""; flex: 0 0 14px; }
@@ -71,10 +71,10 @@
 :global(html.lp-m[dir="rtl"]) .strike { left: auto; right: var(--gp-wsp-2); }
 :global(html.lp-m[dir="rtl"]) .digits { left: auto; right: var(--gp-wsp-2); }
 :global(html.lp-m) .lede { inset-inline-start: var(--gp-wsp-3); inset-inline-end: var(--gp-wsp-3); top: calc(var(--dtop, 328px) + 152px); bottom: auto; width: auto; font-size: 16px; text-align: start; }
-:global(html.lp-m) .tags { inset-inline-start: var(--gp-wsp-3); inset-inline-end: var(--gp-wsp-3); bottom: var(--gp-wsp-12); flex-wrap: wrap; gap: var(--gp-wsp-1); }
+:global(html.lp-m) .tags { inset-inline-start: var(--gp-wsp-3); inset-inline-end: var(--gp-wsp-3); top: calc(var(--dtop, 328px) + 264px); bottom: auto; flex-wrap: wrap; gap: var(--gp-wsp-1); } /* follows the lede, so the board, lede and chips read as one group instead of the chips sinking to the dock */
 
 /* short phone windows (an in-app browser with its translate bar and toolbars): no room for the lede between the board and the chips */
-@media (max-height: 740px) { :global(html.lp-m) .lede { display: none; } }
+@media (max-height: 740px) { :global(html.lp-m) .lede { display: none; } :global(html.lp-m) .tags { top: calc(var(--dtop, 328px) + 168px); } }
 
 /* html[data-gp-pick] (HomeSections boot script): the static HTML shows the charger, but this load will show another
    product; hold the product parts back until ProductProvider swaps it in, so no charger flashes. Failsafe: shown after 1s. */

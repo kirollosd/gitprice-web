@@ -20,7 +20,7 @@
 :global(html[dir="rtl"]) .r em, :global(html[dir="rtl"]) .r bdi { unicode-bidi: isolate; }
 
 /* phone canvas */
-:global(html.lp-m) .trap { grid-template-columns: 1fr; gap: var(--gp-wsp-4); padding: var(--gp-wsec-m) var(--gp-wsp-3); }
+:global(html.lp-m) .trap { grid-template-columns: 1fr; gap: var(--gp-wsp-4); padding: var(--gp-wsp-4) var(--gp-wsp-3) var(--gp-wsec-m); } /* the lineup above already ends in its own space */
 :global(html.lp-m) .trap h2 { font-size: 40px; }
 :global(html.lp-m) .trap p { font-size: 16px; }
 :global(html.lp-m) .rank { padding: var(--gp-wsp-3); }

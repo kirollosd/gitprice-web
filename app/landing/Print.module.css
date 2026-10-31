@@ -66,17 +66,18 @@
 /* phone canvas: copy and tally pinned on top, the receipt prints under them */
 :global(html.lp-m) .stage { display: block; padding: 0 var(--gp-wsp-3); }
 :global(html.lp-m) .stage::before { content: ""; position: absolute; inset-inline-start: 0; inset-inline-end: 0; top: 0; height: 92px; background: var(--gp-web-ground); z-index: 4; }
-:global(html.lp-m) .copy { position: absolute; inset-inline-start: var(--gp-wsp-3); inset-inline-end: var(--gp-wsp-3); top: var(--gp-wsp-12); height: 200px; z-index: 4; background: var(--gp-web-ground); gap: var(--gp-wsp-1); margin-top: 0; }
+:global(html.lp-m) .copy { position: absolute; inset-inline-start: var(--gp-wsp-3); inset-inline-end: var(--gp-wsp-3); top: var(--gp-wsp-12); height: 216px; z-index: 4; background: var(--gp-web-ground); gap: var(--gp-wsp-1); margin-top: 0; }
 :global(html.lp-m) .copy h2 { font-size: 26px; }
+:global(html.lp-m) .c:first-child h2 { margin-bottom: var(--gp-wsp-1); }
 :global(html.lp-m) .copy p { font-size: max(14px, var(--fl, 0px)); margin-top: var(--gp-wsp-1); display: none; }
 :global(html.lp-m) .c + .c p { font-size: 15px; margin-top: var(--gp-wsp-1); }
 :global(html.lp-m) .c + .c { padding-inline-start: var(--gp-wsp-2); }
 :global(html.lp-m) .c + .c h2 { font-size: 15px; }
 :global(html.lp-m) .tog { margin-top: var(--gp-wsp-2); }
-:global(html.lp-m) .tally { inset-inline-start: 0; inset-inline-end: 0; top: 296px; padding: 0 var(--gp-wsp-3) var(--gp-wsp-1); z-index: 5; gap: var(--gp-wsp-1); background: var(--gp-web-ground); }
+:global(html.lp-m) .tally { inset-inline-start: 0; inset-inline-end: 0; top: 312px; padding: 0 var(--gp-wsp-3) var(--gp-wsp-1); z-index: 5; gap: var(--gp-wsp-1); background: var(--gp-web-ground); }
 :global(html.lp-m) .tally small { font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .tally b { font-size: 28px; }
-:global(html.lp-m) .slotwrap { padding-top: 352px; }
+:global(html.lp-m) .slotwrap { padding-top: 368px; }
 :global(html.lp-m) .slot { height: 22px; }
 :global(html.lp-m) .paper { margin: calc(-1 * var(--gp-wsp-1)) var(--gp-wsp-1) 0; padding: var(--gp-wsp-3) var(--gp-wsp-2) 0; font-size: max(12px, var(--fl, 0px)); }
 :global(html.lp-m) .logo { height: 24px; width: 83px; }

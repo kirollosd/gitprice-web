@@ -28,7 +28,7 @@
 :global(html.lp-m) .h2 { inset-inline-start: var(--gp-wsp-3); top: var(--gp-wsp-12); width: 390px; font-size: 44px; }
 :global(html.lp-m) .lede2 { inset-inline-start: var(--gp-wsp-3); inset-inline-end: var(--gp-wsp-3); top: 200px; width: auto; font-size: 16px; }
 :global(html.lp-m[lang="ar"]) .lede2 { top: 216px; }
-:global(html.lp-m) .fframe { width: 300px; height: 375px; left: calc((var(--cw, 430px) - 304px) / 2); top: 360px; background-image: var(--pml, none); }
+:global(html.lp-m) .fframe { width: 300px; height: 375px; left: calc((var(--cw, 430px) - 304px) / 2); top: 296px; background-image: var(--pml, none); }
 :global(html.lp-m[data-theme="dark"]) .fframe { background-image: var(--pmd, none); }
 @media (prefers-color-scheme: dark) { :global(html.lp-m:not([data-theme="light"])) .fframe { background-image: var(--pmd, none); } }
 :global(html.lp-m) .chap { bottom: var(--gp-wsp-10); gap: var(--gp-wsp-1); }

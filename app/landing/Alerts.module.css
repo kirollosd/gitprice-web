@@ -26,7 +26,7 @@
 :global(html[dir="rtl"]) .hint { direction: rtl; }
 
 /* phone canvas: the chart scrolls with the page, a tap moves the line */
-:global(html.lp-m) .alerts { padding: var(--gp-wsec-m) var(--gp-wsp-3); }
+:global(html.lp-m) .alerts { padding: var(--gp-wsec-m) var(--gp-wsp-3) 0; } /* the footer's own top padding is the gap below */
 :global(html.lp-m) .alerts h2 { font-size: 48px; }
 :global(html.lp-m) .aw { grid-template-columns: 1fr; gap: var(--gp-wsp-3); margin-top: var(--gp-wsp-4); }
 :global(html.lp-m) .rules { flex-direction: row; flex-wrap: wrap; gap: var(--gp-wsp-1); }

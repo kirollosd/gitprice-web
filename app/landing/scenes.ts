@@ -141,7 +141,7 @@ export function createScenes(reduce: boolean, wake: () => void) {
     const g = reduce ? 1 : ease(seg(p, 0, 0.2)), m = c.isM;
     css(sl, "left", mix(m ? 12 : 520, 0, g) + "px");
     css(sl, "right", mix(m ? 12 : 40, 0, g) + "px");
-    css(sl, "top", mix(m ? 360 : 220, 0, g) + "px");
+    css(sl, "top", mix(m ? (innerHeight <= 740 ? 288 : 320) : 220, 0, g) + "px");
     css(sl, "bottom", mix(m ? 24 : 120, 0, g) + "px");
     css(sl, "border-radius", mix(44, 0, g) + "px");
     css(hb, "transform", `rotateX(${mix(26, 0, g)}deg) scale(${mix(0.92, 1, g)})`);
@@ -163,7 +163,7 @@ export function createScenes(reduce: boolean, wake: () => void) {
     const w = mix(m ? 300 : 600, Math.min(W - (m ? 24 : 96), (H - (m ? 214 : 280)) / AR), g), fh = w * AR;
     const set: [string, string][] = [
       ["left", (W - w) / 2 + "px"], ["width", w + "px"], ["right", "auto"], ["bottom", "auto"], ["height", fh + "px"],
-      ["top", mix(m ? 360 : 400, m ? (H - fh) / 2 : 100, g) + "px"], ["border-radius", mix(36, 20, g) + "px"], ["transform", `rotate(${mix(-3, 0, g)}deg)`],
+      ["top", mix(m ? 296 : 400, m ? (H - fh) / 2 : 100, g) + "px"], ["border-radius", mix(36, 20, g) + "px"], ["transform", `rotate(${mix(-3, 0, g)}deg)`],
     ];
     set.forEach(([k, v]) => css(f, k, v));
     const o = String(1 - seg(p, 0.04, 0.3));

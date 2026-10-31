@@ -70,7 +70,6 @@
 
 /* the hero CTA and its tag are hidden on phones (html.lp-m), so the header carries the tag there, seated beside the CTA */
 .ctaWrap { display: inline-flex; align-items: center; gap: var(--gp-wsp-1); }
-:global(html.lp-m) 
 /* phones */
 @media (max-width: 767px) {
   .top .bar { padding-inline: var(--gp-wsp-3); }
