@@ -64,7 +64,7 @@
 :global(html.lp-m) .steps h3 { font-size: 36px; }
 :global(html.lp-m) .steps p { font-size: 16px; margin-top: var(--gp-wsp-1); }
 :global(html.lp-m) .prog { inset-inline-start: var(--gp-wsp-3); top: 280px; }
-:global(html.lp-m) .browser { inset-inline-start: var(--gp-wsp-3); top: 304px; width: 390px; height: 390px; }
+:global(html.lp-m) .browser { inset-inline-start: var(--gp-wsp-3); top: 304px; width: 390px; height: 352px; }
 :global(html.lp-m) .bar { height: 36px; font-size: max(11px, var(--fl, 0px)); }
 :global(html.lp-m) .bar .u { margin-inline-start: var(--gp-wsp-1); padding: var(--gp-wsp-1) var(--gp-wsp-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .pdp { grid-template-columns: 110px 1fr; gap: var(--gp-wsp-2); padding: var(--gp-wsp-2); }
@@ -72,11 +72,11 @@
 :global(html.lp-m) .pdp h4 { font-size: 15px; }
 :global(html.lp-m) .pdp .pr { font-size: 19px; margin-top: var(--gp-wsp-1); }
 :global(html.lp-m) .ln { display: none; }
-:global(html.lp-m) .badge { inset-inline-start: 144px; top: 176px; font-size: max(14px, var(--fl, 0px)); padding-block: var(--gp-wsp-1); padding-inline: var(--gp-wsp-1) var(--gp-wsp-2); }
+:global(html.lp-m) .badge { inset-inline-start: 144px; top: 168px; font-size: max(14px, var(--fl, 0px)); padding-block: var(--gp-wsp-1); padding-inline: var(--gp-wsp-1) var(--gp-wsp-2); }
 :global(html.lp-m) .badge .eq { width: 26px; height: 26px; }
 /* ship critique: the note sat under the panel (Arabic wraps to two lines); it now grows upward from just above the badge */
-:global(html.lp-m) .browser .bnote { inset-inline-start: 144px; inset-inline-end: var(--gp-wsp-2); top: auto; bottom: calc(100% - 168px); font-size: max(14px, var(--fl, 0px)); }
-:global(html.lp-m) .panel { inset-inline-start: var(--gp-wsp-2); inset-inline-end: var(--gp-wsp-2); top: auto; bottom: var(--gp-wsp-2); width: auto; padding: var(--gp-wsp-3); transform: translateY(240px); }
+:global(html.lp-m) .browser .bnote { inset-inline-start: 144px; inset-inline-end: var(--gp-wsp-2); top: auto; bottom: calc(100% - 160px); font-size: max(14px, var(--fl, 0px)); }
+:global(html.lp-m) .panel { inset-inline-start: var(--gp-wsp-2); inset-inline-end: var(--gp-wsp-2); top: auto; bottom: var(--gp-wsp-2); width: auto; padding: var(--gp-wsp-2) var(--gp-wsp-3); transform: translateY(240px); }
 :global(html.lp-m) .panel:global(.on) { transform: none; }
 :global(html.lp-m) .r { padding: var(--gp-wsp-1) 0; font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .r b { font-size: 15px; }
