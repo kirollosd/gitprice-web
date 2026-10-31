@@ -95,7 +95,7 @@
 :global(html.lp-short) .room h2 { font-size: 46px; min-height: 92px; }
 
 /* phone canvas */
-:global(html.lp-m) .room { padding: var(--gp-wsec-m) var(--gp-wsp-2) 0; }
+:global(html.lp-m) .room { padding: var(--gp-wsp-12) var(--gp-wsp-2) 0; } /* clears the 72px fixed header with a 24px gap */
 :global(html.lp-m) .top { flex-direction: column; align-items: stretch; gap: var(--gp-wsp-1); }
 :global(html.lp-m) .room h2 { font-size: 26px; min-height: 58px; }
 :global(html.lp-m) .ref { width: auto; padding: var(--gp-wsp-1); gap: var(--gp-wsp-1); }
@@ -104,7 +104,7 @@
 :global(html.lp-m) .ref small { font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .ref div div { font-size: max(14px, var(--fl, 0px)); }
 :global(html.lp-m) .ref .pr { font-size: max(14px, var(--fl, 0px)); margin-top: 2px; }
-:global(html.lp-m) .wall { margin-top: var(--gp-wsp-2); height: max(420px, calc(100vh / var(--z) - 480px)); padding: 0; border-radius: 22px; }
+:global(html.lp-m) .wall { margin-top: var(--gp-wsp-2); height: max(420px, calc(100vh / var(--z) - 440px)); padding: 0; border-radius: 22px; }
 :global(html.lp-m) .sus { inset: var(--gp-wsp-2) var(--gp-wsp-2) var(--gp-wsp-3); grid-template-columns: 1fr 1fr; grid-template-rows: repeat(2, minmax(0, 1fr)); row-gap: var(--gp-wsp-3); column-gap: var(--gp-wsp-1); }
 :global(html.lp-m) .s { padding: var(--gp-wsp-1); }
 :global(html.lp-m) .s .img { height: auto; flex: 1; min-height: 64px; }
@@ -123,3 +123,8 @@
 :global(html.lp-m) .dots button { width: 32px; height: 44px; padding: 0; }
 :global(html.lp-m) .hint { display: none; }
 :global(html.lp-m) .s .store { text-transform: none; letter-spacing: .02em; }
+/* short phone windows (same 740px breakpoint as the hero and How): the lineup, dots and verdict all clear the dock */
+@media (max-height: 740px) {
+  :global(html.lp-m) .room { padding-top: var(--gp-wsp-10); }
+  :global(html.lp-m) .wall { height: max(320px, calc(100vh / var(--z) - 440px)); }
+}
