@@ -41,11 +41,14 @@ async function stub(page: Page, s: Stub) {
   return calls;
 }
 const expired = json(403, { code: 403, error_code: "otp_expired", msg: "Email link is invalid or has expired" });
+// Verification waits for a click so link scanners cannot spend the token.
+const proceed = (page: Page) => page.getByRole("button", { name: /^(Confirm|تأكيد)$/ }).click();
 const save = (page: Page) => page.getByRole("button", { name: R.button.label });
 
 test("otp link: verify, set password, success; hash and token_hash are stripped", async ({ page }) => {
   const calls = await stub(page, {});
   await page.goto("/reset-password?token_hash=h&type=recovery");
+  await proceed(page);
   await expect(page.getByLabel(R.field.label)).toBeVisible();
   expect(await page.evaluate(() => location.hash + location.search)).toBe("");
   await page.getByLabel(R.field.label).fill(GOOD);
@@ -57,6 +60,7 @@ test("otp link: verify, set password, success; hash and token_hash are stripped"
 test("implicit link: the fragment is stripped and the password saves", async ({ page }) => {
   await stub(page, {});
   await page.goto(`/reset-password#access_token=${jwt}&refresh_token=r&type=recovery`);
+  await proceed(page);
   await expect(page.getByLabel(R.field.label)).toBeVisible();
   expect(await page.evaluate(() => location.hash)).toBe("");
   await page.getByLabel(R.field.label).fill(GOOD);
@@ -67,6 +71,7 @@ test("implicit link: the fragment is stripped and the password saves", async ({ 
 test("expired otp shows link-expired", async ({ page }) => {
   await stub(page, { verify: expired });
   await page.goto("/reset-password?token_hash=h&type=recovery");
+  await proceed(page);
   await expect(page.getByRole("heading", { name: R.linkExpired.title })).toBeVisible();
   expect(await page.evaluate(() => location.search)).toBe("");
 });
@@ -74,6 +79,7 @@ test("expired otp shows link-expired", async ({ page }) => {
 test("a non-expiry verify failure also lands on link-expired, not a form without a session", async ({ page }) => {
   await stub(page, { verify: json(500, { code: 500, msg: "boom" }) });
   await page.goto("/reset-password?token_hash=h&type=recovery");
+  await proceed(page);
   await expect(page.getByRole("heading", { name: R.linkExpired.title })).toBeVisible();
   await expect(page.getByLabel(R.field.label)).toHaveCount(0);
 });
@@ -97,6 +103,7 @@ test("error in the fragment and an empty URL show link-expired", async ({ page }
 test("a weak password is announced and never sent", async ({ page }) => {
   const calls = await stub(page, {});
   await page.goto("/reset-password?token_hash=h");
+  await proceed(page);
   const input = page.getByLabel(R.field.label);
   await input.fill("short");
   await save(page).click();
@@ -110,6 +117,7 @@ test("a weak password is announced and never sent", async ({ page }) => {
 test("a server weak_password answer shows the weak message", async ({ page }) => {
   await stub(page, { update: [json(422, { code: 422, error_code: "weak_password", msg: "weak" })] });
   await page.goto("/reset-password?token_hash=h");
+  await proceed(page);
   await page.getByLabel(R.field.label).fill(GOOD);
   await save(page).click();
   await expect(page.getByText(R.weak.message)).toBeVisible();
@@ -118,6 +126,7 @@ test("a server weak_password answer shows the weak message", async ({ page }) =>
 test("update 500 shows the error, retry works and does not re-verify the otp", async ({ page }) => {
   const calls = await stub(page, { update: [json(500, { code: 500, msg: "boom" }), json(200, user)] });
   await page.goto("/reset-password?token_hash=h");
+  await proceed(page);
   await page.getByLabel(R.field.label).fill(GOOD);
   await save(page).click();
   await expect(page.getByText(R.error.field.message)).toBeVisible();
@@ -130,6 +139,7 @@ test("update 500 shows the error, retry works and does not re-verify the otp", a
 test("update 401 shows link-expired", async ({ page }) => {
   await stub(page, { update: [json(401, { code: 401, msg: "jwt expired" })] });
   await page.goto("/reset-password?token_hash=h");
+  await proceed(page);
   await page.getByLabel(R.field.label).fill(GOOD);
   await save(page).click();
   await expect(page.getByRole("heading", { name: R.linkExpired.title })).toBeVisible();
@@ -143,6 +153,7 @@ test("the submit button is disabled while saving", async ({ page }) => {
     await route.fulfill(json(200, user));
   });
   await page.goto("/reset-password?token_hash=h");
+  await proceed(page);
   await page.getByLabel(R.field.label).fill(GOOD);
   await save(page).click();
   await expect(page.getByRole("button", { name: R.saving.button.label })).toBeDisabled();
@@ -157,6 +168,7 @@ for (const [path, locale] of [["/reset-password", "en"], ["/ar/reset-password", 
     page.on("console", (m) => m.type() === "error" && !m.location().url.includes("/_vercel/insights") && problems.push(m.text()));
     await stub(page, {});
     const res = await page.goto(`${path}?token_hash=h`);
+    await proceed(page);
     expect(res?.headers()["referrer-policy"]).toBe("no-referrer");
     const copy = (locale === "ar" ? ar : en).web.resetPassword.field.label;
     await expect(page.getByLabel(copy)).toBeFocused();
@@ -181,6 +193,7 @@ test.describe("390 wide", () => {
         expectsNetwork = name === "form"; // the expired case has no token, so no call
         await stub(page, {});
         await page.goto(`${base}/reset-password${url}`);
+        if (name === "form") await proceed(page);
         await page.waitForSelector("h1");
         expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
       });

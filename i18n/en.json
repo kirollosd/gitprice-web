@@ -1120,6 +1120,9 @@
         "failed": {
           "title": "This link didn’t work",
           "body": "It may have expired or already been used. Request a new code from the GitPrice extension."
+        },
+        "retry": {
+          "body": "Something went wrong on our side. Your link is still valid. Try again."
         }
       }
     }

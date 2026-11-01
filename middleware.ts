@@ -20,7 +20,7 @@ export function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
   // Links from the API keep ?lang=ar; the page itself lives under /ar. Other query params (and the #fragment) ride along.
-  if (AUTH.test(pathname) && req.nextUrl.searchParams.get("lang") === "ar") {
+  if (AUTH.test(pathname) && /^ar(-|$)/i.test(req.nextUrl.searchParams.get("lang") ?? "")) {
     const url = req.nextUrl.clone();
     url.pathname = `/ar${pathname}`;
     url.searchParams.delete("lang");
