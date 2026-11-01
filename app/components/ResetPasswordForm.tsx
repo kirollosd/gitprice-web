@@ -9,6 +9,10 @@ import StatusIcon, { type IconKind } from "./StatusIcon";
 import { useHeadingFocus } from "./useHeadingFocus";
 import styles from "./ResetPasswordForm.module.css";
 
+declare global {
+  interface Window { __gpAuthHash?: string }
+}
+
 const K = "web.resetPassword.";
 type Status = "verifying" | "ready" | "weak" | "saving" | "success" | "expired" | "error";
 type AuthFailure = { code?: string; status?: number } | null;
@@ -35,7 +39,9 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
     // Effects run twice in dev; the URL is stripped after the first parse, so verify only once.
     if (started.current) return;
     started.current = true;
-    const input = parseRecovery(window.location.search, window.location.hash);
+    const input = parseRecovery(window.location.search, window.__gpAuthHash ?? window.location.hash);
+    // The layout script already stripped the fragment and kept it in memory; drop that copy too.
+    delete window.__gpAuthHash;
     // Tokens leave the address bar and history before any network call, and are never kept in state.
     window.history.replaceState(null, "", window.location.pathname);
 

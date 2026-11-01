@@ -13,6 +13,7 @@ import WebNav from "../components/WebNav";
 import Dock, { JoinProvider } from "../landing/Dock";
 import { env } from "../../lib/env";
 import { consentDefaultScript, gtmScript } from "../../lib/gtm";
+import { TOKEN_SCRUB_SCRIPT } from "../../lib/scrub";
 import { dir, t, type Locale } from "../../lib/i18n";
 import { fullTitle, OG_LOCALE, SITE_NAME } from "../../lib/seo";
 import { readToneConfig, THEME_BOOT, toneCss } from "../../lib/theme";
@@ -73,6 +74,8 @@ export default async function LocaleLayout({
     // THEME_BOOT sets data-theme before hydration, so the server and client attributes can differ.
     <html lang={l} dir={dir(l)} data-gp="web" suppressHydrationWarning>
       <head>
+        {/* First script on every page: strips auth tokens from the URL fragment before GTM/GA4 can read location. */}
+        <script id="gp-scrub" dangerouslySetInnerHTML={{ __html: TOKEN_SCRUB_SCRIPT }} />
         {/* A plain inline script: next/script beforeInteractive is queued behind the Next runtime, so a stored choice flashed the other theme. */}
         <script id="gp-theme" dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
         {/* Consent Mode v2: denied by default, ahead of the GTM loader. beforeInteractive only works from the root layout, not a client component. */}

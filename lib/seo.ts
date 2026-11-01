@@ -7,7 +7,7 @@ import { pathFor } from "./locale";
 export const INDEXABLE_PATHS = ["/", "/sellers", "/faq", "/privacy", "/terms"] as const;
 
 /** Unlisted or hosted pages: noindex, never in the sitemap. Reset-password and checkout pages import this. */
-export const NOINDEX_PATHS = ["/pricing", "/welcome", "/reset-password", "/checkout", "/checkout/return"] as const;
+export const NOINDEX_PATHS = ["/pricing", "/welcome", "/reset-password", "/auth/confirm", "/auth/confirmed", "/checkout", "/checkout/return"] as const;
 
 /** The English root is the bare origin (no trailing slash), matching what Next renders for canonical and og:url. */
 export const absoluteUrl = (locale: Locale, path: string) => {

@@ -826,7 +826,7 @@
       },
       "success": {
         "title": "Password updated",
-        "body": "Sign in with your new password in the GitPrice extension or app."
+        "body": "Go back to the GitPrice extension and sign in with your new password."
       },
       "linkExpired": {
         "title": "This link has expired",
@@ -1104,6 +1104,24 @@
     "faq": {
       "title": "Frequently asked questions",
       "intro": "Short answers about how GitPrice works."
+    },
+    "auth": {
+      "confirmed": {
+        "title": "Email confirmed",
+        "body": "Go back to the GitPrice extension and sign in."
+      },
+      "confirm": {
+        "title": "Confirm to continue",
+        "body": "Select the button to finish. Nothing happens until you do.",
+        "button": {
+          "label": "Confirm",
+          "busy": "Confirming…"
+        },
+        "failed": {
+          "title": "This link didn’t work",
+          "body": "It may have expired or already been used. Request a new code from the GitPrice extension."
+        }
+      }
     }
   }
 }

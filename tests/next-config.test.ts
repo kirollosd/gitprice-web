@@ -12,3 +12,20 @@ describe("www redirect", () => {
     www.forEach((r) => expect(r.permanent).toBe(true));
   });
 });
+
+describe("Referrer-Policy", () => {
+  const policy = async (path: string) => {
+    const rules = await nextConfig.headers!();
+    const hits = rules
+      .filter((r) => new RegExp(`^${r.source.replace(/:path\*/g, ".*")}$`).test(path))
+      .flatMap((r) => r.headers.filter((h) => h.key === "Referrer-Policy").map((h) => h.value));
+    return hits.at(-1);
+  };
+  it("is no-referrer on the auth pages in both locales", async () => {
+    for (const p of ["/auth/confirm", "/auth/confirmed", "/ar/auth/confirm", "/ar/auth/confirmed"]) expect(await policy(p)).toBe("no-referrer");
+  });
+  it("is strict-origin-when-cross-origin site-wide", async () => {
+    expect(await policy("/")).toBe("strict-origin-when-cross-origin");
+    expect(await policy("/privacy")).toBe("strict-origin-when-cross-origin");
+  });
+});
