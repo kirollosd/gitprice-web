@@ -36,3 +36,22 @@ describe("checkout while NEXT_PUBLIC_CHECKOUT is off", () => {
     expect(rewrite("http://localhost:3000/ar/checkoutx")).toBe("");
   });
 });
+
+describe("?lang=ar on /auth pages (links from the API)", () => {
+  const to = (url: string) => middleware(new NextRequest(url));
+  it("redirects to the /ar page and drops lang, keeping the rest of the query", () => {
+    const res = to("http://localhost:3000/auth/confirm?lang=ar&token_hash=h&type=signup");
+    expect(res.status).toBe(307);
+    expect(res.headers.get("location")).toBe("http://localhost:3000/ar/auth/confirm?token_hash=h&type=signup");
+    expect(to("http://localhost:3000/auth/confirmed?lang=ar").headers.get("location")).toBe("http://localhost:3000/ar/auth/confirmed");
+  });
+  it("accepts ar-* and any letter case", () => {
+    for (const lang of ["AR", "ar-EG", "Ar-eg"]) {
+      expect(to(`http://localhost:3000/auth/confirmed?lang=${lang}`).headers.get("location")).toBe("http://localhost:3000/ar/auth/confirmed");
+    }
+  });
+  it("leaves other languages and other paths alone", () => {
+    expect(to("http://localhost:3000/auth/confirmed?lang=en").headers.get("location")).toBeNull();
+    expect(to("http://localhost:3000/privacy?lang=ar").headers.get("location")).toBeNull();
+  });
+});

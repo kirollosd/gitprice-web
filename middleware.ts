@@ -5,6 +5,7 @@ import { suggestLocale } from "./lib/locale";
 // notFound() from a page under the [locale] root layout renders Next's bare error document (no lang or dir), so while
 // checkout is off its pages are rewritten to a path no route matches and app/global-not-found renders instead.
 const CHECKOUT = /^\/checkout(\/return)?\/?$/;
+const AUTH = /^\/auth(\/|$)/;
 const NOT_FOUND = "/__gp404";
 const hidden = (rest: string) => !env.checkout && CHECKOUT.test(rest);
 
@@ -18,6 +19,13 @@ function withLocale(req: NextRequest, locale: "en" | "ar"): Headers {
 export function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
+  // Links from the API keep ?lang=ar; the page itself lives under /ar. Other query params (and the #fragment) ride along.
+  if (AUTH.test(pathname) && /^ar(-|$)/i.test(req.nextUrl.searchParams.get("lang") ?? "")) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/ar${pathname}`;
+    url.searchParams.delete("lang");
+    return NextResponse.redirect(url, 307);
+  }
   if (pathname === "/en" || pathname.startsWith("/en/")) {
     const url = req.nextUrl.clone();
     url.pathname = pathname.slice(3) || "/";

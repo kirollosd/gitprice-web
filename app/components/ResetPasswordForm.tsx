@@ -2,15 +2,16 @@
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { useEffect, useRef, useState, type FormEvent, type RefObject } from "react";
+import { takeAuth } from "../../lib/authHandoff";
 import { env } from "../../lib/env";
 import { t, type Locale } from "../../lib/i18n";
-import { parseRecovery, validatePassword } from "../../lib/recovery";
+import { parseRecovery, validatePassword, type RecoveryInput } from "../../lib/recovery";
 import StatusIcon, { type IconKind } from "./StatusIcon";
 import { useHeadingFocus } from "./useHeadingFocus";
 import styles from "./ResetPasswordForm.module.css";
 
 const K = "web.resetPassword.";
-type Status = "verifying" | "ready" | "weak" | "saving" | "success" | "expired" | "error";
+type Status = "confirm" | "verifying" | "ready" | "weak" | "saving" | "success" | "expired" | "error";
 type AuthFailure = { code?: string; status?: number } | null;
 
 const isExpired = (e: NonNullable<AuthFailure>) =>
@@ -22,7 +23,8 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
   const [password, setPassword] = useState("");
   const client = useRef<SupabaseClient | null>(null);
   const started = useRef(false);
-  const view = status === "verifying" || status === "expired" || status === "success" ? status : "form";
+  const pending = useRef<RecoveryInput | null>(null);
+  const view = status === "confirm" || status === "verifying" || status === "expired" || status === "success" ? status : "form";
   const heading = useHeadingFocus(view);
 
   // Lazy so nothing is created during prerender.
@@ -31,32 +33,45 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
       auth: { persistSession: false, detectSessionInUrl: false },
     }));
 
+  async function verify(input: RecoveryInput) {
+    // Any failure before a session exists is a dead link: the form could not save without one.
+    if (input.kind === "none" || input.kind === "error") return setStatus("expired");
+    setStatus("verifying");
+    try {
+      const auth = supabase().auth;
+      const { data, error } =
+        input.kind === "implicit"
+          ? await auth.setSession({ access_token: input.accessToken, refresh_token: input.refreshToken })
+          : await auth.verifyOtp({ type: "recovery", token_hash: input.tokenHash });
+      if (error || !data.session) return setStatus("expired");
+      setEmail(data.user?.email ?? "");
+      setStatus("ready");
+    } catch {
+      setStatus("expired");
+    }
+  }
+
   useEffect(() => {
-    // Effects run twice in dev; the URL is stripped after the first parse, so verify only once.
+    // Effects run twice in dev; the URL is stripped after the first parse, so read only once.
     if (started.current) return;
     started.current = true;
-    const input = parseRecovery(window.location.search, window.location.hash);
-    // Tokens leave the address bar and history before any network call, and are never kept in state.
-    window.history.replaceState(null, "", window.location.pathname);
-
-    async function verify() {
-      // Any failure before a session exists is a dead link: the form could not save without one.
-      if (input.kind === "none" || input.kind === "error") return setStatus("expired");
-      try {
-        const auth = supabase().auth;
-        const { data, error } =
-          input.kind === "implicit"
-            ? await auth.setSession({ access_token: input.accessToken, refresh_token: input.refreshToken })
-            : await auth.verifyOtp({ type: "recovery", token_hash: input.tokenHash });
-        if (error || !data.session) return setStatus("expired");
-        setEmail(data.user?.email ?? "");
-        setStatus("ready");
-      } catch {
-        setStatus("expired");
-      }
-    }
-    void verify();
+    // The head script already moved the tokens out of the URL into memory; without it (dev) they are still in the URL.
+    const held = takeAuth();
+    const input = held ? parseRecovery(held.search, held.hash) : parseRecovery(window.location.search, window.location.hash);
+    // Tokens leave the address bar before any network call, are never kept in state, and history.state stays the router's.
+    window.history.replaceState(window.history.state, "", window.location.pathname);
+    // A link scanner must not spend the token: verify only after a click (the confirm page already had one).
+    if (input.kind === "none" || input.kind === "error" || held?.clicked) return void verify(input);
+    pending.current = input;
+    setStatus("confirm");
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- runs once; verify only touches refs and setters
   }, []);
+
+  function onContinue() {
+    const input = pending.current;
+    pending.current = null;
+    if (input) void verify(input);
+  }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -75,6 +90,18 @@ export default function ResetPasswordForm({ locale }: { locale: Locale }) {
     }
   }
 
+  if (status === "confirm") {
+    return (
+      <div className={styles.card}>
+        <div className={styles.head}>
+          <StatusIcon kind="lock" />
+          <h1 ref={heading} tabIndex={-1} className={styles.h1}>{t(locale, "web.auth.confirm.title")}</h1>
+          <p className={styles.muted}>{t(locale, "web.auth.confirm.body")}</p>
+        </div>
+        <button type="button" className={styles.button} onClick={onContinue}>{t(locale, "web.auth.confirm.button.label")}</button>
+      </div>
+    );
+  }
   if (status === "verifying") return <Message locale={locale} k="verifying" heading={heading} />;
   if (status === "expired") return <Message locale={locale} k="linkExpired" heading={heading} />;
   if (status === "success") return <Message locale={locale} k="success" heading={heading} />;

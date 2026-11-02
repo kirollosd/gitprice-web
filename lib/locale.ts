@@ -47,12 +47,12 @@ export function suggestLocale(acceptLanguage: string | null, current: Locale): L
 }
 
 // `rest` is locale-less, but callers may still pass a raw rewritten path, so /en is tolerated.
-const HOSTED = /^(\/en)?\/(reset-password|checkout)(\/|$)/;
+const HOSTED = /^(\/en)?\/(reset-password|checkout|auth)(\/|$)/;
 
 /** Takes the locale-less path (`localeFromPath(...).rest`). Hosted pages carry secrets in the URL and show a minimal shell. */
 export const isHostedPath = (rest: string) => HOSTED.test(rest);
 
-const MINIMAL_NAV = /^(\/en)?\/(reset-password|checkout|welcome)(\/|$)/;
+const MINIMAL_NAV = /^(\/en)?\/(reset-password|checkout|auth|welcome)(\/|$)/;
 
 /** Boards draw the logo-and-language nav on the hosted pages and on /welcome (the post-install page, no secrets). */
 export const hasMinimalNav = (rest: string) => MINIMAL_NAV.test(rest);
