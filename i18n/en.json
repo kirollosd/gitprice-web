@@ -712,7 +712,7 @@
       },
       "section3": {
         "heading": "3. Third-Party Services and Store Links",
-        "p1": "A link from GitPrice to a store may carry a referral tag. If that store has an affiliate arrangement with us, we may earn a small commission when you buy, at no extra cost to you. Not every store we compare is a partner, and a tag does not mean we have a deal with that store. Whether a store is a partner never changes the prices we show you.",
+        "p1": "A link from GitPrice to a store may carry a referral tag. If that store has an affiliate arrangement with us, we may earn a small commission when you buy, at no extra cost to you. Not every store we compare is a partner, and a tag does not mean we have a deal with that store. Being a partner never changes a store’s price. It can affect order: results are ranked by price together with store trust, delivery and partner status, so a partner store may appear above a slightly cheaper one. Every result always shows its own price.",
         "p2": "When you follow a link to a store, that store’s own privacy policy applies. GitPrice does not share your personal information with stores.",
         "p3": "We use a small number of service providers to run this website. Our hosting provider processes standard request data (such as IP address and browser type) to deliver it. If you join the waitlist, our own form collects your email address and stores it on GitPrice’s servers. We use it only to send you the launch email, and we remove it on request."
       },
@@ -779,7 +779,7 @@
       },
       "section4": {
         "heading": "4. Affiliate Disclosure",
-        "p1": "Links from the Service to a store, such as a price-comparison result or a “Go to Store” link, may carry a referral tag. If that store has an affiliate arrangement with GitPrice, GitPrice may receive a commission from the retailer when you complete a purchase, at no additional cost to you. Not every supported store is a partner, and a tag does not mean GitPrice has an agreement with that store. Affiliate arrangements do not influence the prices displayed or the ranking of results."
+        "p1": "Links from the Service to a store, such as a price-comparison result or a “Go to Store” link, may carry a referral tag. If that store has an affiliate arrangement with GitPrice, GitPrice may receive a commission from the retailer when you complete a purchase, at no additional cost to you. Not every supported store is a partner, and a tag does not mean GitPrice has an agreement with that store. Being a partner never changes a store’s price. It can affect order: results are ranked by price together with store trust, delivery and partner status, so a partner store may appear above a slightly cheaper one. Every result always shows its own price."
       },
       "section5": {
         "heading": "5. Privacy and Data",
