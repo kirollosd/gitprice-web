@@ -683,7 +683,7 @@
     },
     "privacy": {
       "title": "Privacy Policy",
-      "meta": "Effective May 11, 2026 · Last updated October 25, 2026",
+      "meta": "Effective May 11, 2026 · Last updated November 2, 2026",
       "intro": "GitPrice is a browser extension that helps you compare prices across supported online stores. This Privacy Policy explains what information we collect, how we use it, and your rights as a user.",
       "section1": {
         "heading": "1. Information We Collect",
@@ -696,6 +696,10 @@
         "p7": "Account data (if you sign in):",
         "li8": "•  Email address used to create your GitPrice account",
         "li9": "•  Authentication tokens stored locally in chrome.storage.local",
+        "p11": "Shopping data backup (after you accept the first-run screen, on supported stores and stores you add):",
+        "li12": "•  Your price alerts and their state, the product pages you view and the comparisons shown for them, and your searches in GitPrice and in supported stores’ search boxes",
+        "li13": "•  Your browser and extension version",
+        "p14": "We back this up to restore it on your devices and to improve our product matching. A search that looks like an email address or phone number is never recorded, and tracking parameters are removed from links. We never record names, addresses, phone numbers, payment details or passwords, or anything you type on checkout or account pages. Prices on store search and category pages are sent without any ID. Browsing and search data tied to an account or a device is personal data.",
         "p10": "We do not collect your browsing history outside supported store pages, financial information, passwords, or any personally identifiable information beyond your email if you register."
       },
       "section2": {
@@ -715,7 +719,7 @@
       "section4": {
         "heading": "4. Data Storage and Security",
         "p1": "Your extension settings and authentication tokens are stored locally in your browser using Chrome’s secure storage APIs (chrome.storage.local and chrome.storage.sync). Server-side data is stored on secured servers with access controls and encryption at rest.",
-        "p2": "We retain price comparison data only as long as necessary. Account data is retained until you delete your account."
+        "p2": "We keep your backup until you delete your account or ask us to delete it. If an upload fails, the extension tries again until our servers accept it. Withdrawing consent pauses uploads and keeps the copy on your device. Items you delete are marked deleted on our servers and are never restored. That is not an erasure: the record stays until you delete your account or ask us. Data saved without an account is not linked to any name or email, so we cannot find it or delete it for you."
       },
       "section5": {
         "heading": "5. Data Sharing",
@@ -729,7 +733,7 @@
         "p1": "Depending on your jurisdiction, you may have the right to:",
         "li2": "•  Access: Request a copy of the personal data we hold about you",
         "li3": "•  Correction: Ask us to correct inaccurate data",
-        "li4": "•  Deletion: Request deletion of your account and associated data",
+        "li4": "•  Deletion: Request deletion of your account and associated data, including your backup. Email support@gitprice.com from the email on your GitPrice account, or delete your account in the extension",
         "li5": "•  Portability: Receive your data in a machine-readable format",
         "li6": "•  Objection: Object to processing based on legitimate interests",
         "li7": "•  Opt-out of error reporting: Disable anonymous error reports in Settings → Privacy",
