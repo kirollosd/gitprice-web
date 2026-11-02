@@ -242,15 +242,21 @@
         "default": {
           "heading": "On this page",
           "label": {
-            "section1": "1. Information We Collect",
-            "section2": "2. How We Use Your Information",
-            "section3": "3. Third-Party Services and Store Links",
-            "section4": "4. Data Storage and Security",
-            "section5": "5. Data Sharing",
-            "section6": "6. Your Rights",
-            "section7": "7. Cookies and Tracking",
-            "section8": "8. Children’s Privacy",
-            "section9": "9. Changes to This Policy"
+            "section1": "1. Who we are and contact",
+            "section2": "2. What the extension does",
+            "section3": "3. Data collected automatically after consent",
+            "section4": "4. Data collected on user action",
+            "section5": "5. Stored only on your device",
+            "section6": "6. Optional features",
+            "section7": "7. Thorough search",
+            "section8": "8. Store links and affiliate arrangements",
+            "section9": "9. What we never collect",
+            "section10": "10. No sale of data and Limited Use",
+            "section11": "11. Retention and deletion",
+            "section12": "12. Legal basis",
+            "section13": "13. This website",
+            "section14": "14. Children's privacy",
+            "section15": "15. Changes to this policy"
           }
         },
         "terms": {
@@ -686,73 +692,104 @@
       "meta": "Effective May 11, 2026 · Last updated November 2, 2026",
       "intro": "GitPrice is a browser extension that helps you compare prices across supported online stores. This Privacy Policy explains what information we collect, how we use it, and your rights as a user.",
       "section1": {
-        "heading": "1. Information We Collect",
-        "p1": "GitPrice collects the minimum data necessary to provide price comparison functionality.",
-        "p2": "Data collected automatically while using the extension:",
-        "li3": "•  Product identifiers (ASIN, SKU) and product titles from the pages you browse on supported stores",
-        "li4": "•  Current prices displayed on those pages",
-        "li5": "•  Your extension settings, saved in your browser",
-        "li6": "•  Anonymous error and crash reports (opt-out available in Settings → Privacy)",
-        "p7": "Account data (if you sign in):",
-        "li8": "•  Email address used to create your GitPrice account",
-        "li9": "•  Authentication tokens, saved locally in your browser",
-        "p11": "Shopping data backup (after you accept the first-run screen, on supported stores and stores you add):",
-        "li12": "•  Your price alerts and their state, the product pages you view and the comparisons shown for them, and your searches in GitPrice and in supported stores’ search boxes",
-        "li13": "•  Your browser and extension version",
-        "p14": "We back this up to restore it on your devices and to improve our product matching. A search that looks like an email address or phone number is never recorded, and tracking parameters are removed from links. We never record names, addresses, phone numbers, payment details or passwords, or anything you type on checkout or account pages. Prices on store search and category pages are sent without any ID. Browsing and search data tied to an account or a device is personal data.",
-        "p10": "We do not collect your browsing history outside supported store pages, financial information, passwords, or any personally identifiable information beyond your email if you register."
+        "heading": "1. Who we are and contact",
+        "p1": "GitPrice (\"we\", \"us\") publishes the GitPrice browser extension. For any privacy question, to exercise your rights, for help or to ask us to delete your data, write to support@gitprice.com."
       },
       "section2": {
-        "heading": "2. How We Use Your Information",
-        "li1": "•  To search for and display competing prices across supported stores",
-        "li2": "•  To send price-drop notifications for products you are tracking (if enabled)",
-        "li3": "•  To improve extension reliability by diagnosing crashes and errors",
-        "li4": "•  To sign you in and keep your account working",
-        "p5": "We never use your data for advertising or to build a profile of you, and we never sell your personal data. We may share aggregated, de-identified insights (such as price trends across stores) with partners; these cannot identify you."
+        "heading": "2. What the extension does",
+        "p1": "When you open a product page on a supported online store, GitPrice checks other supported stores for the same item and shows you the best price. It can also track prices for you and send a notification when a price drops, if you create a price alert.",
+        "p2": "GitPrice stays off until you accept the first-run screen. Before you accept, it sends nothing to us or to anyone else, and it does not look up prices.",
+        "p3": "Some supported stores need your permission in Chrome before GitPrice can work on their pages. You give it in one step for all supported stores in your country (for example, \"Allow all stores in Egypt\"). Chrome asks you to confirm, and you can remove the permission at any time in Chrome's site settings. On those stores, GitPrice handles data only as described in this policy."
       },
       "section3": {
-        "heading": "3. Third-Party Services and Store Links",
-        "p1": "A link from GitPrice to a store may carry a referral tag. If that store has an affiliate arrangement with us, we may earn a small commission when you buy, at no extra cost to you. Not every store we compare is a partner, and a tag does not mean we have a deal with that store. Being a partner never changes a store’s price. It can affect order: results are ranked by price together with store trust, delivery and partner status, so a partner store may appear above a slightly cheaper one. Every result always shows its own price.",
-        "p2": "When you follow a link to a store, that store’s own privacy policy applies. GitPrice does not share your personal information with stores.",
-        "p3": "We use a small number of service providers to run this website. Our hosting provider processes standard request data (such as IP address and browser type) to deliver it. If you join the waitlist, our own form collects your email address and stores it on GitPrice’s servers. We use it only to send you the launch email, and we remove it on request."
+        "heading": "3. Data collected automatically after consent",
+        "p1": "After you accept, on product pages of supported online stores only, the extension sends to our servers:",
+        "li2": "•  the product page link, with tracking parameters removed;",
+        "li3": "•  the product name, price, currency and stock status, and product details shown on the page that help identify the item (brand, model, category, identifiers such as SKU or barcode number, variants and image links);",
+        "li4": "•  the links and names of matching products it found in other stores;",
+        "li5": "•  a random device ID, generated on your device when you accept. It is not derived from your device, your account or your browsing. We use it to give your installation a temporary access token and to apply rate limits;",
+        "li6": "•  the extension version, so that we can tell when an update is required;",
+        "li7": "•  an anonymous report of whether reading the page worked or failed (the store, the outcome, the type of error and the product page link). If a store's page layout is not recognised, the extension may also send the site's selectors (rules for locating the price on the page), and no page content.",
+        "p8": "To find the same item in other stores, the extension also sends the product name as a search query to the websites of those supported stores, in the same way that searching on them would. These search requests carry no cookies and do not use your store accounts. Pages that the extension renders in a hidden frame, a minimized window or a background tab load like a normal visit to that store, so the store may see your cookies as it would for any visit.",
+        "p9": "With the setting \"Background Search\" (on by default), the extension may also refresh prices in the background, including for products whose pages you did not just open, and send those readings to us in the same way.",
+        "sub10": "Prices shown on search and category pages",
+        "p11": "The extension also reads product names, prices and product links shown on the search and category pages of supported online stores, to keep prices up to date. For each product it sends only: the product link (without query or fragment), the product name, the price, the currency and the time it was seen. These price observations never carry the page you are on, a search term, a category path or your browsing history. Product tiles are sent in small batches.",
+        "p12": "Our servers store these price observations without any device ID or user ID. They are not linked to the backup described below. To make sure a price is real before it triggers an alert, we keep a short-lived, keyed hash of the contributing installation and of its network prefix for 6 hours, in temporary memory only. These hashes are not stored in our database and not logged, and we cannot reverse them.",
+        "sub13": "Backup of your shopping data",
+        "p14": "After you accept, the extension also backs up the following, so that we can restore it on your devices and improve our product matching:",
+        "li15": "•  your price alerts, with their full state (rule, status, lowest price seen, last checked price and price history);",
+        "li16": "•  the product pages you viewed on supported online stores and the price comparisons shown for them, with the time of the visit and the store;",
+        "li17": "•  your searches, both in GitPrice and in the search boxes of supported online stores;",
+        "li18": "•  your browser and extension version.",
+        "p19": "A search that looks like an email address or phone number is never recorded. We remove tracking parameters from links. We never back up names, email addresses (other than your account email, section 4), addresses, phone numbers, payment details or passwords, nor anything you type on checkout or account pages. Nothing is uploaded on pages outside supported online stores and stores you add.",
+        "p20": "The backup is filed under a random identifier that the extension creates after you accept. It is kept in your browser's synced storage, so a reinstall in the same browser profile finds it again, and it stays there after you uninstall until you clear your browser's sync data. It is separate from the device ID and is not linked to any name or email. If you are signed in, the backup is also tied to your account. Restoring on a new device or after a reinstall merges the backup with what is already there, and does not bring back anything you deleted.",
+        "p21": "If an upload fails, the extension keeps the data and tries again until our servers accept it. A batch that our servers reject as invalid is dropped. Browsing and search data tied to a random identifier, device ID or account is personal data. We keep it under the legal basis in section 12.",
+        "p22": "On install the extension creates a random key used only to verify that price updates come from a genuine install. It is not derived from your device or linked to your browsing. The private half never leaves your browser; only the public half is sent to us when the device is registered. It is kept with the random device ID, so it is associated with that ID (not with your identity or browsing)."
       },
       "section4": {
-        "heading": "4. Data Storage and Security",
-        "p1": "Your extension settings and authentication tokens are saved locally in your browser. Server-side data is stored on secured servers with access controls and encryption at rest.",
-        "p2": "We keep your backup until you delete your account or ask us to delete it. If an upload fails, the extension tries again until our servers accept it. Withdrawing consent pauses uploads and keeps the copy on your device. Items you delete are marked deleted on our servers and are never restored. That is not an erasure: the record stays until you delete your account or ask us. Data saved without an account is not linked to any name or email, so we cannot find it or delete it for you."
+        "heading": "4. Data collected on user action",
+        "li1": "•  Sign-in email and password. If you create an account or sign in, we receive your email address and the password you choose. The password goes over HTTPS to our sign-in provider, which stores only a hash of it. The extension never stores your password; it keeps only your sign-in session on your device. We keep your email address with your account. Our sign-in provider sends emails to that address to confirm a new account and, if you ask, to reset your password. If sign-in shows a security check, it is provided by a security-check provider, which receives technical information from your browser, such as your network address, to tell people from automated programs.",
+        "li2": "•  Price alerts. If you create an alert, we store the product link, product name, product image, store, current price, currency and your alert rule (target price or percentage).",
+        "li3": "•  Store link click records. If you open a store link from GitPrice, we record which product, which store and where in GitPrice you clicked, so that we can add a referral tag where a store has an affiliate arrangement with us, and credit the click.",
+        "li4": "•  Orders on supported stores. If you are signed in and you reach an order confirmation page on a supported store, the extension sends that order to our servers: the store, the order number, the subtotal, shipping, discount and total, the currency, and for each item its name, link, SKU (if shown), quantity and unit price, together with the GitPrice store link you opened before it, if any. We use it to tell which purchases followed a GitPrice link. If you are not signed in, nothing about the order is sent. Payment details are never read.",
+        "li5": "•  Price reports. Price and product details that the extension reads from a product page and submits to improve our price data, as described in section 3.",
+        "li6": "•  Stores you add. If you are signed in and you tap Save on \"Add this site\", we receive the store's web address, the name you confirmed, its country, its currency and the address pattern of its search page, and we keep it with your account. See \"Suggest adding stores\" in section 6."
       },
       "section5": {
-        "heading": "5. Data Sharing",
-        "p1": "We do not sell, rent, or trade your personal information. We may share data only in these limited circumstances:",
-        "li2": "•  Service providers: Third-party vendors assisting in operating the extension under strict confidentiality agreements",
-        "li3": "•  Legal requirements: If required by applicable law, court order, or governmental authority",
-        "li4": "•  Business transfers: In connection with a merger, acquisition, or sale of assets, with notice to users",
-        "li5": "•  Partners: Aggregated, de-identified insights only, never data that identifies you"
+        "heading": "5. Stored only on your device",
+        "p1": "The extension keeps a local history of the product pages you viewed: the link without query or fragment, the page title and the price. It is kept for up to 120 days and at most 20,000 entries; older entries are deleted automatically. This history is also backed up, as described in section 3. Your settings, alerts cache, comparison cache and sign-in tokens are also kept on your device."
       },
       "section6": {
-        "heading": "6. Your Rights",
-        "p1": "Depending on your jurisdiction, you may have the right to:",
-        "li2": "•  Access: Request a copy of the personal data we hold about you",
-        "li3": "•  Correction: Ask us to correct inaccurate data",
-        "li4": "•  Deletion: Request deletion of your account and associated data, including your backup. Email support@gitprice.com from the email on your GitPrice account, or delete your account in the extension",
-        "li5": "•  Portability: Receive your data in a machine-readable format",
-        "li6": "•  Objection: Object to processing based on legitimate interests",
-        "li7": "•  Opt-out of error reporting: Disable anonymous error reports in Settings → Privacy",
-        "p8": "To exercise these rights, contact us at support@gitprice.com."
+        "heading": "6. Optional features",
+        "sub1": "Error reporting",
+        "p2": "Error reporting is on by default and you can switch it off at any time in Settings or on the first-run screen. Nothing is sent before you accept. When on, crash reports go to our error-reporting processor. A report contains the error message and stack trace, the extension version and technical details such as browser and operating system. Errors that occur inside shopping pages are never reported; only errors from the extension's own pages and background process are. Before sending, we strip the query string and fragment from every link, replace links to any other website with \"[scrubbed]\", and remove your email address, device ID, tokens, cookies and authorization headers. Reports never include performance traces or session recordings.",
+        "sub3": "Analytics enrollment",
+        "p4": "Analytics enrollment is on by default and you can switch it off at any time in Settings or on the first-run screen. Nothing is sent before you accept, and nothing more is sent after you switch it off. When on, the extension sends usage events to our analytics processor, together with a separate random identifier that is not your device ID. Events are: a click on the badge or on a store row (for a store row, with the store name), once-only milestones (first install, first comparison shown), the opening of a store link (with the store and a random click identifier that we also store on our servers to credit referrals), an order recorded as described in section 4 (with the store and that click identifier, if any), and technical counters about how product matching performed, including a short pattern label when a store blocks a request. It does not send page contents, product names, product identifiers or any links. Like any web service, that processor's servers also see your network address.",
+        "sub5": "Suggest adding stores",
+        "p6": "Off by default and never pre-ticked. You can switch it on at any time in Settings or on the first-run screen. Switching it on makes Chrome ask whether to let GitPrice run on all websites; you can decline, and you can revoke it in Settings or in Chrome's site access settings. When on, on this device only, GitPrice checks the pages you open on shopping sites it does not support yet, to see whether the page is a product page with a price, and offers a small chip that opens the side panel. This check runs locally: no page content, link or price is sent to us. The only thing sent is the store draft (web address, name, country, currency and search-page address) that you review and save with Save. Hiding the chip on a site is remembered on your device."
       },
       "section7": {
-        "heading": "7. Cookies and Tracking",
-        "p1": "The GitPrice extension itself does not set cookies. When you visit store pages, those sites may set their own cookies — their respective privacy policies govern that activity.",
-        "p2": "This website counts page views without cookies and without identifying individual visitors.",
-        "p3": "With your consent, we also use third-party analytics tools to understand how visitors use the site (pages viewed, clicks, where visits come from, and general device and browser information). Until you make a choice in the cookie notice, these tools run without cookies and receive only anonymous signals. They set cookies only if you accept, and you can change your choice at any time from the link in the site footer. We do not use this data for advertising."
+        "heading": "7. Thorough search",
+        "p1": "Thorough search is a setting that is off unless you turn it on. When it is on, GitPrice may briefly open a minimized window or a background tab to read search results from a supported online store when a normal request is not enough. It reads only the store results needed for the comparison."
       },
       "section8": {
-        "heading": "8. Children’s Privacy",
-        "p1": "GitPrice is not directed at children under 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, contact us at support@gitprice.com and we will promptly delete it."
+        "heading": "8. Store links and affiliate arrangements",
+        "p1": "A link from GitPrice to a store may carry a referral tag. If that store has an affiliate arrangement with us, the store may pay us a commission when you buy; you pay nothing extra. Not every supported store is a partner, and a tag does not mean we have a deal with that store. We add a referral tag only when you click a store link in GitPrice, or when a price alert you created needs one.",
+        "p2": "Being a partner never changes a store's price. It can affect order: results are ranked by price together with store trust, delivery and partner status, so a partner store may appear above a slightly cheaper one. Every result always shows its own price."
       },
       "section9": {
-        "heading": "9. Changes to This Policy",
-        "p1": "We may update this Privacy Policy from time to time. We will post the revised policy on this page with an updated effective date. For significant changes, we will notify you via a notice in the extension."
+        "heading": "9. What we never collect",
+        "p1": "We do not collect your other browsing, the pages you visit outside supported online stores' product, search and category pages, the passwords you use on store websites or any other site, the contents of your cart or any payment details. Order details are sent only as described in section 4. We record your searches only as described in section 3 and never read form entries. The only password involved is your GitPrice account password, handled as described in section 4."
+      },
+      "section10": {
+        "heading": "10. No sale of data and Limited Use",
+        "p1": "We do not sell your data, and we do not use or transfer it for advertising, for creditworthiness or lending decisions, or to data brokers. We share data only with the processors described in this policy (our error-reporting and analytics processors, if you leave those options on; our sign-in provider, which holds your account email, password hash and sign-in sessions; and our security-check provider, which runs the check at sign-in when one is shown) and with our hosting providers, where necessary to run the service, to comply with law, or to protect against abuse. People at GitPrice do not read user data except with your consent, for security investigations, to comply with law, or when it is aggregated and anonymous. We never use your data to build a profile of you. We may share aggregated, de-identified insights, such as price trends across stores, with partners; these cannot identify you.",
+        "p2": "The use of information received from Google APIs will adhere to the Chrome Web Store User Data Policy, including the Limited Use requirements.",
+        "p3": "The extension does not use Google user-data APIs; the same limits apply to all user data the extension handles."
+      },
+      "section11": {
+        "heading": "11. Retention and deletion",
+        "p1": "Uninstalling the extension removes all data stored on your device. The random identifier of your backup stays in your browser's synced storage until you clear your browser's sync data.",
+        "p2": "Your backup is kept until you delete your account or ask us to delete it. To delete your data, email support@gitprice.com from the email on your GitPrice account. Signed-in users can also delete their account in the extension, which deletes your email address, alerts, backup and related records. Data saved without an account is not linked to any name or email, so we cannot find it or delete it for you. When you delete an alert or a history entry in the extension, we mark it as deleted on our servers and never restore it. That is not an erasure: the record stays until you delete your account or ask us. Price observations are stored without any identifier, so they cannot be traced back to you or deleted individually."
+      },
+      "section12": {
+        "heading": "12. Legal basis",
+        "p1": "We process your data on the basis of your consent. You can withdraw consent at any time with Withdraw consent in Settings, after which the extension stops until you accept again (this deletes your sign-in tokens and the analytics identifier from your device; the random device ID, the random install key described above and your saved alerts and browsing history stay on your device, are not sent while consent is withdrawn and are removed when you uninstall; uploads pause, and backed-up data already on our servers stays until you delete it as described in section 11), or by uninstalling the extension, and you can turn off Error reporting and Analytics in Settings. You may ask us at support@gitprice.com for access to, correction of or deletion of your personal data, to object to its processing, or for a copy in a machine-readable format."
+      },
+      "section13": {
+        "heading": "13. This website",
+        "p1": "Our hosting provider processes standard request data (such as IP address and browser type) to deliver this website. If you join the waitlist, our own form collects your email address and stores it on GitPrice's servers. We use it only to send you the launch email, and we remove it on request.",
+        "p2": "This website counts page views without cookies and without identifying individual visitors.",
+        "p3": "With your consent, we also use third-party analytics tools to understand how visitors use the site (pages viewed, clicks, where visits come from, and general device and browser information). Until you make a choice in the cookie notice, these tools run without cookies and receive only anonymous signals. They set cookies only if you accept, and you can change your choice at any time from the link in the site footer. We do not use this data for advertising.",
+        "p4": "The GitPrice extension itself does not set cookies. When you visit store pages, those sites may set their own cookies, and their own privacy policies govern that activity. When you follow a link to a store, that store's own privacy policy applies."
+      },
+      "section14": {
+        "heading": "14. Children's privacy",
+        "p1": "GitPrice is not directed at children under 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, contact us at support@gitprice.com and we will promptly delete it."
+      },
+      "section15": {
+        "heading": "15. Changes to this policy",
+        "p1": "If we change this policy, we will publish the new version at gitprice.com/privacy with a new date, and we will ask for your consent again where the law requires it."
       }
     },
     "terms": {

@@ -32,6 +32,7 @@
 .section { scroll-margin-block-start: var(--gp-wsp-8); }
 .section + .section { margin-block-start: var(--gp-wsp-6); }
 .sectionTitle { font-size: var(--web-fs-title); line-height: var(--gp-lh-tight); margin-block-end: var(--gp-wsp-3); }
+.subTitle { font-size: var(--web-fs-body); font-weight: 600; line-height: var(--gp-lh-tight); margin-block: var(--gp-wsp-3) var(--gp-wsp-2); }
 .body, .list { font-size: var(--web-fs-body); line-height: var(--web-lh-body); }
 .body { margin-block-end: var(--gp-wsp-2); overflow-wrap: anywhere; }
 .list { padding-inline-start: var(--gp-wsp-3); margin-block-end: var(--gp-wsp-2); }

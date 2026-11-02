@@ -4,10 +4,16 @@ import LegalToc from "./LegalToc";
 import styles from "./LegalPage.module.css";
 
 export type LegalName = "privacy" | "terms";
-type Item = { key: string; kind: "p" | "li" };
+type Kind = "p" | "li" | "sub";
+type Item = { key: string; kind: Kind };
 type Section = { id: string; items: Item[] };
 
 const BULLET = /^[\u200e\u200f]*•\s*/u;
+
+function kindOf(key: string): Kind {
+  if (key.startsWith("li")) return "li";
+  return key.startsWith("sub") ? "sub" : "p";
+}
 
 /** Sections and their paragraph/list keys in source order, so no key is ever skipped. */
 export function sectionKeys(name: LegalName): Section[] {
@@ -18,7 +24,7 @@ export function sectionKeys(name: LegalName): Section[] {
       id,
       items: Object.keys(node[id] as object)
         .filter((key) => key !== "heading")
-        .map((key) => ({ key, kind: key.startsWith("li") ? ("li" as const) : ("p" as const) })),
+        .map((key) => ({ key, kind: kindOf(key) })),
     }));
 }
 
@@ -43,7 +49,9 @@ export default function LegalPage({ locale, name }: { locale: Locale; name: Lega
             <section key={s.id} id={s.id} className={styles.section} aria-labelledby={`${s.id}-h`}>
               <h2 id={`${s.id}-h`} className={styles.sectionTitle}>{t(locale, `${P}${s.id}.heading`)}</h2>
               {group(s.items).map((g, i) =>
-                g.kind === "p" ? (
+                g.kind === "sub" ? (
+                  <h3 key={i} className={styles.subTitle}>{t(locale, `${P}${s.id}.${g.keys[0]}`)}</h3>
+                ) : g.kind === "p" ? (
                   <p key={i} className={styles.body}>{t(locale, `${P}${s.id}.${g.keys[0]}`)}</p>
                 ) : (
                   <ul key={i} className={styles.list}>
@@ -62,8 +70,8 @@ export default function LegalPage({ locale, name }: { locale: Locale; name: Lega
 }
 
 /** One group per paragraph; consecutive list items share a group. */
-function group(items: Item[]): { kind: "p" | "li"; keys: string[] }[] {
-  const out: { kind: "p" | "li"; keys: string[] }[] = [];
+function group(items: Item[]): { kind: Kind; keys: string[] }[] {
+  const out: { kind: Kind; keys: string[] }[] = [];
   for (const { key, kind } of items) {
     const last = out[out.length - 1];
     if (kind === "li" && last?.kind === "li") last.keys.push(key);

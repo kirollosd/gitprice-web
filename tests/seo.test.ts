@@ -73,9 +73,9 @@ describe("legal pages", () => {
   const decode = (h: string) =>
     h.replace(/&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
   const must = [
-    ["privacy", "section3.p3"],
-    ["privacy", "section7.p2"],
-    ["privacy", "section7.p3"],
+    ["privacy", "section13.p1"],
+    ["privacy", "section13.p3"],
+    ["privacy", "section8.p2"],
     ["terms", "section11.p1"],
   ] as const;
   for (const locale of ["en", "ar"] as const) {
