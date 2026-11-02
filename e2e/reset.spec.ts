@@ -176,7 +176,7 @@ for (const [path, locale] of [["/reset-password", "en"], ["/ar/reset-password", 
     await expect(page.locator("header nav")).toHaveCount(0);
     await expect(page.locator('a[href*="sellers"]')).toHaveCount(0);
     await expect(page.locator("header a[hreflang]")).toHaveCount(1);
-    await expect(page.locator("footer a[hreflang]")).toHaveCount(1);
+    await expect(page.locator("footer a[hreflang]")).toHaveCount(0);
     await expect(page.locator('footer a[href$="/privacy"]')).toHaveCount(1);
     await expect(page.locator('footer a[href$="/terms"]')).toHaveCount(1);
     await expect(page.locator("footer [data-cookie-settings]")).toHaveCount(1);
