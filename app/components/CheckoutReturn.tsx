@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { takeAuth } from "../../lib/authHandoff";
 import { getReturnStatus } from "../../lib/api";
 import type { Locale } from "../../lib/i18n";
 import CheckoutCard from "./CheckoutCard";
@@ -18,7 +19,7 @@ export default function CheckoutReturn({ locale }: { locale: Locale }) {
 
   useEffect(() => {
     if (!input.current) {
-      const p = new URLSearchParams(window.location.hash.slice(1));
+      const p = new URLSearchParams((takeAuth()?.hash ?? window.location.hash).slice(1));
       input.current = { token: p.get("rt") ?? "", cancelled: p.get("status") === "cancelled" };
       // The return token leaves the address bar and history before any network call.
       window.history.replaceState(null, "", window.location.pathname + window.location.search);
