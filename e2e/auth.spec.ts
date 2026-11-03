@@ -55,6 +55,8 @@ const SECRET_URLS = [
   "/ar/reset-password?token_hash=SECRET&type=recovery",
   "/reset-password#access_token=SECRET&refresh_token=SECRET&type=recovery",
   "/privacy#access_token=SECRET&refresh_token=SECRET",
+  "/checkout/return#rt=SECRET",
+  "/ar/checkout/return#rt=SECRET&status=ok",
 ];
 for (const url of SECRET_URLS) {
   test(`GTM never sees a token in page_location: ${url}`, async ({ page }) => {
