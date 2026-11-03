@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { getHandoffSummary, redeemHandoff, type HandoffSummary } from "../../lib/api";
+import { takeAuth } from "../../lib/authHandoff";
 import { t, type Locale } from "../../lib/i18n";
 import { formatPrice } from "../../lib/price";
 import CheckoutCard from "./CheckoutCard";
@@ -35,7 +36,9 @@ export default function CheckoutFlow({ locale }: { locale: Locale }) {
     // Effects run twice in dev; the fragment is gone after the first read, so run only once.
     if (started.current) return;
     started.current = true;
-    code.current = new URLSearchParams(window.location.hash.slice(1)).get("code") ?? "";
+    // The head scrub (lib/scrub.ts) strips `#code=` before any bundle runs and holds it for us; the URL is the fallback.
+    const hash = takeAuth()?.hash ?? window.location.hash;
+    code.current = new URLSearchParams(hash.slice(1)).get("code") ?? "";
     // The code leaves the address bar and history before any network call.
     window.history.replaceState(null, "", window.location.pathname + window.location.search);
     if (!code.current) return setState({ kind: "signedOut" });

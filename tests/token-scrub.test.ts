@@ -37,6 +37,16 @@ describe("fragment", () => {
     expect(run("/privacy", "", hash).calls).toEqual([]);
   });
 
+  it.each(["/checkout", "/ar/checkout"])("holds the handoff code on %s for CheckoutFlow (GP-533)", (path) => {
+    const { calls, state, take } = run(path, "?utm_source=mail", "#code=ab/c");
+    expect(calls).toEqual([[state, "", `${path}?utm_source=mail`]]);
+    expect(take()).toEqual({ search: "?utm_source=mail", hash: "#code=ab/c" });
+  });
+
+  it("keeps the query on /checkout: only auth paths drop query params", () => {
+    expect(run("/checkout", "?code=b").calls).toEqual([]);
+  });
+
   it("discards the values on pages that are not auth pages", () => {
     const { win } = run("/", "", "#access_token=a");
     expect(win.__gpTake).toBeUndefined();
