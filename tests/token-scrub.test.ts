@@ -43,6 +43,22 @@ describe("fragment", () => {
     expect(take()).toEqual({ search: "?utm_source=mail", hash: "#code=ab/c" });
   });
 
+  it("strips #rt= on any page", () => {
+    const { calls, state } = run("/privacy", "", "#rt=tok");
+    expect(calls).toEqual([[state, "", "/privacy"]]);
+  });
+
+  it.each(["/checkout/return", "/checkout/return/", "/ar/checkout/return", "/ar/checkout/return/"])("holds the return token on %s once (GP-551)", (path) => {
+    const { calls, state, take, win } = run(path, "", "#rt=tok&status=ok");
+    expect(calls).toEqual([[state, "", path]]);
+    expect(take()).toEqual({ search: "", hash: "#rt=tok&status=ok" });
+    expect(win.__gpTake).toBeUndefined();
+  });
+
+  it.each(["/checkout/returnx", "/checkout/return/x", "/"])("does not hold #rt= on %s", (path) => {
+    expect(run(path, "", "#rt=tok").win.__gpTake).toBeUndefined();
+  });
+
   it("keeps the query on /checkout: only auth paths drop query params", () => {
     expect(run("/checkout", "?code=b").calls).toEqual([]);
   });
