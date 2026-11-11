@@ -1,5 +1,7 @@
 import { describe, expect, test } from "vitest";
-import { readEnv } from "../lib/env";
+import { CHROME_EXTENSION_ID, readEnv } from "../lib/env";
+import en from "../i18n/en.json";
+import ar from "../i18n/ar.json";
 
 const base = {
   NEXT_PUBLIC_API_BASE_URL: "https://api.example.com",
@@ -39,6 +41,46 @@ describe("readEnv", () => {
       const m = (e as Error).message;
       expect(m).toMatch(/NEXT_PUBLIC_API_BASE_URL.*NEXT_PUBLIC_SUPABASE_URL.*NEXT_PUBLIC_SUPABASE_ANON_KEY.*NEXT_PUBLIC_SITE_URL/s);
       expect(m).not.toMatch(/STORE_URL|TALLY/);
+    }
+  });
+});
+
+describe("Chrome Web Store id (launch day one-line swap)", () => {
+  const ID = "abcdefghijklmnopabcdefghijklmnop";
+
+  test("an id turns launch on and builds the store detail URL, without any env change", () => {
+    const e = readEnv(base, ID);
+    expect(e.launch).toBe(true);
+    expect(e.chromeStoreUrl).toBe(`https://chromewebstore.google.com/detail/${ID}`);
+  });
+
+  test("the id wins over a stale NEXT_PUBLIC_CHROME_STORE_URL and LAUNCH=0", () => {
+    const e = readEnv({ ...base, NEXT_PUBLIC_LAUNCH: "0", NEXT_PUBLIC_CHROME_STORE_URL: "https://old.example" }, ID);
+    expect(e.launch).toBe(true);
+    expect(e.chromeStoreUrl).toBe(`https://chromewebstore.google.com/detail/${ID}`);
+  });
+
+  test("no id keeps the env-driven behaviour", () => {
+    expect(readEnv(base, "").launch).toBe(false);
+    expect(readEnv({ ...base, NEXT_PUBLIC_LAUNCH: "1", NEXT_PUBLIC_CHROME_STORE_URL: "https://c" }, "").chromeStoreUrl).toBe("https://c");
+  });
+
+  test("a malformed id fails the build instead of shipping a dead link", () => {
+    for (const bad of ["abc", ID.toUpperCase(), ID.slice(0, 31) + "z", ` ${ID}x`]) {
+      expect(() => readEnv(base, bad)).toThrow(/CHROME_EXTENSION_ID/);
+    }
+  });
+
+  test("the shipped id is empty or a valid Web Store id", () => {
+    expect(CHROME_EXTENSION_ID).toMatch(/^(|[a-p]{32})$/);
+  });
+});
+
+describe("launch CTA copy", () => {
+  test("the Chrome store CTA says Download in English and Arabic", () => {
+    for (const [msgs, word] of [[en, "Download"], [ar, "تنزيل"]] as const) {
+      expect(msgs.web.component.webStoreBadges.default.button.addToChrome.label).toBe(word);
+      expect(msgs.web.home.launch.nav.label).toBe(word);
     }
   });
 });

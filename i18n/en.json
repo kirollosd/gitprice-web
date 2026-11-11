@@ -210,7 +210,7 @@
         "default": {
           "button": {
             "addToChrome": {
-              "label": "Add GitPrice to Chrome"
+              "label": "Download"
             }
           },
           "label": {
@@ -504,7 +504,7 @@
       },
       "launch": {
         "nav": {
-          "label": "Add GitPrice to Chrome"
+          "label": "Download"
         },
         "cta": {
           "title": "Check your next purchase against other stores.",
