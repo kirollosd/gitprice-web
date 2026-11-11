@@ -35,7 +35,7 @@ const LAUNCH_REQUIRED = { chromeStoreUrl: STORES.chromeStoreUrl } as const;
  * Set, it turns launch on and every Download CTA links to the store listing, overriding
  * NEXT_PUBLIC_LAUNCH and NEXT_PUBLIC_CHROME_STORE_URL. Empty keeps the env-driven prelaunch site.
  */
-export const CHROME_EXTENSION_ID = "";
+export const CHROME_EXTENSION_ID = "olamjhgamjllngcahiaijkaighnegemo";
 
 export function readEnv(src: Record<string, string | undefined>, extensionId: string = CHROME_EXTENSION_ID): SiteEnv {
   const get = (name: string) => src[name]?.trim() || undefined;

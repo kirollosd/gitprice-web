@@ -12,10 +12,10 @@ const base = {
 
 describe("readEnv", () => {
   test("readEnv throws when LAUNCH=1 and CHROME_STORE_URL missing", () =>
-    expect(() => readEnv({ ...base, NEXT_PUBLIC_LAUNCH: "1" })).toThrow(/NEXT_PUBLIC_CHROME_STORE_URL/));
+    expect(() => readEnv({ ...base, NEXT_PUBLIC_LAUNCH: "1" }, "")).toThrow(/NEXT_PUBLIC_CHROME_STORE_URL/));
 
   test("readEnv allows missing store URLs in prelaunch", () => {
-    const e = readEnv(base);
+    const e = readEnv(base, "");
     expect(e.launch).toBe(false);
     expect(e.siteUrl).toBe("https://gitprice.com");
   });
@@ -27,7 +27,7 @@ describe("readEnv", () => {
   });
 
   test("readEnv accepts launch with only the Chrome store URL (phase 1 is extension only)", () => {
-    const e = readEnv({ ...base, NEXT_PUBLIC_LAUNCH: "1", NEXT_PUBLIC_CHROME_STORE_URL: "https://c" });
+    const e = readEnv({ ...base, NEXT_PUBLIC_LAUNCH: "1", NEXT_PUBLIC_CHROME_STORE_URL: "https://c" }, "");
     expect(e.launch).toBe(true);
     expect(e.chromeStoreUrl).toBe("https://c");
     expect(e.appStoreUrl).toBeUndefined();
