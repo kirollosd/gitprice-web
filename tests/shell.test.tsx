@@ -4,6 +4,8 @@ import { isHostedPath, switchPath } from "../lib/locale";
 
 let mockPath = "/";
 vi.mock("next/navigation", () => ({ usePathname: () => mockPath }));
+// Prelaunch nav (waitlist CTA): pin launch off now that lib/env ships a Web Store id.
+vi.mock("../lib/env", async (orig) => { const m = await orig<typeof import("../lib/env")>(); return { ...m, env: { ...m.env, launch: false } }; });
 
 // Controllable matchMedia: tests flip `viewport` and fire change listeners.
 let viewport = 390;

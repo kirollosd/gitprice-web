@@ -30,14 +30,25 @@ const STORES = {
 // Phase 1 is extension only (MOBILE_APPS_ENABLED=false in StoreBadges): only Chrome is required at launch. Add the others in phase 2.
 const LAUNCH_REQUIRED = { chromeStoreUrl: STORES.chromeStoreUrl } as const;
 
-export function readEnv(src: Record<string, string | undefined>): SiteEnv {
+/**
+ * Launch day: paste the Chrome Web Store item id here (32 letters a-p, from the CWS dashboard).
+ * Set, it turns launch on and every Download CTA links to the store listing, overriding
+ * NEXT_PUBLIC_LAUNCH and NEXT_PUBLIC_CHROME_STORE_URL. Empty keeps the env-driven prelaunch site.
+ */
+export const CHROME_EXTENSION_ID = "olamjhgamjllngcahiaijkaighnegemo";
+
+export function readEnv(src: Record<string, string | undefined>, extensionId: string = CHROME_EXTENSION_ID): SiteEnv {
   const get = (name: string) => src[name]?.trim() || undefined;
-  const launch = get("NEXT_PUBLIC_LAUNCH") === "1";
+  if (extensionId && !/^[a-p]{32}$/.test(extensionId)) {
+    throw new Error(`CHROME_EXTENSION_ID must be a 32-letter Chrome Web Store id (a-p), got "${extensionId}"`);
+  }
+  const storeUrl = extensionId ? `https://chromewebstore.google.com/detail/${extensionId}` : get(STORES.chromeStoreUrl);
+  const launch = !!extensionId || get("NEXT_PUBLIC_LAUNCH") === "1";
   const checkout = get("NEXT_PUBLIC_CHECKOUT") === "1";
   const sellersNav = get("NEXT_PUBLIC_SELLERS_NAV") === "1";
 
   const needed: Record<string, string> = { ...REQUIRED, ...(launch ? LAUNCH_REQUIRED : {}) };
-  const missing = Object.values(needed).filter((name) => !get(name));
+  const missing = Object.values(needed).filter((name) => !(name === STORES.chromeStoreUrl ? storeUrl : get(name)));
   if (missing.length) {
     throw new Error(`Missing required env vars: ${missing.join(", ")}`);
   }
@@ -46,7 +57,7 @@ export function readEnv(src: Record<string, string | undefined>): SiteEnv {
     launch,
     checkout,
     sellersNav,
-    chromeStoreUrl: get(STORES.chromeStoreUrl),
+    chromeStoreUrl: storeUrl,
     appStoreUrl: get(STORES.appStoreUrl),
     playStoreUrl: get(STORES.playStoreUrl),
     apiBaseUrl: get(REQUIRED.apiBaseUrl)!,
@@ -58,6 +69,7 @@ export function readEnv(src: Record<string, string | undefined>): SiteEnv {
   };
 }
 
+// NEXT_PUBLIC_CHROME_EXTENSION_ID is a build-time override for the test projects only ("" = prelaunch); unset ships CHROME_EXTENSION_ID.
 // Next inlines NEXT_PUBLIC_* only for literal property access, so pass them explicitly.
 export const env: SiteEnv = readEnv({
   NEXT_PUBLIC_LAUNCH: process.env.NEXT_PUBLIC_LAUNCH,
@@ -72,4 +84,4 @@ export const env: SiteEnv = readEnv({
   NEXT_PUBLIC_HEAP_ID: process.env.NEXT_PUBLIC_HEAP_ID,
   NEXT_PUBLIC_GTM_ID: process.env.NEXT_PUBLIC_GTM_ID,
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-});
+}, process.env.NEXT_PUBLIC_CHROME_EXTENSION_ID ?? CHROME_EXTENSION_ID);

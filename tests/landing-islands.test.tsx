@@ -9,6 +9,8 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(),
   usePathname: () => "/",
 }));
+// Prelaunch nav (waitlist CTA): pin launch off now that lib/env ships a Web Store id.
+vi.mock("../lib/env", async (orig) => { const m = await orig<typeof import("../lib/env")>(); return { ...m, env: { ...m.env, launch: false } }; });
 vi.mock("next/link", () => ({
   default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => <a href={href} {...rest}>{children}</a>,
 }));

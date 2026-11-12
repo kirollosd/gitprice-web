@@ -164,6 +164,8 @@ export async function seedReset(page: Page, state: ResetState, path: string, lab
     return route.fulfill(pathname.endsWith("/user") ? json(200, user) : json(404, {}));
   });
   await page.goto(`${path}/reset-password?token_hash=h&type=recovery`);
+  // A link scanner must not spend the token: the page verifies only after its one Confirm button is clicked.
+  await page.locator("main button").click();
   if (!["set-new-password", "weak-password", "saving", "error", "success"].includes(state)) return;
   const field = page.getByLabel(label);
   await field.waitFor();

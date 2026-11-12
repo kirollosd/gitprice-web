@@ -210,7 +210,7 @@
         "default": {
           "button": {
             "addToChrome": {
-              "label": "أضف GitPrice إلى Chrome"
+              "label": "تنزيل"
             }
           },
           "label": {
@@ -504,7 +504,7 @@
       },
       "launch": {
         "nav": {
-          "label": "أضف GitPrice إلى Chrome"
+          "label": "تنزيل"
         },
         "cta": {
           "title": "قارن مشترياتك القادمة بالمتاجر الأخرى.",

@@ -76,7 +76,7 @@ test.describe("Home prelaunch", () => {
     await expect(email).toHaveAttribute("type", "email");
     await expect(email).toBeFocused();
     await expect(page.locator("iframe")).toHaveCount(0);
-    await expect(page.getByRole("link", { name: "Add GitPrice to Chrome" })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "Download", exact: true })).toHaveCount(0);
     expect(tally).toEqual([]);
   });
 
