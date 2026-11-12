@@ -14,12 +14,11 @@ test.describe("390 wide", () => {
   }
 });
 
-test("privacy names Vercel and Heap, not Tally, and exposes hreflang + canonical", async ({ page }) => {
+test("privacy describes processors by category, names no vendor (GP-521), and exposes hreflang + canonical", async ({ page }) => {
   await page.goto("/ar/privacy");
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   const body = await page.locator("main").innerText();
-  for (const n of ["Vercel", "Heap"]) expect(body).toContain(n);
-  expect(body).not.toContain("Tally");
+  for (const n of ["Vercel", "Heap", "Tally"]) expect(body).not.toContain(n);
   const hreflang = await page.locator('link[rel="alternate"][hreflang]').evaluateAll((els) =>
     els.map((e) => [e.getAttribute("hreflang"), new URL(e.getAttribute("href")!).pathname]),
   );

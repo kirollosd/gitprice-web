@@ -1,7 +1,7 @@
 import { expect, test } from "./fixtures";
 
 // Runs against the NEXT_PUBLIC_LAUNCH=1 build (see playwright.config.ts).
-const CHROME = "https://chromewebstore.example/gitprice";
+const CHROME = "https://chromewebstore.google.com/detail/olamjhgamjllngcahiaijkaighnegemo";
 
 test.describe("launch mode", () => {
   test("Home offers Add to Chrome in the header, the dock and the foot, and no waitlist form", async ({ page }) => {

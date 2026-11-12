@@ -69,6 +69,7 @@ export function readEnv(src: Record<string, string | undefined>, extensionId: st
   };
 }
 
+// NEXT_PUBLIC_CHROME_EXTENSION_ID is a build-time override for the test projects only ("" = prelaunch); unset ships CHROME_EXTENSION_ID.
 // Next inlines NEXT_PUBLIC_* only for literal property access, so pass them explicitly.
 export const env: SiteEnv = readEnv({
   NEXT_PUBLIC_LAUNCH: process.env.NEXT_PUBLIC_LAUNCH,
@@ -83,4 +84,4 @@ export const env: SiteEnv = readEnv({
   NEXT_PUBLIC_HEAP_ID: process.env.NEXT_PUBLIC_HEAP_ID,
   NEXT_PUBLIC_GTM_ID: process.env.NEXT_PUBLIC_GTM_ID,
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-});
+}, process.env.NEXT_PUBLIC_CHROME_EXTENSION_ID ?? CHROME_EXTENSION_ID);

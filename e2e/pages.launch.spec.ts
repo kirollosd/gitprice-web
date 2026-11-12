@@ -3,7 +3,7 @@ import { expect, test } from "./fixtures";
 test("launched pricing sends both plans to the Chrome store, with no app-store links", async ({ page }) => {
   await page.goto("/pricing");
   const hrefs = await page.locator("main a").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
-  expect(hrefs[0]).toBe("https://chromewebstore.example/gitprice");
+  expect(hrefs[0]).toBe("https://chromewebstore.google.com/detail/olamjhgamjllngcahiaijkaighnegemo");
   expect(hrefs).not.toContain("https://apps.example/gitprice");
   expect(hrefs).not.toContain("https://play.example/gitprice");
 });
