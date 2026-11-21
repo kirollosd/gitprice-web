@@ -81,3 +81,12 @@ for (const [path, label] of [["/", "Skip to content"], ["/ar/nope", "انتقل 
     await expect(page.locator("main")).toBeFocused();
   });
 }
+
+// The e2e builds leave NEXT_PUBLIC_TELEGRAM_CHANNEL_URL unset: no channel link anywhere (shown-when-set is unit-tested in channel-link.test.tsx).
+for (const path of ["/", "/privacy", "/ar/stores"]) {
+  test(`${path}: no deals channel link while the channel URL is unset; footer links Stores`, async ({ page }) => {
+    await page.goto(path);
+    await expect(page.locator('a[href^="https://t.me/"]')).toHaveCount(0);
+    await expect(page.locator(`footer a[href="${path.startsWith("/ar") ? "/ar/stores" : "/stores"}"]`)).toHaveCount(1);
+  });
+}

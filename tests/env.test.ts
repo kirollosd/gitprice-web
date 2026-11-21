@@ -100,3 +100,14 @@ describe("gtmId", () => {
     expect(readEnv({ ...base, NEXT_PUBLIC_GTM_ID: "GTM-PLZZJV54" }).gtmId).toBe("GTM-PLZZJV54");
   });
 });
+
+describe("telegramChannelUrl", () => {
+  test("unset or blank: no channel link anywhere", () => {
+    expect(readEnv(base).telegramChannelUrl).toBeUndefined();
+    expect(readEnv({ ...base, NEXT_PUBLIC_TELEGRAM_CHANNEL_URL: "  " }).telegramChannelUrl).toBeUndefined();
+  });
+  test("a t.me link is kept", () =>
+    expect(readEnv({ ...base, NEXT_PUBLIC_TELEGRAM_CHANNEL_URL: "https://t.me/gitprice_deals" }).telegramChannelUrl).toBe("https://t.me/gitprice_deals"));
+  test("anything else fails the build", () =>
+    expect(() => readEnv({ ...base, NEXT_PUBLIC_TELEGRAM_CHANNEL_URL: "javascript:alert(1)" })).toThrow(/NEXT_PUBLIC_TELEGRAM_CHANNEL_URL/));
+});

@@ -13,6 +13,8 @@ export type SiteEnv = {
   heapId?: string;
   gtmId?: string;
   siteUrl: string;
+  /** Public Telegram deals channel (https://t.me/...); every channel link is hidden while unset. */
+  telegramChannelUrl?: string;
 };
 
 const REQUIRED = {
@@ -47,6 +49,11 @@ export function readEnv(src: Record<string, string | undefined>, extensionId: st
   const checkout = get("NEXT_PUBLIC_CHECKOUT") === "1";
   const sellersNav = get("NEXT_PUBLIC_SELLERS_NAV") === "1";
 
+  const telegramChannelUrl = get("NEXT_PUBLIC_TELEGRAM_CHANNEL_URL");
+  if (telegramChannelUrl && !telegramChannelUrl.startsWith("https://t.me/")) {
+    throw new Error(`NEXT_PUBLIC_TELEGRAM_CHANNEL_URL must be an https://t.me/ link, got "${telegramChannelUrl}"`);
+  }
+
   const needed: Record<string, string> = { ...REQUIRED, ...(launch ? LAUNCH_REQUIRED : {}) };
   const missing = Object.values(needed).filter((name) => !(name === STORES.chromeStoreUrl ? storeUrl : get(name)));
   if (missing.length) {
@@ -66,6 +73,7 @@ export function readEnv(src: Record<string, string | undefined>, extensionId: st
     heapId: get("NEXT_PUBLIC_HEAP_ID"),
     gtmId: get("NEXT_PUBLIC_GTM_ID"),
     siteUrl: get(REQUIRED.siteUrl)!,
+    telegramChannelUrl,
   };
 }
 
@@ -75,6 +83,7 @@ export const env: SiteEnv = readEnv({
   NEXT_PUBLIC_LAUNCH: process.env.NEXT_PUBLIC_LAUNCH,
   NEXT_PUBLIC_CHECKOUT: process.env.NEXT_PUBLIC_CHECKOUT,
   NEXT_PUBLIC_SELLERS_NAV: process.env.NEXT_PUBLIC_SELLERS_NAV,
+  NEXT_PUBLIC_TELEGRAM_CHANNEL_URL: process.env.NEXT_PUBLIC_TELEGRAM_CHANNEL_URL,
   NEXT_PUBLIC_CHROME_STORE_URL: process.env.NEXT_PUBLIC_CHROME_STORE_URL,
   NEXT_PUBLIC_APP_STORE_URL: process.env.NEXT_PUBLIC_APP_STORE_URL,
   NEXT_PUBLIC_PLAY_STORE_URL: process.env.NEXT_PUBLIC_PLAY_STORE_URL,

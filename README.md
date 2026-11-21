@@ -20,6 +20,7 @@ Names only. Real values live in Vercel (Production and Preview); `.env.example` 
 | `NEXT_PUBLIC_LAUNCH` | `0` prelaunch (waitlist), `1` launch (store buttons). With `1`, a missing store URL fails the build. |
 | `NEXT_PUBLIC_CHECKOUT` | `0` (default) `/checkout` and `/checkout/return` return 404 until Pro opens; `1` serves them. The e2e prelaunch build sets `1`, the launch build leaves it off. |
 | `NEXT_PUBLIC_SELLERS_NAV` | `0` (default) hides the header "For sellers" / "For shoppers" toggle in the desktop nav and the menu sheet; `1` shows it. `/sellers` stays reachable either way. The e2e builds set `1` (the boards draw it). |
+| `NEXT_PUBLIC_TELEGRAM_CHANNEL_URL` | Optional public deals channel, must start with `https://t.me/` (anything else fails the build). Set, a "Join our deals channel" link shows in both footers and the menu sheet; unset (the default, and the e2e builds) hides it. |
 | `NEXT_PUBLIC_CHROME_STORE_URL` | Chrome Web Store listing (required when launched) |
 | `NEXT_PUBLIC_APP_STORE_URL` | App Store listing (optional until the mobile apps ship) |
 | `NEXT_PUBLIC_PLAY_STORE_URL` | Google Play listing (optional until the mobile apps ship) |
