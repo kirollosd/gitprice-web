@@ -21,7 +21,7 @@ export default function StoresPage({ locale, groups }: { locale: Locale; groups:
             <ul className={styles.list}>
               {stores.map((s) => (
                 <li key={s.id} className={styles.row}>
-                  <span className={styles.name}>
+                  <span className={styles.name} dir="auto">
                     {s.name}
                     <span className={styles.domain} dir="ltr">{s.domain}</span>
                   </span>

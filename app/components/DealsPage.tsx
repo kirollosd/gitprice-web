@@ -45,7 +45,7 @@ export default function DealsPage({ locale, deals }: { locale: Locale; deals: Pu
               return (
                 <li key={`${d.buyUrl}|${d.observedAt}`} className={styles.row}>
                   <div className={styles.body}>
-                    <h2 className={styles.title}>{d.title}</h2>
+                    <h2 className={styles.title} dir="auto">{d.title}</h2>
                     <p className={styles.price}>
                       <bdi dir="ltr">{formatEGP(d.price)} <span className={styles.cur}>{t(locale, D + "currency")}</span></bdi>
                     </p>

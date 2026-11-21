@@ -48,7 +48,6 @@ export function NavCta({ locale, keys, className, onNavigate }: { locale: Locale
   return <Link href={href} className={className} onClick={onNavigate} data-gp-track="cta_click" data-gp-cta-id={ctaId} data-gp-placement="nav">{label}</Link>;
 }
 
-/** "Join our deals channel": opens the public Telegram channel in a new tab. Hidden unless NEXT_PUBLIC_TELEGRAM_CHANNEL_URL is set. */
 /** The /deals page link; shown with the channel link, once the channel is live (NEXT_PUBLIC_TELEGRAM_CHANNEL_URL set). */
 export function DealsLink({ locale, placement, className, onNavigate }: { locale: Locale; placement: string; className?: string; onNavigate?: () => void }) {
   if (!env.telegramChannelUrl) return null;
@@ -59,6 +58,7 @@ export function DealsLink({ locale, placement, className, onNavigate }: { locale
   );
 }
 
+/** "Join our deals channel": opens the public Telegram channel in a new tab. Hidden unless NEXT_PUBLIC_TELEGRAM_CHANNEL_URL is set. */
 export function ChannelLink({ locale, placement, className, onNavigate }: { locale: Locale; placement: string; className?: string; onNavigate?: () => void }) {
   if (!env.telegramChannelUrl) return null;
   return (

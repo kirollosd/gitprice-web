@@ -23,6 +23,10 @@ describe("DealsPage", () => {
     expect(html).toContain(">Buy at Amazon Egypt<");
   });
 
+  it("isolates the product title so a Latin title ending in brackets reads right on the Arabic page", () => {
+    expect(render("ar", [{ ...deal, title: "USB-A Cable (1m)" }])).toMatch(/<h2[^>]*dir="auto"[^>]*>USB-A Cable \(1m\)<\/h2>/);
+  });
+
   it("no img for Amazon deals", () => {
     expect(render("en", [deal])).not.toContain("<img");
   });

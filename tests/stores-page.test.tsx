@@ -24,6 +24,10 @@ describe("StoresPage", () => {
     expect(html).toContain('aria-label="Go to Amazon (opens in a new tab)"');
   });
 
+  it("isolates Latin store names on the Arabic page so trailing punctuation stays put", () => {
+    expect(render("ar", groups)).toMatch(/<span[^>]*dir="auto"[^>]*>Amazon/);
+  });
+
   it("shows the calm empty state when there are no stores", () => {
     const html = render("ar", []);
     expect(html).toContain("قائمة المتاجر غير متاحة الآن");
