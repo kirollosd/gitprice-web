@@ -29,7 +29,6 @@ export default function DealsPage({ locale, deals }: { locale: Locale; deals: Pu
       <header className={legal.header}>
         <h1 className={legal.title}>{t(locale, D + "title")}</h1>
       </header>
-      <p className={legal.intro}>{t(locale, D + "intro")}</p>
       {env.telegramChannelUrl && (
         <p className={`${legal.intro} ${styles.channel}`}>
           {t(locale, "web.channel.body")} <ChannelLink locale={locale} placement="deals" />

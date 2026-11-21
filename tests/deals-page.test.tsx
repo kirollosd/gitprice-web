@@ -12,6 +12,11 @@ const deal: PublicDeal = {
 const render = (locale: "en" | "ar", deals: PublicDeal[]) => renderToStaticMarkup(createElement(DealsPage, { locale, deals }));
 
 describe("DealsPage", () => {
+  it("has no intro line under the heading", () => {
+    expect(render("en", [deal])).not.toContain("Prices change, so check the store");
+    expect(render("ar", [])).not.toContain("فتحقق من المتجر قبل الشراء");
+  });
+
   it("deal card shows price, Cairo time and a sponsored buy link", () => {
     const html = render("en", [deal]);
     expect(html).toContain("Phone &lt;X&gt;");
