@@ -233,7 +233,8 @@
             "privacy": "Privacy",
             "terms": "Terms",
             "nav": "Footer links",
-            "cookies": "Cookie settings"
+            "cookies": "Cookie settings",
+            "stores": "Stores"
           },
           "copyright": "© 2026 GitPrice"
         }
@@ -689,7 +690,7 @@
     },
     "privacy": {
       "title": "Privacy Policy",
-      "meta": "Effective May 11, 2026 · Last updated November 2, 2026",
+      "meta": "Effective May 11, 2026 · Last updated November 21, 2026",
       "intro": "GitPrice is a browser extension that helps you compare prices across supported online stores. This Privacy Policy explains what information we collect, how we use it, and your rights as a user.",
       "section1": {
         "heading": "1. Who we are and contact",
@@ -755,7 +756,8 @@
       "section8": {
         "heading": "8. Store links and affiliate arrangements",
         "p1": "A link from GitPrice to a store may carry a referral tag. If that store has an affiliate arrangement with us, the store may pay us a commission when you buy; you pay nothing extra. Not every supported store is a partner, and a tag does not mean we have a deal with that store. We add a referral tag only when you click a store link in GitPrice, or when a price alert you created needs one.",
-        "p2": "Being a partner never changes a store's price. It can affect order: results are ranked by price together with store trust, delivery and partner status, so a partner store may appear above a slightly cheaper one. Every result always shows its own price."
+        "p2": "Being a partner never changes a store's price. It can affect order: results are ranked by price together with store trust, delivery and partner status, so a partner store may appear above a slightly cheaper one. Every result always shows its own price.",
+        "p3": "Prices that GitPrice observes, whether from the extension or from our own checks, may be published on gitprice.com and in our Telegram deals channel. We publish the product, the store, the price and when it was seen, never who saw it."
       },
       "section9": {
         "heading": "9. What we never collect",
@@ -1166,6 +1168,18 @@
           "body": "Something went wrong on our side. Your link is still valid. Try again."
         }
       }
+    },
+    "stores": {
+      "title": "Stores we compare",
+      "intro": "GitPrice compares prices across these stores. You can open any of them from here.",
+      "go": "Go to store",
+      "goLabel": "Go to {name} (opens in a new tab)",
+      "empty": "The store list is not available right now. Please try again later."
+    },
+    "channel": {
+      "join": "Join our deals channel",
+      "title": "Deals on Telegram",
+      "body": "We post the best price drops we see, with the time each price was checked, on our Telegram channel."
     }
   }
 }

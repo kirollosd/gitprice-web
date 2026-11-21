@@ -9,8 +9,8 @@ const BANNED = ["Vercel", "Heap", "Google Analytics", "Google Tag Manager", "chr
 
 describe("privacy page names no vendors and keeps the consent explanation", () => {
   it.each([
-    ["en", "until you make a choice in the cookie notice", "Last updated November 2, 2026"],
-    ["ar", "إلى أن تحدد اختيارك في إشعار ملفات تعريف الارتباط", "آخر تحديث: 2 نوفمبر 2026"],
+    ["en", "until you make a choice in the cookie notice", "Last updated November 21, 2026"],
+    ["ar", "إلى أن تحدد اختيارك في إشعار ملفات تعريف الارتباط", "آخر تحديث: 21 نوفمبر 2026"],
   ] as const)("%s", (locale, consent, updated) => {
     const html = renderToStaticMarkup(createElement(LegalPage, { locale, name: "privacy" }));
     for (const word of BANNED) expect(html).not.toContain(word);
@@ -34,5 +34,11 @@ describe("privacy page carries the reviewed extension policy", () => {
     );
     expect(html).toContain("Being a partner never changes a store&#x27;s price.");
     expect(html).toContain("120 days");
+  });
+
+  it("says observed prices may be published, never who saw them", () => {
+    const html = renderToStaticMarkup(createElement(LegalPage, { locale: "en", name: "privacy" }));
+    expect(html).toContain("in our Telegram deals channel");
+    expect(html).toContain("never who saw it");
   });
 });

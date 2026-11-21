@@ -1,6 +1,6 @@
 import { expect, test } from "./fixtures";
 
-const PAGES = ["/faq", "/privacy", "/terms", "/welcome", "/pricing"];
+const PAGES = ["/faq", "/stores", "/privacy", "/terms", "/welcome", "/pricing"];
 
 test.describe("390 wide", () => {
   test.use({ viewport: { width: 390, height: 800 } });
@@ -53,6 +53,7 @@ test("prelaunch pricing CTAs open the waitlist in the dock", async ({ page }) =>
 test("sitemap and robots", async ({ request }) => {
   const sm = await (await request.get("/sitemap.xml")).text();
   expect(sm).toContain("/ar/terms");
+  expect(sm).toContain("/ar/stores");
   expect(sm).not.toMatch(/pricing|welcome|checkout|reset-password/);
   expect(await (await request.get("/robots.txt")).text()).toMatch(/Sitemap: .*\/sitemap\.xml/);
 });
@@ -80,3 +81,12 @@ test(`/sellers header "How it works" lands on a landing section, and there is no
   await expect(page).toHaveURL(/\/#how$/);
   await expect(page.locator("#how")).toBeInViewport();
 });
+
+// The e2e API host is fake and unreachable at build time, so /stores renders its empty state: the page must still stand.
+for (const p of ["/stores", "/ar/stores"]) {
+  test(`${p} renders the store directory shell`, async ({ page }) => {
+    await page.goto(p);
+    await expect(page.locator("main h1")).toBeVisible();
+    await expect(page.locator('meta[name="robots"]')).not.toHaveAttribute("content", /noindex/);
+  });
+}
