@@ -28,12 +28,12 @@ export default function WebFooter({ locale }: { locale: Locale }) {
           <nav aria-label={t(locale, K + "label.nav")}>
             <ul className={styles.links} role="list">
               <li><Link href={pathFor(locale, "/stores")} className={styles.link} data-gp-track="cta_click" data-gp-cta-id="stores" data-gp-placement="footer">{t(locale, K + "label.stores")}</Link></li>
+              <li><DealsLink locale={locale} placement="footer" className={styles.link} /></li>
               <li><Link href={pathFor(locale, "/faq")} className={styles.link} data-gp-track="cta_click" data-gp-cta-id="faq" data-gp-placement="footer">{t(locale, K + "label.faq")}</Link></li>
               <li><Link href={pathFor(locale, "/privacy")} className={styles.link} data-gp-track="cta_click" data-gp-cta-id="privacy_policy" data-gp-placement="footer">{t(locale, K + "label.privacy")}</Link></li>
               <li><Link href={pathFor(locale, "/terms")} className={styles.link} data-gp-track="cta_click" data-gp-cta-id="terms" data-gp-placement="footer">{t(locale, K + "label.terms")}</Link></li>
-              {env.telegramChannelUrl && <li><DealsLink locale={locale} placement="footer" className={styles.link} /></li>}
               {env.telegramChannelUrl && <li><ChannelLink locale={locale} placement="footer" className={styles.link} /></li>}
-              <li><CookieSettingsButton locale={locale} className={`${styles.link} hit-target`} /></li>
+              <li><CookieSettingsButton locale={locale} className={styles.link} /></li>
             </ul>
           </nav>
         </div>

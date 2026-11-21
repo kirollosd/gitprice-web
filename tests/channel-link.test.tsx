@@ -21,13 +21,13 @@ afterEach(() => {
 const channelLinks = () => [...document.querySelectorAll(`a[href="${URL}"]`)];
 
 describe("deals channel link", () => {
-  it("site footer: Stores always; channel link only when the URL is set", async () => {
+  it("site footer: Stores and Deals always; channel link only when the URL is set", async () => {
     mockEnv(undefined);
     let { default: WebFooter } = await import("../app/components/WebFooter");
     render(<WebFooter locale="en" />);
     expect(screen.getByRole("link", { name: "Stores" }).getAttribute("href")).toBe("/stores");
+    expect(screen.getByRole("link", { name: "Deals" }).getAttribute("href")).toBe("/deals");
     expect(channelLinks()).toHaveLength(0);
-    expect(document.querySelector('a[href="/deals"]')).toBeNull();
     cleanup();
     vi.resetModules();
     mockEnv(URL);
@@ -49,6 +49,22 @@ describe("deals channel link", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
     expect(document.querySelector(`#web-menu a[href="${URL}"]`)?.textContent).toBe("Join our deals channel");
     expect(document.querySelector('#web-menu a[href="/deals"]')?.textContent).toBe("Deals");
+  });
+
+  it("menu sheet and landing footer link Deals even before the channel is live", async () => {
+    mockEnv(undefined);
+    window.matchMedia = ((q: string) => ({ matches: /768/.test(q), addEventListener() {}, removeEventListener() {} })) as unknown as typeof window.matchMedia;
+    const { default: WebNav } = await import("../app/components/WebNav");
+    render(<WebNav locale="en" variant="site" />);
+    fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
+    expect(document.querySelector('#web-menu a[href="/deals"]')?.textContent).toBe("Deals");
+    expect(channelLinks()).toHaveLength(0);
+    cleanup();
+    const { default: Foot } = await import("../app/landing/Foot");
+    const { products } = await import("../app/landing/products");
+    render(<Foot locale="ar" product={products[0]} />);
+    expect(document.querySelectorAll('footer#foot a[href="/ar/deals"]')).toHaveLength(1);
+    expect(channelLinks()).toHaveLength(0);
   });
 
   it("landing footer (home) carries Stores and the channel link", async () => {

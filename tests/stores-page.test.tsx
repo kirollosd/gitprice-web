@@ -28,6 +28,13 @@ describe("StoresPage", () => {
     expect(render("ar", groups)).toMatch(/<span[^>]*dir="auto"[^>]*>Amazon/);
   });
 
+  it("titles the page Stores with no intro line under the heading", () => {
+    const en = render("en", groups);
+    expect(en).toMatch(/<h1[^>]*>Stores<\/h1>/);
+    expect(en).not.toContain("GitPrice compares prices across these stores");
+    expect(render("ar", groups)).toMatch(/<h1[^>]*>المتاجر<\/h1>/);
+  });
+
   it("shows the calm empty state when there are no stores", () => {
     const html = render("ar", []);
     expect(html).toContain("قائمة المتاجر غير متاحة الآن");

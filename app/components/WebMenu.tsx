@@ -95,7 +95,7 @@ export default function WebMenu({ locale }: { locale: Locale }) {
           <ul className={styles.list} role="list">
             <li><Link href={`${home}#how`} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id="how_it_works" data-gp-placement="menu">{t(locale, `${N}${keys}.label.howItWorks`)}</Link></li>
             {env.sellersNav && <li><Link href={sellers.href} onClick={() => setOpen(false)} data-gp-track="cta_click" data-gp-cta-id={sellers.ctaId} data-gp-placement="menu">{sellers.label}</Link></li>}
-            {env.telegramChannelUrl && <li><DealsLink locale={locale} placement="menu" onNavigate={() => setOpen(false)} /></li>}
+            <li><DealsLink locale={locale} placement="menu" onNavigate={() => setOpen(false)} /></li>
             {env.telegramChannelUrl && <li><ChannelLink locale={locale} placement="menu" onNavigate={() => setOpen(false)} /></li>}
             <li><LanguageSwitch locale={locale} icon /></li>
           </ul>

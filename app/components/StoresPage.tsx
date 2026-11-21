@@ -12,7 +12,6 @@ export default function StoresPage({ locale, groups }: { locale: Locale; groups:
       <header className={legal.header}>
         <h1 className={legal.title}>{t(locale, "web.stores.title")}</h1>
       </header>
-      <p className={legal.intro}>{t(locale, "web.stores.intro")}</p>
       <article className={`${legal.article} ${styles.article}`}>
         {groups.length === 0 && <p className={legal.body}>{t(locale, "web.stores.empty")}</p>}
         {groups.map(({ country, stores }) => (

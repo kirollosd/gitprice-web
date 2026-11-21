@@ -1171,7 +1171,7 @@
       }
     },
     "stores": {
-      "title": "Stores we compare",
+      "title": "Stores",
       "intro": "GitPrice compares prices across these stores. You can open any of them from here.",
       "go": "Go to store",
       "goLabel": "Go to {name} (opens in a new tab)",
