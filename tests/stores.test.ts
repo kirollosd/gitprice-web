@@ -8,7 +8,7 @@ const mockFetch = (r: Response | Error) => {
   return f;
 };
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 
 describe("stores", () => {
   it("groupByCountry puts EG first then alphabetical", () => {
@@ -24,14 +24,19 @@ describe("stores", () => {
     expect(f).toHaveBeenCalledWith("http://localhost:8080/api/v1/stores/public", expect.objectContaining({ credentials: "omit" }));
   });
 
-  it("fetchStores returns [] when fetch rejects", async () => {
+  it("fetchStores returns [] when fetch rejects or is non-200 during the build", async () => {
+    vi.stubEnv("NEXT_PHASE", "phase-production-build");
     mockFetch(new TypeError("down"));
+    expect(await fetchStores()).toEqual([]);
+    mockFetch(new Response("bad gateway", { status: 502 }));
     expect(await fetchStores()).toEqual([]);
   });
 
-  it("fetchStores returns [] on non-200", async () => {
+  it("fetchStores throws at runtime, so ISR keeps the last good list instead of caching an empty page", async () => {
+    mockFetch(new TypeError("down"));
+    await expect(fetchStores()).rejects.toThrow();
     mockFetch(new Response("bad gateway", { status: 502 }));
-    expect(await fetchStores()).toEqual([]);
+    await expect(fetchStores()).rejects.toThrow(/502/);
   });
 
   it("fetchStores drops rows whose url is not https", async () => {

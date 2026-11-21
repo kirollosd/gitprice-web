@@ -1,23 +1,24 @@
 import { env } from "./env";
+import { emptyAtBuild } from "./isr-fallback";
 
 export type PublicStore = { id: number; name: string; domain: string; country: string; url: string };
 export type CountryGroup = { country: string; stores: PublicStore[] };
 
 const HOME_COUNTRY = "EG";
 
-/** GET /api/v1/stores/public, refreshed hourly. Any failure renders the empty state, never a broken build. */
+/** GET /api/v1/stores/public, refreshed hourly. A failure renders the empty state at build time and keeps the last good page at runtime. */
 export async function fetchStores(): Promise<PublicStore[]> {
   try {
     const res = await fetch(`${env.apiBaseUrl}/api/v1/stores/public`, {
       credentials: "omit",
       next: { revalidate: 3600 },
     } as RequestInit);
-    if (!res.ok) return [];
+    if (!res.ok) throw new Error(`stores feed: HTTP ${res.status}`);
     const body = (await res.json()) as { stores?: PublicStore[] };
     // the url lands in an href: only https links from the API are rendered
     return (body.stores ?? []).filter((s) => typeof s.url === "string" && s.url.startsWith("https://"));
-  } catch {
-    return [];
+  } catch (err) {
+    return emptyAtBuild<PublicStore[]>([], err);
   }
 }
 

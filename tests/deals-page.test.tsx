@@ -16,7 +16,7 @@ describe("DealsPage", () => {
     const html = render("en", [deal]);
     expect(html).toContain("Phone &lt;X&gt;");
     expect(html).toMatch(/1,299[\s\S]*EGP/);
-    expect(html).toContain("Price at 14:05 Cairo time, may change");
+    expect(html).toContain("Price at 21/11 14:05 Cairo time, may change");
     expect(html).toContain('href="https://amazon.eg/dp/B0AAAAAAAA?tag=gitpriceeg-21"');
     expect(html).toContain('rel="sponsored noopener"');
     expect(html).toContain('target="_blank"');
@@ -34,7 +34,7 @@ describe("DealsPage", () => {
     expect(en).not.toContain("mystery");
     const ar = render("ar", [deal]);
     expect(ar).toContain("أرخص من Noon بـ 200 ج.م");
-    expect(ar).toContain("السعر الساعة 14:05 بتوقيت القاهرة وقد يتغير");
+    expect(ar).toContain("السعر في 21/11 14:05 بتوقيت القاهرة وقد يتغير");
   });
 
   it("notes a changed price on an updated post", () => {

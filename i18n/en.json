@@ -1183,7 +1183,7 @@
       "body": "We post the best price drops we see, with the time each price was checked, on our Telegram channel."
     },
     "deals": {
-      "title": "Today's price drops",
+      "title": "Latest price drops",
       "intro": "Price drops GitPrice found in the prices shoppers check. Prices change, so check the store before you buy.",
       "timeLine": "Price at {time} Cairo time, may change",
       "buy": "Buy at {store}",
