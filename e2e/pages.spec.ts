@@ -83,10 +83,11 @@ test(`/sellers header "How it works" lands on a landing section, and there is no
 });
 
 // The e2e API host is fake and unreachable at build time, so /stores renders its empty state: the page must still stand.
-for (const p of ["/stores", "/ar/stores"]) {
-  test(`${p} renders the store directory shell`, async ({ page }) => {
+for (const [p, empty] of [["/stores", "The store list is not available right now."], ["/ar/stores", "قائمة المتاجر غير متاحة الآن."]]) {
+  test(`${p} shows the calm empty state when the API is down`, async ({ page }) => {
     await page.goto(p);
     await expect(page.locator("main h1")).toBeVisible();
+    await expect(page.locator("main")).toContainText(empty);
     await expect(page.locator('meta[name="robots"]')).not.toHaveAttribute("content", /noindex/);
   });
 }
