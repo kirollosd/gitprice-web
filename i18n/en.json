@@ -234,7 +234,8 @@
             "terms": "Terms",
             "nav": "Footer links",
             "cookies": "Cookie settings",
-            "stores": "Stores"
+            "stores": "Stores",
+            "deals": "Deals"
           },
           "copyright": "© 2026 GitPrice"
         }
@@ -1180,6 +1181,22 @@
       "join": "Join our deals channel",
       "title": "Deals on Telegram",
       "body": "We post the best price drops we see, with the time each price was checked, on our Telegram channel."
+    },
+    "deals": {
+      "title": "Today's price drops",
+      "intro": "Price drops GitPrice found in the prices shoppers check. Prices change, so check the store before you buy.",
+      "timeLine": "Price at {time} Cairo time, may change",
+      "buy": "Buy at {store}",
+      "buyLabel": "Buy at {store} (opens in a new tab)",
+      "changed": "The price has changed since this was posted.",
+      "empty": "No deals right now. Please check back later.",
+      "currency": "EGP",
+      "insight": {
+        "low90": "Lowest price in 90 days",
+        "belowAvg": "{pct}% below its 30-day average",
+        "cheaperThan": "{diff} EGP cheaper than {store}",
+        "popular": "Popular on GitPrice this week"
+      }
     }
   }
 }

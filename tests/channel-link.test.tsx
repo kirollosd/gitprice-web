@@ -27,6 +27,7 @@ describe("deals channel link", () => {
     render(<WebFooter locale="en" />);
     expect(screen.getByRole("link", { name: "Stores" }).getAttribute("href")).toBe("/stores");
     expect(channelLinks()).toHaveLength(0);
+    expect(document.querySelector('a[href="/deals"]')).toBeNull();
     cleanup();
     vi.resetModules();
     mockEnv(URL);
@@ -37,6 +38,7 @@ describe("deals channel link", () => {
     expect(a.textContent).toBe("انضم إلى قناة العروض");
     expect(a.getAttribute("target")).toBe("_blank");
     expect(a.getAttribute("rel")).toBe("noopener");
+    expect(screen.getByRole("link", { name: "العروض" }).getAttribute("href")).toBe("/ar/deals");
   });
 
   it("menu sheet shows the channel link when set", async () => {
@@ -46,6 +48,7 @@ describe("deals channel link", () => {
     render(<WebNav locale="en" variant="site" />);
     fireEvent.click(screen.getByRole("button", { name: "Open menu" }));
     expect(document.querySelector(`#web-menu a[href="${URL}"]`)?.textContent).toBe("Join our deals channel");
+    expect(document.querySelector('#web-menu a[href="/deals"]')?.textContent).toBe("Deals");
   });
 
   it("landing footer (home) carries Stores and the channel link", async () => {
@@ -55,5 +58,6 @@ describe("deals channel link", () => {
     render(<Foot locale="en" product={products[0]} />);
     expect(document.querySelector('footer#foot a[href="/stores"]')).not.toBeNull();
     expect(document.querySelectorAll(`footer#foot a[href="${URL}"]`)).toHaveLength(1);
+    expect(document.querySelectorAll('footer#foot a[href="/deals"]')).toHaveLength(1);
   });
 });

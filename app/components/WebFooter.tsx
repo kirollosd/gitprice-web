@@ -6,7 +6,7 @@ import { CookieSettingsButton } from "./CookieNotice";
 import FooterTagline from "./FooterTagline";
 import BetaTag from "./BetaTag";
 import Logo from "./Logo";
-import { ChannelLink } from "./NavLinks";
+import { ChannelLink, DealsLink } from "./NavLinks";
 import styles from "./WebFooter.module.css";
 
 const K = "web.component.webFooter.default.";
@@ -31,6 +31,7 @@ export default function WebFooter({ locale }: { locale: Locale }) {
               <li><Link href={pathFor(locale, "/faq")} className={styles.link} data-gp-track="cta_click" data-gp-cta-id="faq" data-gp-placement="footer">{t(locale, K + "label.faq")}</Link></li>
               <li><Link href={pathFor(locale, "/privacy")} className={styles.link} data-gp-track="cta_click" data-gp-cta-id="privacy_policy" data-gp-placement="footer">{t(locale, K + "label.privacy")}</Link></li>
               <li><Link href={pathFor(locale, "/terms")} className={styles.link} data-gp-track="cta_click" data-gp-cta-id="terms" data-gp-placement="footer">{t(locale, K + "label.terms")}</Link></li>
+              {env.telegramChannelUrl && <li><DealsLink locale={locale} placement="footer" className={styles.link} /></li>}
               {env.telegramChannelUrl && <li><ChannelLink locale={locale} placement="footer" className={styles.link} /></li>}
               <li><CookieSettingsButton locale={locale} className={`${styles.link} hit-target`} /></li>
             </ul>

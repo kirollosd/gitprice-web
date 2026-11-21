@@ -49,6 +49,16 @@ export function NavCta({ locale, keys, className, onNavigate }: { locale: Locale
 }
 
 /** "Join our deals channel": opens the public Telegram channel in a new tab. Hidden unless NEXT_PUBLIC_TELEGRAM_CHANNEL_URL is set. */
+/** The /deals page link; shown with the channel link, once the channel is live (NEXT_PUBLIC_TELEGRAM_CHANNEL_URL set). */
+export function DealsLink({ locale, placement, className, onNavigate }: { locale: Locale; placement: string; className?: string; onNavigate?: () => void }) {
+  if (!env.telegramChannelUrl) return null;
+  return (
+    <Link href={pathFor(locale, "/deals")} className={className} onClick={onNavigate} data-gp-track="cta_click" data-gp-cta-id="deals" data-gp-placement={placement}>
+      {t(locale, "web.component.webFooter.default.label.deals")}
+    </Link>
+  );
+}
+
 export function ChannelLink({ locale, placement, className, onNavigate }: { locale: Locale; placement: string; className?: string; onNavigate?: () => void }) {
   if (!env.telegramChannelUrl) return null;
   return (

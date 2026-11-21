@@ -1,6 +1,6 @@
 import { expect, test } from "./fixtures";
 
-const PAGES = ["/faq", "/stores", "/privacy", "/terms", "/welcome", "/pricing"];
+const PAGES = ["/faq", "/stores", "/deals", "/privacy", "/terms", "/welcome", "/pricing"];
 
 test.describe("390 wide", () => {
   test.use({ viewport: { width: 390, height: 800 } });
@@ -54,6 +54,7 @@ test("sitemap and robots", async ({ request }) => {
   const sm = await (await request.get("/sitemap.xml")).text();
   expect(sm).toContain("/ar/terms");
   expect(sm).toContain("/ar/stores");
+  expect(sm).toContain("/ar/deals");
   expect(sm).not.toMatch(/pricing|welcome|checkout|reset-password/);
   expect(await (await request.get("/robots.txt")).text()).toMatch(/Sitemap: .*\/sitemap\.xml/);
 });
@@ -82,8 +83,8 @@ test(`/sellers header "How it works" lands on a landing section, and there is no
   await expect(page.locator("#how")).toBeInViewport();
 });
 
-// The e2e API host is fake and unreachable at build time, so /stores renders its empty state: the page must still stand.
-for (const [p, empty] of [["/stores", "The store list is not available right now."], ["/ar/stores", "قائمة المتاجر غير متاحة الآن."]]) {
+// The e2e API host is fake and unreachable at build time, so /stores and /deals render their empty state: the page must still stand.
+for (const [p, empty] of [["/stores", "The store list is not available right now."], ["/ar/stores", "قائمة المتاجر غير متاحة الآن."], ["/deals", "No deals right now."], ["/ar/deals", "لا توجد عروض الآن."]]) {
   test(`${p} shows the calm empty state when the API is down`, async ({ page }) => {
     await page.goto(p);
     await expect(page.locator("main h1")).toBeVisible();
