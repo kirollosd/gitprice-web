@@ -135,6 +135,14 @@ describe("Dock", () => {
     expect(document.getElementById("dt")!.textContent).toBe(en.web.landing.dock.foot);
   });
 
+  // GP-906: launched, the footer line drops the launch-email promise.
+  it("launch: over the home footer the dock line says what the extension does, not a launch email", async () => {
+    await page(true);
+    document.getElementById("foot")!.getBoundingClientRect = () => ({ top: 10, bottom: 900 } as DOMRect);
+    act(() => { dispatchEvent(new Event("scroll")); vi.advanceTimersToNextFrame(); });
+    expect(document.getElementById("dt")!.textContent).toBe(en.web.landing.dock.rail);
+  });
+
   it("comes after <main> in document and tab order", async () => {
     await page();
     const main = document.querySelector("main")!;
@@ -192,6 +200,16 @@ describe("Dock", () => {
     expect(document.getElementById("dt")!.textContent).toBe(en.web.landing.dock.foot);
     act(() => { fireEvent.click(document.getElementById("dgo")!); });
     expect(document.activeElement).toBe(dock().querySelector('input[type="email"]'));
+    vi.doUnmock("next/navigation");
+  });
+
+  // GP-906: a launched site has no launch email to promise; the line says what Add to Chrome gets you instead.
+  it("launch: on a site page the dock line says what the extension does, not a launch email", async () => {
+    vi.doMock("next/navigation", () => ({ useRouter: () => ({ replace: vi.fn(), push: vi.fn() }), useSearchParams: () => new URLSearchParams(), usePathname: () => "/faq" }));
+    mockEnv(true);
+    const { default: Dock, JoinProvider } = await import("../app/landing/Dock");
+    render(<JoinProvider><main id="main" /><Dock locale="en" /></JoinProvider>);
+    expect(document.getElementById("dt")!.textContent).toBe(en.web.landing.dock.rail);
     vi.doUnmock("next/navigation");
   });
 

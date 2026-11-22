@@ -73,9 +73,10 @@ describe("Coral landing sections", () => {
       expect(guardHits(container)).toEqual([]);
     });
 
-    it(`the hero has no waitlist CTA, so it drops the CTA's free line (${locale})`, async () => {
+    // GP-906: the CTA's "Free. One email once we launch." line is gone from the copy; the hero promises no email
+    it(`the hero has no waitlist CTA and promises no email (${locale})`, async () => {
       await renderHome(locale);
-      expect(screen.queryByText(L[locale].hero.free)).toBeNull();
+      expect(document.querySelector("#num")!.textContent).not.toMatch(/email|إيميل/i);
       expect(document.querySelector("#num [data-join]")).toBeNull();
     });
   }
@@ -198,5 +199,13 @@ describe("Sellers", () => {
     ({ default: SellersPage } = await import("../app/[locale]/sellers/page"));
     render(await SellersPage({ params: Promise.resolve({ locale: "en" }) }));
     expect(document.querySelector("#waitlist")?.nextElementSibling).toBeNull();
+  });
+  // GP-906: the seller-access email line belongs to the prelaunch waitlist form only.
+  it("launched: the sellers page promises no email", async () => {
+    mockEnv(true);
+    const { default: SellersPage } = await import("../app/[locale]/sellers/page");
+    render(await SellersPage({ params: Promise.resolve({ locale: "en" }) }));
+    expect(document.body.textContent).not.toContain(en.web.sellers.cta.line);
+    expect(document.body.textContent).not.toMatch(/one email/i);
   });
 });

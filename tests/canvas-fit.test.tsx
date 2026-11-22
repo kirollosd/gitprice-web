@@ -30,6 +30,12 @@ describe("CanvasFit", () => {
     act(() => { window.dispatchEvent(new Event("resize")); });
     expect(to).toHaveBeenCalledTimes(1);
   });
+  it("marks the page once the resize restore is listening, and clears the mark on unmount", () => {
+    const { unmount } = render(<CanvasFit />);
+    expect(document.documentElement.dataset.gpFit).toBe("1");
+    unmount();
+    expect(document.documentElement.dataset.gpFit).toBeUndefined();
+  });
   it("a zoomed-down desktop canvas keeps a 12 rendered px text floor; at z >= 1 there is none", () => {
     const d = document.documentElement;
     vi.stubGlobal("innerHeight", 700);

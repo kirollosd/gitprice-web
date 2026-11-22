@@ -89,7 +89,8 @@ export function JoinButton({ locale, placement, className }: { locale: Locale; p
 const SECTIONS = [["foot", "foot"], ["alerts", "alerts"], ["rcpt", "print"], ["spot", "spot"], ["film", "film"], ["how", "how"]] as const;
 type Msg = (typeof SECTIONS)[number][1] | null;
 const MSG: Record<NonNullable<Msg>, string> = {
-  foot: K + "foot", alerts: K + "alerts", print: K + "print", spot: K + "spot", film: K + "film",
+  // launched there is no launch email to promise (GP-906): the line says what Add to Chrome gets you
+  foot: env.launch ? K + "rail" : K + "foot", alerts: K + "alerts", print: K + "print", spot: K + "spot", film: K + "film",
   how: "web.landing.how.panelSame", // the mock's "= Same product, another store" has no key yet; closest approved copy
 };
 const rect = (el: Element | null) => el?.getBoundingClientRect();
@@ -182,7 +183,7 @@ function DockBar({ locale }: { locale: Locale }) {
   const shown = !home || isOpen || (view.landed && !view.aside);
   const less = fmt(view.from - view.best, 2).replace(".00 ", " ");
   const line = joined ? esc(t(locale, K + "done"))
-    : !home ? esc(t(locale, K + "foot"))
+    : !home ? esc(t(locale, MSG.foot))
     : view.msg ? esc(t(locale, MSG[view.msg]))
     : html(locale, K + "elsewhere", {}, { price: `<bdi dir="ltr">${moneyTextHtml(formatMoney(view.best))}</bdi>`, less: `<bdi dir="ltr">${moneyTextHtml(less)}</bdi>` }).__html;
   const cls = [s.dock, shown && "in", view.dk && "dk", isOpen && "join", joined && "done"].filter(Boolean).join(" ");

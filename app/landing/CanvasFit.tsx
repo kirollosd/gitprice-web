@@ -37,7 +37,10 @@ export default function CanvasFit() {
     };
     window.addEventListener("scroll", track, { passive: true });
     window.addEventListener("resize", refit);
+    // the static HTML has no listener yet: tests wait for this mark before resizing (a resize before hydration is not restored)
+    document.documentElement.dataset.gpFit = "1";
     return () => {
+      delete document.documentElement.dataset.gpFit;
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", track);
       window.removeEventListener("resize", refit);
