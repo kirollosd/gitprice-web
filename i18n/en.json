@@ -1009,7 +1009,6 @@
         "srPrices": "{from} where you are. {to} at another store.",
         "join": "Join the waitlist",
         "seeHow": "See how it works ↓",
-        "free": "Free. One email once we launch.",
         "scrollCue": "Scroll down"
       },
       "how": {
@@ -1118,6 +1117,7 @@
         "join": "Join the waitlist",
         "howItWorks": "How it works",
         "facts": "Works on 70+ stores.<br>English and عربي.<br>One email when we launch.",
+        "factsLaunch": "Works on 70+ stores.<br>English and عربي.",
         "copyright": "© {year} GitPrice. All rights reserved."
       },
       "store": {

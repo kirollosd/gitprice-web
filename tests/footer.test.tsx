@@ -1,6 +1,8 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import ar from "../i18n/ar.json";
+import en from "../i18n/en.json";
 
 let pathname = "/";
 vi.mock("next/navigation", () => ({ usePathname: () => pathname }));
@@ -41,5 +43,28 @@ describe("landing footer landmark", () => {
     const { products } = await import("../app/landing/products");
     render(<main><Foot locale="en" product={products[0]} /></main>);
     expect(document.querySelector("footer#foot")?.getAttribute("role")).toBe("contentinfo");
+  });
+});
+
+// GP-906: the launched site has no launch email to send, so the footer facts stop promising one.
+describe("landing footer facts", () => {
+  afterEach(() => { vi.doUnmock("../lib/env"); vi.resetModules(); });
+  const facts = async (launch: boolean, locale: "en" | "ar") => {
+    vi.doMock("../app/components/CookieNotice", () => ({ CookieSettingsButton: () => null }));
+    vi.doMock("../lib/env", () => ({ env: { launch, chromeStoreUrl: "https://c.test", appStoreUrl: "https://a.test", playStoreUrl: "https://p.test" } }));
+    const { default: Foot } = await import("../app/landing/Foot");
+    const { products } = await import("../app/landing/products");
+    render(<main><Foot locale={locale} product={products[0]} /></main>);
+    return document.querySelector("#foot p")!.innerHTML.replaceAll("&nbsp;", "\u00a0");
+  };
+  it("launched: no launch-email promise, in either language", async () => {
+    expect(await facts(true, "en")).toBe(en.web.landing.foot.factsLaunch);
+    cleanup(); vi.resetModules();
+    expect(await facts(true, "ar")).toBe(ar.web.landing.foot.factsLaunch);
+    expect(en.web.landing.foot.factsLaunch).not.toMatch(/email/i);
+    expect(ar.web.landing.foot.factsLaunch).not.toMatch(/إيميل/);
+  });
+  it("prelaunch keeps the launch-email line (the waitlist form is there)", async () => {
+    expect(await facts(false, "en")).toBe(en.web.landing.foot.facts);
   });
 });

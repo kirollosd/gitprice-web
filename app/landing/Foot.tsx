@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { env } from "../../lib/env";
 import { t, type Locale } from "../../lib/i18n";
 import { pathFor } from "../../lib/locale";
 import BetaTag from "../components/BetaTag";
@@ -33,7 +34,8 @@ export default function Foot({ locale, product: P }: { locale: Locale; product: 
       </div>
       {/* facts and the legal row share one column, so the legal row follows the facts however long they run */}
       <div className={s.aside}>
-      <p className={s.meta} dangerouslySetInnerHTML={html(locale, K + "facts")} />
+      {/* launched there is no launch email to promise (GP-906) */}
+      <p className={s.meta} dangerouslySetInnerHTML={html(locale, K + (env.launch ? "factsLaunch" : "facts"))} />
       <div className={s.legal}>
         <p>{t(locale, K + "copyright", { year: 2026 })}</p>
         <nav aria-label={t(locale, W + "label.nav")}>
