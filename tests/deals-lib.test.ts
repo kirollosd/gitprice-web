@@ -45,6 +45,18 @@ describe("fetchDealLists", () => {
     expect(f).toHaveBeenCalledWith("http://localhost:8080/api/v1/deals/lists", expect.objectContaining({ credentials: "omit", next: { revalidate: 120 } }));
   });
 
+  it("drops entries with a non-finite count or non-string names", async () => {
+    mockFetch(new Response(JSON.stringify({ lists: [
+      { key: "ok", nameEn: "Ok", nameAr: "تمام", count: 2 },
+      { key: "nocount", nameEn: "A", nameAr: "ا" },
+      { key: "strcount", nameEn: "A", nameAr: "ا", count: "5" },
+      { key: "noname", nameEn: 1, nameAr: "ا", count: 1 },
+      { key: "noar", nameEn: "A", count: 1 },
+      null,
+    ] })));
+    expect((await fetchDealLists()).map((l) => l.key)).toEqual(["ok"]);
+  });
+
   it("returns [] on a 500 or non-JSON body", async () => {
     mockFetch(new Response("x", { status: 500 }));
     expect(await fetchDealLists()).toEqual([]);

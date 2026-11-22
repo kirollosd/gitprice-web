@@ -14,7 +14,9 @@ const ISO_DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
 /** The drop line, or null when the reference day cannot be read (no line beats a dangling one). */
 function dropText(locale: Locale, x: DealInsight, deal: PublicDeal): string | null {
   const diff = x.diff ?? 0;
-  const amount = diff < FRESH_DROP_MIN_PCT
+  const small = diff < FRESH_DROP_MIN_PCT;
+  if (small && !((x.ref ?? 0) > deal.price)) return null; // no usable reference price: no line beats a negative amount
+  const amount = small
     ? `${formatEGP((x.ref ?? 0) - deal.price)} ${t(locale, D + "currency")}`
     : `${Math.round(diff)}${locale === "ar" ? "٪" : "%"}`;
   const day = x.refDay ?? "";

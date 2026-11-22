@@ -48,7 +48,9 @@ export async function fetchDealLists(): Promise<DealList[]> {
     } as RequestInit);
     if (!res.ok) throw new Error(`deal lists: HTTP ${res.status}`);
     const body = (await res.json()) as { lists?: DealList[] };
-    return (body.lists ?? []).filter((l) => typeof l.key === "string" && LIST_KEY_RE.test(l.key) && l.count > 0);
+    return (body.lists ?? []).filter(
+      (l) => !!l && typeof l.key === "string" && LIST_KEY_RE.test(l.key) && typeof l.nameEn === "string" && typeof l.nameAr === "string" && Number.isFinite(l.count) && l.count > 0,
+    );
   } catch (err) {
     return emptyAtBuild<DealList[]>([], err);
   }

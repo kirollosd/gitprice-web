@@ -85,6 +85,10 @@ describe("DealsPage", () => {
     expect(items(one("en", { kind: "drop_since_prev", diff: 6, ref: 1400, refDay: "garbage <b>" }))).toEqual([]);
   });
 
+  it("renders no drop line in EGP when the reference price is missing", () => {
+    expect(items(one("en", { kind: "drop_since_prev", diff: 3, refDay: "2026-11-20" }))).toEqual([]);
+  });
+
   it("keeps the same key set under web.deals in en and ar", () => {
     const keys = (o: unknown, p = ""): string[] =>
       o && typeof o === "object" ? Object.entries(o).flatMap(([k, v]) => keys(v, `${p}${k}.`)) : [p];
