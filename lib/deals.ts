@@ -56,6 +56,23 @@ export async function fetchDealLists(): Promise<DealList[]> {
   }
 }
 
+/**
+ * Runs an API read for a dynamic page: a failure becomes an empty result the page can render calmly, flagged so the
+ * page can be noindex. Logs a fixed line with the error name and HTTP status only: never the URL, query or a body.
+ */
+export async function settle<T>(read: Promise<T[]>, log = true): Promise<{ data: T[]; failed: boolean }> {
+  try {
+    return { data: await read, failed: false };
+  } catch (err) {
+    if (log) {
+      const name = err instanceof Error ? err.name : "unknown";
+      const status = err instanceof Error ? /HTTP (\d{3})/.exec(err.message)?.[1] : undefined;
+      console.error(`deals page: API read failed (${name}${status ? `, HTTP ${status}` : ""})`);
+    }
+    return { data: [], failed: true };
+  }
+}
+
 export function listName(l: { nameEn: string; nameAr: string }, locale: "en" | "ar"): string {
   return locale === "ar" ? l.nameAr : l.nameEn;
 }

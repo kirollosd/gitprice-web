@@ -19,7 +19,6 @@ const LISTS: DealList[] = [
 const render = (locale: "en" | "ar", deals: PublicDeal[], lists: DealList[] = [], selected: string | null = null) =>
   renderToStaticMarkup(createElement(DealsPage, { locale, deals, lists, selected }));
 
-
 describe("DealsPage", () => {
   it("has no intro line under the heading", () => {
     expect(render("en", [deal])).not.toContain("Prices change, so check the store");

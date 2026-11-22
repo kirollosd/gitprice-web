@@ -89,7 +89,10 @@ for (const [p, empty] of [["/stores", "The store list is not available right now
     await page.goto(p);
     await expect(page.locator("main h1")).toBeVisible();
     await expect(page.locator("main")).toContainText(empty);
-    await expect(page.locator('meta[name="robots"]')).not.toHaveAttribute("content", /noindex/);
+    // an API outage on the dynamic /deals page is logged and noindex; /stores stays indexable
+    const robots = page.locator('meta[name="robots"]');
+    if (p.endsWith("/deals")) await expect(robots).toHaveAttribute("content", /noindex/);
+    else await expect(robots).not.toHaveAttribute("content", /noindex/);
   });
 }
 
@@ -100,7 +103,9 @@ test("/deals?list=__bad is still a 200 page, never an error", async ({ page }) =
   expect(res?.status()).toBe(200);
   await expect(page.locator("main h1")).toBeVisible();
   const all = page.locator('nav[aria-label="Filter by list"] a').first();
+  // no API: no chips, and the outage render must not be indexable; with an API: All is selected
   if (await all.count()) await expect(all).toHaveAttribute("aria-current", "page");
+  else await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
 });
 
 test.describe("/deals list chips", () => {
@@ -121,6 +126,10 @@ test.describe("/deals list chips", () => {
       const last = await chips.last().boundingBox();
       if (first && last && Math.abs(first.y - last.y) < 4) expect(dir === "rtl" ? first.x > last.x : first.x < last.x).toBe(true);
       await expect(chips.first()).toHaveAttribute("aria-current", "page");
+      // hit test: 6px above the chip is inside its 44px pad, so it still lands on the chip
+      const box = (await chips.first().boundingBox())!;
+      const hit = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest("a")?.getAttribute("href"), [box.x + box.width / 2, box.y - 6]);
+      expect(hit).toBe(await chips.first().getAttribute("href"));
       const target = chips.nth(1);
       const href = await target.getAttribute("href");
       await target.click();

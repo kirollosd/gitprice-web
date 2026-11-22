@@ -60,6 +60,9 @@
 }
 .chip:is(:global(.sel), [aria-pressed="true"]) { background: var(--chip-ink, var(--gp-web-ink)); border-color: var(--chip-ink, var(--gp-web-ink)); color: var(--chip-on, var(--gp-web-ground)); }
 :global(html.lp-m) .chip { min-height: calc(28px / var(--z, 1)); }
+/* interactive chips (links, buttons) keep the 28px look; an invisible ::after pad brings the tap area to 44px (ui-rules 9). Same pad as Hero .pick */
+a.chip, button.chip { position: relative; }
+a.chip::after, button.chip::after { content: ""; position: absolute; inset: 50% auto auto 50%; inline-size: calc(100% + 4px); block-size: calc(44px / var(--z, 1)); translate: -50% -50%; }
 
 /* GP-407 round 3 · the one segmented toggle: the receipt's With / Without and the trap's sort. The selected segment is
    contrast ink, never coral. A dark band sets --seg-bg / --seg-text / --seg-on / --seg-on-text. */

@@ -98,6 +98,7 @@ export default function DealsPage({ locale, deals, lists, selected }: { locale: 
           <ul className={styles.list}>
             {deals.map((d) => {
               const insights = d.insights.map((x) => insightText(locale, x, d)).filter((s): s is string => s !== null);
+              const rowList = listName({ nameEn: d.listNameEn, nameAr: d.listNameAr }, locale);
               return (
                 <li key={`${d.buyUrl}|${d.observedAt}`} className={styles.row}>
                   <div className={styles.body}>
@@ -110,7 +111,7 @@ export default function DealsPage({ locale, deals, lists, selected }: { locale: 
                         {insights.map((s) => <li key={s}>{s}</li>)}
                       </ul>
                     )}
-                    {d.listKey && <p className={styles.meta}>{locale === "ar" ? d.listNameAr : d.listNameEn}</p>}
+                    {rowList && <p className={styles.meta}>{rowList}</p>}
                     <p className={styles.meta}>{t(locale, D + "timeLine", { time: formatDealTime(d.observedAt) })}</p>
                     {d.status === "updated" && <p className={styles.meta}>{t(locale, D + "changed")}</p>}
                   </div>
