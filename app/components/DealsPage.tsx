@@ -2,6 +2,7 @@ import Link from "next/link";
 import { env } from "../../lib/env";
 import { cairoDay, formatDealTime, formatEGP, LIST_KEY_RE, listName, type DealInsight, type DealList, type PublicDeal } from "../../lib/deals";
 import { t, type Locale } from "../../lib/i18n";
+import { outUrl } from "../../lib/outbound";
 import { pathFor } from "../../lib/locale";
 import b from "../landing/base.module.css";
 import legal from "./LegalPage.module.css";
@@ -100,7 +101,7 @@ export default function DealsPage({ locale, deals, lists, selected }: { locale: 
               const insights = d.insights.map((x) => insightText(locale, x, d)).filter((s): s is string => s !== null);
               const rowList = listName({ nameEn: d.listNameEn, nameAr: d.listNameAr }, locale);
               return (
-                <li key={`${d.buyUrl}|${d.observedAt}`} className={styles.row}>
+                <li key={`${d.productUrl}|${d.observedAt}`} className={styles.row}>
                   <div className={styles.body}>
                     <h2 className={styles.title} dir="auto">{d.title}</h2>
                     <p className={styles.price}>
@@ -117,9 +118,9 @@ export default function DealsPage({ locale, deals, lists, selected }: { locale: 
                   </div>
                   <a
                     className="gp-btn-2 gp-btn-sm"
-                    href={d.buyUrl}
+                    href={outUrl(d.productUrl, "deals")}
                     target="_blank"
-                    rel="sponsored noopener"
+                    rel="sponsored nofollow noopener"
                     aria-label={t(locale, D + "buyLabel", { store: d.storeName })}
                     data-gp-track="cta_click"
                     data-gp-cta-id="deal_buy"

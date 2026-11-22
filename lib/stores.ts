@@ -1,7 +1,9 @@
 import { env } from "./env";
 import { emptyAtBuild } from "./isr-fallback";
+import { outUrl } from "./outbound";
 
-export type PublicStore = { id: number; name: string; domain: string; country: string; url: string };
+/** url is the tagged homepage; homepage is the plain one, for the click-tracked /out (older APIs omit it). */
+export type PublicStore = { id: number; name: string; domain: string; country: string; url: string; homepage?: string };
 export type CountryGroup = { country: string; stores: PublicStore[] };
 
 const HOME_COUNTRY = "EG";
@@ -12,7 +14,7 @@ const featuredRank = (s: PublicStore) => {
   return i === -1 ? FEATURED_DOMAINS.length : i;
 };
 
-/** GET /api/v1/stores/public, refreshed hourly. A failure renders the empty state at build time and keeps the last good page at runtime. */
+/** GET /api/v1/stores/public, refreshed hourly (only the store list: links resolve at click time through /out). A failure renders the empty state at build time and keeps the last good page at runtime. */
 export async function fetchStores(): Promise<PublicStore[]> {
   try {
     const res = await fetch(`${env.apiBaseUrl}/api/v1/stores/public`, {
@@ -38,4 +40,9 @@ export function groupByCountry(stores: PublicStore[]): CountryGroup[] {
   return [...byCountry.keys()]
     .sort((a, b) => (a === HOME_COUNTRY ? -1 : b === HOME_COUNTRY ? 1 : a.localeCompare(b)))
     .map((country) => ({ country, stores: [...byCountry.get(country)!].sort((a, b) => featuredRank(a) - featuredRank(b)) }));
+}
+
+/** The store's href: the click-tracked /out for its plain homepage, else the tagged url (an API without homepage has no /out). */
+export function storeHref(s: PublicStore): string {
+  return typeof s.homepage === "string" && s.homepage.startsWith("https://") ? outUrl(s.homepage, "stores") : s.url;
 }

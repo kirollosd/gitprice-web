@@ -36,8 +36,8 @@ describe("deals", () => {
     await expect(fetchDeals()).rejects.toThrow(/502/);
   });
 
-  it("fetchDeals drops deals whose buy link is not https", async () => {
-    mockFetch(new Response(JSON.stringify({ deals: [deal(), deal({ title: "evil", buyUrl: "javascript:alert(1)" })] }), { status: 200 }));
+  it("fetchDeals drops deals whose product link (the /out target) is not https", async () => {
+    mockFetch(new Response(JSON.stringify({ deals: [deal(), deal({ title: "evil", productUrl: "javascript:alert(1)" })] }), { status: 200 }));
     expect((await fetchDeals()).map((d) => d.title)).toEqual(["Phone X"]);
   });
 

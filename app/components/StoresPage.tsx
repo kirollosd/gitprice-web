@@ -1,5 +1,5 @@
 import { t, type Locale } from "../../lib/i18n";
-import type { CountryGroup } from "../../lib/stores";
+import { storeHref, type CountryGroup } from "../../lib/stores";
 import legal from "./LegalPage.module.css";
 import styles from "./StoresPage.module.css";
 
@@ -26,9 +26,9 @@ export default function StoresPage({ locale, groups }: { locale: Locale; groups:
                   </span>
                   <a
                     className="gp-btn-2 gp-btn-sm"
-                    href={s.url}
+                    href={storeHref(s)}
                     target="_blank"
-                    rel="sponsored noopener"
+                    rel="sponsored nofollow noopener"
                     aria-label={t(locale, "web.stores.goLabel", { name: s.name })}
                     data-gp-track="cta_click"
                     data-gp-cta-id={`store_${s.id}`}

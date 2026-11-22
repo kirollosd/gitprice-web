@@ -25,13 +25,13 @@ describe("DealsPage", () => {
     expect(render("ar", [])).not.toContain("فتحقق من المتجر قبل الشراء");
   });
 
-  it("deal card shows price, Cairo time and a sponsored buy link", () => {
+  it("deal card shows price, Cairo time and a click-tracked sponsored buy link", () => {
     const html = render("en", [deal]);
     expect(html).toContain("Phone &lt;X&gt;");
     expect(html).toMatch(/1,299[\s\S]*EGP/);
     expect(html).toContain("Price at 21/11 14:05 Cairo time, may change");
-    expect(html).toContain('href="https://amazon.eg/dp/B0AAAAAAAA?tag=gitpriceeg-21"');
-    expect(html).toContain('rel="sponsored noopener"');
+    expect(html).toContain('href="http://localhost:8080/api/v1/out?url=https%3A%2F%2Famazon.eg%2Fdp%2FB0AAAAAAAA&amp;from=deals"');
+    expect(html).toContain('rel="sponsored nofollow noopener"');
     expect(html).toContain('target="_blank"');
     expect(html).toContain(">Buy at Amazon Egypt<");
   });

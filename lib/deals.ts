@@ -32,8 +32,8 @@ export async function fetchDeals(list?: string): Promise<PublicDeal[]> {
     } as RequestInit);
     if (!res.ok) throw new Error(`deals feed: HTTP ${res.status}`);
     const body = (await res.json()) as { deals?: PublicDeal[] };
-    // the buy link lands in an href: only https links from the API are rendered
-    return (body.deals ?? []).filter((d) => typeof d.buyUrl === "string" && d.buyUrl.startsWith("https://"));
+    // the product link goes into the /out href (GP-905): only https links from the API are rendered
+    return (body.deals ?? []).filter((d) => typeof d.productUrl === "string" && d.productUrl.startsWith("https://"));
   } catch (err) {
     return emptyAtBuild<PublicDeal[]>([], err);
   }
