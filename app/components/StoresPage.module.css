@@ -1,0 +1,15 @@
+/* /stores: plain rows under each country, the legal template around them. Tokens only; logical properties so Arabic mirrors. */
+.article { margin-block-start: var(--gp-wsp-4); }
+.list { list-style: none; }
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gp-wsp-2);
+  padding-block: var(--gp-wsp-2);
+  border-block-end: 1px solid var(--gp-hairline);
+}
+.row:first-child { border-block-start: 1px solid var(--gp-hairline); }
+.name { display: flex; flex-direction: column; min-inline-size: 0; font-size: var(--web-fs-body); font-weight: 600; line-height: var(--gp-lh-tight); }
+.domain { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); font-weight: 400; text-align: start; overflow-wrap: anywhere; }
+.row a { flex: none; }

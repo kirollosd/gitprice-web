@@ -1,0 +1,28 @@
+/* /deals: hairline rows like /stores, text only. Tokens only; logical properties so Arabic mirrors. */
+.channel { margin-block-start: var(--gp-wsp-2); }
+.article { margin-block-start: var(--gp-wsp-4); }
+.list { list-style: none; }
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gp-wsp-3);
+  padding-block: var(--gp-wsp-3);
+  border-block-end: 1px solid var(--gp-hairline);
+}
+.row:first-child { border-block-start: 1px solid var(--gp-hairline); }
+.row > a { flex: none; }
+.body { display: flex; flex-direction: column; gap: var(--gp-wsp-1); min-inline-size: 0; }
+.title { font-size: var(--web-fs-body); font-weight: 600; line-height: var(--gp-lh-tight); overflow-wrap: anywhere; }
+/* the price stays an LTR unit so "1,299 ج.م" never flips; bold ink, never coloured */
+.price { font-size: var(--web-fs-title); font-weight: 700; line-height: var(--gp-lh-tight); font-variant-numeric: tabular-nums; }
+.cur { font-size: var(--web-fs-body); font-weight: 600; }
+.insights { list-style: none; font-size: var(--web-fs-body); line-height: var(--web-lh-body); }
+.meta { color: var(--gp-ink-muted); font-size: var(--gp-fs-caption); }
+@media (max-width: 767px) {
+  .row { flex-direction: column; align-items: stretch; }
+  .row > a { align-self: start; }
+}
+/* list filter: the shared .chip links (its 44px tap pad lives on .chip); 8px gap, wraps, never scrolls sideways */
+.chips { display: flex; flex-wrap: wrap; gap: var(--gp-wsp-1); margin-block-start: var(--gp-wsp-3); }
+.chips a { text-decoration: none; }

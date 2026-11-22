@@ -1,0 +1,47 @@
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { describe, expect, it } from "vitest";
+import StoresPage from "../app/components/StoresPage";
+import type { CountryGroup } from "../lib/stores";
+
+const groups: CountryGroup[] = [
+  { country: "EG", stores: [{ id: 1, name: "Amazon", domain: "amazon.eg", country: "EG", url: "https://www.amazon.eg/?tag=gitpriceeg-21", homepage: "https://www.amazon.eg/" }] },
+  { country: "SA", stores: [{ id: 9, name: "Noon", domain: "noon.com", country: "SA", url: "https://www.noon.com/saudi-en/" }] },
+];
+const render = (locale: "en" | "ar", g: CountryGroup[]) => renderToStaticMarkup(createElement(StoresPage, { locale, groups: g }));
+
+describe("StoresPage", () => {
+  it("lists each country under its own heading, in the page language", () => {
+    expect(render("en", groups)).toMatch(/<h2[^>]*>Egypt<\/h2>[\s\S]*<h2[^>]*>Saudi Arabia<\/h2>/);
+    expect(render("ar", groups)).toContain(">مصر</h2>");
+  });
+
+  it("links each store through the API's click-tracked /out as a sponsored new-tab link", () => {
+    const html = render("en", groups);
+    expect(html).toContain('href="http://localhost:8080/api/v1/out?url=https%3A%2F%2Fwww.amazon.eg%2F&amp;from=stores"');
+    expect(html).toContain('rel="sponsored nofollow noopener"');
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('aria-label="Go to Amazon (opens in a new tab)"');
+  });
+
+  it("isolates Latin store names on the Arabic page so trailing punctuation stays put", () => {
+    expect(render("ar", groups)).toMatch(/<span[^>]*dir="auto"[^>]*>Amazon/);
+  });
+
+  it("titles the page Stores with no intro line under the heading", () => {
+    const en = render("en", groups);
+    expect(en).toMatch(/<h1[^>]*>Stores<\/h1>/);
+    expect(en).not.toContain("GitPrice compares prices across these stores");
+    expect(render("ar", groups)).toMatch(/<h1[^>]*>المتاجر<\/h1>/);
+  });
+
+  it("shows the calm empty state when there are no stores", () => {
+    const html = render("ar", []);
+    expect(html).toContain("قائمة المتاجر غير متاحة الآن");
+    expect(html).not.toContain("<h2");
+  });
+
+  it("keeps the tagged url when the API sends no plain homepage (an API without /out)", () => {
+    expect(render("en", groups)).toContain('href="https://www.noon.com/saudi-en/"');
+  });
+});
