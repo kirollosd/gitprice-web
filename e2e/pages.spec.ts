@@ -1,6 +1,6 @@
 import { expect, test } from "./fixtures";
 
-const PAGES = ["/faq", "/privacy", "/terms", "/welcome", "/pricing"];
+const PAGES = ["/faq", "/stores", "/deals", "/privacy", "/terms", "/welcome", "/pricing"];
 
 test.describe("390 wide", () => {
   test.use({ viewport: { width: 390, height: 800 } });
@@ -53,6 +53,8 @@ test("prelaunch pricing CTAs open the waitlist in the dock", async ({ page }) =>
 test("sitemap and robots", async ({ request }) => {
   const sm = await (await request.get("/sitemap.xml")).text();
   expect(sm).toContain("/ar/terms");
+  expect(sm).toContain("/ar/stores");
+  expect(sm).toContain("/ar/deals");
   expect(sm).not.toMatch(/pricing|welcome|checkout|reset-password/);
   expect(await (await request.get("/robots.txt")).text()).toMatch(/Sitemap: .*\/sitemap\.xml/);
 });
@@ -79,4 +81,60 @@ test(`/sellers header "How it works" lands on a landing section, and there is no
   await nav.getByRole("link", { name: /how it works/i }).click();
   await expect(page).toHaveURL(/\/#how$/);
   await expect(page.locator("#how")).toBeInViewport();
+});
+
+// The e2e API host is fake and unreachable at build time, so /stores and /deals render their empty state: the page must still stand.
+for (const [p, empty] of [["/stores", "The store list is not available right now."], ["/ar/stores", "قائمة المتاجر غير متاحة الآن."], ["/deals", "No deals right now."], ["/ar/deals", "لا توجد عروض الآن."]]) {
+  test(`${p} shows the calm empty state when the API is down`, async ({ page }) => {
+    await page.goto(p);
+    await expect(page.locator("main h1")).toBeVisible();
+    await expect(page.locator("main")).toContainText(empty);
+    // an API outage on the dynamic /deals page is logged and noindex; /stores stays indexable
+    const robots = page.locator('meta[name="robots"]');
+    if (p.endsWith("/deals")) await expect(robots).toHaveAttribute("content", /noindex/);
+    else await expect(robots).not.toHaveAttribute("content", /noindex/);
+  });
+}
+
+// /deals list chips. The e2e API host is fake, so the chips only render when a real or mocked deals API answers
+// (PLAYWRIGHT_BASE_URL at a deployment, or a local build with NEXT_PUBLIC_API_BASE_URL at a mock): those tests skip otherwise.
+test("/deals?list=__bad is still a 200 page, never an error", async ({ page }) => {
+  const res = await page.goto("/deals?list=__bad");
+  expect(res?.status()).toBe(200);
+  await expect(page.locator("main h1")).toBeVisible();
+  const all = page.locator('nav[aria-label="Filter by list"] a').first();
+  // no API: no chips, and the outage render must not be indexable; with an API: All is selected
+  if (await all.count()) await expect(all).toHaveAttribute("aria-current", "page");
+  else await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+});
+
+test.describe("/deals list chips", () => {
+  for (const [base, dir] of [["/deals", "ltr"], ["/ar/deals", "rtl"]] as const) {
+    test(`${base}: chips filter by link, wrap without sideways scroll, 44px tap target, ${dir} order`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 800 });
+      await page.goto(base);
+      const nav = page.locator("main nav", { has: page.locator('a[href*="list="]') });
+      test.skip((await nav.count()) === 0, "no deals API in this environment");
+      const chips = nav.locator("a");
+      expect(await nav.evaluate((n) => n.scrollWidth <= n.clientWidth)).toBe(true);
+      for (const a of await chips.all()) {
+        const pad = await a.evaluate((e) => parseFloat(getComputedStyle(e, "::after").height));
+        expect(pad).toBeGreaterThanOrEqual(43.9);
+      }
+      // the first chip (All) sits at the reading start: right of the last chip in rtl, left in ltr
+      const first = await chips.first().boundingBox();
+      const last = await chips.last().boundingBox();
+      if (first && last && Math.abs(first.y - last.y) < 4) expect(dir === "rtl" ? first.x > last.x : first.x < last.x).toBe(true);
+      await expect(chips.first()).toHaveAttribute("aria-current", "page");
+      // hit test: 6px above the chip is inside its 44px pad, so it still lands on the chip
+      const box = (await chips.first().boundingBox())!;
+      const hit = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest("a")?.getAttribute("href"), [box.x + box.width / 2, box.y - 6]);
+      expect(hit).toBe(await chips.first().getAttribute("href"));
+      const target = chips.nth(1);
+      const href = await target.getAttribute("href");
+      await target.click();
+      await expect(page).toHaveURL(new RegExp(`${href!.replace("?", "\\?")}$`));
+      await expect(page.locator(`main nav a[href="${href}"]`)).toHaveAttribute("aria-current", "page");
+    });
+  }
 });

@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   // app/global-not-found.tsx: the 404 document for a site whose root layouts are per locale.
   experimental: { globalNotFound: true },
+  // lib/tokens.ts reads this at render time; dynamic routes (e.g. /deals?list=) need it in their serverless bundle.
+  outputFileTracingIncludes: { "/**": ["./styles/tokens.css"] },
   async redirects() {
     return [
       { source: "/", has: www, destination: "https://gitprice.com/", permanent: true },

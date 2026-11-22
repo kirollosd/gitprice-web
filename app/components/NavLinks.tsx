@@ -47,3 +47,22 @@ export function NavCta({ locale, keys, className, onNavigate }: { locale: Locale
   if (!href) return <JoinCta label={label} className={className} placement="nav" ctaId={ctaId} onOpen={onNavigate} />;
   return <Link href={href} className={className} onClick={onNavigate} data-gp-track="cta_click" data-gp-cta-id={ctaId} data-gp-placement="nav">{label}</Link>;
 }
+
+/** The /deals page link: footer, landing footer and menu sheet, whether or not the Telegram channel is live. */
+export function DealsLink({ locale, placement, className, onNavigate }: { locale: Locale; placement: string; className?: string; onNavigate?: () => void }) {
+  return (
+    <Link href={pathFor(locale, "/deals")} className={className} onClick={onNavigate} data-gp-track="cta_click" data-gp-cta-id="deals" data-gp-placement={placement}>
+      {t(locale, "web.component.webFooter.default.label.deals")}
+    </Link>
+  );
+}
+
+/** "Join our deals channel": opens the public Telegram channel in a new tab. Hidden unless NEXT_PUBLIC_TELEGRAM_CHANNEL_URL is set. */
+export function ChannelLink({ locale, placement, className, onNavigate }: { locale: Locale; placement: string; className?: string; onNavigate?: () => void }) {
+  if (!env.telegramChannelUrl) return null;
+  return (
+    <a href={env.telegramChannelUrl} target="_blank" rel="noopener" className={className} onClick={onNavigate} data-gp-track="cta_click" data-gp-cta-id="deals_channel" data-gp-placement={placement}>
+      {t(locale, "web.channel.join")}
+    </a>
+  );
+}

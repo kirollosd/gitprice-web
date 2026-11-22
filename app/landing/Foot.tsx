@@ -4,6 +4,7 @@ import { t, type Locale } from "../../lib/i18n";
 import { pathFor } from "../../lib/locale";
 import BetaTag from "../components/BetaTag";
 import { CookieSettingsButton } from "../components/CookieNotice";
+import { ChannelLink, DealsLink } from "../components/NavLinks";
 import b from "./base.module.css";
 import { JoinButton } from "./Dock";
 import { html } from "./html";
@@ -39,6 +40,9 @@ export default function Foot({ locale, product: P }: { locale: Locale; product: 
       <div className={s.legal}>
         <p>{t(locale, K + "copyright", { year: 2026 })}</p>
         <nav aria-label={t(locale, W + "label.nav")}>
+          <Link href={pathFor(locale, "/stores")} data-gp-track="cta_click" data-gp-cta-id="stores" data-gp-placement="footer">{t(locale, W + "label.stores")}</Link>
+          <DealsLink locale={locale} placement="footer" />
+          <ChannelLink locale={locale} placement="footer" />
           <Link href={pathFor(locale, "/faq")} data-gp-track="cta_click" data-gp-cta-id="faq" data-gp-placement="footer">{t(locale, W + "label.faq")}</Link>
           <Link href={pathFor(locale, "/privacy")} data-gp-track="cta_click" data-gp-cta-id="privacy_policy" data-gp-placement="footer">{t(locale, W + "label.privacy")}</Link>
           <Link href={pathFor(locale, "/terms")} data-gp-track="cta_click" data-gp-cta-id="terms" data-gp-placement="footer">{t(locale, W + "label.terms")}</Link>

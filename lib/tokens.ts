@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 // Server-only: for places CSS variables cannot reach (metadata, the OG image). Values come from the synced tokens.css.
-// Reads the file at render time: safe only while every caller's page is statically prerendered (the file is not traced into a serverless bundle).
+// Reads the file at render time; next.config.ts traces it into every route's serverless bundle so dynamic pages can read it too.
 const css = () => readFileSync(join(process.cwd(), "styles/tokens.css"), "utf8");
 const LIGHT_BLOCK = '[data-gp="web"] {';
 const DARK_BLOCK = '[data-gp="web"][data-theme="dark"]';
