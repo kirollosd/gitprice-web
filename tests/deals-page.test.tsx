@@ -2,7 +2,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import DealsPage from "../app/components/DealsPage";
-import { formatEGP, type PublicDeal } from "../lib/deals";
+import { formatEGP, type DealList, type PublicDeal } from "../lib/deals";
 import en from "../i18n/en.json";
 import ar from "../i18n/ar.json";
 
@@ -12,7 +12,13 @@ const deal: PublicDeal = {
   buyUrl: "https://amazon.eg/dp/B0AAAAAAAA?tag=gitpriceeg-21", productUrl: "https://amazon.eg/dp/B0AAAAAAAA", status: "posted",
   listKey: "phones", listNameEn: "Phones", listNameAr: "هواتف",
 };
-const render = (locale: "en" | "ar", deals: PublicDeal[]) => renderToStaticMarkup(createElement(DealsPage, { locale, deals }));
+const LISTS: DealList[] = [
+  { key: "phones", nameEn: "Phones", nameAr: "هواتف", count: 3 },
+  { key: "food", nameEn: "Food", nameAr: "طعام", count: 1 },
+];
+const render = (locale: "en" | "ar", deals: PublicDeal[], lists: DealList[] = [], selected: string | null = null) =>
+  renderToStaticMarkup(createElement(DealsPage, { locale, deals, lists, selected }));
+
 
 describe("DealsPage", () => {
   it("has no intro line under the heading", () => {
@@ -94,5 +100,66 @@ describe("DealsPage", () => {
       o && typeof o === "object" ? Object.entries(o).flatMap(([k, v]) => keys(v, `${p}${k}.`)) : [p];
     const d = (x: typeof en) => keys((x as unknown as { web: { deals: unknown } }).web.deals).sort();
     expect(d(ar as unknown as typeof en)).toEqual(d(en));
+  });
+
+  describe("list chips", () => {
+    const nav = (html: string) => html.match(/<nav[\s\S]*?<\/nav>/)?.[0] ?? "";
+    const anchors = (html: string) => [...nav(html).matchAll(/<a ([^>]*)>([\s\S]*?)<\/a>/g)].map((m) => ({ attrs: m[1], text: m[2] }));
+
+    it("renders All plus one link per list; the selected chip is .sel with aria-current", () => {
+      const a = anchors(render("en", [deal], LISTS, "phones"));
+      expect(a).toHaveLength(3);
+      const phones = a[1];
+      expect(phones.attrs).toContain('href="/deals?list=phones"');
+      expect(phones.attrs).toContain('aria-current="page"');
+      expect(phones.attrs).toMatch(/class="[^"]*\bsel\b/);
+      expect(a[0].attrs).toContain('href="/deals"');
+      expect(a[0].attrs).not.toContain("aria-current");
+      expect(a[2].attrs).not.toContain("aria-current");
+      expect(nav(render("en", [deal], LISTS, "phones"))).toContain('aria-label="Filter by list"');
+    });
+
+    it("marks All current when nothing is selected, and links Arabic chips under /ar", () => {
+      const a = anchors(render("ar", [deal], LISTS, null));
+      expect(a[0].attrs).toContain('aria-current="page"');
+      expect(a[0].attrs).toContain('href="/ar/deals"');
+      expect(a[1].attrs).toContain('href="/ar/deals?list=phones"');
+      expect(a[0].text).toContain("الكل");
+    });
+
+    it("shows each chip name with its count in a span, in API order", () => {
+      const a = anchors(render("en", [deal], LISTS, null));
+      expect(a.map((x) => x.text.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim())).toEqual(["All", "Phones 3", "Food 1"]);
+      expect(a[1].text).toMatch(/<span[^>]*>3<\/span>/);
+    });
+
+    it("renders no nav when there are no lists", () => {
+      expect(render("en", [deal], [], null)).not.toContain("<nav");
+    });
+
+    it("escapes a hostile list name", () => {
+      const html = render("en", [deal], [{ key: "bad_one", nameEn: "<b>", nameAr: "<b>", count: 1 }], null);
+      expect(html).toContain("&lt;b&gt;");
+      expect(html).not.toContain("<b>");
+    });
+
+    it("never builds an href from an invalid key", () => {
+      const html = render("en", [deal], [{ key: "A b\"><x", nameEn: "X", nameAr: "X", count: 1 }], null);
+      expect(html).not.toContain("<x");
+      expect(html).not.toContain("list=A");
+    });
+
+    it("shows the row's list name in the page language as plain meta text, not a chip", () => {
+      expect(render("ar", [deal])).toMatch(/<p class="[^"]*meta[^"]*">هواتف<\/p>/);
+      const en = render("en", [deal]);
+      expect(en).toMatch(/<p class="[^"]*meta[^"]*">Phones<\/p>/);
+      expect(en).not.toContain("هواتف");
+    });
+
+    it("an empty selected list shows the empty copy plus an All link", () => {
+      const html = render("en", [], LISTS, "food");
+      expect(html).toContain("No deals right now.");
+      expect(html.match(/<a [^>]*href="\/deals"[^>]*>All<\/a>/g)).toHaveLength(2); // the chip and the empty-state link
+    });
   });
 });

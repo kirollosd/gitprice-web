@@ -23,3 +23,7 @@
   .row { flex-direction: column; align-items: stretch; }
   .row > a { align-self: start; }
 }
+/* list filter: the shared .chip links; 8px gap, wraps (never scrolls sideways); an invisible ::after pad lifts the 28px chip to a 44px tap target */
+.chips { display: flex; flex-wrap: wrap; gap: var(--gp-wsp-1); margin-block-start: var(--gp-wsp-3); }
+.chips a { position: relative; text-decoration: none; }
+.chips a::after { content: ""; position: absolute; inset: 50% auto auto 50%; inline-size: calc(100% + var(--gp-wsp-1)); block-size: 44px; translate: -50% -50%; }

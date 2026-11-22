@@ -92,3 +92,40 @@ for (const [p, empty] of [["/stores", "The store list is not available right now
     await expect(page.locator('meta[name="robots"]')).not.toHaveAttribute("content", /noindex/);
   });
 }
+
+// /deals list chips. The e2e API host is fake, so the chips only render when a real or mocked deals API answers
+// (PLAYWRIGHT_BASE_URL at a deployment, or a local build with NEXT_PUBLIC_API_BASE_URL at a mock): those tests skip otherwise.
+test("/deals?list=__bad is still a 200 page, never an error", async ({ page }) => {
+  const res = await page.goto("/deals?list=__bad");
+  expect(res?.status()).toBe(200);
+  await expect(page.locator("main h1")).toBeVisible();
+  const all = page.locator('nav[aria-label="Filter by list"] a').first();
+  if (await all.count()) await expect(all).toHaveAttribute("aria-current", "page");
+});
+
+test.describe("/deals list chips", () => {
+  for (const [base, dir] of [["/deals", "ltr"], ["/ar/deals", "rtl"]] as const) {
+    test(`${base}: chips filter by link, wrap without sideways scroll, 44px tap target, ${dir} order`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 800 });
+      await page.goto(base);
+      const nav = page.locator("main nav", { has: page.locator('a[href*="list="]') });
+      test.skip((await nav.count()) === 0, "no deals API in this environment");
+      const chips = nav.locator("a");
+      expect(await nav.evaluate((n) => n.scrollWidth <= n.clientWidth)).toBe(true);
+      for (const a of await chips.all()) {
+        const pad = await a.evaluate((e) => parseFloat(getComputedStyle(e, "::after").height));
+        expect(pad).toBeGreaterThanOrEqual(43.9);
+      }
+      // the first chip (All) sits at the reading start: right of the last chip in rtl, left in ltr
+      const first = await chips.first().boundingBox();
+      const last = await chips.last().boundingBox();
+      if (first && last && Math.abs(first.y - last.y) < 4) expect(dir === "rtl" ? first.x > last.x : first.x < last.x).toBe(true);
+      await expect(chips.first()).toHaveAttribute("aria-current", "page");
+      const target = chips.nth(1);
+      const href = await target.getAttribute("href");
+      await target.click();
+      await expect(page).toHaveURL(new RegExp(`${href!.replace("?", "\\?")}$`));
+      await expect(page.locator(`main nav a[href="${href}"]`)).toHaveAttribute("aria-current", "page");
+    });
+  }
+});

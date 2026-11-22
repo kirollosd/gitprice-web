@@ -1,6 +1,9 @@
+import Link from "next/link";
 import { env } from "../../lib/env";
-import { cairoDay, formatDealTime, formatEGP, type DealInsight, type PublicDeal } from "../../lib/deals";
+import { cairoDay, formatDealTime, formatEGP, LIST_KEY_RE, listName, type DealInsight, type DealList, type PublicDeal } from "../../lib/deals";
 import { t, type Locale } from "../../lib/i18n";
+import { pathFor } from "../../lib/locale";
+import b from "../landing/base.module.css";
 import legal from "./LegalPage.module.css";
 import { ChannelLink } from "./NavLinks";
 import styles from "./DealsPage.module.css";
@@ -52,8 +55,28 @@ function insightText(locale: Locale, x: DealInsight, deal: PublicDeal): string |
   }
 }
 
+const dealsPath = (locale: Locale, key?: string) => pathFor(locale, key ? `/deals?list=${key}` : "/deals");
+
+/** The list filter: the shared .chip as links, so a filtered page is shareable and stays server-rendered. Hidden with no lists. */
+function ListChips({ lists, selected, locale }: { lists: DealList[]; selected: string | null; locale: Locale }) {
+  const shown = lists.filter((l) => LIST_KEY_RE.test(l.key));
+  if (shown.length === 0) return null;
+  const chip = (on: boolean) => (on ? `${b.chip} sel` : b.chip);
+  const cur = (on: boolean) => (on ? ("page" as const) : undefined);
+  return (
+    <nav aria-label={t(locale, D + "lists.label")} className={styles.chips}>
+      <Link href={dealsPath(locale)} className={chip(selected === null)} aria-current={cur(selected === null)}>{t(locale, D + "lists.all")}</Link>
+      {shown.map((l) => (
+        <Link key={l.key} href={dealsPath(locale, l.key)} className={chip(selected === l.key)} aria-current={cur(selected === l.key)}>
+          {listName(l, locale)} <span className={b.mono}>{l.count}</span>
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
 /** The deals channel's live posts, as text rows (no product images). The legal page template, like /stores. Copy: web.deals.*. */
-export default function DealsPage({ locale, deals }: { locale: Locale; deals: PublicDeal[] }) {
+export default function DealsPage({ locale, deals, lists, selected }: { locale: Locale; deals: PublicDeal[]; lists: DealList[]; selected: string | null }) {
   return (
     <div className={`container ${legal.page}`}>
       <header className={legal.header}>
@@ -64,9 +87,13 @@ export default function DealsPage({ locale, deals }: { locale: Locale; deals: Pu
           {t(locale, "web.channel.body")} <ChannelLink locale={locale} placement="deals" />
         </p>
       )}
+      <ListChips lists={lists} selected={selected} locale={locale} />
       <article className={`${legal.article} ${styles.article}`}>
         {deals.length === 0 ? (
-          <p className={legal.body}>{t(locale, D + "empty")}</p>
+          <>
+            <p className={legal.body}>{t(locale, D + "empty")}</p>
+            {selected !== null && <p className={legal.body}><Link href={dealsPath(locale)}>{t(locale, D + "lists.all")}</Link></p>}
+          </>
         ) : (
           <ul className={styles.list}>
             {deals.map((d) => {
@@ -83,6 +110,7 @@ export default function DealsPage({ locale, deals }: { locale: Locale; deals: Pu
                         {insights.map((s) => <li key={s}>{s}</li>)}
                       </ul>
                     )}
+                    {d.listKey && <p className={styles.meta}>{locale === "ar" ? d.listNameAr : d.listNameEn}</p>}
                     <p className={styles.meta}>{t(locale, D + "timeLine", { time: formatDealTime(d.observedAt) })}</p>
                     {d.status === "updated" && <p className={styles.meta}>{t(locale, D + "changed")}</p>}
                   </div>
