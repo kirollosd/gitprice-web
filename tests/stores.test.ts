@@ -17,6 +17,40 @@ describe("stores", () => {
     expect(groups[0].stores.map((s) => s.name)).toEqual(["noon", "amazon"]);
   });
 
+  const dom = (name: string, domain: string, country = "EG"): PublicStore => ({ ...store(name, country), domain });
+  const amazon = dom("Amazon Egypt", "amazon.eg");
+  const noon = dom("Noon", "noon.com");
+  const jumia = dom("Jumia Egypt", "jumia.com.eg");
+  const btech = dom("B.Tech", "btech.com");
+  const carrefour = dom("Carrefour", "carrefouregypt.com");
+  const talabat = dom("Talabat", "talabat.com");
+
+  it("groupByCountry puts Amazon, Noon, Jumia first within a group, rest in API order", () => {
+    const groups = groupByCountry([amazon, btech, carrefour, jumia, noon, talabat]);
+    expect(groups[0].stores.map((s) => s.name)).toEqual(["Amazon Egypt", "Noon", "Jumia Egypt", "B.Tech", "Carrefour", "Talabat"]);
+  });
+
+  it("groupByCountry keeps the other featured stores first when one is missing", () => {
+    const groups = groupByCountry([btech, jumia, carrefour, amazon, talabat]);
+    expect(groups[0].stores.map((s) => s.name)).toEqual(["Amazon Egypt", "Jumia Egypt", "B.Tech", "Carrefour", "Talabat"]);
+  });
+
+  it("groupByCountry does not feature other domains such as www.jumia.ma", () => {
+    const ma = [dom("Zed", "zed.ma", "MA"), dom("Jumia Morocco", "www.jumia.ma", "MA"), dom("Amazon MA", "amazon.ma", "MA")];
+    const groups = groupByCountry([...ma, btech, noon]);
+    expect(groups.map((g) => g.country)).toEqual(["EG", "MA"]);
+    expect(groups[0].stores.map((s) => s.name)).toEqual(["Noon", "B.Tech"]);
+    expect(groups[1].stores.map((s) => s.name)).toEqual(["Zed", "Jumia Morocco", "Amazon MA"]);
+  });
+
+  it("groupByCountry does not mutate its input", () => {
+    const input = [btech, noon, amazon];
+    const snapshot = [...input];
+    groupByCountry(input);
+    expect(input).toEqual(snapshot);
+    expect(input.map((s) => s.name)).toEqual(["B.Tech", "Noon", "Amazon Egypt"]);
+  });
+
   it("fetchStores reads the public list without credentials", async () => {
     const list = [store("amazon", "EG")];
     const f = mockFetch(new Response(JSON.stringify({ stores: list }), { status: 200 }));
