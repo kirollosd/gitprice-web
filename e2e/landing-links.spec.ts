@@ -126,6 +126,8 @@ test.describe("landing behaviours (parity with the preview)", () => {
 
   test("resizing keeps the visitor at the same place in the same scene", async ({ page }) => {
     await page.goto("/?p=charger");
+    // the restore listens once hydrated; resizing before that raced it (CI flake: "spot" 0.7 came back 0.3)
+    await expect(page.locator("html")).toHaveAttribute("data-gp-fit", "1");
     await page.evaluate(() => scrollTo({ top: 4200, behavior: "instant" }));
     // let the page see the scroll (its place is tracked from scroll events) before the window changes
     await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
