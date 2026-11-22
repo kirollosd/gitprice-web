@@ -1195,7 +1195,19 @@
         "low90": "Lowest price in 90 days",
         "belowAvg": "{pct}% below its 30-day average",
         "cheaperThan": "{diff} EGP cheaper than {store}",
-        "popular": "Popular on GitPrice this week"
+        "popular": "Popular on GitPrice this week",
+        "drop_since_prev": "{diff} lower than {refDay}",
+        "yesterday": "yesterday",
+        "priceOn": "the {day} price",
+        "low_30d": "Lowest price in 30 days",
+        "low_all": "Lowest price since we started tracking it",
+        "below_avg_egp": "{diff} EGP below its 30-day average",
+        "low_30d_everyday": "Lowest price in 30 days and {diff}% below average",
+        "team_pick": "GitPrice team pick"
+      },
+      "lists": {
+        "all": "All",
+        "label": "Filter by list"
       }
     }
   }

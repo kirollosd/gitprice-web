@@ -1,5 +1,5 @@
 import { env } from "../../lib/env";
-import { formatDealTime, formatEGP, type DealInsight, type PublicDeal } from "../../lib/deals";
+import { cairoDay, formatDealTime, formatEGP, type DealInsight, type PublicDeal } from "../../lib/deals";
 import { t, type Locale } from "../../lib/i18n";
 import legal from "./LegalPage.module.css";
 import { ChannelLink } from "./NavLinks";
@@ -7,7 +7,25 @@ import styles from "./DealsPage.module.css";
 
 const D = "web.deals.";
 
-function insightText(locale: Locale, x: DealInsight): string | null {
+const FRESH_DROP_MIN_PCT = 5; // below it the drop is shown in EGP, as in the channel
+const DAY_MS = 24 * 3600 * 1000;
+const ISO_DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+/** The drop line, or null when the reference day cannot be read (no line beats a dangling one). */
+function dropText(locale: Locale, x: DealInsight, deal: PublicDeal): string | null {
+  const diff = x.diff ?? 0;
+  const amount = diff < FRESH_DROP_MIN_PCT
+    ? `${formatEGP((x.ref ?? 0) - deal.price)} ${t(locale, D + "currency")}`
+    : `${Math.round(diff)}${locale === "ar" ? "٪" : "%"}`;
+  const day = x.refDay ?? "";
+  if (day === cairoDay(new Date(new Date(deal.observedAt).getTime() - DAY_MS))) {
+    return t(locale, D + "insight.drop_since_prev", { diff: amount, refDay: t(locale, D + "insight.yesterday") });
+  }
+  if (!ISO_DAY_RE.test(day)) return null;
+  return t(locale, D + "insight.drop_since_prev", { diff: amount, refDay: t(locale, D + "insight.priceOn", { day: `${day.slice(8)}/${day.slice(5, 7)}` }) });
+}
+
+function insightText(locale: Locale, x: DealInsight, deal: PublicDeal): string | null {
   switch (x.kind) {
     case "low_90d":
       return t(locale, D + "insight.low90");
@@ -15,6 +33,16 @@ function insightText(locale: Locale, x: DealInsight): string | null {
       return t(locale, D + "insight.belowAvg", { pct: Math.round(x.diff ?? 0) });
     case "cheaper_than":
       return t(locale, D + "insight.cheaperThan", { diff: formatEGP(x.diff ?? 0), store: x.otherStore ?? "" });
+    case "drop_since_prev":
+      return dropText(locale, x, deal);
+    case "low_30d":
+    case "low_all":
+    case "team_pick":
+      return t(locale, D + "insight." + x.kind);
+    case "below_avg_egp":
+      return t(locale, D + "insight.below_avg_egp", { diff: formatEGP(x.diff ?? 0) });
+    case "low_30d_everyday":
+      return t(locale, D + "insight.low_30d_everyday", { diff: Math.round(x.diff ?? 0) });
     case "popular":
       return t(locale, D + "insight.popular");
     default:
@@ -40,7 +68,7 @@ export default function DealsPage({ locale, deals }: { locale: Locale; deals: Pu
         ) : (
           <ul className={styles.list}>
             {deals.map((d) => {
-              const insights = d.insights.map((x) => insightText(locale, x)).filter((s): s is string => s !== null);
+              const insights = d.insights.map((x) => insightText(locale, x, d)).filter((s): s is string => s !== null);
               return (
                 <li key={`${d.buyUrl}|${d.observedAt}`} className={styles.row}>
                   <div className={styles.body}>

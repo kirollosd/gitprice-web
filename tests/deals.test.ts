@@ -4,7 +4,7 @@ import { fetchDeals, formatDealTime, formatEGP, type PublicDeal } from "../lib/d
 const deal = (over: Partial<PublicDeal> = {}): PublicDeal => ({
   title: "Phone X", storeName: "Amazon Egypt", price: 68, currency: "EGP", observedAt: "2026-11-21T12:05:00Z",
   insights: [{ kind: "cheaper_than", otherStore: "Noon", diff: 22 }], buyUrl: "https://amazon.eg/dp/B0AAAAAAAA?tag=gitpriceeg-21",
-  productUrl: "https://amazon.eg/dp/B0AAAAAAAA", status: "posted", ...over,
+  productUrl: "https://amazon.eg/dp/B0AAAAAAAA", status: "posted", listKey: "", listNameEn: "", listNameAr: "", ...over,
 });
 const mockFetch = (r: Response | Error) => {
   const f = vi.fn(async () => { if (r instanceof Error) throw r; return r; });

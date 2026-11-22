@@ -1,7 +1,9 @@
 import { env } from "./env";
 import { emptyAtBuild } from "./isr-fallback";
 
-export type DealInsight = { kind: string; otherStore?: string; diff?: number };
+export const LIST_KEY_RE = /^[a-z][a-z0-9_]{1,31}$/;
+export type DealList = { key: string; nameEn: string; nameAr: string; count: number };
+export type DealInsight = { kind: string; otherStore?: string; diff?: number; ref?: number; refDay?: string };
 export type PublicDeal = {
   title: string;
   storeName: string;
@@ -12,14 +14,21 @@ export type PublicDeal = {
   buyUrl: string;
   productUrl: string;
   status: string;
+  listKey: string;
+  listNameEn: string;
+  listNameAr: string;
 };
 
-/** GET /api/v1/deals (the deals channel's live posts), refreshed every 2 minutes. A failure renders the empty state at build time and keeps the last good page at runtime. */
-export async function fetchDeals(): Promise<PublicDeal[]> {
+const REVALIDATE_SECONDS = 120;
+
+/** GET /api/v1/deals (the deals channel's live posts), refreshed every 2 minutes. An invalid list key is dropped, so the unfiltered feed is read. A failure renders the empty state at build time and keeps the last good page at runtime. */
+export async function fetchDeals(list?: string): Promise<PublicDeal[]> {
   try {
-    const res = await fetch(`${env.apiBaseUrl}/api/v1/deals?limit=30`, {
+    const params = new URLSearchParams({ limit: "30" });
+    if (list && LIST_KEY_RE.test(list)) params.set("list", list);
+    const res = await fetch(`${env.apiBaseUrl}/api/v1/deals?${params}`, {
       credentials: "omit",
-      next: { revalidate: 120 },
+      next: { revalidate: REVALIDATE_SECONDS },
     } as RequestInit);
     if (!res.ok) throw new Error(`deals feed: HTTP ${res.status}`);
     const body = (await res.json()) as { deals?: PublicDeal[] };
@@ -30,9 +39,35 @@ export async function fetchDeals(): Promise<PublicDeal[]> {
   }
 }
 
+/** GET /api/v1/deals/lists: the filter chips, only lists with live posts. Same failure rules as fetchDeals. */
+export async function fetchDealLists(): Promise<DealList[]> {
+  try {
+    const res = await fetch(`${env.apiBaseUrl}/api/v1/deals/lists`, {
+      credentials: "omit",
+      next: { revalidate: REVALIDATE_SECONDS },
+    } as RequestInit);
+    if (!res.ok) throw new Error(`deal lists: HTTP ${res.status}`);
+    const body = (await res.json()) as { lists?: DealList[] };
+    return (body.lists ?? []).filter((l) => typeof l.key === "string" && LIST_KEY_RE.test(l.key) && l.count > 0);
+  } catch (err) {
+    return emptyAtBuild<DealList[]>([], err);
+  }
+}
+
+export function listName(l: { nameEn: string; nameAr: string }, locale: "en" | "ar"): string {
+  return locale === "ar" ? l.nameAr : l.nameEn;
+}
+
 const cairoTime = new Intl.DateTimeFormat("en-GB", {
   timeZone: "Africa/Cairo", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23",
 });
+
+const cairoIsoDay = new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Cairo", year: "numeric", month: "2-digit", day: "2-digit" });
+
+/** The Cairo calendar day as YYYY-MM-DD. */
+export function cairoDay(d: Date): string {
+  return cairoIsoDay.format(d);
+}
 
 /** When the price was seen, as Cairo DD/MM HH:MM with Latin digits in both languages, so a post from yesterday never reads as today. */
 export function formatDealTime(iso: string): string {

@@ -2,12 +2,15 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import DealsPage from "../app/components/DealsPage";
-import type { PublicDeal } from "../lib/deals";
+import { formatEGP, type PublicDeal } from "../lib/deals";
+import en from "../i18n/en.json";
+import ar from "../i18n/ar.json";
 
 const deal: PublicDeal = {
   title: "Phone <X>", storeName: "Amazon Egypt", price: 1299, currency: "EGP", observedAt: "2026-11-21T12:05:00Z",
   insights: [{ kind: "low_90d" }, { kind: "cheaper_than", otherStore: "Noon", diff: 200 }, { kind: "mystery" }],
   buyUrl: "https://amazon.eg/dp/B0AAAAAAAA?tag=gitpriceeg-21", productUrl: "https://amazon.eg/dp/B0AAAAAAAA", status: "posted",
+  listKey: "phones", listNameEn: "Phones", listNameAr: "هواتف",
 };
 const render = (locale: "en" | "ar", deals: PublicDeal[]) => renderToStaticMarkup(createElement(DealsPage, { locale, deals }));
 
@@ -55,5 +58,37 @@ describe("DealsPage", () => {
     const html = render("ar", []);
     expect(html).toContain("لا توجد عروض الآن");
     expect(html).not.toContain("<li");
+  });
+
+  const one = (locale: "en" | "ar", insight: PublicDeal["insights"][number]) => render(locale, [{ ...deal, insights: [insight] }]);
+  const items = (html: string) => [...html.matchAll(/<li>([^<]*)<\/li>/g)].map((m) => m[1]);
+
+  it("renders each new insight kind in both languages", () => {
+    const cases: [PublicDeal["insights"][number], string, string][] = [
+      [{ kind: "drop_since_prev", diff: 6, ref: 1400, refDay: "2026-11-20" }, "6% lower than yesterday", "أقل بـ 6٪ من أمس"],
+      [{ kind: "drop_since_prev", diff: 3, ref: 1350, refDay: "2026-11-20" }, "51 EGP lower than yesterday", "أقل بـ 51 ج.م من أمس"],
+      [{ kind: "drop_since_prev", diff: 6, ref: 1400, refDay: "2026-11-15" }, "6% lower than the 15/11 price", "أقل بـ 6٪ من سعر 15/11"],
+      [{ kind: "low_30d" }, "Lowest price in 30 days", "أقل سعر خلال 30 يومًا"],
+      [{ kind: "low_all" }, "Lowest price since we started tracking it", "أقل سعر منذ بدأنا متابعته"],
+      [{ kind: "below_avg_egp", diff: 500 }, `${formatEGP(500)} EGP below its 30-day average`, `أقل من متوسط آخر 30 يومًا بـ ${formatEGP(500)} ج.م`],
+      [{ kind: "low_30d_everyday", diff: 12.4 }, "Lowest price in 30 days and 12% below average", "أقل سعر خلال 30 يومًا وأقل من المتوسط بنسبة 12٪"],
+      [{ kind: "team_pick" }, "GitPrice team pick", "اختيار فريق GitPrice"],
+    ];
+    for (const [x, e, a] of cases) {
+      expect(items(one("en", x)).slice(0, 1)).toEqual([e]);
+      expect(items(one("ar", x)).slice(0, 1)).toEqual([a]);
+    }
+  });
+
+  it("renders no insight line for an unknown kind or an unreadable refDay", () => {
+    expect(items(one("en", { kind: "mystery" }))).toEqual([]);
+    expect(items(one("en", { kind: "drop_since_prev", diff: 6, ref: 1400, refDay: "garbage <b>" }))).toEqual([]);
+  });
+
+  it("keeps the same key set under web.deals in en and ar", () => {
+    const keys = (o: unknown, p = ""): string[] =>
+      o && typeof o === "object" ? Object.entries(o).flatMap(([k, v]) => keys(v, `${p}${k}.`)) : [p];
+    const d = (x: typeof en) => keys((x as unknown as { web: { deals: unknown } }).web.deals).sort();
+    expect(d(ar as unknown as typeof en)).toEqual(d(en));
   });
 });
