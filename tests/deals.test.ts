@@ -18,7 +18,7 @@ describe("deals", () => {
   it("fetchDeals reads the public feed without credentials, revalidated every 2 minutes", async () => {
     const f = mockFetch(new Response(JSON.stringify({ deals: [deal()] }), { status: 200 }));
     expect(await fetchDeals()).toEqual([deal()]);
-    expect(f).toHaveBeenCalledWith("http://localhost:8080/api/v1/deals?limit=30", expect.objectContaining({ credentials: "omit", next: { revalidate: 120 } }));
+    expect(f).toHaveBeenCalledWith("http://localhost:8080/api/v1/deals?limit=60", expect.objectContaining({ credentials: "omit", next: { revalidate: 120 } }));
   });
 
   it("fetchDeals returns [] on error during the build, so the build succeeds", async () => {

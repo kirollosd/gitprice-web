@@ -21,10 +21,10 @@ export type PublicDeal = {
 
 const REVALIDATE_SECONDS = 120;
 
-/** GET /api/v1/deals (the deals channel's live posts), refreshed every 2 minutes. An invalid list key is dropped, so the unfiltered feed is read. A failure renders the empty state at build time and keeps the last good page at runtime. */
+/** GET /api/v1/deals (the deals channel's live posts), refreshed every 2 minutes. An invalid list key is dropped, so the unfiltered feed is read. A failure renders the empty state at build time and throws at runtime; /deals catches it (settle) and serves a noindex empty state. */
 export async function fetchDeals(list?: string): Promise<PublicDeal[]> {
   try {
-    const params = new URLSearchParams({ limit: "30" });
+    const params = new URLSearchParams({ limit: "60" });
     if (list && LIST_KEY_RE.test(list)) params.set("list", list);
     const res = await fetch(`${env.apiBaseUrl}/api/v1/deals?${params}`, {
       credentials: "omit",

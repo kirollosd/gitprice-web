@@ -17,13 +17,13 @@ describe("fetchDeals list filter", () => {
     await fetchDeals("phones");
     const u = calledUrl(f);
     expect(u.pathname).toBe("/api/v1/deals");
-    expect(Object.fromEntries(u.searchParams)).toEqual({ limit: "30", list: "phones" });
+    expect(Object.fromEntries(u.searchParams)).toEqual({ limit: "60", list: "phones" });
   });
 
   it.each(["Phones!", "a&b=c", ""])("drops the invalid list %j", async (bad) => {
     const f = mockFetch(new Response(JSON.stringify({ deals: [] })));
     await fetchDeals(bad);
-    expect(Object.fromEntries(calledUrl(f).searchParams)).toEqual({ limit: "30" });
+    expect(Object.fromEntries(calledUrl(f).searchParams)).toEqual({ limit: "60" });
   });
 
   it("returns [] on a 500 or non-JSON body", async () => {
