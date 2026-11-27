@@ -69,6 +69,11 @@ Names only. Real values live in Vercel (Production and Preview); `.env.example` 
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project, used by reset password |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase publishable key only |
 | `NEXT_PUBLIC_HEAP_ID` | Optional. Heap analytics, loaded only after consent |
+| `NEXT_PUBLIC_META_PIXEL_ID` | Optional. Meta Pixel id (public); script loads only after consent Allow |
+| `NEXT_PUBLIC_TIKTOK_PIXEL_ID` | Optional. TikTok Pixel id (public); script loads only after consent Allow |
+| `META_CAPI_ACCESS_TOKEN` | Server-only. Meta Conversions API; used by `/api/send-to-desktop` when consent Allow |
+| `RESEND_API_KEY` | Server-only. Resend for `/api/send-to-desktop` (missing → 503; page still works) |
+| `RESEND_FROM` | Server-only. Resend from address, e.g. `GitPrice <hello@gitprice.com>` |
 | `NEXT_PUBLIC_SITE_URL` | Canonical origin for metadata and sitemap |
 
 ## Syncing the design system

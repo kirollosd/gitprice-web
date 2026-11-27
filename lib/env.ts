@@ -11,6 +11,10 @@ export type SiteEnv = {
   supabaseUrl: string;
   supabaseAnonKey: string;
   heapId?: string;
+  /** Meta Pixel id (public); script loads only after consent Allow. */
+  metaPixelId?: string;
+  /** TikTok Pixel id (public); script loads only after consent Allow. */
+  tiktokPixelId?: string;
   gtmId?: string;
   siteUrl: string;
   /** Public Telegram deals channel (https://t.me/...); every channel link is hidden while unset. */
@@ -71,6 +75,8 @@ export function readEnv(src: Record<string, string | undefined>, extensionId: st
     supabaseUrl: get(REQUIRED.supabaseUrl)!,
     supabaseAnonKey: get(REQUIRED.supabaseAnonKey)!,
     heapId: get("NEXT_PUBLIC_HEAP_ID"),
+    metaPixelId: get("NEXT_PUBLIC_META_PIXEL_ID"),
+    tiktokPixelId: get("NEXT_PUBLIC_TIKTOK_PIXEL_ID"),
     gtmId: get("NEXT_PUBLIC_GTM_ID"),
     siteUrl: get(REQUIRED.siteUrl)!,
     telegramChannelUrl,
@@ -91,6 +97,8 @@ export const env: SiteEnv = readEnv({
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   NEXT_PUBLIC_HEAP_ID: process.env.NEXT_PUBLIC_HEAP_ID,
+  NEXT_PUBLIC_META_PIXEL_ID: process.env.NEXT_PUBLIC_META_PIXEL_ID,
+  NEXT_PUBLIC_TIKTOK_PIXEL_ID: process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID,
   NEXT_PUBLIC_GTM_ID: process.env.NEXT_PUBLIC_GTM_ID,
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
 }, process.env.NEXT_PUBLIC_CHROME_EXTENSION_ID ?? CHROME_EXTENSION_ID);

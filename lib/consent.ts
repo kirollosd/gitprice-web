@@ -4,7 +4,7 @@ export type Consent = "allow" | "decline" | null;
 export const CONSENT_COOKIE = "gp_consent";
 export const CONSENT_EVENT = "gp:consent";
 export const REOPEN_EVENT = "gp:cookie-settings";
-export const ANALYTICS_COOKIE_PREFIXES = ["_hp2_", "_hp5_", "_ga", "_gid"] as const;
+export const ANALYTICS_COOKIE_PREFIXES = ["_hp2_", "_hp5_", "_ga", "_gid", "_fbp", "_fbc", "_ttp"] as const;
 
 export function readConsent(cookie: string): Consent {
   const hit = cookie.split(";").map((p) => p.trim()).find((p) => p.startsWith(`${CONSENT_COOKIE}=`));
@@ -45,7 +45,14 @@ export function setConsent(value: "allow" | "decline"): void {
     try { heap?.stopTracking?.(); } catch { /* best effort; the reload removes Heap anyway */ }
   }
   document.cookie = consentCookie(value);
-  gtag("consent", "update", { analytics_storage: value === "allow" ? "granted" : "denied" });
+  const storage = value === "allow" ? "granted" : "denied";
+  // Banner covers analytics and ads (Meta/TikTok pixels load only after Allow).
+  gtag("consent", "update", {
+    analytics_storage: storage,
+    ad_storage: storage,
+    ad_user_data: storage,
+    ad_personalization: storage,
+  });
   if (value === "decline") {
     cookieExpiries(document.cookie, location.hostname, ANALYTICS_COOKIE_PREFIXES).forEach((c) => { document.cookie = c; });
   }

@@ -15,10 +15,15 @@ describe("consentDefaultScript", () => {
       }],
     ]);
   });
-  it("grants only analytics when gp_consent=allow", () => {
+  it("grants analytics and ads when gp_consent=allow", () => {
     const dl = run("a=1; gp_consent=allow");
     expect(dl).toHaveLength(2);
-    expect(dl[1]).toEqual(["consent", "update", { analytics_storage: "granted" }]);
+    expect(dl[1]).toEqual(["consent", "update", {
+      analytics_storage: "granted",
+      ad_storage: "granted",
+      ad_user_data: "granted",
+      ad_personalization: "granted",
+    }]);
   });
   it("ignores look-alike cookies", () => {
     expect(run("x_gp_consent=allow; gp_consent=decline")).toHaveLength(1);
