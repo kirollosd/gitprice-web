@@ -1,0 +1,145 @@
+/* /get ad landing: one job (desktop CWS or phone email). Coral primary; tokens only; 8px web grid. */
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gp-wsp-3);
+  max-inline-size: 32rem;
+  padding-block: var(--gp-wsec-m);
+  margin-inline: auto;
+  padding-inline: var(--gp-wsp-2);
+}
+@media (min-width: 768px) {
+  .root { padding-block: var(--gp-wsec); padding-inline: var(--gp-wsp-4); }
+}
+
+.brand {
+  color: var(--gp-ink);
+  font-size: var(--web-fs-title);
+  font-weight: 700;
+  line-height: var(--gp-lh-tight);
+  letter-spacing: -0.02em;
+}
+
+.headline {
+  color: var(--gp-ink);
+  font-size: var(--web-fs-hero);
+  font-weight: 700;
+  line-height: var(--web-lh-hero);
+  letter-spacing: -0.03em;
+}
+
+.sub {
+  color: var(--gp-ink-muted);
+  font-size: var(--web-fs-body);
+  line-height: var(--web-lh-body);
+  max-inline-size: 28rem;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--gp-wsp-2);
+  inline-size: 100%;
+  max-inline-size: 25rem;
+}
+
+.chrome {
+  inline-size: 100%;
+}
+
+.secondary {
+  align-self: flex-start;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--gp-accent);
+  font: inherit;
+  font-size: var(--gp-fs-caption);
+  line-height: var(--web-lh-caption);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.secondary:focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
+
+.form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gp-wsp-2);
+  inline-size: 100%;
+  max-inline-size: 25rem;
+}
+
+.field { display: flex; flex-direction: column; }
+.label {
+  min-block-size: var(--gp-sp-6);
+  color: var(--gp-ink-muted);
+  font-size: var(--gp-fs-caption);
+  line-height: var(--web-lh-caption);
+}
+.input {
+  inline-size: 100%;
+  block-size: var(--gp-sp-12);
+  padding-inline: var(--gp-wsp-2);
+  border: 1px solid var(--gp-control);
+  border-radius: var(--gp-r-control);
+  background: var(--gp-surface);
+  color: var(--gp-ink);
+  font: var(--gp-fw-body) var(--gp-fs-body) / var(--web-lh-text) var(--gp-font);
+}
+.input::placeholder { color: var(--gp-ink-muted); opacity: 1; }
+[dir="rtl"] .input:placeholder-shown { text-align: right; }
+.input:focus-visible { outline: 2px solid var(--gp-focus); outline-offset: 2px; }
+.input[aria-invalid="true"] {
+  border-width: 2px;
+  border-color: var(--gp-danger);
+  padding-inline: calc(var(--gp-wsp-2) - 1px);
+}
+.error {
+  margin-block-start: var(--gp-wsp-1);
+  color: var(--gp-danger);
+  font-size: var(--gp-fs-caption);
+  line-height: var(--web-lh-caption);
+}
+.button { inline-size: 100%; }
+.note {
+  color: var(--gp-ink-muted);
+  font-size: var(--gp-fs-caption);
+  line-height: var(--web-lh-caption);
+}
+.failed {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gp-wsp-1);
+  color: var(--gp-danger);
+  font-size: var(--gp-fs-callout);
+  line-height: var(--web-lh-caption);
+}
+.trap {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.done {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gp-wsp-1);
+}
+.doneTitle {
+  color: var(--gp-ink);
+  font-size: var(--web-fs-body);
+  font-weight: 600;
+  line-height: var(--web-lh-text);
+}
+.doneBody {
+  color: var(--gp-ink-muted);
+  font-size: var(--web-fs-body);
+  line-height: var(--web-lh-text);
+}

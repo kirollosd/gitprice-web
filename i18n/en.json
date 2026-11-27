@@ -1209,6 +1209,31 @@
         "all": "All",
         "label": "Filter by list"
       }
+    },
+    "get": {
+      "title": "Get GitPrice",
+      "description": "Add the GitPrice Chrome extension on your computer.",
+      "headline": "Add GitPrice on your computer",
+      "sub": "The Chrome extension needs a desktop browser.",
+      "cta": {
+        "chrome": "Add to Chrome"
+      },
+      "form": {
+        "email": {
+          "label": "Email",
+          "placeholder": "you@example.com",
+          "message": "Enter a valid email."
+        },
+        "submit": "Email me the link",
+        "submitting": "Sending…",
+        "note": "We send one link. Nothing else.",
+        "sent": {
+          "title": "Check your email",
+          "body": "Open the link on your computer to add GitPrice to Chrome."
+        },
+        "failed": "Something went wrong. Try again.",
+        "emailInstead": "Email me the link instead"
+      }
     }
   }
 }

@@ -1,32 +1,23 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import { isValidEmail } from "../../lib/email";
 import { env } from "../../lib/env";
 import { t, type Locale } from "../../lib/i18n";
 import { track } from "../../lib/track";
 import styles from "./WaitlistForm.module.css";
+
+export { isValidEmail };
 
 const W = "web.component.webWaitlistForm.";
 // The Sellers boards override the form's note and joined body with seller copy.
 const SELLER_NOTE = { hero: "web.sellers.prelaunch.hero.waitlist.note", bottom: "web.sellers.cta.waitlist.note" } as const;
 const SELLER_JOINED_BODY = "web.sellers.prelaunchJoined.hero.waitlist.body";
 const TIMEOUT_MS = 10_000;
-const MAX_EMAIL = 254;
 // A meaningless name so autofill never fills the trap; it is still sent as the API's `website` field.
 const HONEYPOT = "gp_hp";
 
 type Status = "empty" | "error" | "submitting" | "joined" | "alreadyJoined" | "failed";
-
-/** The API's rule (POST /api/v1/waitlist): trimmed, at most 254 bytes, no spaces or control characters, one @, a local part, and a dotted domain that neither starts nor ends with a dot. */
-export function isValidEmail(raw: string): boolean {
-  const email = raw.trim();
-  if (!email || new TextEncoder().encode(email).length > MAX_EMAIL) return false;
-  if (/[\u0000-\u0020\u007f]/.test(email)) return false;
-  const parts = email.split("@");
-  if (parts.length !== 2) return false;
-  const [local, domain] = parts;
-  return local.length > 0 && domain.includes(".") && !domain.startsWith(".") && !domain.endsWith(".");
-}
 
 /** Maps the API reply to a state: branch on the HTTP status; the error code only tells INVALID_EMAIL apart. */
 async function outcome(res: Response): Promise<Status> {
