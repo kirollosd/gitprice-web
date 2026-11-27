@@ -42,12 +42,14 @@ function rateLimited(key: string, max: number, windowMs: number): boolean {
   return false;
 }
 
-function emailOnCooldown(email: string): boolean {
-  const now = Date.now();
+function isEmailCoolingDown(email: string): boolean {
   const until = emailCooldown.get(email);
-  if (until && until > now) return true;
-  emailCooldown.set(email, now + EMAIL_COOLDOWN_MS);
-  return false;
+  return !!until && until > Date.now();
+}
+
+/** Call only after Resend accepts the message — never lock on 4xx/5xx. */
+function markEmailSent(email: string): void {
+  emailCooldown.set(email, Date.now() + EMAIL_COOLDOWN_MS);
 }
 
 /** Same-site browser posts only (fetch always sends Origin). */
@@ -114,7 +116,7 @@ export async function POST(req: Request): Promise<Response> {
   if (rateLimited(`ip:${ip}`, MAX_PER_WINDOW, WINDOW_MS)) {
     return Response.json({ error: "rate_limited" }, { status: 429 });
   }
-  if (emailOnCooldown(email)) return Response.json({ error: "rate_limited" }, { status: 429 });
+  if (isEmailCoolingDown(email)) return Response.json({ error: "rate_limited" }, { status: 429 });
 
   const utms = asUtms(body.utms);
   if (utms === null) return Response.json({ error: "invalid" }, { status: 400 });
@@ -144,9 +146,12 @@ export async function POST(req: Request): Promise<Response> {
     return Response.json({ error: "failed" }, { status: 502 });
   }
 
+  markEmailSent(email);
+
   // CAPI only when the gp_consent cookie is Allow (never trust a client body flag).
+  // Bounded + non-blocking so a slow Graph call cannot turn a sent email into a client "failed".
   if (readConsent(req.headers.get("cookie") ?? "") === "allow") {
-    await sendMetaCapiEvent({
+    void sendMetaCapiEvent({
       event: "send_to_desktop",
       email,
       eventSourceUrl: env.siteUrl ? `${env.siteUrl.replace(/\/+$/, "")}/${locale === "ar" ? "ar/" : ""}get` : undefined,

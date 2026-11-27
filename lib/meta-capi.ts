@@ -45,8 +45,9 @@ export async function sendMetaCapiEvent(opts: {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(2_500),
     });
   } catch {
-    /* CAPI must never fail the user-facing request */
+    /* CAPI must never fail the user-facing request (timeouts included) */
   }
 }

@@ -80,13 +80,26 @@ describe("POST /api/send-to-desktop", () => {
     expect(sendMock).not.toHaveBeenCalled();
   });
 
-  it("returns 503 when Resend env is missing", async () => {
+  it("returns 503 when Resend env is missing and does not lock the email", async () => {
     envStore.RESEND_API_KEY = undefined;
     stubProcessEnv();
     vi.resetModules();
-    const res = await post({ email: "sara@example.com", website: "" });
+    const res = await post(
+      { email: "retry-after-503@example.com", website: "" },
+      { "x-real-ip": "203.0.113.80" },
+    );
     expect(res.status).toBe(503);
     expect(sendMock).not.toHaveBeenCalled();
+
+    envStore.RESEND_API_KEY = "re_test";
+    stubProcessEnv();
+    vi.resetModules();
+    const retry = await post(
+      { email: "retry-after-503@example.com", website: "" },
+      { "x-real-ip": "203.0.113.81" },
+    );
+    expect(retry.status).toBe(200);
+    expect(sendMock).toHaveBeenCalledTimes(1);
   });
 
   it("returns 200 and emails the CWS link with UTMs on success", async () => {

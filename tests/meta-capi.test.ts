@@ -32,6 +32,7 @@ describe("sendMetaCapiEvent", () => {
     const [url, init] = fetchImpl.mock.calls[0] as [string, RequestInit];
     expect(url).toContain("pix_1");
     expect(url).toContain("access_token=token_1");
+    expect(init.signal).toBeInstanceOf(AbortSignal);
     const body = JSON.parse(String(init.body)) as {
       data: Array<{ event_name: string; user_data: { em: string; client_ip_address: string } }>;
     };
