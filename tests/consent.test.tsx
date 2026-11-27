@@ -183,7 +183,12 @@ describe("setConsent and the dataLayer", () => {
   it("allow pushes a granted consent update", async () => {
     const { setConsent } = await import("../lib/consent");
     setConsent("allow");
-    expect(dl()).toContainEqual(["consent", "update", { analytics_storage: "granted" }]);
+    expect(dl()).toContainEqual(["consent", "update", {
+      analytics_storage: "granted",
+      ad_storage: "granted",
+      ad_user_data: "granted",
+      ad_personalization: "granted",
+    }]);
   });
   it("decline after allow pushes denied, expires _ga cookies, then reloads", async () => {
     const { setConsent } = await import("../lib/consent");
@@ -193,7 +198,12 @@ describe("setConsent and the dataLayer", () => {
     reload.mockImplementation(() => { expect(document.cookie).not.toContain("_ga="); atReload = dl(); });
     setConsent("decline");
     expect(reload).toHaveBeenCalledTimes(1);
-    expect(atReload).toContainEqual(["consent", "update", { analytics_storage: "denied" }]);
+    expect(atReload).toContainEqual(["consent", "update", {
+      analytics_storage: "denied",
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+    }]);
   });
   it("first-time decline expires existing _ga cookies without a reload", async () => {
     const { setConsent } = await import("../lib/consent");
@@ -202,7 +212,12 @@ describe("setConsent and the dataLayer", () => {
     setConsent("decline");
     expect(document.cookie).not.toContain("_ga");
     expect(document.cookie).toContain("gp_consent=decline");
-    expect(dl()).toContainEqual(["consent", "update", { analytics_storage: "denied" }]);
+    expect(dl()).toContainEqual(["consent", "update", {
+      analytics_storage: "denied",
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+    }]);
     expect(reload).not.toHaveBeenCalled();
   });
 });

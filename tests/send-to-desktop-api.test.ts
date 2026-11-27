@@ -29,7 +29,12 @@ async function post(body: unknown, headers: Record<string, string> = {}) {
   const { POST } = await import("../app/api/send-to-desktop/route");
   const req = new Request("http://localhost:3000/api/send-to-desktop", {
     method: "POST",
-    headers: { "Content-Type": "application/json", "x-forwarded-for": "203.0.113.10", ...headers },
+    headers: {
+      "Content-Type": "application/json",
+      Origin: "http://localhost:3000",
+      "x-real-ip": "203.0.113.10",
+      ...headers,
+    },
     body: JSON.stringify(body),
   });
   return POST(req);
@@ -50,6 +55,19 @@ afterEach(() => {
 });
 
 describe("POST /api/send-to-desktop", () => {
+  it("returns 403 without a same-site Origin", async () => {
+    const { POST } = await import("../app/api/send-to-desktop/route");
+    const res = await POST(
+      new Request("http://localhost:3000/api/send-to-desktop", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-real-ip": "203.0.113.99" },
+        body: JSON.stringify({ email: "sara@example.com", website: "" }),
+      }),
+    );
+    expect(res.status).toBe(403);
+    expect(sendMock).not.toHaveBeenCalled();
+  });
+
   it("returns 400 for an invalid email", async () => {
     const res = await post({ email: "not-an-email", website: "" });
     expect(res.status).toBe(400);
@@ -89,27 +107,71 @@ describe("POST /api/send-to-desktop", () => {
     expect(arg.html).toContain("https://chromewebstore.test/gitprice");
   });
 
+  it("returns 400 when the UTM bag is oversized", async () => {
+    const res = await post({
+      email: "oversized@example.com",
+      website: "",
+      utms: {
+        utm_source: "ig",
+        utm_medium: "paid",
+        utm_campaign: "bf26",
+        utm_content: "c1",
+        utm_term: "t",
+        utm_extra: "too-many",
+      },
+    });
+    expect(res.status).toBe(400);
+    expect(sendMock).not.toHaveBeenCalled();
+  });
+
   it("returns 429 after the rate limit is exceeded for one IP", async () => {
     for (let i = 0; i < 5; i++) {
-      const res = await post({ email: `ok${i}@example.com`, website: "" }, { "x-forwarded-for": "198.51.100.7" });
+      const res = await post(
+        { email: `ok${i}@example.com`, website: "" },
+        { "x-real-ip": "198.51.100.7" },
+      );
       expect(res.status).toBe(200);
     }
-    const blocked = await post({ email: "more@example.com", website: "" }, { "x-forwarded-for": "198.51.100.7" });
+    const blocked = await post(
+      { email: "more@example.com", website: "" },
+      { "x-real-ip": "198.51.100.7" },
+    );
     expect(blocked.status).toBe(429);
   });
 
-  it("calls Meta CAPI only when consent is allow", async () => {
+  it("returns 429 when the same email is resent within the cooldown", async () => {
+    const first = await post(
+      { email: "cooldown@example.com", website: "" },
+      { "x-real-ip": "198.51.100.20" },
+    );
+    expect(first.status).toBe(200);
+    const second = await post(
+      { email: "cooldown@example.com", website: "" },
+      { "x-real-ip": "198.51.100.21" },
+    );
+    expect(second.status).toBe(429);
+  });
+
+  it("calls Meta CAPI only when the gp_consent cookie is allow", async () => {
     const capi = vi.fn(async () => {});
     vi.doMock("../lib/meta-capi", () => ({ sendMetaCapiEvent: capi }));
     vi.resetModules();
     const { POST } = await import("../app/api/send-to-desktop/route");
-    const make = (consent: string) =>
+    const make = (cookie: string) =>
       new Request("http://localhost:3000/api/send-to-desktop", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-forwarded-for": "203.0.113.50" },
-        body: JSON.stringify({ email: "sara@example.com", website: "", consent, locale: "en" }),
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+          "x-real-ip": `203.0.113.${cookie === "allow" ? "51" : "52"}`,
+          Cookie: cookie ? `gp_consent=${cookie}` : "",
+        },
+        // Spoofed body consent must be ignored.
+        body: JSON.stringify({ email: `capi-${cookie || "none"}@example.com`, website: "", consent: "allow", locale: "en" }),
       });
     expect((await POST(make("decline"))).status).toBe(200);
+    expect(capi).not.toHaveBeenCalled();
+    expect((await POST(make(""))).status).toBe(200);
     expect(capi).not.toHaveBeenCalled();
     expect((await POST(make("allow"))).status).toBe(200);
     expect(capi).toHaveBeenCalledTimes(1);

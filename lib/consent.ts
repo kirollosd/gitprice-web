@@ -45,7 +45,14 @@ export function setConsent(value: "allow" | "decline"): void {
     try { heap?.stopTracking?.(); } catch { /* best effort; the reload removes Heap anyway */ }
   }
   document.cookie = consentCookie(value);
-  gtag("consent", "update", { analytics_storage: value === "allow" ? "granted" : "denied" });
+  const storage = value === "allow" ? "granted" : "denied";
+  // Banner covers analytics and ads (Meta/TikTok pixels load only after Allow).
+  gtag("consent", "update", {
+    analytics_storage: storage,
+    ad_storage: storage,
+    ad_user_data: storage,
+    ad_personalization: storage,
+  });
   if (value === "decline") {
     cookieExpiries(document.cookie, location.hostname, ANALYTICS_COOKIE_PREFIXES).forEach((c) => { document.cookie = c; });
   }

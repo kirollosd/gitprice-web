@@ -1,4 +1,5 @@
 import { pushAdEvent } from "./ad-pixels";
+import { readConsent } from "./consent";
 import type { Locale } from "./i18n";
 
 export type TrackEvent =
@@ -27,7 +28,9 @@ export function track<E extends TrackEvent>(name: E["name"], params: E["params"]
     const locale = document.documentElement.lang;
     pushDataLayer({ event: name, ...params, locale });
     try { (window as unknown as Win).heap?.track?.(name, { ...params, locale }); } catch { /* Heap is best effort */ }
-    if (name === "send_to_desktop") pushAdEvent("send_to_desktop");
-    if (name === "store_click" && (params as { store?: string }).store === "chrome") pushAdEvent("cws_click");
+    if (readConsent(document.cookie) === "allow") {
+      if (name === "send_to_desktop") pushAdEvent("send_to_desktop");
+      if (name === "store_click" && (params as { store?: string }).store === "chrome") pushAdEvent("cws_click");
+    }
   } catch { /* analytics must never break the page */ }
 }

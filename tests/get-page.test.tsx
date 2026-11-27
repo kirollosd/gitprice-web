@@ -69,16 +69,17 @@ describe("GetLanding", () => {
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
     expect(url).toBe("/api/send-to-desktop");
     expect(init.method).toBe("POST");
+    expect(init.credentials).toBe("same-origin");
     const body = JSON.parse(String(init.body)) as {
       email: string;
       website: string;
       utms: Record<string, string>;
-      consent: string;
+      consent?: string;
     };
     expect(body.email).toBe("sara@example.com");
     expect(body.website).toBe("");
     expect(body.utms.utm_source).toBe("ig");
-    expect(body.consent).toBe("allow");
+    expect(body.consent).toBeUndefined();
     expect(track).toHaveBeenCalledWith("send_to_desktop", { placement: "get" });
   });
 

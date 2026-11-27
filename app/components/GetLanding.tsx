@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
-import { readConsent } from "../../lib/consent";
 import { isPhoneUserAgent } from "../../lib/device";
 import { isValidEmail } from "../../lib/email";
 import { t, type Locale } from "../../lib/i18n";
@@ -62,14 +61,13 @@ export default function GetLanding({ locale, phone: phoneProp, chromeHref, utms 
       const res = await fetch("/api/send-to-desktop", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "omit",
-        referrerPolicy: "no-referrer",
+        // Same-origin so gp_consent reaches the server for CAPI gating.
+        credentials: "same-origin",
         body: JSON.stringify({
           email: email.trim(),
           website: String(data.get(HONEYPOT) ?? ""),
           locale,
           utms,
-          consent: readConsent(document.cookie) ?? "decline",
         }),
         signal: AbortSignal.timeout(TIMEOUT_MS),
       });
