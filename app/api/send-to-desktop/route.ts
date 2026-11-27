@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 const WINDOW_MS = 60_000;
 const MAX_PER_WINDOW = 5;
 const EMAIL_COOLDOWN_MS = 15 * 60_000;
-const MAX_UTM_KEYS = 5;
+const MAX_UTM_KEYS = 15;
 const MAX_UTM_VALUE = 200;
 /** In-memory only (best-effort on serverless). Prefer Upstash/KV + CAPTCHA for launch traffic. */
 const buckets = new Map<string, { count: number; resetAt: number }>();
@@ -70,8 +70,8 @@ function asUtms(raw: unknown): UtmParams | null {
   for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
     if (!k.startsWith("utm_") || typeof v !== "string" || !v) continue;
     if (v.length > MAX_UTM_VALUE) return null;
+    if (Object.keys(out).length >= MAX_UTM_KEYS) continue; // keep first N; do not 400
     out[k] = v;
-    if (Object.keys(out).length > MAX_UTM_KEYS) return null;
   }
   return out;
 }

@@ -107,21 +107,14 @@ describe("POST /api/send-to-desktop", () => {
     expect(arg.html).toContain("https://chromewebstore.test/gitprice");
   });
 
-  it("returns 400 when the UTM bag is oversized", async () => {
-    const res = await post({
-      email: "oversized@example.com",
-      website: "",
-      utms: {
-        utm_source: "ig",
-        utm_medium: "paid",
-        utm_campaign: "bf26",
-        utm_content: "c1",
-        utm_term: "t",
-        utm_extra: "too-many",
-      },
-    });
-    expect(res.status).toBe(400);
-    expect(sendMock).not.toHaveBeenCalled();
+  it("keeps the first N UTMs when the bag is large", async () => {
+    const utms: Record<string, string> = {};
+    for (let i = 0; i < 20; i++) utms[`utm_k${i}`] = `v${i}`;
+    const res = await post({ email: "oversized@example.com", website: "", utms });
+    expect(res.status).toBe(200);
+    const html = (sendMock.mock.calls[0]![0] as { html: string }).html;
+    expect(html).toContain("utm_k0=v0");
+    expect(html).not.toContain("utm_k19=v19");
   });
 
   it("returns 429 after the rate limit is exceeded for one IP", async () => {
