@@ -29,7 +29,7 @@ describe("sendMetaCapiEvent", () => {
       fetchImpl,
     });
     expect(fetchImpl).toHaveBeenCalledTimes(1);
-    const [url, init] = fetchImpl.mock.calls[0] as [string, RequestInit];
+    const [url, init] = fetchImpl.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toContain("pix_1");
     expect(url).toContain("access_token=token_1");
     expect(init.signal).toBeInstanceOf(AbortSignal);

@@ -111,7 +111,7 @@ describe("POST /api/send-to-desktop", () => {
     });
     expect(res.status).toBe(200);
     expect(sendMock).toHaveBeenCalledTimes(1);
-    const arg = sendMock.mock.calls[0]![0] as { to: string; from: string; subject: string; html: string };
+    const arg = (sendMock.mock.calls[0] as unknown as [{ to: string; from: string; subject: string; html: string }])[0];
     expect(arg.to).toBe("sara@example.com");
     expect(arg.from).toBe("GitPrice <hello@gitprice.com>");
     expect(arg.html).toContain("utm_source=ig");
@@ -125,7 +125,7 @@ describe("POST /api/send-to-desktop", () => {
     for (let i = 0; i < 20; i++) utms[`utm_k${i}`] = `v${i}`;
     const res = await post({ email: "oversized@example.com", website: "", utms });
     expect(res.status).toBe(200);
-    const html = (sendMock.mock.calls[0]![0] as { html: string }).html;
+    const html = ((sendMock.mock.calls[0] as unknown as [{ html: string }])[0]).html;
     expect(html).toContain("utm_k0=v0");
     expect(html).not.toContain("utm_k19=v19");
   });
@@ -181,6 +181,6 @@ describe("POST /api/send-to-desktop", () => {
     expect(capi).not.toHaveBeenCalled();
     expect((await POST(make("allow"))).status).toBe(200);
     expect(capi).toHaveBeenCalledTimes(1);
-    expect(capi.mock.calls[0]![0]).toMatchObject({ event: "send_to_desktop" });
+    expect((capi.mock.calls[0] as unknown as [{ event: string }])[0]).toMatchObject({ event: "send_to_desktop" });
   });
 });

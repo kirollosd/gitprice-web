@@ -66,7 +66,7 @@ describe("GetLanding", () => {
       fireEvent.click(screen.getByRole("button", { name: COPY.form.submit }));
     });
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
-    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toBe("/api/send-to-desktop");
     expect(init.method).toBe("POST");
     expect(init.credentials).toBe("same-origin");
