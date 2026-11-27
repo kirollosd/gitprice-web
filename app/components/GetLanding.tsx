@@ -1,5 +1,6 @@
 "use client";
 
+import Script from "next/script";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { isPhoneUserAgent } from "../../lib/device";
 import { isValidEmail } from "../../lib/email";
@@ -20,10 +21,28 @@ type Props = {
   phone: boolean;
   chromeHref: string;
   utms: UtmParams;
+  /** Cloudflare Turnstile site key; widget omitted when unset. */
+  turnstileSiteKey?: string;
 };
 
+type TurnstileApi = {
+  reset: (widgetId?: string) => void;
+};
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
+
 /** Paid-traffic /get landing: desktop → CWS+UTM; phone → email the link. */
-export default function GetLanding({ locale, phone: phoneProp, chromeHref, utms }: Props) {
+export default function GetLanding({
+  locale,
+  phone: phoneProp,
+  chromeHref,
+  utms,
+  turnstileSiteKey,
+}: Props) {
   const [phone, setPhone] = useState(phoneProp);
   const [showForm, setShowForm] = useState(phoneProp);
   const [status, setStatus] = useState<Status>("empty");
@@ -51,9 +70,12 @@ export default function GetLanding({ locale, phone: phoneProp, chromeHref, utms 
     e.preventDefault();
     if (busy.current) return;
     setAttempt((n) => n + 1);
-    const data = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const data = new FormData(form);
     const email = String(data.get("email") ?? "");
     if (!isValidEmail(email)) return setStatus("error");
+    const turnstileToken = String(data.get("cf-turnstile-response") ?? "");
+    if (turnstileSiteKey && !turnstileToken.trim()) return setStatus("failed");
     busy.current = true;
     setStatus("submitting");
     let ok = false;
@@ -68,6 +90,7 @@ export default function GetLanding({ locale, phone: phoneProp, chromeHref, utms 
           website: String(data.get(HONEYPOT) ?? ""),
           locale,
           utms,
+          turnstileToken,
         }),
         signal: AbortSignal.timeout(TIMEOUT_MS),
       });
@@ -80,6 +103,11 @@ export default function GetLanding({ locale, phone: phoneProp, chromeHref, utms 
       track("send_to_desktop", { placement: "get" });
       setStatus("sent");
       return;
+    }
+    try {
+      window.turnstile?.reset();
+    } catch {
+      /* widget may not be ready */
     }
     setStatus("failed");
   }
@@ -99,6 +127,7 @@ export default function GetLanding({ locale, phone: phoneProp, chromeHref, utms 
   const errorId = `${id}-error`;
   const submitLabel =
     status === "submitting" ? t(locale, G + "form.submitting") : t(locale, G + "form.submit");
+  const showEmailForm = phone || showForm;
 
   return (
     <main className={`container ${styles.root}`}>
@@ -106,7 +135,7 @@ export default function GetLanding({ locale, phone: phoneProp, chromeHref, utms 
       <h1 className={styles.headline}>{t(locale, G + "headline")}</h1>
       <p className={styles.sub}>{t(locale, G + "sub")}</p>
 
-      {!phone && !showForm ? (
+      {!showEmailForm ? (
         <div className={styles.actions}>
           <a
             className={`${styles.chrome} gp-btn`}
@@ -151,6 +180,14 @@ export default function GetLanding({ locale, phone: phoneProp, chromeHref, utms 
           <div className={styles.trap} aria-hidden="true">
             <input type="text" name={HONEYPOT} tabIndex={-1} autoComplete="off" defaultValue="" />
           </div>
+          {turnstileSiteKey ? (
+            <>
+              <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
+              <div className={styles.turnstile}>
+                <div className="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="auto" />
+              </div>
+            </>
+          ) : null}
           <button type="submit" className={`${styles.button} gp-btn`} disabled={status === "submitting"}>
             {submitLabel}
           </button>

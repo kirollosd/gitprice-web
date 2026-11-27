@@ -36,5 +36,13 @@ export default async function GetPage({ params, searchParams }: Props) {
   const phone = isPhoneUserAgent(ua);
   const base = env.chromeStoreUrl || "https://chromewebstore.google.com/";
   const chromeHref = chromeStoreUrlWithUtms(base, utms);
-  return <GetLanding locale={locale} phone={phone} chromeHref={chromeHref} utms={utms} />;
+  return (
+    <GetLanding
+      locale={locale}
+      phone={phone}
+      chromeHref={chromeHref}
+      utms={utms}
+      turnstileSiteKey={env.turnstileSiteKey}
+    />
+  );
 }

@@ -105,6 +105,12 @@
   line-height: var(--web-lh-caption);
 }
 .button { inline-size: 100%; }
+.turnstile {
+  display: flex;
+  justify-content: flex-start;
+  /* Cloudflare widget ~65px; 64 keeps the 8px web grid. */
+  min-block-size: 64px;
+}
 .note {
   color: var(--gp-ink-muted);
   font-size: var(--gp-fs-caption);
