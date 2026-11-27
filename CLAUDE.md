@@ -74,6 +74,10 @@ Names only. Real values live in Vercel (Production and Preview); `.env.example` 
 | `META_CAPI_ACCESS_TOKEN` | Server-only. Meta Conversions API; used by `/api/send-to-desktop` when consent Allow |
 | `RESEND_API_KEY` | Server-only. Resend for `/api/send-to-desktop` (missing → 503; page still works) |
 | `RESEND_FROM` | Server-only. Resend from address, e.g. `GitPrice <hello@gitprice.com>` |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Optional. Cloudflare Turnstile site key; /get email form widget |
+| `TURNSTILE_SECRET_KEY` | Server-only. When set, `/api/send-to-desktop` requires a valid Turnstile token (else 403) |
+| `UPSTASH_REDIS_REST_URL` | Optional. Upstash Redis REST URL for shared IP/email rate limits on send-to-desktop |
+| `UPSTASH_REDIS_REST_TOKEN` | Server-only. Upstash Redis REST token (pair with URL; missing → in-memory fallback) |
 | `NEXT_PUBLIC_SITE_URL` | Canonical origin for metadata and sitemap |
 
 ## Syncing the design system

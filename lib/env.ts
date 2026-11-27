@@ -15,6 +15,8 @@ export type SiteEnv = {
   metaPixelId?: string;
   /** TikTok Pixel id (public); script loads only after consent Allow. */
   tiktokPixelId?: string;
+  /** Cloudflare Turnstile site key (public); /get email form only. */
+  turnstileSiteKey?: string;
   gtmId?: string;
   siteUrl: string;
   /** Public Telegram deals channel (https://t.me/...); every channel link is hidden while unset. */
@@ -77,6 +79,7 @@ export function readEnv(src: Record<string, string | undefined>, extensionId: st
     heapId: get("NEXT_PUBLIC_HEAP_ID"),
     metaPixelId: get("NEXT_PUBLIC_META_PIXEL_ID"),
     tiktokPixelId: get("NEXT_PUBLIC_TIKTOK_PIXEL_ID"),
+    turnstileSiteKey: get("NEXT_PUBLIC_TURNSTILE_SITE_KEY"),
     gtmId: get("NEXT_PUBLIC_GTM_ID"),
     siteUrl: get(REQUIRED.siteUrl)!,
     telegramChannelUrl,
@@ -99,6 +102,7 @@ export const env: SiteEnv = readEnv({
   NEXT_PUBLIC_HEAP_ID: process.env.NEXT_PUBLIC_HEAP_ID,
   NEXT_PUBLIC_META_PIXEL_ID: process.env.NEXT_PUBLIC_META_PIXEL_ID,
   NEXT_PUBLIC_TIKTOK_PIXEL_ID: process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID,
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
   NEXT_PUBLIC_GTM_ID: process.env.NEXT_PUBLIC_GTM_ID,
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
 }, process.env.NEXT_PUBLIC_CHROME_EXTENSION_ID ?? CHROME_EXTENSION_ID);

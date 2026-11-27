@@ -40,7 +40,7 @@ async function post(body: unknown, headers: Record<string, string> = {}) {
   return POST(req);
 }
 
-beforeEach(() => {
+beforeEach(async () => {
   sendMock.mockReset();
   sendMock.mockResolvedValue({ data: { id: "email_1" }, error: null });
   envStore.RESEND_API_KEY = "re_test";
@@ -48,7 +48,12 @@ beforeEach(() => {
   envStore.META_CAPI_ACCESS_TOKEN = undefined;
   envStore.NEXT_PUBLIC_META_PIXEL_ID = undefined;
   stubProcessEnv();
+  vi.stubEnv("TURNSTILE_SECRET_KEY", "");
+  vi.stubEnv("UPSTASH_REDIS_REST_URL", "");
+  vi.stubEnv("UPSTASH_REDIS_REST_TOKEN", "");
   vi.resetModules();
+  const { __resetSendRateForTests } = await import("../lib/send-rate");
+  __resetSendRateForTests();
 });
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -156,6 +161,43 @@ describe("POST /api/send-to-desktop", () => {
       { "x-real-ip": "198.51.100.21" },
     );
     expect(second.status).toBe(429);
+  });
+
+  it("returns 403 when Turnstile is configured and the token is missing", async () => {
+    vi.stubEnv("TURNSTILE_SECRET_KEY", "test-secret");
+    vi.resetModules();
+    const res = await post({ email: "bot@example.com", website: "" }, { "x-real-ip": "198.51.100.90" });
+    expect(res.status).toBe(403);
+    expect(await res.json()).toEqual({ error: "captcha" });
+    expect(sendMock).not.toHaveBeenCalled();
+  });
+
+  it("returns 403 when Turnstile siteverify rejects the token", async () => {
+    vi.stubEnv("TURNSTILE_SECRET_KEY", "test-secret");
+    vi.doMock("../lib/turnstile", () => ({
+      verifyTurnstile: vi.fn(async () => false),
+    }));
+    vi.resetModules();
+    const res = await post(
+      { email: "bot2@example.com", website: "", turnstileToken: "bad" },
+      { "x-real-ip": "198.51.100.91" },
+    );
+    expect(res.status).toBe(403);
+    expect(sendMock).not.toHaveBeenCalled();
+  });
+
+  it("sends when Turnstile siteverify accepts the token", async () => {
+    vi.stubEnv("TURNSTILE_SECRET_KEY", "test-secret");
+    vi.doMock("../lib/turnstile", () => ({
+      verifyTurnstile: vi.fn(async () => true),
+    }));
+    vi.resetModules();
+    const res = await post(
+      { email: "human@example.com", website: "", turnstileToken: "ok" },
+      { "x-real-ip": "198.51.100.92" },
+    );
+    expect(res.status).toBe(200);
+    expect(sendMock).toHaveBeenCalledTimes(1);
   });
 
   it("calls Meta CAPI only when the gp_consent cookie is allow", async () => {

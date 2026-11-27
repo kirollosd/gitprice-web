@@ -3,6 +3,8 @@ import { readConsent } from "../../../lib/consent";
 import { isValidEmail } from "../../../lib/email";
 import { env } from "../../../lib/env";
 import { sendMetaCapiEvent } from "../../../lib/meta-capi";
+import { hitIpLimit, isEmailCoolingDown, markEmailSent } from "../../../lib/send-rate";
+import { verifyTurnstile } from "../../../lib/turnstile";
 import { chromeStoreUrlWithUtms, type UtmParams } from "../../../lib/utm";
 
 export const runtime = "nodejs";
@@ -12,15 +14,13 @@ const MAX_PER_WINDOW = 5;
 const EMAIL_COOLDOWN_MS = 15 * 60_000;
 const MAX_UTM_KEYS = 15;
 const MAX_UTM_VALUE = 200;
-/** In-memory only (best-effort on serverless). Prefer Upstash/KV + CAPTCHA for launch traffic. */
-const buckets = new Map<string, { count: number; resetAt: number }>();
-const emailCooldown = new Map<string, number>();
 
 type Body = {
   email?: unknown;
   website?: unknown;
   locale?: unknown;
   utms?: unknown;
+  turnstileToken?: unknown;
 };
 
 function clientIp(req: Request): string {
@@ -28,28 +28,6 @@ function clientIp(req: Request): string {
   const vercel = req.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim();
   const real = req.headers.get("x-real-ip")?.trim();
   return vercel || real || req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-}
-
-function rateLimited(key: string, max: number, windowMs: number): boolean {
-  const now = Date.now();
-  const hit = buckets.get(key);
-  if (!hit || hit.resetAt <= now) {
-    buckets.set(key, { count: 1, resetAt: now + windowMs });
-    return false;
-  }
-  if (hit.count >= max) return true;
-  hit.count += 1;
-  return false;
-}
-
-function isEmailCoolingDown(email: string): boolean {
-  const until = emailCooldown.get(email);
-  return !!until && until > Date.now();
-}
-
-/** Call only after Resend accepts the message — never lock on 4xx/5xx. */
-function markEmailSent(email: string): void {
-  emailCooldown.set(email, Date.now() + EMAIL_COOLDOWN_MS);
 }
 
 /** Same-site browser posts only (fetch always sends Origin). */
@@ -113,10 +91,23 @@ export async function POST(req: Request): Promise<Response> {
   if (!isValidEmail(email)) return Response.json({ error: "invalid" }, { status: 400 });
 
   const ip = clientIp(req);
-  if (rateLimited(`ip:${ip}`, MAX_PER_WINDOW, WINDOW_MS)) {
+
+  // When TURNSTILE_SECRET_KEY is set (production), require a valid widget token.
+  const turnstileSecret = process.env.TURNSTILE_SECRET_KEY?.trim();
+  if (turnstileSecret) {
+    const token = typeof body.turnstileToken === "string" ? body.turnstileToken : "";
+    const ok = await verifyTurnstile({
+      token,
+      secret: turnstileSecret,
+      remoteip: ip === "unknown" ? undefined : ip,
+    });
+    if (!ok) return Response.json({ error: "captcha" }, { status: 403 });
+  }
+
+  if (await hitIpLimit(ip, MAX_PER_WINDOW, WINDOW_MS)) {
     return Response.json({ error: "rate_limited" }, { status: 429 });
   }
-  if (isEmailCoolingDown(email)) return Response.json({ error: "rate_limited" }, { status: 429 });
+  if (await isEmailCoolingDown(email)) return Response.json({ error: "rate_limited" }, { status: 429 });
 
   const utms = asUtms(body.utms);
   if (utms === null) return Response.json({ error: "invalid" }, { status: 400 });
@@ -146,7 +137,7 @@ export async function POST(req: Request): Promise<Response> {
     return Response.json({ error: "failed" }, { status: 502 });
   }
 
-  markEmailSent(email);
+  await markEmailSent(email, EMAIL_COOLDOWN_MS);
 
   // CAPI only when the gp_consent cookie is Allow (never trust a client body flag).
   // Bounded + non-blocking so a slow Graph call cannot turn a sent email into a client "failed".
